@@ -587,17 +587,13 @@ body {
    CTA button land at the same y regardless of which card's body text is actually longer. */
 .amfc-service-card__body {
 	color: var(--amfc-text-heading); /* same navy as the title in Figma, not the muted body color */
-	/* 16px at the 1440px Figma reference width, fluid-scaled below it, per feedback */
-	font-size: clamp(0.875rem, calc(16 / 1440 * 100vw), 16px);
+	/* 15px (not 16px) — tested against both cards' real copy at the fixed 351px content
+	   width: personal-loan text wraps to 3 lines at 16px, 2 lines at 15px. */
+	font-size: clamp(0.8125rem, calc(15 / 1440 * 100vw), 15px);
 	line-height: 1.5;
-	height: 4.5em; /* 3 lines at this element's own line-height */
+	height: 3em; /* 2 lines — was 4.5em (3 lines) */
 	max-width: 351px;
 	margin-inline: auto;
-}
-
-/* Right card (personal loan) only, per feedback — 351px + 5px */
-.amfc-service-card__body--wide {
-	max-width: 356px;
 }
 
 .amfc-service-card__cta {
@@ -609,7 +605,7 @@ body {
 	align-items: center;
 	justify-content: center;
 	margin-top: auto; /* pins the button to the bottom of the card, per feedback */
-	margin-bottom: 20px; /* nudges it back up from that bottom edge, per feedback */
+	margin-bottom: 32px; /* nudges it back up from that bottom edge — 32px per feedback */
 }
 
 /* --- App download ("KingDo") --- */
