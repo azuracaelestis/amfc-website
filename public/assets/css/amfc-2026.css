@@ -364,7 +364,7 @@ body {
 .amfc-philosophy__stat-card {
 	position: sticky;
 	width: 100%;
-	max-width: 480px;
+	max-width: 384px; /* -20% from 480px, per feedback */
 	aspect-ratio: 1 / 1;
 	margin-inline: auto;
 	display: flex;
