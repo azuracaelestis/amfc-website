@@ -858,14 +858,32 @@ body {
 	padding-block: var(--amfc-space-xl) var(--amfc-space-lg);
 }
 
+/* AMFC's custom.css has `*, html, body { font-family: ...; font-size: 1.1rem }`. Two separate
+   problems, both from that one rule:
+   1. It's a universal selector that DIRECTLY matches every descendant, so it wins over
+      inheritance from .amfc-footer alone (see the CLAUDE.md gotcha). Targeting `.amfc-footer *`
+      explicitly overrides it: specificity (0,1,0) beats AMFC's plain `*` (0,0,0).
+   2. The `html { font-size: 1.1rem }` part of that same rule changes what "1rem" MEANS
+      everywhere on the page, not just on elements it directly matches — rem units are always
+      relative to the root element's font-size, and AMFC's own rule already inflated that root
+      to 17.6px (1.1 x the standard 16px). So even after fixing (1), writing `font-size: 1rem`
+      here still computed to 17.6px, not 16px. Using raw px instead sidesteps that entirely.
+      Confirmed via computed style before this fix: footer contact text was 19.36px in AMFC's
+      system font, and even the "corrected" rem-based attempt still landed at 17.6px. */
+.amfc-footer,
+.amfc-footer * {
+	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
+	font-size: 16px; /* per feedback — px, not rem, see comment above */
+}
+
 /* Row containing the 7 nav columns + logo, side by side — confirmed via Figma (node 87:80):
    logo sits to the right of the nav columns, not as an 8th grid column. */
 .amfc-footer__row {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: var(--amfc-space-lg);
-	margin-bottom: 2.5rem; /* 40px, splits the difference toward the confirmed 64px gap below */
+	gap: 32px; /* px, not rem — see the .amfc-footer rem/root-font-size comment above */
+	margin-bottom: 40px; /* px — splits the difference toward the confirmed 64px gap below */
 }
 
 @media (min-width: 992px) {
@@ -873,21 +891,20 @@ body {
 		flex-direction: row;
 		align-items: flex-start;
 		justify-content: space-between;
-		gap: 3rem; /* 48px, confirmed via Figma */
+		gap: 48px; /* px, confirmed via Figma */
 	}
 }
 
 .amfc-footer__nav {
 	display: flex;
 	flex-wrap: wrap;
-	gap: var(--amfc-space-lg) 2.25rem; /* 36px column gap, confirmed via Figma; wraps on narrow screens */
+	gap: 32px 36px; /* px — 36px column gap confirmed via Figma; wraps on narrow screens */
 }
 
 .amfc-footer__col-title {
 	color: var(--amfc-footer-text);
 	font-weight: 700;
-	font-size: 1rem; /* 16px, confirmed via Figma */
-	margin-bottom: var(--amfc-space-sm);
+	margin-bottom: 8px; /* px, not rem — see the .amfc-footer rem/root-font-size comment above */
 }
 
 .amfc-footer__col-title a {
@@ -908,47 +925,63 @@ body {
 .amfc-footer__col a {
 	color: inherit;
 	text-decoration: none;
-	font-size: 1rem; /* 16px, confirmed via Figma */
 }
 
 .amfc-footer__col a:hover {
 	color: var(--amfc-accent);
 }
 
+/* 285x147 at the 1440px Figma reference width, fluid-scaled below it, per feedback. The clamp
+   floor is in px (not rem) for the same root-font-size reason as everything else in this file. */
 .amfc-footer__logo {
-	height: 32px;
-	width: auto;
+	width: clamp(142px, calc(285 / 1440 * 100vw), 285px);
+	height: clamp(73px, calc(147 / 1440 * 100vw), 147px);
 	flex-shrink: 0;
 }
 
 .amfc-footer__contact {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--amfc-space-lg);
+	display: flex;
+	flex-wrap: wrap;
+	/* 40px, not the Figma-measured 56px — .amfc-container renders a touch narrower than
+	   Figma's exact 1200px footer content width, so 56px would wrap the third group (Japan
+	   Office) onto its own row; 40px keeps all three on one row within our actual width. */
+	gap: 40px;
 	border-top: 1px solid var(--amfc-gray-100);
-	padding-top: var(--amfc-space-lg);
-	font-size: 1rem; /* 16px, confirmed via Figma */
-}
-
-@media (min-width: 768px) {
-	.amfc-footer__contact {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
+	padding-top: 32px; /* px, not rem — see the .amfc-footer rem/root-font-size comment above */
 }
 
 .amfc-footer__contact-group {
 	display: flex;
-	gap: 0.75rem; /* 12px, confirmed via Figma */
+	gap: 12px; /* px, confirmed via Figma */
 }
 
 .amfc-footer__contact-label {
 	flex-shrink: 0;
+	/* width (not min-width) — Taiwan/Japan Office's English name is one string ("Taiwan
+	   Office"), and a hard width is what forces it to wrap onto its own line the way Figma's
+	   separately-stacked text nodes render, instead of staying on one long line and blowing
+	   out each group's total width (this was why the contact row was wrapping to a second
+	   row: the labels were rendering ~120px wider than intended). */
+	width: 74px; /* px, confirmed via Figma */
 	line-height: 1.2;
 }
 
 .amfc-footer__contact-content {
 	display: flex;
 	flex-direction: column;
-	gap: 0.3125rem; /* 5px, confirmed via Figma */
+	flex-shrink: 0;
+	gap: 5px; /* px, confirmed via Figma */
+	max-width: 328px; /* px, confirmed via Figma — enough width that the address lines don't
+	                      wrap more than Figma's own layout does, per feedback. (This is the
+	                      value that first exposed the rem/root-font-size bug: as `20.5rem` it
+	                      was computing to 360.8px, not 328, because AMFC's html{font-size:1.1rem}
+	                      inflates what "rem" means for the whole page, not just this element.) */
 	line-height: 1.5;
+}
+
+/* Customer Service group only — its content (phone/hours) is genuinely shorter in Figma
+   (~200px) than the two address groups (328px); giving it the same 328px cap was part of why
+   the three groups didn't fit on one row. */
+.amfc-footer__contact-content--narrow {
+	max-width: 200px;
 }

@@ -68,14 +68,15 @@
 					<?= e(t('footer.contact.customer_service.title_en1')) ?><br />
 					<?= e(t('footer.contact.customer_service.title_en2')) ?>
 				</div>
-				<div class="amfc-footer__contact-content">
+				<div class="amfc-footer__contact-content amfc-footer__contact-content--narrow">
 					<div><?= e(t('footer.contact.customer_service.phone')) ?></div>
 					<div><?= e(t('footer.contact.customer_service.hours_zh')) ?><?= e(t('footer.contact.customer_service.hours_en')) ?></div>
 				</div>
 			</div>
 			<div class="amfc-footer__contact-group">
 				<div class="amfc-footer__contact-label">
-					<?= e(t('footer.contact.taiwan.title_zh')) ?> / <?= e(t('footer.contact.taiwan.title_en')) ?>
+					<?= e(t('footer.contact.taiwan.title_zh')) ?><br />
+					<?= e(t('footer.contact.taiwan.title_en')) ?>
 				</div>
 				<div class="amfc-footer__contact-content">
 					<div><?= e(t('footer.contact.taiwan.address_zh')) ?></div>
@@ -84,7 +85,8 @@
 			</div>
 			<div class="amfc-footer__contact-group">
 				<div class="amfc-footer__contact-label">
-					<?= e(t('footer.contact.japan.title_zh')) ?> / <?= e(t('footer.contact.japan.title_en')) ?>
+					<?= e(t('footer.contact.japan.title_zh')) ?><br />
+					<?= e(t('footer.contact.japan.title_en')) ?>
 				</div>
 				<div class="amfc-footer__contact-content">
 					<div><?= e(t('footer.contact.japan.address_zh')) ?></div>
