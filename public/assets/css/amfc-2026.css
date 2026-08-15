@@ -652,7 +652,9 @@ body {
 /* --- App download ("KingDo") --- */
 
 .amfc-app {
-	padding-block: var(--amfc-space-xl);
+	/* Bottom half of the 180px gap to the investor relations section below (other half is
+	   that section's own padding-top, fluid-scaled the same way) — see .amfc-investor. */
+	padding-block: var(--amfc-space-xl) clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px);
 	background: var(--amfc-surface);
 	text-align: center;
 }
@@ -683,6 +685,7 @@ body {
 
 .amfc-app__headline {
 	color: var(--amfc-text-heading);
+	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
 	font-weight: 700;
 	/* 42px at the 1440px Figma reference width, fluid-scaled below it, confirmed via Figma */
 	font-size: clamp(1.75rem, calc(42 / 1440 * 100vw), 42px);
@@ -701,6 +704,7 @@ body {
 .amfc-app__cta {
 	width: 327px;
 	height: 64px;
+	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
 	font-size: 1.25rem; /* 20px, confirmed via Figma */
 	font-weight: 700;
 	display: inline-flex;
@@ -711,7 +715,10 @@ body {
 /* --- Investor relations --- */
 
 .amfc-investor {
-	padding-block: var(--amfc-space-xl);
+	/* Top half of the 180px gap from the app-download section above (other half is that
+	   section's own padding-bottom) — see .amfc-app. 90px at the 1440px reference width,
+	   fluid-scaled below it, per feedback. */
+	padding-block: clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px) var(--amfc-space-xl);
 	background: var(--amfc-lavender-100);
 }
 
