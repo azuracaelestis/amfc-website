@@ -601,7 +601,15 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: clamp(7.4rem, calc(178 / 1440 * 100vw), 178px);
+	flex-shrink: 0;
+	/* 173px, not 178 — recomputed after the CTA's margin-bottom (added later, +32px) pushed
+	   the card's total content 5px over its fixed 500px height. Flex items default to
+	   flex-shrink:1, so that overflow was silently compressing every child, including the CTA
+	   button below (measured rendering to ~48px instead of its declared 64px) — not obvious
+	   from reading the CSS alone, only from the actual computed height. flex-shrink:0 added
+	   throughout this card so any future mismatch overflows visibly instead of silently
+	   shrinking a fixed-size child like the button. */
+	height: clamp(7.2rem, calc(173 / 1440 * 100vw), 173px);
 }
 
 .amfc-service-card__icon {
@@ -614,6 +622,7 @@ body {
 .amfc-service-card__text {
 	display: flex;
 	flex-direction: column;
+	flex-shrink: 0;
 	gap: 1.125rem; /* 18px, per feedback */
 }
 
@@ -640,6 +649,8 @@ body {
 .amfc-service-card__cta {
 	width: 223px;
 	height: 64px;
+	flex-shrink: 0; /* see .amfc-service-card__icon-wrap comment — this was silently
+	                   compressing to ~48px before the card's content budget was fixed */
 	font-size: 1.25rem; /* 20px, restored to the original Figma value */
 	font-weight: 700;
 	display: inline-flex;
@@ -685,7 +696,12 @@ body {
 
 .amfc-app__headline {
 	color: var(--amfc-text-heading);
-	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
+	/* No explicit font-family here (deliberately, per feedback): .amfc-services__heading also
+	   has none, so both fall through the same AMFC custom.css `*, html, body { font-family }`
+	   collision (see CLAUDE.md) to their system CJK stack (PingFang / Microsoft JhengHei)
+	   rather than our Noto Sans TC. Explicit Noto Sans TC at the same nominal 700 weight
+	   renders visibly bolder/denser than that system stack, which is what "too bold" was
+	   compared against — matching requires NOT overriding this, not adjusting the weight. */
 	font-weight: 700;
 	/* 42px at the 1440px Figma reference width, fluid-scaled below it, confirmed via Figma */
 	font-size: clamp(1.75rem, calc(42 / 1440 * 100vw), 42px);
