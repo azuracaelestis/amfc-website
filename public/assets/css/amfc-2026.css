@@ -351,14 +351,12 @@
 	}
 }
 
-/* Reduced motion: no scroll-linked pile-up; present the cards as a static, fully visible list. */
+/* Reduced motion: the stack is driven by the user's own scroll input, not an autoplaying or
+   parallax-style animation, so the sticky stacking itself stays on — only the decorative tilt
+   is flattened. Setting position:static here would remove the stacking entirely, which is a
+   bigger behavior change than what prefers-reduced-motion is meant to opt out of. */
 @media (prefers-reduced-motion: reduce) {
-	.amfc-philosophy__stack {
-		gap: var(--amfc-space-lg);
-		padding-bottom: 0;
-	}
 	.amfc-philosophy__stat-card {
-		position: static;
 		transform: none;
 	}
 }
