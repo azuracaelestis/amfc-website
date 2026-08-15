@@ -59,6 +59,9 @@
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat4.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat4.label')) ?></div>
 				</article>
+				<!-- Real sibling element, not container padding — see amfc-2026.css comment on
+				     .amfc-philosophy__stack-tail for why this must be an actual element. -->
+				<div class="amfc-philosophy__stack-tail" aria-hidden="true"></div>
 			</div>
 		</div>
 	</div>
