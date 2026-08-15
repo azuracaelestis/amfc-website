@@ -184,6 +184,7 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 0.25rem;
+	font-family: var(--amfc-font-en); /* DM Sans, per feedback — "Language" is English copy */
 }
 
 /* Source icon's native orientation points sideways — Figma itself rotates this same asset
