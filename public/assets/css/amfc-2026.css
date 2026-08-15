@@ -464,7 +464,8 @@ body {
 }
 
 .amfc-funds__body {
-	max-width: 40rem;
+	/* 505px at the 1440px Figma reference width, fluid-scaled below it */
+	width: clamp(18.75rem, calc(505 / 1440 * 100vw), 505px);
 	color: var(--amfc-text-heading); /* #1A2F86 */
 	font-family: var(--amfc-font-zh);
 	/* 16px at the 1440px Figma reference width, fluid-scaled below it */
