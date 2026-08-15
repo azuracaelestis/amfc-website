@@ -937,6 +937,7 @@ body {
 	width: clamp(142px, calc(285 / 1440 * 100vw), 285px);
 	height: clamp(73px, calc(147 / 1440 * 100vw), 147px);
 	flex-shrink: 0;
+	transform: translateY(-20px); /* per feedback */
 }
 
 .amfc-footer__contact {
