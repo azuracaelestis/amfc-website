@@ -657,11 +657,13 @@ body {
 	text-align: center;
 }
 
+/* 1043x320 at the 1440px Figma reference width, fluid-scaled below it — confirmed via
+   get_design_context (node 87:270), and matches the size given directly. */
 .amfc-app__photo {
-	width: 100%;
-	max-width: 720px;
-	height: auto;
-	border-radius: var(--amfc-radius-lg);
+	width: clamp(16.3rem, calc(1043 / 1440 * 100vw), 1043px);
+	height: clamp(5rem, calc(320 / 1440 * 100vw), 320px);
+	object-fit: cover;
+	border-radius: var(--amfc-radius-xl);
 	margin-inline: auto;
 	display: block;
 }
@@ -669,25 +671,41 @@ body {
 .amfc-app__store-badges {
 	display: flex;
 	justify-content: center;
-	gap: var(--amfc-space-sm);
-	margin-block: var(--amfc-space-lg) var(--amfc-space-md);
+	align-items: center;
+	gap: 1.125rem; /* 18px, confirmed via Figma */
+	margin-block: 1.75rem 1.875rem; /* 28px above, 30px below, confirmed via Figma */
 }
 
 .amfc-app__store-badges img {
-	height: 40px;
+	height: 50px;
 	width: auto;
 }
 
 .amfc-app__headline {
 	color: var(--amfc-text-heading);
 	font-weight: 700;
-	font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
-	margin-bottom: var(--amfc-space-sm);
+	/* 42px at the 1440px Figma reference width, fluid-scaled below it, confirmed via Figma */
+	font-size: clamp(1.75rem, calc(42 / 1440 * 100vw), 42px);
+	margin-bottom: 1.125rem; /* 18px, confirmed via Figma */
 }
 
 .amfc-app__body {
-	color: var(--amfc-text-body);
-	margin-bottom: var(--amfc-space-lg);
+	color: var(--amfc-text-heading); /* #1A2F86, per feedback */
+	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
+	/* 16px at the 1440px Figma reference width, fluid-scaled below it, per feedback */
+	font-size: clamp(0.875rem, calc(16 / 1440 * 100vw), 16px);
+	line-height: 1.5;
+	margin-bottom: 1.875rem; /* 30px, confirmed via Figma */
+}
+
+.amfc-app__cta {
+	width: 327px;
+	height: 64px;
+	font-size: 1.25rem; /* 20px, confirmed via Figma */
+	font-weight: 700;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* --- Investor relations --- */
