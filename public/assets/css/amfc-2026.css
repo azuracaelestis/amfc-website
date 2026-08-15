@@ -302,8 +302,9 @@
    provides its scroll dwell-time — no wrapper, no dead space to leak into view. A small `gap`
    (not the 8rem originally used) keeps handoff tight: once a card's own bottom edge scrolls
    past the sticky offset and it releases, the next card — sitting almost immediately after it
-   in the flow — reaches that same offset (give or take its own small per-card increment) right
-   away, so it takes over with no blank scroll stretch in between. */
+   in the flow — reaches that same offset right away, so it takes over with no blank scroll
+   stretch in between. All four cards share the exact same `top`, so the handoff is a true
+   stack (each card lands directly on the last), not a fanned peek. */
 .amfc-philosophy__stack {
 	--amfc-stack-top: clamp(6rem, 16vh, 10rem); /* where the pile settles below the nav */
 	display: flex;
@@ -330,12 +331,13 @@
 	text-align: center;
 }
 
-/* Per-card: a small cumulative sticky-top increment (the fanned-peek look), paint order, resting
-   rotation, and background tint. */
-.amfc-philosophy__stat-card--1 { top: calc(var(--amfc-stack-top) + 0rem);    z-index: 1; transform: rotate(2.3deg);  background: var(--amfc-mint-100); }
-.amfc-philosophy__stat-card--2 { top: calc(var(--amfc-stack-top) + 0.75rem); z-index: 2; transform: rotate(-3deg);   background: var(--amfc-cream-100); }
-.amfc-philosophy__stat-card--3 { top: calc(var(--amfc-stack-top) + 1.5rem);  z-index: 3; transform: rotate(3.4deg);  background: var(--amfc-periwinkle-100); }
-.amfc-philosophy__stat-card--4 { top: calc(var(--amfc-stack-top) + 2.25rem); z-index: 4; transform: rotate(-3.2deg); background: var(--amfc-lavender-100); }
+/* Per-card: all four share the exact same sticky `top` so each new card lands directly on top
+   of the last (per feedback — a true stack, not a fanned peek); z-index carries the paint
+   order, and the tilt/background give the deck its resting look. */
+.amfc-philosophy__stat-card--1 { top: var(--amfc-stack-top); z-index: 1; transform: rotate(2.3deg);  background: var(--amfc-mint-100); }
+.amfc-philosophy__stat-card--2 { top: var(--amfc-stack-top); z-index: 2; transform: rotate(-3deg);   background: var(--amfc-cream-100); }
+.amfc-philosophy__stat-card--3 { top: var(--amfc-stack-top); z-index: 3; transform: rotate(3.4deg);  background: var(--amfc-periwinkle-100); }
+.amfc-philosophy__stat-card--4 { top: var(--amfc-stack-top); z-index: 4; transform: rotate(-3.2deg); background: var(--amfc-lavender-100); }
 
 /* Mobile: a narrow sticky pile reads badly — fall back to a plain vertical list. */
 @media (max-width: 991.98px) {
