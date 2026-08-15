@@ -807,7 +807,11 @@ body {
 	color: var(--amfc-text-heading); /* #1A2F86 */
 	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
 	font-weight: 500; /* Noto Sans Medium, confirmed via Figma */
-	font-size: 1rem; /* 16px, confirmed via Figma */
+	font-size: 0.75rem; /* 12px, per feedback */
+	text-decoration: none; /* underline only on hover, per feedback */
+}
+
+.amfc-investor__cta:hover {
 	text-decoration: underline;
 }
 
