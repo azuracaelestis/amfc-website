@@ -29,7 +29,7 @@
 				</div>
 				<div class="amfc-service-card__text">
 					<h3 class="amfc-service-card__title"><?= e(t('home.services.personal.title')) ?></h3>
-					<p class="amfc-service-card__body"><?= e(t('home.services.personal.body')) ?></p>
+					<p class="amfc-service-card__body amfc-service-card__body--wide"><?= e(t('home.services.personal.body')) ?></p>
 				</div>
 				<a href="/product_2" class="btn btn-primary rounded-pill amfc-service-card__cta"><?= e(t('home.services.personal.cta')) ?></a>
 			</div>

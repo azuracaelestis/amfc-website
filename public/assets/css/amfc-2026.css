@@ -594,6 +594,11 @@ body {
 	margin-inline: auto;
 }
 
+/* Right card (personal loan) only, per feedback — 351px + 5px */
+.amfc-service-card__body--wide {
+	max-width: 356px;
+}
+
 .amfc-service-card__cta {
 	width: 223px;
 	height: 64px;
@@ -603,6 +608,7 @@ body {
 	align-items: center;
 	justify-content: center;
 	margin-top: auto; /* pins the button to the bottom of the card, per feedback */
+	margin-bottom: 20px; /* nudges it back up from that bottom edge, per feedback */
 }
 
 /* --- App download ("KingDo") --- */
