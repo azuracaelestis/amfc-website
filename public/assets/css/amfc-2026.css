@@ -276,7 +276,9 @@ body {
    why each failed (a JS opacity-scrub track, then a tall sticky "slot" wrapper). */
 
 .amfc-philosophy {
-	padding-block: var(--amfc-space-xl);
+	/* Bottom half of the 180px gap to Funds partnership below (other half is that
+	   section's own padding-top) — see .amfc-funds. */
+	padding-block: var(--amfc-space-xl) 90px;
 	background: var(--amfc-surface);
 }
 
@@ -447,7 +449,9 @@ body {
 /* --- Funds partnership --- */
 
 .amfc-funds {
-	padding-block: var(--amfc-space-xl);
+	/* 90px top pairs with .amfc-philosophy's 90px bottom padding = 180px gap above;
+	   90px bottom pairs with .amfc-services' 90px top padding = 180px gap below. */
+	padding-block: 90px;
 	background: var(--amfc-surface);
 }
 
@@ -477,7 +481,9 @@ body {
 /* --- Services --- */
 
 .amfc-services {
-	padding-block: var(--amfc-space-xl);
+	/* Top half of the 180px gap from Funds partnership above (other half is that
+	   section's own padding-bottom) — see .amfc-funds. */
+	padding-block: 90px var(--amfc-space-xl);
 	background: var(--amfc-surface-muted);
 	text-align: center;
 }
