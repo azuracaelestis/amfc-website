@@ -22,7 +22,10 @@
 
 .amfc-trust {
 	background: var(--amfc-surface);
-	padding-block: var(--amfc-space-xl);
+	/* Top half of the 180px gap from Services above (other half is that section's own
+	   padding-bottom) — see .amfc-services. 90px at the 1440px reference width, fluid-scaled
+	   below it, per feedback. */
+	padding-block: clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px) var(--amfc-space-xl);
 }
 
 .amfc-trust__grid {
@@ -37,6 +40,7 @@
 	.amfc-trust__grid {
 		flex-direction: row;
 		align-items: center;
+		justify-content: center; /* centers the whole section, per feedback */
 	}
 }
 
@@ -517,8 +521,10 @@ body {
 
 .amfc-services {
 	/* Top half of the 180px gap from Funds partnership above (other half is that
-	   section's own padding-bottom) — see .amfc-funds. */
-	padding-block: 90px var(--amfc-space-xl);
+	   section's own padding-bottom) — see .amfc-funds.
+	   Bottom half of the 180px gap to the trust/social-proof section below (other half is
+	   that section's own padding-top, fluid-scaled the same way) — see .amfc-trust. */
+	padding-block: 90px clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px);
 	background: var(--amfc-surface-muted);
 	text-align: center;
 }
