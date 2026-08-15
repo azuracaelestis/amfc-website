@@ -317,39 +317,33 @@ body {
 }
 
 .amfc-philosophy__heading {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.6rem;
 	color: var(--amfc-text-heading);
 	font-weight: 700;
-	/* 48px at the 1440px Figma reference width, fluid-scaled below it, capped at 48px above —
-	   same clamp(min, calc(N/1440*100vw), Npx) technique as the hero headline. */
-	font-size: clamp(1.375rem, calc(48 / 1440 * 100vw), 3rem);
-	line-height: 1.8;
+	font-size: clamp(2rem, 1.4rem + 2.2vw, 3rem); /* bigger — was max 2rem */
+	line-height: 1.3;
+	text-decoration: none;
 }
 
 /* Gold accent bar under each heading line, per the reference image. */
 .amfc-philosophy__heading-line {
 	position: relative;
-	display: block;
-	width: fit-content; /* stays sized to its own text (not full-width) so the ::after
-	                       underline below still tracks that line's own text, not the column */
-	/* Without the <br> that used to separate these, two block spans stack with no gap of
-	   their own — add enough margin so each line's ::after underline (bottom: -0.5rem) has
-	   room and doesn't visually collide with the next line's text. */
-	margin-bottom: 0.75rem;
-}
-
-.amfc-philosophy__heading-line:last-child {
-	margin-bottom: 0;
+	padding-bottom: 0.8rem;
+	text-decoration: none;
 }
 
 .amfc-philosophy__heading-line::after {
-	content: '';
+	content: "";
 	position: absolute;
 	left: 0;
-	bottom: -0.5rem;
-	width: 65%;
-	height: 4px;
-	border-radius: 2px;
-	background: var(--amfc-gold-400);
+	bottom: 0;
+	width: 62%;
+	height: 0.3rem;
+	background: var(--amfc-accent-gold);
+	border-radius: 999px;
 }
 
 /* The pile lives in the right column. Each card is directly sticky, so its own height is what
