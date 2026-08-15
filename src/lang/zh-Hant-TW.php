@@ -5,6 +5,7 @@
 
 return [
     'site.name' => 'AMFC 亞太普惠金融科技',
+    'site.description' => 'AMFC 亞太普惠金融科技致力於連結在地需求，提供汽機車貸款、個人貸款等普惠金融服務，以創新、專業、效率、誠信打造更溫暖的金融服務體驗。',
     'site.logo_alt' => 'FUNDS AMFC',
 
     'nav.about' => '關於我們',
