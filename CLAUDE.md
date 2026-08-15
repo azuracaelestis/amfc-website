@@ -61,6 +61,8 @@ Three layers, loaded in this order, after Bootstrap and after AMFC's own `custom
 
 **No `@layer`.** It's tempting for cascade control, but an unlayered stylesheet always beats a layered one in specificity — so AMFC's existing unlayered `custom.css` would win every conflict against a layered one of ours. Rely on load order + the `.theme-2026` scope instead.
 
+**Gotcha: AMFC's `custom.css` sets `*, html, body { font-size: 1.1rem }`.** A universal selector *directly* matches every element, including any bare `<span>`/`<div>` we add — and a property's specified value from a directly-matching rule always wins over inheritance, regardless of how low that rule's specificity is. So any of our elements that don't set their own `font-size` will silently render at ~19px (`1.1rem` × their own already-`1.1rem` root) instead of inheriting the size we actually intended from a parent. Symptom: a font-size change you just made appears to do nothing. Fix: add `font-size: inherit` (or an explicit size) on the affected element — don't assume plain inheritance will work for text size anywhere on this site.
+
 ## Naming conventions
 
 - Design tokens: `--amfc-<category>-<name>`, e.g. `--amfc-blue-600`, `--amfc-radius-lg`, `--amfc-grad-hero`
