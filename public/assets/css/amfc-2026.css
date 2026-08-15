@@ -319,7 +319,9 @@ body {
 .amfc-philosophy__heading {
 	color: var(--amfc-text-heading);
 	font-weight: 700;
-	font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+	/* 48px at the 1440px Figma reference width, fluid-scaled below it, capped at 48px above —
+	   same clamp(min, calc(N/1440*100vw), Npx) technique as the hero headline. */
+	font-size: clamp(1.375rem, calc(48 / 1440 * 100vw), 3rem);
 	line-height: 1.8;
 }
 
