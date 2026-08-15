@@ -533,10 +533,10 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 1.35rem; /* 24px * 0.9, per feedback */
-	/* 450px (500px * 0.9) at the 1440px Figma reference width, fluid-scaled below it */
-	min-height: clamp(23.4rem, calc(450 / 1440 * 100vw), 450px);
-	padding: 2.7rem; /* 48px * 0.9, per feedback */
+	gap: 0.945rem; /* 24px * 0.9 * 0.7, per feedback */
+	/* 315px (500px * 0.9 * 0.7) at the 1440px Figma reference width, fluid-scaled below it */
+	min-height: clamp(16.38rem, calc(315 / 1440 * 100vw), 315px);
+	padding: 1.89rem; /* 48px * 0.9 * 0.7, per feedback */
 	text-align: center;
 	/* Hover elevation, per feedback */
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -547,40 +547,57 @@ body {
 	box-shadow: var(--amfc-shadow-card);
 }
 
+/* Fixed height (not just the icon's own max-width) because car-loan.svg (342x188) and
+   personal-loan.svg (323x197) have different aspect ratios — without pinning this wrapper's
+   height, the taller-rendering icon would push its card's title down relative to the other
+   card's. Centering the icon within lets both illustrations sit on their own natural size
+   while still starting the title at the same y in both cards. */
+.amfc-service-card__icon-wrap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: clamp(4.6rem, calc(92 / 1440 * 100vw), 92px); /* 131px * 0.7, per feedback */
+}
+
 .amfc-service-card__icon {
 	width: 100%;
-	max-width: 307.8px; /* 342px * 0.9, per feedback */
+	max-width: 215.46px; /* 342px * 0.9 * 0.7, per feedback */
+	max-height: 100%;
 	height: auto;
 }
 
 .amfc-service-card__text {
 	display: flex;
 	flex-direction: column;
-	gap: 1.0125rem; /* 18px * 0.9, per feedback */
+	gap: 0.70875rem; /* 18px * 0.9 * 0.7, per feedback */
 }
 
 .amfc-service-card__title {
 	color: var(--amfc-text-heading);
 	font-weight: 700;
-	font-size: 1.35rem; /* 24px * 0.9, per feedback */
+	font-size: 0.945rem; /* 24px * 0.9 * 0.7, per feedback */
 }
 
+/* Fixed height sized for 3 lines (the longer of the two cards' copy) so both cards' title and
+   CTA button land at the same y regardless of which card's body text is actually longer. */
 .amfc-service-card__body {
 	color: var(--amfc-text-heading); /* same navy as the title in Figma, not the muted body color */
-	font-size: 0.9rem; /* 16px * 0.9, per feedback */
+	font-size: 0.63rem; /* 16px * 0.9 * 0.7, per feedback */
 	line-height: 1.5;
-	max-width: 315.9px; /* 351px * 0.9, per feedback */
+	height: 4.5em; /* 3 lines at this element's own line-height */
+	max-width: 221.13px; /* 351px * 0.9 * 0.7, per feedback */
 	margin-inline: auto;
 }
 
 .amfc-service-card__cta {
-	width: 200.7px; /* 223px * 0.9, per feedback */
-	height: 57.6px; /* 64px * 0.9, per feedback */
-	font-size: 1.125rem; /* 20px * 0.9, per feedback */
+	width: 140.49px; /* 223px * 0.9 * 0.7, per feedback */
+	height: 40.32px; /* 64px * 0.9 * 0.7, per feedback */
+	font-size: 0.7875rem; /* 20px * 0.9 * 0.7, per feedback */
 	font-weight: 700;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	margin-top: auto; /* pins the button to the bottom of the card, per feedback */
 }
 
 /* --- App download ("KingDo") --- */

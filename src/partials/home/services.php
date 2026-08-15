@@ -11,7 +11,12 @@
 		</div>
 		<div class="amfc-services__grid">
 			<div class="amfc-service-card">
-				<img class="amfc-service-card__icon" src="<?= e(asset('images/car-loan.svg')) ?>" alt="<?= e(t('home.services.vehicle.icon_alt')) ?>" />
+				<!-- Fixed-height wrapper: car-loan.svg and personal-loan.svg have different
+				     aspect ratios (342x188 vs 323x197), so without this the title/body/button
+				     below would land at different heights between the two cards. -->
+				<div class="amfc-service-card__icon-wrap">
+					<img class="amfc-service-card__icon" src="<?= e(asset('images/car-loan.svg')) ?>" alt="<?= e(t('home.services.vehicle.icon_alt')) ?>" />
+				</div>
 				<div class="amfc-service-card__text">
 					<h3 class="amfc-service-card__title"><?= e(t('home.services.vehicle.title')) ?></h3>
 					<p class="amfc-service-card__body"><?= e(t('home.services.vehicle.body')) ?></p>
@@ -19,7 +24,9 @@
 				<a href="/product_1" class="btn btn-primary rounded-pill amfc-service-card__cta"><?= e(t('home.services.vehicle.cta')) ?></a>
 			</div>
 			<div class="amfc-service-card">
-				<img class="amfc-service-card__icon" src="<?= e(asset('images/personal-loan.svg')) ?>" alt="<?= e(t('home.services.personal.icon_alt')) ?>" />
+				<div class="amfc-service-card__icon-wrap">
+					<img class="amfc-service-card__icon" src="<?= e(asset('images/personal-loan.svg')) ?>" alt="<?= e(t('home.services.personal.icon_alt')) ?>" />
+				</div>
 				<div class="amfc-service-card__text">
 					<h3 class="amfc-service-card__title"><?= e(t('home.services.personal.title')) ?></h3>
 					<p class="amfc-service-card__body"><?= e(t('home.services.personal.body')) ?></p>
