@@ -127,8 +127,10 @@
 	background: var(--amfc-surface);
 	border-radius: var(--amfc-radius-lg) var(--amfc-radius-lg) 0 0;
 	/* Pulled up so the white block's top edge covers the bottom of the hero photo. History:
-	   -12rem -> +100px (-5.75rem) -> +40px (-8.25rem) -> +20px more = -7.75rem. */
-	margin-top: -7.75rem;
+	   -12rem -> +100px (-5.75rem) -> +40px (-8.25rem) -> +20px more (-7.75rem, computed
+	   -136.4px due to the site's html{font-size:1.1rem} bug, see CLAUDE.md) -> +42px more.
+	   Written in raw px per CLAUDE.md guidance (rem is corrupted site-wide by that bug). */
+	margin-top: -94.4px;
 	z-index: 1;
 }
 
@@ -230,9 +232,10 @@
 }
 
 /* Shifted 20px right per feedback (matching .amfc-nav__brand's identical shift so the logo
-   stays aligned with the eyebrow/headline/button below it), then 42px up per follow-up. */
+   stays aligned with the eyebrow/headline/button below it). Vertical shift: -42px up, then
+   +42px down per follow-up, netting back to 0. */
 .amfc-hero__content {
-	transform: translate(20px, -42px);
+	transform: translate(20px, 0);
 }
 
 .amfc-hero__eyebrow {
