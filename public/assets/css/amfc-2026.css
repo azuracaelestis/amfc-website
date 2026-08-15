@@ -297,8 +297,9 @@
 /* Hero CTA hover/press micro-interaction, per feedback. Default color matches the existing
    --amfc-accent used by .btn-primary everywhere else; hover/press are new shades scoped to
    just this button so the global .btn-primary override (amfc-bootstrap-overrides.css) is
-   untouched. Arrow lives in a fixed-width slot so the button never changes width across states
-   — it fades/slides within that slot rather than the button growing. */
+   untouched. Default state fits the text only (no reserved arrow space, Bootstrap's gap-2
+   utility removed from the markup); the arrow's slot animates open on hover/press instead,
+   so the button itself grows to the right rather than the arrow appearing in dead space. */
 .amfc-hero__cta {
 	background-color: var(--amfc-accent);
 	border-color: var(--amfc-accent);
@@ -319,9 +320,18 @@
 .amfc-hero__cta-arrow {
 	display: inline-flex;
 	align-items: center;
-	width: 19px;
+	width: 0;
+	margin-left: 0;
 	overflow: hidden;
 	flex-shrink: 0;
+	transition: width 0.2s ease, margin-left 0.2s ease;
+}
+
+.amfc-hero__cta:hover .amfc-hero__cta-arrow,
+.amfc-hero__cta:focus-visible .amfc-hero__cta-arrow,
+.amfc-hero__cta:active .amfc-hero__cta-arrow {
+	width: 19px;
+	margin-left: 8px;
 }
 
 .amfc-hero__cta-arrow img {
@@ -343,6 +353,7 @@
 
 @media (prefers-reduced-motion: reduce) {
 	.amfc-hero__cta,
+	.amfc-hero__cta-arrow,
 	.amfc-hero__cta-arrow img {
 		transition: none;
 	}
