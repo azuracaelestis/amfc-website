@@ -316,7 +316,7 @@ body {
    this is scoped to the philosophy section rather than changing the shared .amfc-eyebrow rule. */
 .amfc-philosophy__eyebrow {
 	color: var(--amfc-gold-500);
-	font-size: 1.5rem; /* 24px, per feedback */
+	font-size: 1rem; /* 16px, per feedback */
 }
 
 .amfc-philosophy__heading {
@@ -504,7 +504,7 @@ body {
    .amfc-philosophy__eyebrow (other sections keep the shared blue accent eyebrow). */
 .amfc-services__eyebrow {
 	color: var(--amfc-gold-500);
-	font-size: 1.5rem; /* 24px, confirmed via Figma */
+	font-size: 1rem; /* 16px, per feedback (overrides the 24px confirmed via Figma) */
 }
 
 .amfc-services__heading {
