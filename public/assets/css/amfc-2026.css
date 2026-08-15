@@ -378,10 +378,10 @@ body {
 /* Per-card: all four share the exact same sticky `top` so each new card lands directly on top
    of the last (per feedback — a true stack, not a fanned peek); z-index carries the paint
    order, and the tilt/background give the deck its resting look. */
-.amfc-philosophy__stat-card--1 { top: var(--amfc-stack-top); z-index: 1; transform: rotate(2.3deg);  background: var(--amfc-mint-100); }
-.amfc-philosophy__stat-card--2 { top: var(--amfc-stack-top); z-index: 2; transform: rotate(-3deg);   background: var(--amfc-cream-100); }
-.amfc-philosophy__stat-card--3 { top: var(--amfc-stack-top); z-index: 3; transform: rotate(3.4deg);  background: var(--amfc-periwinkle-100); }
-.amfc-philosophy__stat-card--4 { top: var(--amfc-stack-top); z-index: 4; transform: rotate(-3.2deg); background: var(--amfc-lavender-100); }
+.amfc-philosophy__stat-card--1 { top: var(--amfc-stack-top); z-index: 1; transform: rotate(-4deg);  background: var(--amfc-mint-100); }
+.amfc-philosophy__stat-card--2 { top: var(--amfc-stack-top); z-index: 2; transform: rotate(3.5deg); background: var(--amfc-cream-100); }
+.amfc-philosophy__stat-card--3 { top: var(--amfc-stack-top); z-index: 3; transform: rotate(-3deg);  background: var(--amfc-periwinkle-100); }
+.amfc-philosophy__stat-card--4 { top: var(--amfc-stack-top); z-index: 4; transform: rotate(4deg);   background: var(--amfc-lavender-100); }
 
 /* Mobile: a narrow sticky pile reads badly — fall back to a plain vertical list. */
 @media (max-width: 991.98px) {
@@ -391,16 +391,6 @@ body {
 	}
 	.amfc-philosophy__stat-card {
 		position: static;
-		transform: none;
-	}
-}
-
-/* Reduced motion: the stack is driven by the user's own scroll input, not an autoplaying or
-   parallax-style animation, so the sticky stacking itself stays on — only the decorative tilt
-   is flattened. Setting position:static here would remove the stacking entirely, which is a
-   bigger behavior change than what prefers-reduced-motion is meant to opt out of. */
-@media (prefers-reduced-motion: reduce) {
-	.amfc-philosophy__stat-card {
 		transform: none;
 	}
 }
