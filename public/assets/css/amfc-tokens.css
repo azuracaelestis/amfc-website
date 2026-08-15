@@ -50,5 +50,6 @@
 	--amfc-space-xl: 4rem;
 	--amfc-radius-md: 0.75rem;
 	--amfc-radius-lg: 1.25rem;
+	--amfc-radius-xl: 2rem; /* service card corner radius — confirmed via Figma (node 87:159) */
 	--amfc-shadow-card: 0 12px 32px rgba(22, 35, 79, 0.08);
 }

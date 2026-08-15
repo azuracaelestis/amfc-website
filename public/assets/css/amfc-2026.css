@@ -488,17 +488,35 @@ body {
 	text-align: center;
 }
 
+.amfc-services__header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.25rem;
+	/* 965px at the 1440px Figma reference width, fluid-scaled below it */
+	width: clamp(18.75rem, calc(965 / 1440 * 100vw), 965px);
+	margin-inline: auto;
+	margin-bottom: 3rem; /* 48px, per Figma gap between header and card row */
+}
+
+/* Gold to match the reference — scoped to this section, same reasoning as
+   .amfc-philosophy__eyebrow (other sections keep the shared blue accent eyebrow). */
+.amfc-services__eyebrow {
+	color: var(--amfc-gold-500);
+	font-size: 1.5rem; /* 24px, confirmed via Figma */
+}
+
 .amfc-services__heading {
 	color: var(--amfc-text-heading);
 	font-weight: 700;
-	font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
-	margin-bottom: var(--amfc-space-lg);
+	/* 42px at the 1440px Figma reference width, fluid-scaled below it */
+	font-size: clamp(1.75rem, calc(42 / 1440 * 100vw), 42px);
 }
 
 .amfc-services__grid {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: var(--amfc-space-lg);
+	gap: 1.5rem; /* 24px, confirmed via Figma */
 	text-align: left;
 }
 
@@ -510,28 +528,52 @@ body {
 
 .amfc-service-card {
 	background: var(--amfc-surface);
-	border-radius: var(--amfc-radius-lg);
-	box-shadow: var(--amfc-shadow-card);
-	padding: var(--amfc-space-lg);
+	border: 1px solid var(--amfc-card-border);
+	border-radius: var(--amfc-radius-xl);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.5rem; /* 24px, confirmed via Figma */
+	/* 500px at the 1440px Figma reference width, fluid-scaled below it */
+	min-height: clamp(26rem, calc(500 / 1440 * 100vw), 500px);
+	padding: 3rem; /* 48px, confirmed via Figma */
+	text-align: center;
 }
 
 .amfc-service-card__icon {
-	width: 72px;
-	height: 72px;
-	margin-bottom: var(--amfc-space-md);
+	width: 100%;
+	max-width: 342px;
+	height: auto;
+}
+
+.amfc-service-card__text {
+	display: flex;
+	flex-direction: column;
+	gap: 1.125rem; /* 18px, confirmed via Figma */
 }
 
 .amfc-service-card__title {
 	color: var(--amfc-text-heading);
 	font-weight: 700;
-	font-size: 1.25rem;
-	margin-bottom: var(--amfc-space-sm);
+	font-size: 1.5rem; /* 24px, confirmed via Figma */
 }
 
 .amfc-service-card__body {
-	color: var(--amfc-text-body);
-	line-height: 1.7;
-	margin-bottom: var(--amfc-space-md);
+	color: var(--amfc-text-heading); /* same navy as the title in Figma, not the muted body color */
+	font-size: 1rem;
+	line-height: 1.5;
+	max-width: 351px;
+	margin-inline: auto;
+}
+
+.amfc-service-card__cta {
+	width: 223px;
+	height: 64px;
+	font-size: 1.25rem; /* 20px, confirmed via Figma */
+	font-weight: 700;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* --- App download ("KingDo") --- */
