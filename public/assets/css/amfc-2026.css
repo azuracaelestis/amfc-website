@@ -304,11 +304,40 @@ body {
 	}
 }
 
+/* Shifted 20px right (matching .amfc-hero__content's identical shift so this heading lines up
+   with the hero headline above it) and 32px down, per feedback. */
+.amfc-philosophy__intro {
+	transform: translate(20px, 32px);
+}
+
+/* Gold to match the reference — every other section's eyebrow stays the blue accent color, so
+   this is scoped to the philosophy section rather than changing the shared .amfc-eyebrow rule. */
+.amfc-philosophy__eyebrow {
+	color: var(--amfc-gold-500);
+}
+
 .amfc-philosophy__heading {
 	color: var(--amfc-text-heading);
 	font-weight: 700;
 	font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
 	line-height: 1.8;
+}
+
+/* Gold accent bar under each heading line, per the reference image. */
+.amfc-philosophy__heading-line {
+	position: relative;
+	display: inline-block;
+}
+
+.amfc-philosophy__heading-line::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: -0.5rem;
+	width: 65%;
+	height: 4px;
+	border-radius: 2px;
+	background: var(--amfc-gold-400);
 }
 
 /* The pile lives in the right column. Each card is directly sticky, so its own height is what

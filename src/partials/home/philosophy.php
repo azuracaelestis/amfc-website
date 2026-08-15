@@ -22,13 +22,15 @@
       fix. Sticky must directly wrap the visible card, not a tall spacer around it. */
 ?>
 <section id="about" class="amfc-curve-top amfc-philosophy">
-	<div class="container">
+	<!-- .amfc-container (not Bootstrap's .container) so this column's left edge lines up
+	     exactly with the hero headline above it — same reasoning as hero.php. -->
+	<div class="amfc-container">
 		<div class="amfc-philosophy__grid">
 			<div class="amfc-philosophy__intro">
-				<p class="amfc-eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
+				<p class="amfc-eyebrow amfc-philosophy__eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
 				<h2 class="amfc-philosophy__heading">
-					<?= e(t('home.philosophy.headline_line1')) ?><br />
-					<?= e(t('home.philosophy.headline_line2')) ?>
+					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1')) ?></span><br />
+					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line2')) ?></span>
 				</h2>
 			</div>
 			<div class="amfc-philosophy__stack">
