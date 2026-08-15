@@ -104,9 +104,9 @@
 	/* 16px at the 1440px Figma reference width, fluid-scaled below it, per feedback */
 	font-size: clamp(0.875rem, calc(16 / 1440 * 100vw), 16px);
 	line-height: 1.5;
-	/* 600px at the 1440px Figma reference width, fluid-scaled below it, per feedback
-	   (Figma's own value here is 525px — overridden per explicit instruction) */
-	width: clamp(18.75rem, calc(600 / 1440 * 100vw), 600px);
+	/* 525px at the 1440px Figma reference width, fluid-scaled below it, per feedback
+	   (matches Figma's own value here) */
+	width: clamp(16.4rem, calc(525 / 1440 * 100vw), 525px);
 }
 
 /* --- Shared section primitives --- */
