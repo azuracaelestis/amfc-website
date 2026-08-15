@@ -722,38 +722,75 @@ body {
 	background: var(--amfc-lavender-100);
 }
 
-.amfc-investor__grid {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--amfc-space-lg);
+.amfc-investor__card {
+	display: flex;
+	flex-direction: column;
 	align-items: center;
+	/* 48px at the 1440px Figma reference width, fluid-scaled below it, confirmed via Figma */
+	gap: clamp(1.5rem, calc(48 / 1440 * 100vw), 48px);
 }
 
 @media (min-width: 768px) {
-	.amfc-investor__grid {
-		grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-		gap: var(--amfc-space-xl);
+	.amfc-investor__card {
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
 	}
+}
+
+.amfc-investor__photo-wrap {
+	position: relative;
+	flex-shrink: 0;
+	border-radius: var(--amfc-radius-xl);
+	overflow: hidden;
+	/* 545x407 at the 1440px Figma reference width, fluid-scaled below it, confirmed via Figma */
+	width: clamp(17rem, calc(545 / 1440 * 100vw), 545px);
+	height: clamp(12.7rem, calc(407 / 1440 * 100vw), 407px);
 }
 
 .amfc-investor__photo {
 	width: 100%;
-	height: auto;
-	border-radius: var(--amfc-radius-lg);
+	height: 100%;
+	object-fit: cover;
 	display: block;
 }
 
+.amfc-investor__text {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	text-align: left;
+	gap: 1.5rem; /* 24px, confirmed via Figma */
+	/* 464px at the 1440px Figma reference width, fluid-scaled below it, confirmed via Figma */
+	width: clamp(14.5rem, calc(464 / 1440 * 100vw), 464px);
+}
+
 .amfc-investor__heading {
-	color: var(--amfc-text-heading);
-	font-weight: 700;
-	font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
-	margin-bottom: var(--amfc-space-sm);
+	color: var(--amfc-text-heading); /* #1A2F86 */
+	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
+	font-weight: 600; /* Noto Sans SemiBold, confirmed via Figma */
+	/* 36px at the 1440px Figma reference width, fluid-scaled below it, confirmed via Figma */
+	font-size: clamp(1.5rem, calc(36 / 1440 * 100vw), 36px);
+	line-height: 1.3;
 }
 
 .amfc-investor__body {
-	color: var(--amfc-text-body);
-	line-height: 1.7;
-	margin-bottom: var(--amfc-space-sm);
+	color: var(--amfc-text-heading); /* #1A2F86, per feedback */
+	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
+	/* 16px at the 1440px Figma reference width, fluid-scaled below it, per feedback */
+	font-size: clamp(0.875rem, calc(16 / 1440 * 100vw), 16px);
+	line-height: 1.5;
+}
+
+.amfc-investor__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem; /* 4px, confirmed via Figma */
+	color: var(--amfc-text-heading); /* #1A2F86 */
+	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
+	font-weight: 500; /* Noto Sans Medium, confirmed via Figma */
+	font-size: 1rem; /* 16px, confirmed via Figma */
+	text-decoration: underline;
 }
 
 /* --- 3-card grid (media / events / anti-fraud) --- */
