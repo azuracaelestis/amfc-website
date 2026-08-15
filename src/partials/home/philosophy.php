@@ -1,15 +1,25 @@
 <?php
 /* PORT THIS — Company philosophy (KSP) section: a scroll-stacking card pile.
    Four stat cards pile up one-by-one as the user scrolls the right column, while the
-   heading stays pinned on the left, so each card is read in turn.
+   heading stays pinned on the left, so each card is read in turn, then the section
+   releases into Funds partnership below.
 
-   Mechanism: PURE CSS `position: sticky` (see amfc-2026.css), the same pattern as the
-   portfolio reference. No JS, no animation library — CSP-safe (CLAUDE.md: no new library).
+   Mechanism: PURE CSS `position: sticky` (see amfc-2026.css), directly on each card — no JS,
+   no animation library, CSP-safe, and no extra wrapper. Cards share nearly the same `top`
+   (a tiny per-card increment for the fanned-peek look) and sit back-to-back with almost no
+   gap, so as soon as one card's own height scrolls past the sticky offset and it releases,
+   the next card — already just behind it — reaches that same offset and takes over.
 
-   Prior approach (removed) pinned a 400vh track and used a JS scroll listener to scrub each
-   card's opacity 0->1. That blanked the entire stack: at scroll progress 0 the first card's
-   computed opacity was also 0, and all four cards were absolute/inset:0 (perfect overlap, not
-   a readable pile). Resting rotation is now owned by the CSS card modifiers, not data-rotate. */
+   Two prior approaches were tried and rejected:
+   1. A tall 400vh scroll-track + JS scrubbing every card's opacity from scroll position.
+      Scroll progress 0 gave EVERY card (including the first) opacity 0, so the pile was
+      blank until scrolled well into the track, and all four cards were absolute/inset:0
+      (perfect overlap), never a readable pile to begin with.
+   2. Wrapping each card in a tall sticky "slot" (for a longer per-card dwell time) with a
+      zero-gap stack. That backfired: once a slot's dwell time ended and it released, the
+      UNUSED height below the (much shorter) card inside it scrolled into view as a plain
+      blank gap before the next slot's card arrived — worse than the gap this was meant to
+      fix. Sticky must directly wrap the visible card, not a tall spacer around it. */
 ?>
 <section id="about" class="amfc-curve-top amfc-philosophy">
 	<div class="container">

@@ -254,16 +254,13 @@
 
 /* --- Company philosophy (KSP) --- */
 
-/* Scroll-stacking card pile, CSS-only via `position: sticky` — the same mechanism as the
-   portfolio reference (each card sticks at a slightly larger top offset + z-index, so they
-   pile up one-by-one as you scroll). No JS, no pinned track, no opacity scrub.
-
-   Why the rewrite: the old build pinned a 400vh track and drove each card's opacity from a JS
-   scroll listener. At scroll progress 0 the reveal formula gave EVERY card (including the
-   first) opacity 0, so the whole stack was blank until you scrolled a quarter into the track —
-   the "wipe out." And all four cards were position:absolute/inset:0, i.e. perfectly
-   overlapping, so it was never a readable pile to begin with. This is CSP-safe (zero script)
-   and needs no artificial track height — the stack's own height provides the scroll distance. */
+/* Scroll-stacking card pile, CSS-only via `position: sticky` directly on each card — the same
+   mechanism as the portfolio reference. No JS, no pinned track, no opacity scrub, no extra
+   wrapper. Cards share nearly the same `top` (see the per-card rules below) and sit almost
+   flush against each other (near-zero `gap`), so a card's own height is what supplies its
+   scroll dwell-time, and the next card is already waiting just behind it to take over the
+   instant the current one releases — see philosophy.php for the two rejected approaches and
+   why each failed (a JS opacity-scrub track, then a tall sticky "slot" wrapper). */
 
 .amfc-philosophy {
 	padding-block: var(--amfc-space-xl);
@@ -301,14 +298,18 @@
 	line-height: 1.8;
 }
 
-/* The pile lives in the right column. Its natural height (four cards + gaps + tail padding)
-   is exactly what supplies the scroll distance the sticky offsets scrub against. */
+/* The pile lives in the right column. Each card is directly sticky, so its own height is what
+   provides its scroll dwell-time — no wrapper, no dead space to leak into view. A small `gap`
+   (not the 8rem originally used) keeps handoff tight: once a card's own bottom edge scrolls
+   past the sticky offset and it releases, the next card — sitting almost immediately after it
+   in the flow — reaches that same offset (give or take its own small per-card increment) right
+   away, so it takes over with no blank scroll stretch in between. */
 .amfc-philosophy__stack {
 	--amfc-stack-top: clamp(6rem, 16vh, 10rem); /* where the pile settles below the nav */
 	display: flex;
 	flex-direction: column;
-	gap: 8rem;             /* scroll travel between each card landing on the pile */
-	padding-bottom: 40vh;  /* lets the last card sit as the top of the pile before the section ends */
+	gap: var(--amfc-space-md); /* small — just enough breathing room, not scroll distance */
+	padding-bottom: 30vh;      /* lets the last card release before Funds partnership begins */
 }
 
 .amfc-philosophy__stat-card {
@@ -327,16 +328,14 @@
 	border-radius: var(--amfc-radius-lg);
 	box-shadow: var(--amfc-shadow-card);
 	text-align: center;
-	opacity: 1; /* nothing scripts this anymore — cards are always fully visible */
 }
 
-/* Per-card: cumulative sticky offset (each peeks below the previous), paint order, resting
-   rotation, and background tint. These four modifiers are now the single source of truth for
-   the fanned look (data-rotate is gone). */
+/* Per-card: a small cumulative sticky-top increment (the fanned-peek look), paint order, resting
+   rotation, and background tint. */
 .amfc-philosophy__stat-card--1 { top: calc(var(--amfc-stack-top) + 0rem);    z-index: 1; transform: rotate(2.3deg);  background: var(--amfc-mint-100); }
-.amfc-philosophy__stat-card--2 { top: calc(var(--amfc-stack-top) + 2.75rem); z-index: 2; transform: rotate(-3deg);   background: var(--amfc-cream-100); }
-.amfc-philosophy__stat-card--3 { top: calc(var(--amfc-stack-top) + 5.5rem);  z-index: 3; transform: rotate(3.4deg);  background: var(--amfc-periwinkle-100); }
-.amfc-philosophy__stat-card--4 { top: calc(var(--amfc-stack-top) + 8.25rem); z-index: 4; transform: rotate(-3.2deg); background: var(--amfc-lavender-100); }
+.amfc-philosophy__stat-card--2 { top: calc(var(--amfc-stack-top) + 0.75rem); z-index: 2; transform: rotate(-3deg);   background: var(--amfc-cream-100); }
+.amfc-philosophy__stat-card--3 { top: calc(var(--amfc-stack-top) + 1.5rem);  z-index: 3; transform: rotate(3.4deg);  background: var(--amfc-periwinkle-100); }
+.amfc-philosophy__stat-card--4 { top: calc(var(--amfc-stack-top) + 2.25rem); z-index: 4; transform: rotate(-3.2deg); background: var(--amfc-lavender-100); }
 
 /* Mobile: a narrow sticky pile reads badly — fall back to a plain vertical list. */
 @media (max-width: 991.98px) {
