@@ -252,6 +252,19 @@
 	height: clamp(1.25rem, calc(38 / 1440 * 100vw), 38px);
 }
 
+/* AMFC's own custom.css sets `overflow-x: hidden` on html/body to prevent horizontal scroll
+   bleed from decorative elements. Per the CSS overflow spec, setting only one axis to
+   `hidden` forces the OTHER axis to compute as `auto` (confirmed via getComputedStyle:
+   overflowY comes back "auto" even though nothing sets it explicitly) — which makes html/body
+   an explicit scroll container instead of just the plain viewport. `overflow-x: clip` gets the
+   same no-horizontal-bleed result without that forced-auto pairing, since `clip` doesn't
+   establish a scrollable overflow context on its own axis. Strictly additive per CLAUDE.md —
+   we never edit their custom.css, just override the computed value from ours, loaded after. */
+html,
+body {
+	overflow-x: clip;
+}
+
 /* --- Company philosophy (KSP) --- */
 
 /* Scroll-stacking card pile, CSS-only via `position: sticky` directly on each card — the same
