@@ -316,6 +316,7 @@ body {
    this is scoped to the philosophy section rather than changing the shared .amfc-eyebrow rule. */
 .amfc-philosophy__eyebrow {
 	color: var(--amfc-gold-500);
+	font-size: 1.5rem; /* 24px, per feedback */
 }
 
 .amfc-philosophy__heading {
