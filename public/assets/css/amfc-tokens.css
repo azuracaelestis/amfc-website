@@ -6,7 +6,9 @@
 	/* primitive tier */
 	--amfc-blue-900: #1a2f86; /* dominant heading/text color across the design */
 	--amfc-blue-700: #223a8c;
+	--amfc-blue-650: #2441b5; /* hero CTA press state */
 	--amfc-blue-600: #2d50d7; /* button/link/accent — exact from Figma */
+	--amfc-blue-550: #4161e1; /* hero CTA hover state */
 	--amfc-blue-500: #4a68e0;
 	--amfc-blue-100: #e8ecfb;
 	--amfc-lavender-100: #f5f7ff; /* investor band / one stat card / hero gradient stop */

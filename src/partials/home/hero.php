@@ -14,9 +14,11 @@
 					<?= e(t('home.hero.headline_2')) ?><br />
 					<?= e(t('home.hero.headline_3')) ?>
 				</h1>
-				<a href="#service" class="btn btn-primary btn-lg rounded-pill px-4 d-inline-flex align-items-center gap-2">
+				<a href="#service" class="btn btn-primary btn-lg rounded-pill px-4 d-inline-flex align-items-center gap-2 amfc-hero__cta">
 					<?= e(t('home.hero.cta')) ?>
-					<img src="<?= e(asset('images/icon-arrow-down-circle.svg')) ?>" alt="" width="24" height="24" aria-hidden="true" />
+					<span class="amfc-hero__cta-arrow">
+						<img src="<?= e(asset('images/icon-arrow-right.svg')) ?>" alt="" width="19" height="19" aria-hidden="true" />
+					</span>
 				</a>
 			</div>
 			<div class="amfc-hero__photo-wrap">

@@ -294,6 +294,60 @@
 	height: clamp(1.25rem, calc(38 / 1440 * 100vw), 38px);
 }
 
+/* Hero CTA hover/press micro-interaction, per feedback. Default color matches the existing
+   --amfc-accent used by .btn-primary everywhere else; hover/press are new shades scoped to
+   just this button so the global .btn-primary override (amfc-bootstrap-overrides.css) is
+   untouched. Arrow lives in a fixed-width slot so the button never changes width across states
+   — it fades/slides within that slot rather than the button growing. */
+.amfc-hero__cta {
+	background-color: var(--amfc-accent);
+	border-color: var(--amfc-accent);
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.amfc-hero__cta:hover,
+.amfc-hero__cta:focus-visible {
+	background-color: var(--amfc-blue-550);
+	border-color: var(--amfc-blue-550);
+}
+
+.amfc-hero__cta:active {
+	background-color: var(--amfc-blue-650);
+	border-color: var(--amfc-blue-650);
+}
+
+.amfc-hero__cta-arrow {
+	display: inline-flex;
+	align-items: center;
+	width: 19px;
+	overflow: hidden;
+	flex-shrink: 0;
+}
+
+.amfc-hero__cta-arrow img {
+	opacity: 0;
+	transform: translateX(-6px);
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.amfc-hero__cta:hover .amfc-hero__cta-arrow img,
+.amfc-hero__cta:focus-visible .amfc-hero__cta-arrow img {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+.amfc-hero__cta:active .amfc-hero__cta-arrow img {
+	opacity: 0;
+	transform: translateX(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-hero__cta,
+	.amfc-hero__cta-arrow img {
+		transition: none;
+	}
+}
+
 /* AMFC's own custom.css sets `overflow-x: hidden` on html/body to prevent horizontal scroll
    bleed from decorative elements. Per the CSS overflow spec, setting only one axis to
    `hidden` forces the OTHER axis to compute as `auto` (confirmed via getComputedStyle:
