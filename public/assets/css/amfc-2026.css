@@ -328,7 +328,17 @@ body {
 /* Gold accent bar under each heading line, per the reference image. */
 .amfc-philosophy__heading-line {
 	position: relative;
-	display: inline-block;
+	display: block;
+	width: fit-content; /* stays sized to its own text (not full-width) so the ::after
+	                       underline below still tracks that line's own text, not the column */
+	/* Without the <br> that used to separate these, two block spans stack with no gap of
+	   their own — add enough margin so each line's ::after underline (bottom: -0.5rem) has
+	   room and doesn't visually collide with the next line's text. */
+	margin-bottom: 0.75rem;
+}
+
+.amfc-philosophy__heading-line:last-child {
+	margin-bottom: 0;
 }
 
 .amfc-philosophy__heading-line::after {

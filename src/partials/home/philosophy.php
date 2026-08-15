@@ -29,7 +29,7 @@
 			<div class="amfc-philosophy__intro">
 				<p class="amfc-eyebrow amfc-philosophy__eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
 				<h2 class="amfc-philosophy__heading">
-					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1')) ?></span><br />
+					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1')) ?></span>
 					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line2')) ?></span>
 				</h2>
 			</div>
