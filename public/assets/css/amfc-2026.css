@@ -497,7 +497,8 @@ body {
 	/* 965px at the 1440px Figma reference width, fluid-scaled below it */
 	width: clamp(18.75rem, calc(965 / 1440 * 100vw), 965px);
 	margin-inline: auto;
-	margin-bottom: 3rem; /* 48px, per Figma gap between header and card row */
+	/* 48px at the 1440px Figma reference width, fluid-scaled below it, per feedback */
+	margin-bottom: clamp(1.5rem, calc(48 / 1440 * 100vw), 48px);
 }
 
 /* Gold to match the reference — scoped to this section, same reasoning as
