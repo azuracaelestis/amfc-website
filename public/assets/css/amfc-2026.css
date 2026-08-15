@@ -734,7 +734,9 @@ body {
 	/* Top half of the 180px gap from the app-download section above (other half is that
 	   section's own padding-bottom) — see .amfc-app. 90px at the 1440px reference width,
 	   fluid-scaled below it, per feedback. */
-	padding-block: clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px) var(--amfc-space-xl);
+	/* Bottom half of the 180px gap to the news-grid section below (other half is that
+	   section's own padding-top, fluid-scaled the same way) — see .amfc-news-grid. */
+	padding-block: clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px) clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px);
 	/* White fading to lavender, confirmed via Figma (node 87:347): linear-gradient to bottom,
 	   white -> #f5f7ff (== --amfc-lavender-100) reaching full stop at 63.462%. */
 	background: linear-gradient(to bottom, var(--amfc-white) 0%, var(--amfc-lavender-100) 63.462%);
@@ -820,7 +822,10 @@ body {
 /* CORRECTED: real cards are single flattened illustration images (text baked in) on a
    periwiknle band, not a muted card + separate icon/title as first built. */
 .amfc-news-grid {
-	padding-block: var(--amfc-space-xl);
+	/* Top half of the 180px gap from the investor section above (other half is that
+	   section's own padding-bottom) — see .amfc-investor. 90px at the 1440px reference
+	   width, fluid-scaled below it, per feedback. */
+	padding-block: clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px) var(--amfc-space-xl);
 	background: var(--amfc-periwinkle-100);
 }
 
