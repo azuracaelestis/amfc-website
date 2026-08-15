@@ -513,17 +513,13 @@ body {
 	font-size: clamp(1.75rem, calc(42 / 1440 * 100vw), 42px);
 }
 
+/* flex, not grid — .amfc-service-card now has a fixed (fluid-scaled) width of its own, so the
+   cards should sit at their own size side by side, not stretch to fill grid columns. */
 .amfc-services__grid {
-	display: grid;
-	grid-template-columns: 1fr;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 	gap: 1.5rem; /* 24px, confirmed via Figma */
-	text-align: left;
-}
-
-@media (min-width: 768px) {
-	.amfc-services__grid {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
 }
 
 .amfc-service-card {
@@ -533,10 +529,11 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 0.945rem; /* 24px * 0.9 * 0.7, per feedback */
-	/* 315px (500px * 0.9 * 0.7) at the 1440px Figma reference width, fluid-scaled below it */
-	min-height: clamp(16.38rem, calc(315 / 1440 * 100vw), 315px);
-	padding: 1.89rem; /* 48px * 0.9 * 0.7, per feedback */
+	gap: 1.5rem; /* 24px, per feedback */
+	/* Fixed 447x500 at the 1440px Figma reference width, fluid-scaled below it, per feedback. */
+	width: clamp(16.75rem, calc(447 / 1440 * 100vw), 447px);
+	height: clamp(18.75rem, calc(500 / 1440 * 100vw), 500px);
+	padding: 3rem; /* 48px, per feedback */
 	text-align: center;
 	/* Hover elevation, per feedback */
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -551,17 +548,23 @@ body {
    personal-loan.svg (323x197) have different aspect ratios — without pinning this wrapper's
    height, the taller-rendering icon would push its card's title down relative to the other
    card's. Centering the icon within lets both illustrations sit on their own natural size
-   while still starting the title at the same y in both cards. */
+   while still starting the title at the same y in both cards.
+
+   178px is what's left of the fixed 500px card height once padding (48*2), both gaps (24*2),
+   the text block (title 24 + gap 18 + body 4.5-line-height box), and the button (64) are
+   subtracted — see the math in the card's own comment. Whichever icon is taller at a given
+   width (personal-loan.svg) shrinks to fit this box; car-loan.svg, being wider/shorter, ends
+   up a little narrower than its own 342px max-width, which is expected and fine. */
 .amfc-service-card__icon-wrap {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: clamp(4.6rem, calc(92 / 1440 * 100vw), 92px); /* 131px * 0.7, per feedback */
+	height: clamp(7.4rem, calc(178 / 1440 * 100vw), 178px);
 }
 
 .amfc-service-card__icon {
 	width: 100%;
-	max-width: 215.46px; /* 342px * 0.9 * 0.7, per feedback */
+	max-width: 342px;
 	max-height: 100%;
 	height: auto;
 }
@@ -569,30 +572,32 @@ body {
 .amfc-service-card__text {
 	display: flex;
 	flex-direction: column;
-	gap: 0.70875rem; /* 18px * 0.9 * 0.7, per feedback */
+	gap: 1.125rem; /* 18px, per feedback */
 }
 
 .amfc-service-card__title {
 	color: var(--amfc-text-heading);
 	font-weight: 700;
-	font-size: 0.945rem; /* 24px * 0.9 * 0.7, per feedback */
+	/* 24px at the 1440px Figma reference width, fluid-scaled below it, per feedback */
+	font-size: clamp(1.25rem, calc(24 / 1440 * 100vw), 24px);
 }
 
 /* Fixed height sized for 3 lines (the longer of the two cards' copy) so both cards' title and
    CTA button land at the same y regardless of which card's body text is actually longer. */
 .amfc-service-card__body {
 	color: var(--amfc-text-heading); /* same navy as the title in Figma, not the muted body color */
-	font-size: 0.63rem; /* 16px * 0.9 * 0.7, per feedback */
+	/* 16px at the 1440px Figma reference width, fluid-scaled below it, per feedback */
+	font-size: clamp(0.875rem, calc(16 / 1440 * 100vw), 16px);
 	line-height: 1.5;
 	height: 4.5em; /* 3 lines at this element's own line-height */
-	max-width: 221.13px; /* 351px * 0.9 * 0.7, per feedback */
+	max-width: 351px;
 	margin-inline: auto;
 }
 
 .amfc-service-card__cta {
-	width: 140.49px; /* 223px * 0.9 * 0.7, per feedback */
-	height: 40.32px; /* 64px * 0.9 * 0.7, per feedback */
-	font-size: 0.7875rem; /* 20px * 0.9 * 0.7, per feedback */
+	width: 223px;
+	height: 64px;
+	font-size: 1.25rem; /* 20px, restored to the original Figma value */
 	font-weight: 700;
 	display: inline-flex;
 	align-items: center;
