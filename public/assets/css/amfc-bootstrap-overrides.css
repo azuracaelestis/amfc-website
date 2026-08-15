@@ -1,0 +1,23 @@
+/* PORT THIS — Bootstrap 5.3 retheme via its own CSS variables, not new selectors.
+   Known gaps (see CLAUDE.md "CSS architecture"):
+   - utilities like .text-primary/.bg-primary read --bs-primary-rgb, so it's set explicitly below
+   - .btn-primary hover/active shades are compiled hex in Bootstrap's distributed CSS,
+     so they're overridden explicitly rather than derived */
+
+.theme-2026 {
+	--bs-primary: var(--amfc-accent);
+	--bs-primary-rgb: var(--amfc-accent-rgb);
+	--bs-body-color: var(--amfc-text-body);
+	--bs-body-font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--bs-border-radius: var(--amfc-radius-md);
+	--bs-border-radius-lg: var(--amfc-radius-lg);
+}
+
+.theme-2026 .btn-primary {
+	--bs-btn-bg: var(--amfc-accent);
+	--bs-btn-border-color: var(--amfc-accent);
+	--bs-btn-hover-bg: var(--amfc-blue-700);
+	--bs-btn-hover-border-color: var(--amfc-blue-700);
+	--bs-btn-active-bg: var(--amfc-blue-700);
+	--bs-btn-active-border-color: var(--amfc-blue-700);
+}

@@ -1,0 +1,638 @@
+/* PORT THIS — new component styles. Everything scoped under .theme-2026 on <body> so this
+   cannot leak into AMFC's legacy pages during rollout, and the whole redesign is reversible
+   by removing one class. Load order: Bootstrap -> tokens -> bootstrap-overrides -> this file
+   -> page CSS, and always AFTER AMFC's own custom.css. */
+
+/* Accessibility floor: AMFC's live custom.css sets `*:focus { outline: none }` and repeats it
+   for `:focus-visible`, removing keyboard focus indicators site-wide. Reinstate it here. */
+.theme-2026 :focus-visible {
+	outline: 2px solid var(--amfc-accent);
+	outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.theme-2026 [data-aos] {
+		transition: none !important;
+		animation: none !important;
+		transform: none !important;
+	}
+}
+
+/* --- Trust / compliance section --- */
+
+.amfc-trust {
+	background: var(--amfc-surface);
+	padding-block: var(--amfc-space-xl);
+}
+
+.amfc-trust__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--amfc-space-lg);
+	align-items: center;
+}
+
+@media (min-width: 992px) {
+	.amfc-trust__grid {
+		grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+		gap: var(--amfc-space-xl);
+	}
+}
+
+.amfc-trust__badges {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--amfc-space-lg) var(--amfc-space-md);
+}
+
+.amfc-trust__badges img {
+	height: 64px;
+	width: auto;
+	object-fit: contain;
+}
+
+/* The entity badge (trust-badge-3) carries its own name text baked into the image and runs
+   wider than the other two — give it its own row so it doesn't get squeezed. */
+.amfc-trust__badges img:last-child {
+	flex-basis: 100%;
+}
+
+.amfc-trust__heading {
+	color: var(--amfc-text-heading);
+	font-weight: 700;
+	font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+	line-height: 1.35;
+	margin-bottom: var(--amfc-space-md);
+}
+
+.amfc-trust__body {
+	color: var(--amfc-text-body);
+	line-height: 1.8;
+}
+
+/* --- Shared section primitives --- */
+
+.amfc-eyebrow {
+	display: inline-block;
+	color: var(--amfc-accent);
+	font-weight: 600;
+	font-size: 0.875rem;
+	letter-spacing: 0.04em;
+	margin-bottom: var(--amfc-space-sm);
+}
+
+/* Curved white overlap used to transition out of the hero's gradient background.
+   Reused wherever a section needs to visually "lift" over the section above it. */
+.amfc-curve-top {
+	position: relative;
+	background: var(--amfc-surface);
+	border-radius: var(--amfc-radius-lg) var(--amfc-radius-lg) 0 0;
+	/* Pulled up so the white block's top edge covers the bottom of the hero photo. History:
+	   -12rem -> +100px (-5.75rem) -> +40px (-8.25rem) -> +20px more = -7.75rem. */
+	margin-top: -7.75rem;
+	z-index: 1;
+}
+
+/* --- Header / nav ---
+   Floating rounded pill per the reference screenshot: translucent white, rounded-full,
+   offset from the top edge and from the side edges (not full-width, not flush to top). */
+
+.amfc-nav-pill {
+	position: fixed;
+	top: 1.5rem;
+	left: 50%;
+	transform: translateX(-50%);
+	width: calc(100% - 2 * var(--amfc-space-lg));
+	max-width: 1264px;
+	background: rgba(255, 255, 255, 0.8);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border-radius: 999px;
+	box-shadow: var(--amfc-shadow-card);
+	/* Figma reference: 32px horizontal padding at a 1440px canvas, then the whole bar scaled
+	   down 10% per the user's request (font-size held fixed separately below) -> 28.8px. */
+	padding-inline: clamp(0.9rem, calc(28.8 / 1440 * 100vw), 1.8rem);
+	z-index: 1000;
+}
+
+.amfc-nav-pill .navbar {
+	/* Bootstrap's py-2 utility (0.5rem) scaled down 10% -> 0.45rem */
+	padding-block: 0.45rem;
+}
+
+/* Shifted 20px right per feedback — the hero content block (.amfc-hero__content) gets the
+   identical shift below, so the two stay aligned with each other, just both moved right. */
+.amfc-nav__brand {
+	display: inline-block;
+	transform: translateX(20px);
+}
+
+.amfc-nav__items {
+	gap: clamp(0.9rem, calc(35.1 / 1440 * 100vw), 2.19375rem); /* 39px at 1440px, -10% */
+}
+
+.amfc-nav-pill .nav-link {
+	color: var(--amfc-text-heading); /* #1A2F86 */
+	font-size: 1rem; /* 16px — held fixed, NOT scaled down with the rest of the bar */
+	font-weight: 600;
+}
+
+.amfc-nav__lang-toggle {
+	background: none;
+	border: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+/* Source icon's native orientation points sideways — Figma itself rotates this same asset
+   -90deg to point down (see node 87:74), so replicate that rotation here. */
+.amfc-nav__lang-toggle img {
+	transform: rotate(-90deg);
+}
+
+/* Real Figma icon replaces it, so suppress Bootstrap's default ::after triangle caret */
+.amfc-nav__lang-toggle.dropdown-toggle::after {
+	display: none;
+}
+
+/* --- Hero ---
+   Uses .amfc-container instead of Bootstrap's .container so the logo (inside .amfc-nav-pill,
+   which uses the identical width/max-width/padding formula) lines up exactly with the
+   headline's left edge — Bootstrap's .container snaps to different breakpoint widths and
+   would NOT align with the nav pill's fluid 1264px-capped box. */
+
+.amfc-container {
+	width: calc(100% - 2 * var(--amfc-space-lg));
+	max-width: 1264px;
+	margin-inline: auto;
+	padding-inline: clamp(0.9rem, calc(28.8 / 1440 * 100vw), 1.8rem);
+}
+
+.amfc-hero {
+	background: var(--amfc-grad-hero);
+	/* Top padding clears the fixed translucent nav pill (top:1.5rem + its own height) */
+	padding-block: calc(var(--amfc-space-xl) * 2) calc(var(--amfc-space-xl) * 1.5);
+	position: relative;
+	overflow: hidden;
+}
+
+.amfc-hero__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--amfc-space-lg);
+	align-items: center;
+}
+
+@media (min-width: 992px) {
+	.amfc-hero__grid {
+		grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+	}
+}
+
+/* Shifted 20px right per feedback (matching .amfc-nav__brand's identical shift so the logo
+   stays aligned with the eyebrow/headline/button below it), then 42px up per follow-up. */
+.amfc-hero__content {
+	transform: translate(20px, -42px);
+}
+
+.amfc-hero__eyebrow {
+	color: var(--amfc-white);
+	font-family: var(--amfc-font-en);
+	font-weight: 700;
+	font-size: 1.25rem;
+	margin-bottom: var(--amfc-space-md);
+}
+
+.amfc-hero__headline {
+	color: var(--amfc-white);
+	font-family: var(--amfc-font-zh);
+	font-weight: 700;
+	/* 64px at the 1440px Figma reference width, scaling fluidly below it, capped at 64px above */
+	font-size: clamp(1.75rem, calc(64 / 1440 * 100vw), 4rem);
+	line-height: 1.3;
+	letter-spacing: 0.05em;
+	/* Headline-to-button gap: 48px at the 1440px reference, same fluid-scaling technique */
+	margin-bottom: clamp(1.5rem, calc(48 / 1440 * 100vw), 3rem);
+}
+
+.amfc-hero__photo-wrap {
+	position: relative;
+	text-align: center;
+	/* enlarged photo can overflow its own box; clip against the hero section instead
+	   (amfc-hero already has overflow: hidden) */
+	overflow: visible;
+}
+
+.amfc-hero__photo {
+	max-width: 100%;
+	height: auto;
+	/* Net +8% (was +20%, then -10% per follow-up: 1.2 * 0.9 = 1.08), shifted 40px left.
+	   Order matters: translate is listed first (outer/applied last) so the shift is a flat
+	   40px regardless of the scale factor. */
+	transform: translateX(-40px) scale(1.08);
+}
+
+.amfc-hero__sparkle {
+	position: absolute;
+	color: var(--amfc-blue-500);
+	opacity: 0.8;
+}
+
+/* Small sparkle: right side, near the shoulder */
+.amfc-hero__sparkle--a { top: 30%; right: 2%; width: 24px; height: 24px; }
+/* Large sparkle: moved to the LEFT side of the photo per reference screenshot. Size now set
+   as 38px at the 1440px reference width, fluid-scaled like the other measurements (was a
+   fixed 67.5px from two prior +50% requests). */
+.amfc-hero__sparkle--c {
+	top: 22%;
+	left: -2%;
+	width: clamp(1.25rem, calc(38 / 1440 * 100vw), 38px);
+	height: clamp(1.25rem, calc(38 / 1440 * 100vw), 38px);
+}
+
+/* --- Company philosophy --- */
+
+.amfc-philosophy {
+	padding-block: var(--amfc-space-xl);
+	background: var(--amfc-surface);
+}
+
+/* Scroll-scrubbed reveal (per feedback: NOT a one-shot trigger — genuinely tied to scroll
+   position, like a parallax/scrollytelling effect). A tall track provides scroll distance;
+   the inner wrapper pins via position:sticky while JS (amfc-2026.js initPhilosophyParallax)
+   maps scroll progress through the track directly onto each card's opacity/position every
+   frame, so scrolling back up un-reveals cards in reverse, same as scrolling down reveals them. */
+.amfc-philosophy__scroll-track {
+	position: relative;
+	height: 400vh; /* ~100vh of scroll per card; tune here if the pacing feels off */
+}
+
+.amfc-philosophy__sticky {
+	position: sticky;
+	top: 0;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	/* overflow:hidden here was silently breaking the element's own sticky positioning
+	   (confirmed empirically) — removed. Nothing needs clipping at this level anyway;
+	   the cards are small and absolutely positioned within their own stack box. */
+}
+
+.amfc-philosophy__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--amfc-space-lg);
+	align-items: center;
+	width: 100%;
+	/* Content (card stack, eyebrow, heading) shifted down 42px per earlier feedback */
+	transform: translateY(42px);
+}
+
+@media (min-width: 992px) {
+	.amfc-philosophy__grid {
+		grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+		gap: var(--amfc-space-xl);
+	}
+}
+
+.amfc-philosophy__heading {
+	color: var(--amfc-text-heading);
+	font-weight: 700;
+	font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+	line-height: 1.8;
+}
+
+.amfc-philosophy__stack {
+	position: relative;
+	width: 100%;
+	max-width: 480px;
+	height: 420px;
+	margin-inline: auto;
+}
+
+.amfc-philosophy__stat-card {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--amfc-space-md);
+	border: 1px solid var(--amfc-card-border);
+	border-radius: var(--amfc-radius-lg);
+	text-align: center;
+	/* Default (no-JS / pre-hydration) fallback: fully visible, correctly rotated per card via
+	   data-rotate, read by JS below. Once JS runs, it drives opacity/transform via inline
+	   style each scroll frame — inline style specificity overrides this automatically. */
+	opacity: 1;
+}
+
+.amfc-philosophy__stat-card--1 { background: var(--amfc-mint-100); z-index: 1; transform: rotate(2.3deg); }
+.amfc-philosophy__stat-card--2 { background: var(--amfc-cream-100); z-index: 2; transform: rotate(-3deg); }
+.amfc-philosophy__stat-card--3 { background: var(--amfc-periwinkle-100); z-index: 3; transform: rotate(3.4deg); }
+.amfc-philosophy__stat-card--4 { background: var(--amfc-lavender-100); z-index: 4; transform: rotate(-3.2deg); }
+
+@media (prefers-reduced-motion: reduce) {
+	/* JS skips attaching the scroll listener under reduced motion (see amfc-2026.js), so this
+	   is the state that actually ships for those users: static, fully visible, no pin/scrub. */
+	.amfc-philosophy__scroll-track {
+		height: auto;
+	}
+	.amfc-philosophy__sticky {
+		position: static;
+		height: auto;
+	}
+}
+
+.amfc-philosophy__stat-tag {
+	display: inline-block;
+	background: var(--amfc-gold-400);
+	color: #000;
+	font-size: 1rem;
+	font-weight: 700;
+	border-radius: 999px;
+	padding: 0.35rem 1rem;
+}
+
+.amfc-philosophy__stat-icon {
+	width: 72px;
+	height: 72px;
+}
+
+.amfc-philosophy__stat-number {
+	color: var(--amfc-text-heading);
+	font-weight: 800;
+	font-size: 2rem;
+}
+
+.amfc-philosophy__stat-label {
+	color: var(--amfc-text-heading);
+	font-size: 1rem;
+}
+
+/* --- Funds partnership --- */
+
+.amfc-funds {
+	padding-block: var(--amfc-space-xl);
+	background: var(--amfc-surface);
+	text-align: center;
+}
+
+.amfc-funds__logo {
+	height: 40px;
+	width: auto;
+	margin-bottom: var(--amfc-space-md);
+}
+
+.amfc-funds__body {
+	max-width: 56rem;
+	margin-inline: auto;
+	color: var(--amfc-text-body);
+	line-height: 1.8;
+}
+
+/* --- Services --- */
+
+.amfc-services {
+	padding-block: var(--amfc-space-xl);
+	background: var(--amfc-surface-muted);
+	text-align: center;
+}
+
+.amfc-services__heading {
+	color: var(--amfc-text-heading);
+	font-weight: 700;
+	font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+	margin-bottom: var(--amfc-space-lg);
+}
+
+.amfc-services__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--amfc-space-lg);
+	text-align: left;
+}
+
+@media (min-width: 768px) {
+	.amfc-services__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+.amfc-service-card {
+	background: var(--amfc-surface);
+	border-radius: var(--amfc-radius-lg);
+	box-shadow: var(--amfc-shadow-card);
+	padding: var(--amfc-space-lg);
+}
+
+.amfc-service-card__icon {
+	width: 72px;
+	height: 72px;
+	margin-bottom: var(--amfc-space-md);
+}
+
+.amfc-service-card__title {
+	color: var(--amfc-text-heading);
+	font-weight: 700;
+	font-size: 1.25rem;
+	margin-bottom: var(--amfc-space-sm);
+}
+
+.amfc-service-card__body {
+	color: var(--amfc-text-body);
+	line-height: 1.7;
+	margin-bottom: var(--amfc-space-md);
+}
+
+/* --- App download ("KingDo") --- */
+
+.amfc-app {
+	padding-block: var(--amfc-space-xl);
+	background: var(--amfc-surface);
+	text-align: center;
+}
+
+.amfc-app__photo {
+	width: 100%;
+	max-width: 720px;
+	height: auto;
+	border-radius: var(--amfc-radius-lg);
+	margin-inline: auto;
+	display: block;
+}
+
+.amfc-app__store-badges {
+	display: flex;
+	justify-content: center;
+	gap: var(--amfc-space-sm);
+	margin-block: var(--amfc-space-lg) var(--amfc-space-md);
+}
+
+.amfc-app__store-badges img {
+	height: 40px;
+	width: auto;
+}
+
+.amfc-app__headline {
+	color: var(--amfc-text-heading);
+	font-weight: 700;
+	font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
+	margin-bottom: var(--amfc-space-sm);
+}
+
+.amfc-app__body {
+	color: var(--amfc-text-body);
+	margin-bottom: var(--amfc-space-lg);
+}
+
+/* --- Investor relations --- */
+
+.amfc-investor {
+	padding-block: var(--amfc-space-xl);
+	background: var(--amfc-lavender-100);
+}
+
+.amfc-investor__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--amfc-space-lg);
+	align-items: center;
+}
+
+@media (min-width: 768px) {
+	.amfc-investor__grid {
+		grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+		gap: var(--amfc-space-xl);
+	}
+}
+
+.amfc-investor__photo {
+	width: 100%;
+	height: auto;
+	border-radius: var(--amfc-radius-lg);
+	display: block;
+}
+
+.amfc-investor__heading {
+	color: var(--amfc-text-heading);
+	font-weight: 700;
+	font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
+	margin-bottom: var(--amfc-space-sm);
+}
+
+.amfc-investor__body {
+	color: var(--amfc-text-body);
+	line-height: 1.7;
+	margin-bottom: var(--amfc-space-sm);
+}
+
+/* --- 3-card grid (media / events / anti-fraud) --- */
+
+/* CORRECTED: real cards are single flattened illustration images (text baked in) on a
+   periwiknle band, not a muted card + separate icon/title as first built. */
+.amfc-news-grid {
+	padding-block: var(--amfc-space-xl);
+	background: var(--amfc-periwinkle-100);
+}
+
+.amfc-news-grid__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--amfc-space-md);
+}
+
+@media (min-width: 768px) {
+	.amfc-news-grid__grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+.amfc-news-card__image {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: var(--amfc-radius-lg);
+}
+
+/* --- Footer --- */
+
+/* CORRECTED: real design (Figma get_design_context, node 87:76-138) has a WHITE footer with
+   dark-blue text, not the navy band originally assumed from the screenshot alone. */
+.amfc-footer {
+	background: var(--amfc-surface-dark);
+	color: var(--amfc-footer-text);
+	padding-block: var(--amfc-space-xl) var(--amfc-space-lg);
+}
+
+.amfc-footer__nav {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--amfc-space-lg) var(--amfc-space-md);
+	margin-bottom: var(--amfc-space-xl);
+}
+
+@media (min-width: 768px) {
+	.amfc-footer__nav {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 992px) {
+	.amfc-footer__nav {
+		grid-template-columns: repeat(6, minmax(0, 1fr)) 1.4fr;
+	}
+}
+
+.amfc-footer__col-title {
+	color: var(--amfc-footer-text);
+	font-weight: 700;
+	font-size: 0.875rem;
+	margin-bottom: var(--amfc-space-sm);
+}
+
+.amfc-footer__col ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.amfc-footer__col a {
+	color: inherit;
+	text-decoration: none;
+	font-size: 0.8125rem;
+	display: block;
+	padding-block: 0.15rem;
+}
+
+.amfc-footer__col a:hover {
+	color: var(--amfc-accent);
+}
+
+.amfc-footer__logo {
+	height: 32px;
+	width: auto;
+}
+
+.amfc-footer__contact {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--amfc-space-md);
+	border-top: 1px solid var(--amfc-gray-100);
+	padding-top: var(--amfc-space-lg);
+	font-size: 0.8125rem;
+}
+
+@media (min-width: 768px) {
+	.amfc-footer__contact {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+.amfc-footer__contact-title {
+	color: var(--amfc-footer-text);
+	font-weight: 700;
+	margin-bottom: 0.25rem;
+}
