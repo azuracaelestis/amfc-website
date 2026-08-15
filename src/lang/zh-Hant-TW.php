@@ -102,17 +102,23 @@ return [
     'footer.col.about.title' => '關於我們',
     'footer.col.about.item1' => '關於亞太普惠',
     'footer.col.about.item2' => '大事紀',
-    'footer.col.about.item3' => '人才招募',
+    'footer.col.about.item3' => '企業永續', // was missing entirely — confirmed via Figma (node 87:84)
+    'footer.col.about.item4' => '人才招募',
     'footer.col.services.title' => '服務介紹',
     'footer.col.services.item1' => '汽機車貸款',
     'footer.col.services.item2' => '個人貸款',
+    'footer.col.services.item3' => '逗陣貸', // was missing entirely — confirmed via Figma (node 87:87)
     'footer.col.investor.title' => '投資人資訊',
     'footer.col.investor.item1' => '發行資訊',
     'footer.col.news.title' => '最新訊息', // as-authored in Figma footer (nav uses "最新消息" — the source design itself uses two different strings)
     'footer.col.news.item1' => '活動花絮',
     'footer.col.news.item2' => '媒體報導',
     'footer.col.antifraud.title' => '防詐騙專區',
+    'footer.col.antifraud.item1' => '防詐騙公告', // was reusing the title string — confirmed via Figma (node 87:95) this is separate copy
     'footer.col.app.title' => '亞太普惠APP',
+    'footer.col.app.item1' => '亞太普惠智能貸款',
+    'footer.col.app.item2' => '逗陣貸',
+    'footer.col.app.item3' => '亞太普惠帳單',
     'footer.col.contact.title' => '聯絡我們',
     // Contact details below are now sourced from the connected Figma file's text nodes
     // (get_design_context, node 87:44) rather than transcribed off a screenshot — still worth

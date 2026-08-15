@@ -858,30 +858,41 @@ body {
 	padding-block: var(--amfc-space-xl) var(--amfc-space-lg);
 }
 
-.amfc-footer__nav {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: var(--amfc-space-lg) var(--amfc-space-md);
-	margin-bottom: var(--amfc-space-xl);
-}
-
-@media (min-width: 768px) {
-	.amfc-footer__nav {
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-	}
+/* Row containing the 7 nav columns + logo, side by side — confirmed via Figma (node 87:80):
+   logo sits to the right of the nav columns, not as an 8th grid column. */
+.amfc-footer__row {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--amfc-space-lg);
+	margin-bottom: 2.5rem; /* 40px, splits the difference toward the confirmed 64px gap below */
 }
 
 @media (min-width: 992px) {
-	.amfc-footer__nav {
-		grid-template-columns: repeat(6, minmax(0, 1fr)) 1.4fr;
+	.amfc-footer__row {
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 3rem; /* 48px, confirmed via Figma */
 	}
+}
+
+.amfc-footer__nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--amfc-space-lg) 2.25rem; /* 36px column gap, confirmed via Figma; wraps on narrow screens */
 }
 
 .amfc-footer__col-title {
 	color: var(--amfc-footer-text);
 	font-weight: 700;
-	font-size: 0.875rem;
+	font-size: 1rem; /* 16px, confirmed via Figma */
 	margin-bottom: var(--amfc-space-sm);
+}
+
+.amfc-footer__col-title a {
+	color: inherit;
+	text-decoration: none;
 }
 
 .amfc-footer__col ul {
@@ -890,12 +901,14 @@ body {
 	margin: 0;
 }
 
+.amfc-footer__col li {
+	line-height: 2; /* confirmed via Figma */
+}
+
 .amfc-footer__col a {
 	color: inherit;
 	text-decoration: none;
-	font-size: 0.8125rem;
-	display: block;
-	padding-block: 0.15rem;
+	font-size: 1rem; /* 16px, confirmed via Figma */
 }
 
 .amfc-footer__col a:hover {
@@ -905,15 +918,16 @@ body {
 .amfc-footer__logo {
 	height: 32px;
 	width: auto;
+	flex-shrink: 0;
 }
 
 .amfc-footer__contact {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: var(--amfc-space-md);
+	gap: var(--amfc-space-lg);
 	border-top: 1px solid var(--amfc-gray-100);
 	padding-top: var(--amfc-space-lg);
-	font-size: 0.8125rem;
+	font-size: 1rem; /* 16px, confirmed via Figma */
 }
 
 @media (min-width: 768px) {
@@ -922,8 +936,19 @@ body {
 	}
 }
 
-.amfc-footer__contact-title {
-	color: var(--amfc-footer-text);
-	font-weight: 700;
-	margin-bottom: 0.25rem;
+.amfc-footer__contact-group {
+	display: flex;
+	gap: 0.75rem; /* 12px, confirmed via Figma */
+}
+
+.amfc-footer__contact-label {
+	flex-shrink: 0;
+	line-height: 1.2;
+}
+
+.amfc-footer__contact-content {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3125rem; /* 5px, confirmed via Figma */
+	line-height: 1.5;
 }
