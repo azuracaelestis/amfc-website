@@ -252,48 +252,45 @@
 	height: clamp(1.25rem, calc(38 / 1440 * 100vw), 38px);
 }
 
-/* --- Company philosophy --- */
+/* --- Company philosophy (KSP) --- */
+
+/* Scroll-stacking card pile, CSS-only via `position: sticky` — the same mechanism as the
+   portfolio reference (each card sticks at a slightly larger top offset + z-index, so they
+   pile up one-by-one as you scroll). No JS, no pinned track, no opacity scrub.
+
+   Why the rewrite: the old build pinned a 400vh track and drove each card's opacity from a JS
+   scroll listener. At scroll progress 0 the reveal formula gave EVERY card (including the
+   first) opacity 0, so the whole stack was blank until you scrolled a quarter into the track —
+   the "wipe out." And all four cards were position:absolute/inset:0, i.e. perfectly
+   overlapping, so it was never a readable pile to begin with. This is CSP-safe (zero script)
+   and needs no artificial track height — the stack's own height provides the scroll distance. */
 
 .amfc-philosophy {
 	padding-block: var(--amfc-space-xl);
 	background: var(--amfc-surface);
 }
 
-/* Scroll-scrubbed reveal (per feedback: NOT a one-shot trigger — genuinely tied to scroll
-   position, like a parallax/scrollytelling effect). A tall track provides scroll distance;
-   the inner wrapper pins via position:sticky while JS (amfc-2026.js initPhilosophyParallax)
-   maps scroll progress through the track directly onto each card's opacity/position every
-   frame, so scrolling back up un-reveals cards in reverse, same as scrolling down reveals them. */
-.amfc-philosophy__scroll-track {
-	position: relative;
-	height: 400vh; /* ~100vh of scroll per card; tune here if the pacing feels off */
-}
-
-.amfc-philosophy__sticky {
-	position: sticky;
-	top: 0;
-	height: 100vh;
-	display: flex;
-	align-items: center;
-	/* overflow:hidden here was silently breaking the element's own sticky positioning
-	   (confirmed empirically) — removed. Nothing needs clipping at this level anyway;
-	   the cards are small and absolutely positioned within their own stack box. */
-}
-
 .amfc-philosophy__grid {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: var(--amfc-space-lg);
-	align-items: center;
-	width: 100%;
-	/* Content (card stack, eyebrow, heading) shifted down 42px per earlier feedback */
-	transform: translateY(42px);
+	/* align-items:start (not center) is required so the sticky intro column can actually
+	   travel within the taller card column; centering would collapse the sticky travel. */
+	align-items: start;
+	/* was transform: translateY(42px) on the grid — a transform here creates a containing
+	   block that muddies sticky reasoning, so express the same 42px offset as padding. */
+	padding-top: 42px;
 }
 
 @media (min-width: 992px) {
 	.amfc-philosophy__grid {
 		grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
 		gap: var(--amfc-space-xl);
+	}
+	/* Heading stays pinned on the left while the reader scrolls through the card pile. */
+	.amfc-philosophy__intro {
+		position: sticky;
+		top: clamp(7rem, 20vh, 12rem);
 	}
 }
 
@@ -304,45 +301,64 @@
 	line-height: 1.8;
 }
 
+/* The pile lives in the right column. Its natural height (four cards + gaps + tail padding)
+   is exactly what supplies the scroll distance the sticky offsets scrub against. */
 .amfc-philosophy__stack {
-	position: relative;
-	width: 100%;
-	max-width: 480px;
-	height: 420px;
-	margin-inline: auto;
+	--amfc-stack-top: clamp(6rem, 16vh, 10rem); /* where the pile settles below the nav */
+	display: flex;
+	flex-direction: column;
+	gap: 8rem;             /* scroll travel between each card landing on the pile */
+	padding-bottom: 40vh;  /* lets the last card sit as the top of the pile before the section ends */
 }
 
 .amfc-philosophy__stat-card {
-	position: absolute;
-	inset: 0;
+	position: sticky;
+	width: 100%;
+	max-width: 480px;
+	min-height: 360px;
+	margin-inline: auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	gap: var(--amfc-space-md);
+	padding: var(--amfc-space-lg);
 	border: 1px solid var(--amfc-card-border);
 	border-radius: var(--amfc-radius-lg);
+	box-shadow: var(--amfc-shadow-card);
 	text-align: center;
-	/* Default (no-JS / pre-hydration) fallback: fully visible, correctly rotated per card via
-	   data-rotate, read by JS below. Once JS runs, it drives opacity/transform via inline
-	   style each scroll frame — inline style specificity overrides this automatically. */
-	opacity: 1;
+	opacity: 1; /* nothing scripts this anymore — cards are always fully visible */
 }
 
-.amfc-philosophy__stat-card--1 { background: var(--amfc-mint-100); z-index: 1; transform: rotate(2.3deg); }
-.amfc-philosophy__stat-card--2 { background: var(--amfc-cream-100); z-index: 2; transform: rotate(-3deg); }
-.amfc-philosophy__stat-card--3 { background: var(--amfc-periwinkle-100); z-index: 3; transform: rotate(3.4deg); }
-.amfc-philosophy__stat-card--4 { background: var(--amfc-lavender-100); z-index: 4; transform: rotate(-3.2deg); }
+/* Per-card: cumulative sticky offset (each peeks below the previous), paint order, resting
+   rotation, and background tint. These four modifiers are now the single source of truth for
+   the fanned look (data-rotate is gone). */
+.amfc-philosophy__stat-card--1 { top: calc(var(--amfc-stack-top) + 0rem);    z-index: 1; transform: rotate(2.3deg);  background: var(--amfc-mint-100); }
+.amfc-philosophy__stat-card--2 { top: calc(var(--amfc-stack-top) + 2.75rem); z-index: 2; transform: rotate(-3deg);   background: var(--amfc-cream-100); }
+.amfc-philosophy__stat-card--3 { top: calc(var(--amfc-stack-top) + 5.5rem);  z-index: 3; transform: rotate(3.4deg);  background: var(--amfc-periwinkle-100); }
+.amfc-philosophy__stat-card--4 { top: calc(var(--amfc-stack-top) + 8.25rem); z-index: 4; transform: rotate(-3.2deg); background: var(--amfc-lavender-100); }
 
-@media (prefers-reduced-motion: reduce) {
-	/* JS skips attaching the scroll listener under reduced motion (see amfc-2026.js), so this
-	   is the state that actually ships for those users: static, fully visible, no pin/scrub. */
-	.amfc-philosophy__scroll-track {
-		height: auto;
+/* Mobile: a narrow sticky pile reads badly — fall back to a plain vertical list. */
+@media (max-width: 991.98px) {
+	.amfc-philosophy__stack {
+		gap: var(--amfc-space-lg);
+		padding-bottom: 0;
 	}
-	.amfc-philosophy__sticky {
+	.amfc-philosophy__stat-card {
 		position: static;
-		height: auto;
+		transform: none;
+	}
+}
+
+/* Reduced motion: no scroll-linked pile-up; present the cards as a static, fully visible list. */
+@media (prefers-reduced-motion: reduce) {
+	.amfc-philosophy__stack {
+		gap: var(--amfc-space-lg);
+		padding-bottom: 0;
+	}
+	.amfc-philosophy__stat-card {
+		position: static;
+		transform: none;
 	}
 }
 
