@@ -412,8 +412,9 @@ body {
 
 .amfc-philosophy__stat-number {
 	color: var(--amfc-text-heading);
-	font-weight: 800;
-	font-size: 2rem;
+	font-family: var(--amfc-font-zh);
+	font-weight: 700;
+	font-size: 3rem;
 }
 
 .amfc-philosophy__stat-label {
