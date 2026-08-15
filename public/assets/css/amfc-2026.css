@@ -323,14 +323,22 @@ body {
 	gap: 0.6rem;
 	color: var(--amfc-text-heading);
 	font-weight: 700;
-	font-size: clamp(2rem, 0.857rem + 2.381vw, 3rem); /* 48px @1440, floor 32px */
+	font-size: clamp(6rem, 2.571rem + 7.143vw, 9rem); /* 3x -> 144px @1440, floor 96px */
 	line-height: 1.3;
 	text-decoration: none;
 }
 
-/* Gold accent bar under each heading line, per the reference image. */
+/* Gold accent bar under each heading line, per the reference image.
+   font-size: inherit is required here — AMFC's live custom.css has a blanket
+   `*, html, body { font-size: 1.1rem }` rule. Because that rule DIRECTLY matches every
+   element (including this span), it wins over normal inheritance from the parent heading
+   regardless of its low (universal-selector) specificity — inheritance only applies when no
+   rule directly targets the element's font-size. Any other span/div we leave without an
+   explicit font-size is at risk of the same silent collapse to ~19px; watch for this whenever
+   a new element's text unexpectedly renders small. */
 .amfc-philosophy__heading-line {
 	position: relative;
+	font-size: inherit;
 	padding-bottom: 0.8rem;
 	text-decoration: none;
 }
