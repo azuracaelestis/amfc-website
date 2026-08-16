@@ -45,8 +45,8 @@
 			<div class="amfc-philosophy__intro" data-aos="fade-up" data-aos-once="true">
 				<p class="amfc-eyebrow amfc-philosophy__eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
 				<h2 class="amfc-philosophy__heading">
-					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1')) ?></span>
-					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line2')) ?></span>
+					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1_prefix')) ?><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line1_highlight')) ?><svg class="amfc-philosophy__heading-underline" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path d="M4,14 C50,2 90,24 140,13 C180,4 210,22 250,12 C266,8 276,16 292,9" /></svg></span></span>
+					<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line2_highlight')) ?><svg class="amfc-philosophy__heading-underline" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path d="M4,14 C50,2 90,24 140,13 C180,4 210,22 250,12 C266,8 276,16 292,9" /></svg></span><?= e(t('home.philosophy.headline_line2_suffix')) ?></span>
 				</h2>
 			</div>
 			<div class="amfc-philosophy__stack">

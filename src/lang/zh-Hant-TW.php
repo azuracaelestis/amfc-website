@@ -32,6 +32,13 @@ return [
     'home.philosophy.eyebrow' => '公司理念',
     'home.philosophy.headline_line1' => '我們以創新、專業、',
     'home.philosophy.headline_line2' => '效率、誠信四項理念',
+    // Split into prefix/highlight/suffix so the hand-drawn underline (per feedback) can scope
+    // to just "創新、專業、" and "效率、誠信" rather than the full line — the two keys above
+    // stay too, in case a future non-highlighted rendering of this headline is ever needed.
+    'home.philosophy.headline_line1_prefix' => '我們以',
+    'home.philosophy.headline_line1_highlight' => '創新、專業、',
+    'home.philosophy.headline_line2_highlight' => '效率、誠信',
+    'home.philosophy.headline_line2_suffix' => '四項理念',
     'home.philosophy.stat1.tag' => '誠信',
     'home.philosophy.stat1.number' => 'NT$200億+',
     'home.philosophy.stat1.label' => '資產管理總量',

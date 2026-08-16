@@ -466,8 +466,12 @@ body {
 	   travel within the taller card column; centering would collapse the sticky travel. */
 	align-items: start;
 	/* was transform: translateY(42px) on the grid — a transform here creates a containing
-	   block that muddies sticky reasoning, so express the same 42px offset as padding. */
-	padding-top: 42px;
+	   block that muddies sticky reasoning, so express the same 42px offset as padding.
+	   90px = 42px + 48px more, per feedback to move the section's CONTENT down without
+	   touching .amfc-curve-top's own position (that white background shape is on the outer
+	   <section>, entirely unaffected by this grid's internal padding — only the section's
+	   total height grows to make room, content doesn't overflow it). */
+	padding-top: 90px;
 }
 
 @media (min-width: 992px) {
@@ -511,8 +515,7 @@ body {
 	text-decoration: none;
 }
 
-/* Gold accent bar under each heading line, per the reference image.
-   font-size: inherit is required here — AMFC's live custom.css has a blanket
+/* font-size: inherit is required here — AMFC's live custom.css has a blanket
    `*, html, body { font-size: 1.1rem }` rule. Because that rule DIRECTLY matches every
    element (including this span), it wins over normal inheritance from the parent heading
    regardless of its low (universal-selector) specificity — inheritance only applies when no
@@ -526,15 +529,75 @@ body {
 	text-decoration: none;
 }
 
-.amfc-philosophy__heading-line::after {
-	content: "";
+/* Scopes the hand-drawn underline (below) to just "創新、專業、" / "效率、誠信" instead of the
+   full line — replaces the old straight bottom bar that spanned the whole line. Same font-size
+   collision risk as .amfc-philosophy__heading-line above, since this is a new bare span. */
+.amfc-philosophy__heading-highlight {
+	position: relative;
+	display: inline-block;
+	font: inherit;
+}
+
+/* Hand-drawn underline, per feedback: replaces the previous straight gold bar with a wavy
+   stroke that "writes itself in" after the heading has finished fading in, reusing the same
+   squiggle path/draw-in technique tried earlier on the hero headline. preserveAspectRatio="none"
+   stretches the path to match each highlight span's own (different) width. stroke-width 5.27px
+   matches the old straight bar's actual rendered thickness (0.3rem, corrupted to ~17.6px root
+   by AMFC's html{font-size:1.1rem} — see CLAUDE.md Bug B — not the nominal 4.8px 0.3rem would
+   suggest at a normal 16px root); written directly in px per CLAUDE.md guidance rather than
+   trying to re-derive it from rem. */
+.amfc-philosophy__heading-underline {
 	position: absolute;
 	left: 0;
-	bottom: 0;
-	width: 62%;
-	height: 0.3rem;
-	background: var(--amfc-accent-gold);
-	border-radius: 999px;
+	top: 100%;
+	margin-top: -0.15em; /* tucks it up under the text baseline rather than floating below it */
+	width: 100%;
+	height: 0.35em;
+	overflow: visible;
+	pointer-events: none;
+}
+
+.amfc-philosophy__heading-underline path {
+	fill: none;
+	stroke: var(--amfc-accent-gold);
+	stroke-width: 5.27px;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-dasharray: 400;
+	stroke-dashoffset: 400; /* hidden until the .aos-animate gate below starts the draw */
+	animation: amfc-philosophy-underline-draw 700ms var(--amfc-ease-out) 550ms forwards;
+	/* Paused by default and only released once the ancestor .amfc-philosophy__intro gets
+	   .aos-animate (below) — a plain animation-delay alone would still start counting down
+	   (and finish) immediately on page load regardless of scroll position, since this section
+	   is below the fold. */
+	animation-play-state: paused;
+}
+
+.amfc-philosophy__intro.aos-animate .amfc-philosophy__heading-underline path {
+	animation-play-state: running;
+}
+
+/* Second line's underline waits for the first one's draw to actually finish (550ms delay +
+   700ms duration = 1250ms) rather than drawing both at once — reads more like a single pen
+   underlining one phrase, then the next, matching the "handwriting" ask, instead of two pens
+   moving simultaneously. */
+.amfc-philosophy__heading-line:nth-child(2) .amfc-philosophy__heading-underline path {
+	animation-delay: 1250ms;
+}
+
+@keyframes amfc-philosophy-underline-draw {
+	from { stroke-dashoffset: 400; }
+	to { stroke-dashoffset: 0; }
+}
+
+/* AOS disables itself entirely under prefers-reduced-motion (see layout/scripts.php), meaning
+   .aos-animate is NEVER added — without this, animation-play-state would stay "paused" forever
+   and the underline would never appear at all for those users. */
+@media (prefers-reduced-motion: reduce) {
+	.amfc-philosophy__heading-underline path {
+		animation: none;
+		stroke-dashoffset: 0;
+	}
 }
 
 /* The pile lives in the right column. Each card is directly sticky, so its own height is what
