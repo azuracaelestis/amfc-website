@@ -56,10 +56,10 @@ window.AMFC = (function () {
 	/* Fades the KSP section's decorative watermark (.amfc-philosophy__watermark) out as the
 	   whole section finishes scrolling past — i.e. as it hands off to the Funds partnership
 	   section below, not tied to any single card. Sets --amfc-philosophy-watermark-fade (0-1)
-	   on the section; the actual opacity math (including the 0.06 resting value) stays in CSS
-	   (see amfc-2026.css), same division of responsibility as --amfc-nav-shift-y above. rAF-
-	   throttled and continuously scroll-scrubbed, same skeleton as initNavAutoHide but driving
-	   a numeric value instead of toggling a class. */
+	   on the section; the opacity itself stays in CSS (see amfc-2026.css), same division of
+	   responsibility as --amfc-nav-shift-y above. rAF-throttled and continuously scroll-
+	   scrubbed, same skeleton as initNavAutoHide but driving a numeric value instead of
+	   toggling a class. */
 	function initPhilosophyWatermarkFade() {
 		var section = document.querySelector('.amfc-philosophy');
 		if (!section) return;
@@ -69,10 +69,19 @@ window.AMFC = (function () {
 		// the viewport's top: large while there's still plenty of the section left to scroll
 		// through, shrinking toward 0 (then negative) exactly as the section finishes handing
 		// off to whatever comes after it. FADE_START/FADE_END map that distance to a 0-1 fade
-		// progress: full opacity while comfortably far from the section's end, fully
-		// transparent by the time its bottom edge reaches the viewport's top.
-		var FADE_START = 800;
-		var FADE_END = 0;
+		// progress.
+		//
+		// FADE_END is 800, not 0, and that matters: near the section's end the watermark runs
+		// out of sticky track and starts riding up the viewport, while the intro heading is
+		// still pinned near the top. They cross, and the mark would otherwise pass straight
+		// through the heading at ~80% opacity (measured). The crossing begins once the section
+		// bottom is within roughly (heading bottom + watermark height) of the viewport top —
+		// about 733px at a 900px viewport, and less on shorter ones, since the heading's own
+		// sticky offset is clamped at 12rem. Finishing the fade at 800 clears that worst case
+		// on every viewport height, so the mark is fully transparent before it ever reaches the
+		// text. Don't lower this without re-running the overlap check.
+		var FADE_START = 1600;
+		var FADE_END = 800;
 		var ticking = false;
 
 		function onScroll() {

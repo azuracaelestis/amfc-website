@@ -510,11 +510,21 @@ body {
 
    Two elements, and both are load-bearing:
 
-   1. The TRACK is absolutely positioned (inset: 0), so it spans the section's full height while
-      being OUT OF FLOW. This is the fix for a real bug hit on the first attempt: `position:
-      sticky` does NOT remove an element from normal flow (unlike absolute), so a bare sticky
-      <img> here reserved its own ~370px-tall block at the top of the section and pushed every
-      bit of real content down that far. Absolute on the wrapper is what prevents that.
+   1. The TRACK is absolutely positioned, so it spans the section while being OUT OF FLOW. This
+      is the fix for a real bug hit on the first attempt: `position: sticky` does NOT remove an
+      element from normal flow (unlike absolute), so a bare sticky <img> here reserved its own
+      ~370px-tall block at the top of the section and pushed every bit of real content down that
+      far. Absolute on the wrapper is what prevents that.
+
+      The track starts 100vh down the section rather than at its top (inset: 100vh 0 0 0). A
+      sticky element only holds its offset once scrolling has pushed it there; before that it
+      sits at its natural position, which — with a track starting at the section's top — is the
+      section's top-left, exactly where the intro eyebrow/headline lives. The two collided on
+      screen for the whole first screenful, per feedback. Starting the track a viewport height
+      in means the mark's natural position begins below the fold, so it rises into view from the
+      bottom edge as the reader scrolls into the card stack and never shares space with the
+      headline. Expressed in vh rather than px so it scales with the viewport instead of needing
+      a magic number tuned to one screen height.
 
    2. The IMG is sticky *within* that track. Plain absolute positioning can't do this job:
       .amfc-philosophy's box spans the whole multi-viewport-tall scroll track (four sticky cards
@@ -525,6 +535,13 @@ body {
       bottom, right where the fade below completes. top (not bottom) drives the stickiness:
       calc(100vh - 420px) holds the mark's top edge that far down the viewport, i.e. bottom-
       anchored in effect, but expressed as the offset sticky actually honors here.
+
+      The max(..., 420px) floor keeps that parking spot clear of the intro heading on short
+      viewports. The heading pins at clamp(7rem, 20vh, 12rem) and runs ~183px tall, so its
+      bottom edge tops out at ~394px once 20vh passes the 12rem clamp. Without the floor, a
+      700px-tall window parks the mark at 280px — above that, straight through the text at full
+      opacity (measured). 420px clears the worst case at every viewport height; the mark simply
+      bleeds further off the bottom edge on short screens, which matches the reference anyway.
 
    Fades out via --amfc-philosophy-watermark-fade (0->1, default 1 so the resting state is
    correct even before JS runs), a scroll-driven custom property set by
@@ -542,14 +559,14 @@ body {
    this ever needs to be fainter, lighten the SVG's fill rather than stacking opacity on it. */
 .amfc-philosophy__watermark-track {
 	position: absolute;
-	inset: 0;
+	inset: 100vh 0 0 0; /* starts a screenful in — see (1) above */
 	z-index: 0; /* behind the stat cards (z-index 1-4) and the intro column */
 	pointer-events: none;
 }
 
 .amfc-philosophy__watermark {
 	position: sticky;
-	top: calc(100vh - 420px);
+	top: max(calc(100vh - 420px), 420px);
 	display: block; /* an inline img would add a baseline gap under it */
 	/* margin, not `left` — on a sticky element `left` is a stickiness constraint for horizontal
 	   scrolling, not a static offset, so it wouldn't reliably produce this bleed. */
