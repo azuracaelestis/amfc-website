@@ -54,4 +54,9 @@
 	--amfc-radius-lg: 1.25rem;
 	--amfc-radius-xl: 2rem; /* service card corner radius — confirmed via Figma (node 87:159) */
 	--amfc-shadow-card: 0 12px 32px rgba(22, 35, 79, 0.08);
+
+	/* motion — named per the project's --amfc-* token convention rather than bare
+	   --ease-out/--duration-fast, so this stays consistent with every other token here */
+	--amfc-ease-out: cubic-bezier(0, 0, 0.2, 1); /* standard decelerate curve */
+	--amfc-duration-fast: 150ms;
 }

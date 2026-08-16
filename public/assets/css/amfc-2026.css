@@ -313,27 +313,46 @@
 	height: clamp(1.25rem, calc(37 / 1440 * 100vw), 37px);
 }
 
-/* Hero CTA hover/press micro-interaction, per feedback. Default color matches the existing
-   --amfc-accent used by .btn-primary everywhere else; hover/press are new shades scoped to
-   just this button so the global .btn-primary override (amfc-bootstrap-overrides.css) is
-   untouched. Default state fits the text only (no reserved arrow space, Bootstrap's gap-2
-   utility removed from the markup); the arrow's slot animates open on hover/press instead,
-   so the button itself grows to the right rather than the arrow appearing in dead space. */
+/* Hero CTA — glossy gradient treatment, per feedback. Overrides .amfc-btn's flat height/
+   padding-inline/border-radius (a fixed pill) with a padding-driven box and a 16px radius,
+   specific to this one button — the other three CTAs (.amfc-btn on app-download/service cards)
+   are untouched. The ::before highlight is a static material property (doesn't animate on
+   hover); only the lift (transform) and shadow do, using the new --amfc-ease-out/
+   --amfc-duration-fast motion tokens. Bootstrap's gap-2 utility stays removed (see the arrow
+   rules below) so the arrow's slot still animates open into fitted text rather than dead space. */
 .amfc-hero__cta {
-	background-color: var(--amfc-accent);
-	border-color: var(--amfc-accent);
-	transition: background-color 0.2s ease, border-color 0.2s ease;
+	position: relative;
+	overflow: hidden;
+	height: auto;
+	padding-block: 14px;
+	padding-inline: 28px;
+	border-radius: 16px;
+	background: linear-gradient(135deg, #4a6be8, #2d50d7);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	box-shadow: 0 8px 20px rgba(45, 80, 215, 0.35);
+	color: var(--amfc-white);
+	font-weight: 600;
+	transition: box-shadow var(--amfc-duration-fast) var(--amfc-ease-out),
+		transform var(--amfc-duration-fast) var(--amfc-ease-out);
+}
+
+/* Glossy highlight: top ~55% of the button, clipped to the button's rounded corners by its
+   overflow:hidden above. Bottom edge fades to fully transparent, so the shared border-radius
+   on this element's own bottom corners never actually shows. */
+.amfc-hero__cta::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 55%;
+	border-radius: 16px;
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0));
+	pointer-events: none;
 }
 
 .amfc-hero__cta:hover,
 .amfc-hero__cta:focus-visible {
-	background-color: var(--amfc-blue-550);
-	border-color: var(--amfc-blue-550);
-}
-
-.amfc-hero__cta:active {
-	background-color: var(--amfc-blue-650);
-	border-color: var(--amfc-blue-650);
+	transform: translateY(-2px);
+	box-shadow: 0 8px 20px rgba(45, 80, 215, 0.45);
 }
 
 .amfc-hero__cta-arrow {
