@@ -625,15 +625,55 @@ body {
 	border-radius: var(--amfc-radius-lg);
 	box-shadow: var(--amfc-shadow-card);
 	text-align: center;
+	/* Resting tilt as a custom property (not a literal value baked into `transform`) so the
+	   scroll-driven entrance keyframe below can reference the SAME per-card angle — one shared
+	   @keyframes for all four cards instead of four near-duplicate ones. */
+	transform: rotate(var(--amfc-card-tilt));
 }
 
 /* Per-card: all four share the exact same sticky `top` so each new card lands directly on top
    of the last (per feedback — a true stack, not a fanned peek); z-index carries the paint
    order, and the tilt/background give the deck its resting look. */
-.amfc-philosophy__stat-card--1 { top: var(--amfc-stack-top); z-index: 1; transform: rotate(-4deg);  background: var(--amfc-mint-100); }
-.amfc-philosophy__stat-card--2 { top: var(--amfc-stack-top); z-index: 2; transform: rotate(3.5deg); background: var(--amfc-cream-100); }
-.amfc-philosophy__stat-card--3 { top: var(--amfc-stack-top); z-index: 3; transform: rotate(-3deg);  background: var(--amfc-periwinkle-100); }
-.amfc-philosophy__stat-card--4 { top: var(--amfc-stack-top); z-index: 4; transform: rotate(4deg);   background: var(--amfc-lavender-100); }
+.amfc-philosophy__stat-card--1 { top: var(--amfc-stack-top); z-index: 1; --amfc-card-tilt: -4deg;  background: var(--amfc-mint-100); }
+.amfc-philosophy__stat-card--2 { top: var(--amfc-stack-top); z-index: 2; --amfc-card-tilt: 3.5deg; background: var(--amfc-cream-100); }
+.amfc-philosophy__stat-card--3 { top: var(--amfc-stack-top); z-index: 3; --amfc-card-tilt: -3deg;  background: var(--amfc-periwinkle-100); }
+.amfc-philosophy__stat-card--4 { top: var(--amfc-stack-top); z-index: 4; --amfc-card-tilt: 4deg;   background: var(--amfc-lavender-100); }
+
+/* Eased entrance as each card approaches the stack, per feedback ("push up more naturally...
+   ease in appear up when scrolling"). Layered on TOP of the sticky mechanic above, not
+   replacing it: position:sticky ties a card's rise 1:1 to scroll position, which is exactly
+   right for the stacking/covering logic, but that's direct position-tracking, not an eased
+   animation — there's no way to get an eased curve out of sticky alone. A scroll-driven
+   view() timeline solves this: it plays a normal (eased) CSS keyframe animation, but scrubbed
+   by scroll position instead of time, so as a card scrolls up from below into the stack, it
+   fades/rises/settles with real easing, then holds its resting state once it reaches the pin.
+   If this isn't supported (Firefox, and Safari before 26), the @supports guard means the
+   browser just keeps today's plain sticky pop-in — no broken states. */
+@supports (animation-timeline: view()) {
+	@media (prefers-reduced-motion: no-preference) {
+		.amfc-philosophy__stat-card {
+			animation-name: amfc-stat-card-enter;
+			animation-timeline: view();
+			animation-timing-function: var(--amfc-ease-out);
+			/* Ends its ease-in a bit before the card is fully entered, so it settles into
+			   place just ahead of reaching the sticky pin rather than visibly finishing the
+			   motion right at the same moment it locks — tuned by eye, adjust to taste. */
+			animation-range: entry 0% entry 65%;
+			animation-fill-mode: both;
+		}
+
+		@keyframes amfc-stat-card-enter {
+			from {
+				opacity: 0;
+				transform: rotate(var(--amfc-card-tilt)) translateY(48px) scale(0.94);
+			}
+			to {
+				opacity: 1;
+				transform: rotate(var(--amfc-card-tilt)) translateY(0) scale(1);
+			}
+		}
+	}
+}
 
 /* Mobile: a narrow sticky pile reads badly — fall back to a plain vertical list. */
 @media (max-width: 991.98px) {
@@ -643,6 +683,7 @@ body {
 	.amfc-philosophy__stat-card {
 		position: static;
 		transform: none;
+		animation-name: none; /* disable the scroll-driven entrance too — flat static list here */
 	}
 	.amfc-philosophy__stack-tail {
 		height: 0;

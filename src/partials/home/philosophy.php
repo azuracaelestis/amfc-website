@@ -26,7 +26,7 @@
 	     exactly with the hero headline above it — same reasoning as hero.php. -->
 	<div class="amfc-container">
 		<div class="amfc-philosophy__grid">
-			<div class="amfc-philosophy__intro">
+			<div class="amfc-philosophy__intro" data-aos="fade-up" data-aos-easing="ease-out-cubic" data-aos-duration="600">
 				<p class="amfc-eyebrow amfc-philosophy__eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
 				<h2 class="amfc-philosophy__heading">
 					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1')) ?></span>
