@@ -191,7 +191,12 @@
 	font-weight: 600;
 	font-size: 0.875rem;
 	letter-spacing: 0.04em;
-	margin-bottom: var(--amfc-space-sm);
+	/* Eyebrow-to-headline gap: 12px at the 1440px reference width, fluid-scaled below it, per
+	   feedback. This class is used by exactly two sections (KSP + services/product), and the
+	   ask covers both, so it's set here rather than per-section. Note .amfc-services__header
+	   is a flex column and used to add its own row-gap on top of this margin — that's zeroed
+	   there now so this value is the single source of the gap in both places. */
+	margin-bottom: clamp(8px, calc(12 / 1440 * 100vw), 12px);
 }
 
 /* Curved white overlap used to transition out of the hero's gradient background.
@@ -570,7 +575,7 @@ body {
 	display: block; /* an inline img would add a baseline gap under it */
 	/* margin, not `left` — on a sticky element `left` is a stickiness constraint for horizontal
 	   scrolling, not a static offset, so it wouldn't reliably produce this bleed. */
-	margin-left: -80px; /* bleeds off the viewport's left edge, per the reference */
+	margin-left: -48px; /* bleeds off the viewport's left edge; moved right 32px per feedback */
 	width: clamp(28rem, calc(700 / 1440 * 100vw), 700px);
 	height: auto;
 	opacity: var(--amfc-philosophy-watermark-fade, 1);
@@ -645,7 +650,12 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: 0.6rem;
+	/* Line spacing tightened by 20px at the 1440px reference, per feedback. Measured before:
+	   line-to-line was 79.2px = 54.6px line-height + 14.1px padding-bottom on each line (dead
+	   weight left behind when the hand-drawn underline was removed — that padding existed to
+	   make room for the SVG) + 10.6px of gap here. Dropping the stale padding covers 14.1px of
+	   the 20px; this gap absorbs the remaining 5.9px, landing line-to-line at 59.2px. */
+	gap: 4.6px;
 	color: var(--amfc-text-heading);
 	font-weight: 700;
 	font-size: clamp(1.75rem, calc(42 / 1440 * 100vw), 42px); /* 42px @1440, floor 28px */
@@ -663,7 +673,6 @@ body {
 .amfc-philosophy__heading-line {
 	position: relative;
 	font-size: inherit;
-	padding-bottom: 0.8rem;
 	text-decoration: none;
 }
 
@@ -877,7 +886,11 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 0.25rem;
+	/* 0, not 0.25rem — the eyebrow-to-headline gap is owned solely by .amfc-eyebrow's
+	   margin-bottom (12px @1440, per feedback). This container's only two children are that
+	   eyebrow and the heading, so a row-gap here would stack on top of that margin and put the
+	   pair at 13.2px instead of the requested 12px. */
+	gap: 0;
 	/* 965px at the 1440px Figma reference width, fluid-scaled below it */
 	width: clamp(18.75rem, calc(965 / 1440 * 100vw), 965px);
 	margin-inline: auto;
