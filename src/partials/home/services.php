@@ -15,7 +15,9 @@
 				     aspect ratios (342x188 vs 323x197), so without this the title/body/button
 				     below would land at different heights between the two cards. -->
 				<div class="amfc-service-card__icon-wrap">
-					<img class="amfc-service-card__icon" src="<?= e(asset('images/car-loan.svg')) ?>" alt="<?= e(t('home.services.vehicle.icon_alt')) ?>" />
+					<?php /* Inlined, not <img> — its parts are animated on hover and CSS can't reach
+					         inside an <img>-loaded SVG. See the partial's own header. */ ?>
+					<?php require __DIR__ . '/illustration-car-loan.php'; ?>
 				</div>
 				<div class="amfc-service-card__text">
 					<h3 class="amfc-service-card__title"><?= e(t('home.services.vehicle.title')) ?></h3>

@@ -1052,6 +1052,75 @@ body {
 	margin-inline: auto;
 }
 
+/* --- Car-loan illustration hover, per spec ---
+
+   Three animations run together on card hover: sparkles twinkle (loop), the coin bounces once,
+   and the car rocks (loop). Amplitudes are deliberately small — they play simultaneously, and
+   the restraint is what keeps the combination from reading as busy.
+
+   The illustration is inlined into the DOM (src/partials/home/illustration-car-loan.php)
+   specifically so these rules can reach its parts; as an <img> it was unstylable from here.
+
+   The whole trigger sits inside prefers-reduced-motion: no-preference, so under `reduce` none
+   of it is even declared — this is real movement, unlike the typographic button/nav hovers that
+   only drop their transition. Fails safe: a browser that doesn't report the feature at all
+   matches no-preference either, and simply gets the static illustration.
+
+   Trigger is the card, not the illustration itself — the whole card is already a hover target
+   (it lifts), so tying these to the same gesture keeps one interaction rather than two
+   overlapping ones with different hit areas. */
+@media (prefers-reduced-motion: no-preference) {
+	/* SVG's default transform-origin is the user-space origin (0 0), NOT each element's own
+	   box — without transform-box, the sparkles would scale/rotate about the drawing's top-left
+	   corner and fly across the illustration instead of twinkling in place. */
+	.amfc-illo-car__sparkle {
+		transform-box: fill-box;
+		transform-origin: center;
+	}
+
+	.amfc-service-card:hover .amfc-illo-car__sparkle {
+		animation: amfc-illo-twinkle 900ms ease-in-out infinite;
+	}
+
+	/* Offset so the two never peak together — they read as independent glints rather than one
+	   synchronised pulse. */
+	.amfc-service-card:hover .amfc-illo-car__sparkle--2 {
+		animation-delay: 300ms;
+	}
+
+	/* Once per hover-enter, not looping: re-entering the card replays it because the animation
+	   is only applied while :hover holds. */
+	.amfc-service-card:hover .amfc-illo-car__coin {
+		animation: amfc-illo-coin-bounce 600ms var(--amfc-ease-out) 1;
+	}
+
+	.amfc-service-card:hover .amfc-illo-car__car {
+		animation: amfc-illo-car-rock 1400ms ease-in-out infinite;
+	}
+}
+
+/* Peaks at 50% and returns, rather than running 1 -> 1.25 one-way: an infinite one-way loop
+   would snap back to the start on every repeat. Peak values are exactly the specified 1.25 and
+   12deg. */
+@keyframes amfc-illo-twinkle {
+	0%, 100% { transform: scale(1) rotate(0deg); }
+	50% { transform: scale(1.25) rotate(12deg); }
+}
+
+@keyframes amfc-illo-coin-bounce {
+	0% { transform: translateY(0); }
+	35% { transform: translateY(-10px); }
+	60% { transform: translateY(0); }
+	80% { transform: translateY(-3px); } /* small settle bounce */
+	100% { transform: translateY(0); }
+}
+
+@keyframes amfc-illo-car-rock {
+	0%, 100% { transform: translateX(0); }
+	25% { transform: translateX(-3px); }
+	75% { transform: translateX(3px); }
+}
+
 /* Box model (height/width/font) now comes from the shared .amfc-btn class — this rule keeps
    only what's still specific to sitting inside the service card. */
 .amfc-service-card__cta {
