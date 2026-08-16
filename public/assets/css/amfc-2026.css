@@ -281,8 +281,10 @@
 	font-size: 1rem; /* 16px — held fixed, NOT scaled down with the rest of the bar */
 	font-weight: 600;
 	/* Micro-lift on hover/focus, per spec. Position shift only — no color, background or
-	   shadow change. */
-	transition: transform var(--amfc-duration-medium) var(--amfc-ease-out-expo);
+	   shadow change. Reuses --amfc-ease-out (not a separate snappier curve) to keep one
+	   easing language across every hover/quick-interaction site-wide — at this 2px amplitude
+	   the difference between curves is sub-pixel for the whole transition anyway. */
+	transition: transform var(--amfc-duration-medium) var(--amfc-ease-out);
 }
 
 /* Applied to .nav-link (the <a>/<button>), NOT .nav-item as the reference CSS had it:
@@ -776,7 +778,7 @@ body {
 	   scroll-driven entrance keyframe below can reference the SAME per-card angle — one shared
 	   @keyframes for all four cards instead of four near-duplicate ones. */
 	transform: rotate(var(--amfc-card-tilt));
-	transition: transform 250ms var(--amfc-ease-out); /* for the hover-straighten below */
+	transition: transform var(--amfc-duration-medium) var(--amfc-ease-out); /* for the hover-straighten below */
 }
 
 /* Straighten on hover, per feedback. Also matched combined with [data-aos].aos-animate:hover —
