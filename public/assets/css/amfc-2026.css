@@ -280,6 +280,53 @@
 	color: var(--amfc-text-heading); /* #1A2F86 */
 	font-size: 1rem; /* 16px — held fixed, NOT scaled down with the rest of the bar */
 	font-weight: 600;
+	/* Micro-lift on hover/focus, per spec. Position shift only — no color, background or
+	   shadow change. */
+	transition: transform var(--amfc-duration-medium) var(--amfc-ease-out-expo);
+}
+
+/* Applied to .nav-link (the <a>/<button>), NOT .nav-item as the reference CSS had it:
+   .nav-item is the wrapping <li>, which is never focusable, so :focus-visible would never
+   fire on it and keyboard users would get no lift at all. .nav-link covers all five items —
+   the four section anchors and the language <button> (which carries .nav-link too). Scoped
+   under .amfc-nav-pill so it can't leak into any other Bootstrap nav on the page. */
+
+/* Current-section cue: a persistent 1px lift, so the state is visible without hovering.
+   Declared BEFORE the :hover/:focus-visible rule below — both selectors land on the same
+   (0,3,0) specificity, so source order is what lets a hover on the current item still lift
+   the full 2px instead of being pinned at 1px.
+
+   NOTE: nothing sets these attributes yet. The nav's links are in-page anchors (#about,
+   #service, ...) and no scrollspy currently marks one active, so today this rule matches
+   nothing — it's the hook, ready for whichever mechanism sets it. Both the ARIA-standard
+   attribute and Bootstrap's own .active class are matched so either will work.
+   A 1px shift is also a weak cue on its own; if this is meant to carry real "you are here"
+   meaning rather than decorate it, it wants a non-positional pair (weight or an underline)
+   alongside. */
+.amfc-nav-pill .nav-link[aria-current],
+.amfc-nav-pill .nav-link.active {
+	transform: translateY(-1px);
+}
+
+.amfc-nav-pill .nav-link:hover,
+.amfc-nav-pill .nav-link:focus-visible {
+	transform: translateY(-2px);
+}
+
+/* The sitewide `.theme-2026 :focus-visible` ring at the top of this file already supplies
+   exactly the required indicator (2px solid, --amfc-accent, 2px offset), and it exists
+   because AMFC's live custom.css kills focus outlines globally. Restated here anyway: the
+   lift alone is not a sufficient focus indicator, and this keeps the nav's own indicator from
+   silently disappearing if that global rule is ever scoped down or dropped during the port. */
+.amfc-nav-pill .nav-link:focus-visible {
+	outline: 2px solid var(--amfc-accent);
+	outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-nav-pill .nav-link {
+		transition: none;
+	}
 }
 
 .amfc-nav__lang-toggle {

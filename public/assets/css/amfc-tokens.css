@@ -61,7 +61,12 @@
 	   --ease-out/--duration-fast, so this stays consistent with every other token here */
 	--amfc-ease-out: cubic-bezier(0, 0, 0.2, 1); /* standard decelerate curve */
 	--amfc-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* slight overshoot then settle */
+	/* Sharper decelerate than --amfc-ease-out: almost all the distance is covered in the first
+	   third, then it eases to a stop. Reads as "snappy". Added for the nav micro-lift, which
+	   specified this exact curve. */
+	--amfc-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 	--amfc-duration-fast: 150ms;
+	--amfc-duration-medium: 250ms; /* between fast and base — added for the nav micro-lift */
 	--amfc-duration-base: 400ms;
 	--amfc-duration-slower: 800ms;
 }
