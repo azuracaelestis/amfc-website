@@ -19,6 +19,6 @@
 		</div>
 		<h2 class="amfc-app__headline"><?= e(t('home.app.headline')) ?></h2>
 		<p class="amfc-app__body"><?= e(t('home.app.body')) ?></p>
-		<a href="#" class="btn btn-primary rounded-pill amfc-btn"><?= e(t('home.app.cta')) ?></a>
+		<a href="#" class="btn btn-primary rounded-pill amfc-btn"><span class="amfc-btn__label"><?= e(t('home.app.cta')) ?></span></a>
 	</div>
 </section>

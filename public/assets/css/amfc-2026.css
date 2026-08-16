@@ -18,24 +18,78 @@
 	}
 }
 
-/* Shared button box model — every filled/pill CTA on the homepage (hero, app-download, both
-   service cards) uses this for a consistent 48px height and fit-to-text width, per feedback
-   referencing a reference button image. Bootstrap's btn/btn-primary/rounded-pill utility
-   classes stay in the markup for base semantics + the shared background color (see
-   amfc-bootstrap-overrides.css); this class overrides the box model with literal px values,
-   which win over Bootstrap's --bs-btn-* vars since this stylesheet loads after Bootstrap.
-   Width is deliberately not set — it falls out of padding-inline + text content instead of a
-   fixed px target. */
+/* Shared button style — every filled/pill CTA on the homepage (hero, app-download, both
+   service cards) uses this for a consistent look, per feedback to apply the hero CTA's treatment
+   (gradient, glossy highlight, letter-spacing + scale hover) everywhere instead of just the
+   hero. Originally just a box model (48px flat height); now carries the full visual treatment
+   too, absorbed from what used to be hero-only .amfc-hero__cta rules — .amfc-hero__cta itself
+   is trimmed to just its entrance-animation delay (see below). Bootstrap's btn/btn-primary/
+   rounded-pill utility classes stay in the markup for base semantics; this class overrides
+   everything else since it loads after Bootstrap. Width is deliberately not set — it falls out
+   of padding-inline + text content instead of a fixed px target. */
 .amfc-btn {
+	position: relative;
+	overflow: hidden;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	height: 48px;
-	padding-inline: 32px;
+	height: auto;
+	padding-block: 14px;
+	padding-inline: 28px;
+	border-radius: 16px;
+	/* 225deg: light stop anchored top-right, flowing down to the dark stop at bottom-left. */
+	background: linear-gradient(225deg, #4768e6, #2d50d7);
+	border: none;
+	box-shadow: none;
+	color: var(--amfc-white);
 	font-family: var(--amfc-font-zh);
 	font-size: 1rem; /* 16px */
 	font-weight: 600;
 	white-space: nowrap;
+	transition: transform var(--amfc-duration-base) var(--amfc-ease-spring);
+}
+
+/* Glossy highlight: top ~55% of the button, clipped to the button's rounded corners by its
+   overflow:hidden above. Bottom edge fades to fully transparent, so the shared border-radius
+   on this element's own bottom corners never actually shows. */
+.amfc-btn::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 55%;
+	border-radius: 16px;
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 0.225), rgba(255, 255, 255, 0));
+	pointer-events: none;
+}
+
+/* Hover/focus: letter-spacing "tracking" on the label text, lives on .amfc-btn__label (the
+   inner span every button's markup wraps its text in) rather than the anchor itself, so the
+   anchor's own padding/box never shifts as the letters spread — only the text inside breathes
+   outward. Combined with a uniform scale() "pop" on the anchor itself — uniform rather than
+   scaleX-only, since scaleX alone visibly skews the border-radius into an ellipse and stretches
+   the glyphs at this size. --amfc-ease-spring gives the pop a slight overshoot-then-settle. */
+.amfc-btn__label {
+	display: inline-block;
+	letter-spacing: 0.01em;
+	transition: letter-spacing var(--amfc-duration-base) var(--amfc-ease-out);
+}
+
+.amfc-btn:hover .amfc-btn__label,
+.amfc-btn:focus-visible .amfc-btn__label {
+	letter-spacing: 0.04em;
+}
+
+.amfc-btn:hover,
+.amfc-btn:focus-visible {
+	transform: scale(1.05);
+}
+
+/* Overrides the sitewide `.theme-2026 :focus-visible` ring (top of this file) with a lighter
+   blue tuned for this button's own dark blue gradient background — same specificity (0,2,0)
+   either way, so this wins purely by appearing later in the same file. */
+.amfc-btn:focus-visible {
+	outline: 2px solid var(--amfc-blue-300);
+	outline-offset: 2px;
 }
 
 /* --- Trust / compliance section --- */
@@ -390,89 +444,20 @@
 	to { opacity: 0.8; transform: scale(1); }
 }
 
-/* Hero CTA — glossy gradient treatment, per feedback. Overrides .amfc-btn's flat height/
-   padding-inline/border-radius (a fixed pill) with a padding-driven box and a 16px radius,
-   specific to this one button — the other three CTAs (.amfc-btn on app-download/service cards)
-   are untouched. The ::before highlight is a static material property (doesn't animate on
-   hover) — hover/focus itself is a letter-spacing "tracking" effect on the label text (see
-   .amfc-hero__cta-label below), not a lift/shadow. No resting shadow, and none on hover either
-   now. No border in either state, per feedback (border: none overrides Bootstrap's own .btn
-   border, not just omits one). The arrow reveal-on-hover interaction (previously
-   .amfc-hero__cta-arrow, growing the button on hover) was removed per feedback — the icon and
-   its markup are gone from hero.php too, this is plain centered text now. */
+/* Hero CTA — the gradient/glossy/hover treatment itself now lives on the shared .amfc-btn (see
+   above), applied to every primary button on the homepage per feedback, not just this one. All
+   that's left specific to the hero button is its entrance-animation delay, part of the hero's
+   staggered reveal sequence (photo -> eyebrow -> headline -> CTA -> sparkles). */
 .amfc-hero__cta {
-	position: relative;
-	overflow: hidden;
-	height: auto;
-	padding-block: 14px;
-	padding-inline: 28px;
-	border-radius: 16px;
-	/* 225deg: a 45-degree diagonal with the light stop anchored top-right (the "right side"),
-	   flowing down to the dark stop at bottom-left — mirrors the previous 135deg (light
-	   top-left), per feedback to source the gradient from the right instead. */
-	background: linear-gradient(225deg, #4768e6, #2d50d7);
-	border: none;
-	box-shadow: none;
-	color: var(--amfc-white);
-	font-weight: 600;
-	transition: transform var(--amfc-duration-base) var(--amfc-ease-spring);
 	animation: amfc-hero-fade-up var(--amfc-duration-base) var(--amfc-ease-out) 700ms backwards;
 }
 
-/* Glossy highlight: top ~55% of the button, clipped to the button's rounded corners by its
-   overflow:hidden above. Bottom edge fades to fully transparent, so the shared border-radius
-   on this element's own bottom corners never actually shows. */
-.amfc-hero__cta::before {
-	content: "";
-	position: absolute;
-	inset: 0 0 auto 0;
-	height: 55%;
-	border-radius: 16px;
-	background: linear-gradient(to bottom, rgba(255, 255, 255, 0.225), rgba(255, 255, 255, 0));
-	pointer-events: none;
-}
-
-/* Hover/focus effect: letter-spacing "tracking" on the label text, replacing the previous
-   lift+shadow (transform/box-shadow) treatment — per feedback. Lives on .amfc-hero__cta-label
-   (the inner span added in hero.php), not the anchor itself, so the anchor's own padding/box
-   never shifts as the letters spread — only the text inside breathes outward. */
-.amfc-hero__cta-label {
-	display: inline-block;
-	letter-spacing: 0.01em;
-	transition: letter-spacing var(--amfc-duration-base) var(--amfc-ease-out);
-}
-
-.amfc-hero__cta:hover .amfc-hero__cta-label,
-.amfc-hero__cta:focus-visible .amfc-hero__cta-label {
-	letter-spacing: 0.04em;
-}
-
-/* Stretch: adds a scale "pop" on top of the letter-spacing above — the tracking alone was too
-   subtle to read as a real hover response, per feedback. Uniform scale() (not scaleX-only) —
-   scaleX alone visibly skews the 16px corner radius into an ellipse and slightly stretches the
-   glyphs at this size (checked side-by-side); uniform scale keeps both crisp while still
-   growing. --amfc-ease-spring (not --amfc-ease-out, used for the letter-spacing) gives it a
-   slight overshoot-then-settle bounce — the same token used for the hero sparkles' entrance. */
-.amfc-hero__cta:hover,
-.amfc-hero__cta:focus-visible {
-	transform: scale(1.05);
-}
-
-/* Overrides the sitewide `.theme-2026 :focus-visible` ring (top of this file) with a lighter
-   blue specifically for this button — same specificity (0,2,0) either way, so this wins purely
-   by appearing later in the same file; --amfc-accent's darker blue would have poor contrast
-   against this button's own dark blue gradient background. */
-.amfc-hero__cta:focus-visible {
-	outline: 2px solid var(--amfc-blue-300);
-	outline-offset: 2px;
-}
-
 @media (prefers-reduced-motion: reduce) {
-	.amfc-hero__cta {
+	.amfc-btn {
 		transition: none;
 	}
 
-	.amfc-hero__cta-label {
+	.amfc-btn__label {
 		transition: none;
 	}
 
@@ -586,75 +571,14 @@ body {
 	text-decoration: none;
 }
 
-/* Scopes the hand-drawn underline (below) to just "創新、專業、" / "效率、誠信" instead of the
-   full line — replaces the old straight bottom bar that spanned the whole line. Same font-size
-   collision risk as .amfc-philosophy__heading-line above, since this is a new bare span. */
+/* Wraps just "創新、專業、" / "效率、誠信" within the line — previously also hosted a hand-drawn
+   underline SVG (removed per feedback); kept as a span since .amfc-philosophy__heading-line
+   above still splits the text this way, and it also still needs font: inherit for the same
+   font-size collision risk as that line span. */
 .amfc-philosophy__heading-highlight {
 	position: relative;
 	display: inline-block;
 	font: inherit;
-}
-
-/* Hand-drawn underline, per feedback: replaces the previous straight gold bar with a wavy
-   stroke that "writes itself in" after the heading has finished fading in, reusing the same
-   squiggle path/draw-in technique tried earlier on the hero headline. preserveAspectRatio="none"
-   stretches the path to match each highlight span's own (different) width. stroke-width 5.27px
-   matches the old straight bar's actual rendered thickness (0.3rem, corrupted to ~17.6px root
-   by AMFC's html{font-size:1.1rem} — see CLAUDE.md Bug B — not the nominal 4.8px 0.3rem would
-   suggest at a normal 16px root); written directly in px per CLAUDE.md guidance rather than
-   trying to re-derive it from rem. */
-.amfc-philosophy__heading-underline {
-	position: absolute;
-	left: 0;
-	top: 100%;
-	margin-top: -0.15em; /* tucks it up under the text baseline rather than floating below it */
-	width: 100%;
-	height: 0.35em;
-	overflow: visible;
-	pointer-events: none;
-}
-
-.amfc-philosophy__heading-underline path {
-	fill: none;
-	stroke: var(--amfc-accent-gold);
-	stroke-width: 8px; /* per feedback (was 5.27px, matched to the old straight bar) */
-	stroke-linecap: round; /* rounded ends, per feedback */
-	stroke-linejoin: round;
-	stroke-dasharray: 400;
-	stroke-dashoffset: 400; /* hidden until the .aos-animate gate below starts the draw */
-	animation: amfc-philosophy-underline-draw 700ms var(--amfc-ease-out) 550ms forwards;
-	/* Paused by default and only released once the ancestor .amfc-philosophy__intro gets
-	   .aos-animate (below) — a plain animation-delay alone would still start counting down
-	   (and finish) immediately on page load regardless of scroll position, since this section
-	   is below the fold. */
-	animation-play-state: paused;
-}
-
-.amfc-philosophy__intro.aos-animate .amfc-philosophy__heading-underline path {
-	animation-play-state: running;
-}
-
-/* Second line's underline waits for the first one's draw to actually finish (550ms delay +
-   700ms duration = 1250ms) rather than drawing both at once — reads more like a single pen
-   underlining one phrase, then the next, matching the "handwriting" ask, instead of two pens
-   moving simultaneously. */
-.amfc-philosophy__heading-line:nth-child(2) .amfc-philosophy__heading-underline path {
-	animation-delay: 1250ms;
-}
-
-@keyframes amfc-philosophy-underline-draw {
-	from { stroke-dashoffset: 400; }
-	to { stroke-dashoffset: 0; }
-}
-
-/* AOS disables itself entirely under prefers-reduced-motion (see layout/scripts.php), meaning
-   .aos-animate is NEVER added — without this, animation-play-state would stay "paused" forever
-   and the underline would never appear at all for those users. */
-@media (prefers-reduced-motion: reduce) {
-	.amfc-philosophy__heading-underline path {
-		animation: none;
-		stroke-dashoffset: 0;
-	}
 }
 
 /* The pile lives in the right column. Each card is directly sticky, so its own height is what
