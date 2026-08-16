@@ -99,6 +99,41 @@ When multi-language work resumes, preserve AMFC's existing contract exactly: coo
 - Reuse libraries already loaded (AOS for reveals, owlCarousel if something needs to scroll) rather than reaching for a new one.
 - Leave `data-*` hooks on primary CTAs (e.g. `data-track="hero-cta"`) since GTM/GA event bindings will need to be reconnected at integration — do not assume which selectors their analytics currently depend on.
 
+## Testing limits & escalation — read this before iterating on scroll/animation-timing bugs
+
+- **Headless rAF can silently fail.** `requestAnimationFrame` has been suppressed by Chromium
+  for backgrounded/occluded pages since 2011, and in this repo's headless test harness it has
+  been observed not firing *at all* over 2+ seconds of wall-clock/virtual time — reproduced with
+  both `--dump-dom` and `--screenshot`, on a page that had nothing else going on. This directly
+  broke naive verification of the nav-pill auto-hide feature (`initNavAutoHide` in
+  `amfc-2026.js`): every `window.dispatchEvent(new Event('scroll'))` looked like it did nothing,
+  because the rAF-throttled handler never got a callback to run in. If a scroll- or rAF-driven
+  feature (nav auto-hide, scroll-stacking cards, entrance animations, etc.) looks broken *only*
+  under headless automation:
+  1. Retry the headless launch with `--disable-backgrounding-occluded-windows
+     --disable-renderer-backgrounding` — resolves it in many cases.
+  2. If still unreliable, verify the decision logic directly instead of chasing the real event
+     loop: reproduce the function's actual conditional branches (not a reimplementation you
+     trust from memory — copy the real logic) and drive it synchronously with mocked inputs
+     against the real shipped CSS. This is how the KSP card entrance and the nav auto-hide
+     logic were both confirmed correct in this project after their rAF/scroll-event paths
+     wouldn't cooperate headlessly — see git log on `amfc-2026.css`/`amfc-2026.js` for the
+     specific verification harnesses used.
+  3. This is NOT deterministic — don't assume headless always breaks rAF, and don't assume a
+     single failing run proves the code is broken. `prefers-reduced-motion` in particular has
+     been observed reporting `true` on some headless invocations and `false` on others with
+     *identical* flags in this same environment.
+  4. Static, spec-defined things (CSS specificity, selector matching) do NOT need runtime
+     verification the way timing-dependent things do — work those out by hand and trust the
+     math. But don't keep rewriting code on the strength of a failed headless *timing* check
+     alone — flag it for a real-browser check instead of guessing at further code changes.
+
+- **Stop-and-escalate, don't loop.** If you can't get a reliable pass/fail signal for an
+  interaction after ~2 distinct verification attempts, stop modifying code for that task.
+  Summarize what you tried, why it can't be verified here, and ask for a real-browser check or
+  more input. Burning further attempts rewriting already-correct code because headless couldn't
+  confirm it wastes effort and risks introducing a real regression to "fix" a test artifact.
+
 ## How to run
 
 ```
