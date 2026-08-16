@@ -3,11 +3,16 @@
    (node 87:269). Real lifestyle photo, and now both real store badges (googleplay.svg and
    appstore.svg supplied directly — the App Store badge was previously a placeholder since its
    Figma source is a complex multi-layer vector group not worth hand-porting).
-   "KingDo" is a confirmed fixed product name — routed through t() like any other string. */
+   "KingDo" is a confirmed fixed product name — routed through t() like any other string.
+
+   Photo sits OUTSIDE .amfc-container (unlike every other element in this section) so it can
+   bleed full-width edge-to-edge, per Figma (node 87:270: `w-full` inside its own 1443px-wide
+   section frame, not the narrower 1264px content container) — see the .amfc-app__photo
+   comment in amfc-2026.css. */
 ?>
 <section id="app" class="amfc-app" data-aos="fade-up">
+	<img class="amfc-app__photo" src="<?= e(asset('images/app-photo.png')) ?>" alt="<?= e(t('home.app.photo_alt')) ?>" />
 	<div class="amfc-container">
-		<img class="amfc-app__photo" src="<?= e(asset('images/app-photo.png')) ?>" alt="<?= e(t('home.app.photo_alt')) ?>" />
 		<div class="amfc-app__store-badges">
 			<img src="<?= e(asset('images/googleplay.svg')) ?>" alt="<?= e(t('home.app.google_play_alt')) ?>" />
 			<img src="<?= e(asset('images/appstore.svg')) ?>" alt="<?= e(t('home.app.app_store_alt')) ?>" />

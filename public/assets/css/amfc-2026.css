@@ -845,7 +845,11 @@ body {
 	   Bottom half of the 180px gap to the trust/social-proof section below (other half is
 	   that section's own padding-top, fluid-scaled the same way) — see .amfc-trust. */
 	padding-block: 90px clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px);
-	background: var(--amfc-surface-muted);
+	/* Confirmed via Figma (node 87:53): linear-gradient(177.7deg, #F5F7FF 36.03%, #FFFFFF
+	   90.18%) — effectively top-to-bottom (177.7deg rounds to a straight vertical drop), so
+	   expressed here as `to bottom` rather than replicating the near-imperceptible 2.3deg tilt.
+	   #F5F7FF is the same hex as --amfc-lavender-100. */
+	background: linear-gradient(to bottom, var(--amfc-lavender-100) 36.03%, var(--amfc-white) 90.18%);
 	text-align: center;
 }
 
@@ -985,14 +989,18 @@ body {
 	text-align: center;
 }
 
-/* 1043x320 at the 1440px Figma reference width, fluid-scaled below it — confirmed via
-   get_design_context (node 87:270), and matches the size given directly. */
+/* Full-bleed, edge-to-edge across the whole viewport width with no corner radius — confirmed
+   via Figma (node 87:270): the photo is `w-full` inside its own 1443px-wide section frame, not
+   constrained to the 1264px .amfc-container like the rest of this section's content. Height
+   439px at the 1440px Figma reference width, fluid-scaled below it (same technique as
+   everything else in this file) so the banner's aspect ratio holds instead of going tall/
+   portrait-cropped on narrow viewports. Markup-wise this means the <img> in app-download.php
+   sits OUTSIDE .amfc-container, directly under <section>, so it isn't limited by the
+   container's max-width/padding-inline. */
 .amfc-app__photo {
-	width: clamp(16.3rem, calc(1043 / 1440 * 100vw), 1043px);
-	height: clamp(5rem, calc(320 / 1440 * 100vw), 320px);
+	width: 100%;
+	height: clamp(9.4rem, calc(439 / 1440 * 100vw), 439px);
 	object-fit: cover;
-	border-radius: var(--amfc-radius-xl);
-	margin-inline: auto;
 	display: block;
 }
 
