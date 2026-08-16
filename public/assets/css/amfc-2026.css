@@ -770,7 +770,11 @@ body {
 	justify-content: center;
 	gap: var(--amfc-space-md);
 	padding: var(--amfc-space-lg);
-	border: 1px solid var(--amfc-card-border);
+	/* Borderless per feedback — the cards separate by fill colour and the stack's drop shadows
+	   instead. `none` rather than omitting the property: AMFC's live custom.css isn't vendored
+	   here, so an explicit reset is what guarantees no border of theirs shows through once this
+	   ships into their app (same reasoning as .amfc-hero__cta's border: none). */
+	border: none;
 	border-radius: var(--amfc-radius-lg);
 	box-shadow: var(--amfc-shadow-card);
 	text-align: center;

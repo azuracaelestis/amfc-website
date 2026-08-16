@@ -17,7 +17,7 @@
 	--amfc-periwinkle-100: #d9e1ff; /* news-grid band / one stat card */
 	--amfc-mint-100: #ebefff; /* stat card (誠信) */
 	--amfc-cream-100: #fff8d9; /* stat card (創新/AI) */
-	--amfc-card-border: #8ea4f5; /* service card / stat card border */
+	--amfc-card-border: #8ea4f5; /* service card border (the KSP stat cards are borderless) */
 	--amfc-gold-500: #eab43f; /* eyebrow accent — used across multiple sections, missed on first pass */
 	--amfc-gold-400: #ebc84f; /* stat-card tag pill background */
 	--amfc-navy-900: #1d3558; /* NOT the footer — see correction below; kept for any future dark-surface need */
