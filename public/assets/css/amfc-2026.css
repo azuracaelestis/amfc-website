@@ -1052,14 +1052,21 @@ body {
 	margin-inline: auto;
 }
 
-/* --- Car-loan illustration hover, per spec ---
+/* --- Service-card illustration hovers, per spec ---
 
-   Three animations run together on card hover: sparkles twinkle (loop), the coin bounces once,
-   and the car rocks (loop). Amplitudes are deliberately small — they play simultaneously, and
-   the restraint is what keeps the combination from reading as busy.
+   Both cards run three animations together on hover. Car card: sparkles twinkle (loop), coin
+   bounces once, car rocks (loop). Personal-loan card: bag swings (loop), sparkle twinkles
+   (loop), coin bounces once. The twinkle and coin-bounce keyframes are shared between the two
+   cards by design, so the pair reads as one family rather than two unrelated effects.
 
-   The illustration is inlined into the DOM (src/partials/home/illustration-car-loan.php)
-   specifically so these rules can reach its parts; as an <img> it was unstylable from here.
+   Amplitudes are deliberately small — they play simultaneously, and the restraint is what keeps
+   each combination from reading as busy.
+
+   Both illustrations are inlined into the DOM (src/partials/home/illustration-*.php)
+   specifically so these rules can reach their parts; as <img> they were unstylable from here.
+
+   The hover selectors are keyed on each illustration's own classes, so the shared
+   `.amfc-service-card:hover` prefix animates only the card actually being hovered.
 
    The whole trigger sits inside prefers-reduced-motion: no-preference, so under `reduce` none
    of it is even declared — this is real movement, unlike the typographic button/nav hovers that
@@ -1073,30 +1080,53 @@ body {
 	/* SVG's default transform-origin is the user-space origin (0 0), NOT each element's own
 	   box — without transform-box, the sparkles would scale/rotate about the drawing's top-left
 	   corner and fly across the illustration instead of twinkling in place. */
-	.amfc-illo-car__sparkle {
+	.amfc-illo-car__sparkle,
+	.amfc-illo-personal__sparkle {
 		transform-box: fill-box;
 		transform-origin: center;
 	}
 
-	.amfc-service-card:hover .amfc-illo-car__sparkle {
+	.amfc-service-card:hover .amfc-illo-car__sparkle,
+	.amfc-service-card:hover .amfc-illo-personal__sparkle {
 		animation: amfc-illo-twinkle 900ms ease-in-out infinite;
 	}
 
-	/* Offset so the two never peak together — they read as independent glints rather than one
-	   synchronised pulse. */
+	/* Offset so the car card's two sparkles never peak together — they read as independent
+	   glints rather than one synchronised pulse. (The personal card has a single sparkle, so
+	   there is nothing to desynchronise there.) */
 	.amfc-service-card:hover .amfc-illo-car__sparkle--2 {
 		animation-delay: 300ms;
 	}
 
 	/* Once per hover-enter, not looping: re-entering the card replays it because the animation
 	   is only applied while :hover holds. */
-	.amfc-service-card:hover .amfc-illo-car__coin {
+	.amfc-service-card:hover .amfc-illo-car__coin,
+	.amfc-service-card:hover .amfc-illo-personal__coin {
 		animation: amfc-illo-coin-bounce 600ms var(--amfc-ease-out) 1;
 	}
 
 	.amfc-service-card:hover .amfc-illo-car__car {
 		animation: amfc-illo-car-rock 1400ms ease-in-out infinite;
 	}
+
+	/* Pivots at the bag's handle rather than its centre, so it swings from the point her hand
+	   grips it like a real hanging bag. fill-box makes the percentages resolve against the
+	   group's own bounding box (body + handle arc, 66.9 x 52.2 user units); 99%/60% is the
+	   handle's grip point (~72, ~95 in viewBox coords) expressed within that box. */
+	.amfc-illo-personal__bag {
+		transform-box: fill-box;
+		transform-origin: 99% 60%;
+	}
+
+	.amfc-service-card:hover .amfc-illo-personal__bag {
+		animation: amfc-illo-bag-swing 1200ms ease-in-out infinite;
+	}
+}
+
+@keyframes amfc-illo-bag-swing {
+	0%, 100% { transform: rotate(0deg); }
+	25% { transform: rotate(-6deg); }
+	75% { transform: rotate(6deg); }
 }
 
 /* Peaks at 50% and returns, rather than running 1 -> 1.25 one-way: an infinite one-way loop

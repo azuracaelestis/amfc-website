@@ -27,7 +27,8 @@
 			</div>
 			<div class="amfc-service-card">
 				<div class="amfc-service-card__icon-wrap">
-					<img class="amfc-service-card__icon" src="<?= e(asset('images/personal-loan.svg')) ?>" alt="<?= e(t('home.services.personal.icon_alt')) ?>" />
+					<?php /* Inlined for the same reason as the car card's — see the partial's header. */ ?>
+					<?php require __DIR__ . '/illustration-personal-loan.php'; ?>
 				</div>
 				<div class="amfc-service-card__text">
 					<h3 class="amfc-service-card__title"><?= e(t('home.services.personal.title')) ?></h3>
