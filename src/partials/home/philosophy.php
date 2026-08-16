@@ -33,11 +33,13 @@
 	     exactly with the hero headline above it — same reasoning as hero.php. -->
 	<div class="amfc-container">
 		<div class="amfc-philosophy__grid">
-			<div class="amfc-philosophy__intro" data-aos="fade-up" data-aos-easing="ease-out-cubic" data-aos-duration="600">
-				<p class="amfc-eyebrow amfc-philosophy__eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
+			<div class="amfc-philosophy__intro" data-aos="fade-up" data-aos-once="true">
+				<p class="amfc-eyebrow amfc-philosophy__eyebrow">
+					<span class="amfc-philosophy__mask"><span class="amfc-philosophy__mask-inner"><?= e(t('home.philosophy.eyebrow')) ?></span></span>
+				</p>
 				<h2 class="amfc-philosophy__heading">
-					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1')) ?></span>
-					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line2')) ?></span>
+					<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__mask"><span class="amfc-philosophy__mask-inner"><?= e(t('home.philosophy.headline_line1')) ?></span></span></span>
+					<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__mask"><span class="amfc-philosophy__mask-inner"><?= e(t('home.philosophy.headline_line2')) ?></span></span></span>
 				</h2>
 			</div>
 			<div class="amfc-philosophy__stack">
