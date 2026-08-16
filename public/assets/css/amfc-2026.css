@@ -998,8 +998,9 @@ body {
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Hover wash: white -> #D9E1FF top-to-bottom, per feedback. White holds the top 65% and the
-   blend occupies the bottom 35%.
+/* Hover wash: white -> #EBEFFF top-to-bottom, per feedback. White holds the top 65% and the
+   blend occupies the bottom 35%. (#EBEFFF is --amfc-mint-100 — the token name is a misnomer
+   carried over from the palette import; the value is a pale blue, not a mint.)
 
    Carried on a ::before overlay rather than swapping the card's own `background`, because CSS
    cannot interpolate background-image: setting the gradient directly on :hover would snap in
@@ -1016,7 +1017,7 @@ body {
 	inset: 0;
 	z-index: -1;
 	border-radius: inherit;
-	background: linear-gradient(to bottom, var(--amfc-white) 65%, var(--amfc-periwinkle-100) 100%);
+	background: linear-gradient(to bottom, var(--amfc-white) 65%, var(--amfc-mint-100) 100%);
 	opacity: 0;
 	transition: opacity 0.2s ease;
 	pointer-events: none;

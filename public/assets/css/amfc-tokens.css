@@ -15,7 +15,8 @@
 	--amfc-blue-100: #e8ecfb;
 	--amfc-lavender-100: #f5f7ff; /* investor band / one stat card / hero gradient stop */
 	--amfc-periwinkle-100: #d9e1ff; /* news-grid band / one stat card */
-	--amfc-mint-100: #ebefff; /* stat card (誠信) */
+	--amfc-mint-100: #ebefff; /* stat card (誠信) + service-card hover wash. Name is a misnomer
+	                             from the palette import — the value is a pale blue, not a mint. */
 	--amfc-cream-100: #fff8d9; /* stat card (創新/AI) */
 	--amfc-card-border: #8ea4f5; /* service card border (the KSP stat cards are borderless) */
 	--amfc-gold-500: #eab43f; /* eyebrow accent — used across multiple sections, missed on first pass */
