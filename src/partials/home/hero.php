@@ -15,7 +15,7 @@
 					<span class="amfc-hero__headline-line"><span class="amfc-hero__headline-line-inner"><?= e(t('home.hero.headline_3')) ?></span></span>
 				</h1>
 				<a href="#service" class="btn btn-primary rounded-pill amfc-hero__cta amfc-btn">
-					<?= e(t('home.hero.cta')) ?>
+					<span class="amfc-hero__cta-label"><?= e(t('home.hero.cta')) ?></span>
 				</a>
 			</div>
 			<div class="amfc-hero__photo-wrap">
