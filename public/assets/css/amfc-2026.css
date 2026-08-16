@@ -415,6 +415,7 @@
 	box-shadow: none;
 	color: var(--amfc-white);
 	font-weight: 600;
+	transition: transform var(--amfc-duration-base) var(--amfc-ease-spring);
 	animation: amfc-hero-fade-up var(--amfc-duration-base) var(--amfc-ease-out) 700ms backwards;
 }
 
@@ -446,6 +447,17 @@
 	letter-spacing: 0.04em;
 }
 
+/* Stretch: adds a scale "pop" on top of the letter-spacing above — the tracking alone was too
+   subtle to read as a real hover response, per feedback. Uniform scale() (not scaleX-only) —
+   scaleX alone visibly skews the 16px corner radius into an ellipse and slightly stretches the
+   glyphs at this size (checked side-by-side); uniform scale keeps both crisp while still
+   growing. --amfc-ease-spring (not --amfc-ease-out, used for the letter-spacing) gives it a
+   slight overshoot-then-settle bounce — the same token used for the hero sparkles' entrance. */
+.amfc-hero__cta:hover,
+.amfc-hero__cta:focus-visible {
+	transform: scale(1.05);
+}
+
 /* Overrides the sitewide `.theme-2026 :focus-visible` ring (top of this file) with a lighter
    blue specifically for this button — same specificity (0,2,0) either way, so this wins purely
    by appearing later in the same file; --amfc-accent's darker blue would have poor contrast
@@ -456,6 +468,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+	.amfc-hero__cta {
+		transition: none;
+	}
+
 	.amfc-hero__cta-label {
 		transition: none;
 	}
