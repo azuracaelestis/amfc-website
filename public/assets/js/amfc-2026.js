@@ -65,30 +65,49 @@ window.AMFC = (function () {
 		if (!section) return;
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-		// section.getBoundingClientRect().bottom is the section's bottom edge distance from
-		// the viewport's top: large while there's still plenty of the section left to scroll
-		// through, shrinking toward 0 (then negative) exactly as the section finishes handing
-		// off to whatever comes after it. FADE_START/FADE_END map that distance to a 0-1 fade
-		// progress.
+		// The mark is position: fixed, so it never moves — opacity is the whole effect, and
+		// this is the only thing standing between it and being visible over the entire page.
+		var mark = section.querySelector('.amfc-philosophy__watermark');
+		var intro = section.querySelector('.amfc-philosophy__intro');
+
+		// Fade IN as the intro heading clears the mark's fixed position, which in practice is
+		// the moment the heading finishes pinning and the first stat card takes its place at
+		// the top of the pile — i.e. "when the first card appears", per feedback.
 		//
-		// FADE_END is 800, not 0, and that matters: near the section's end the watermark runs
-		// out of sticky track and starts riding up the viewport, while the intro heading is
-		// still pinned near the top. They cross, and the mark would otherwise pass straight
-		// through the heading at ~80% opacity (measured). The crossing begins once the section
-		// bottom is within roughly (heading bottom + watermark height) of the viewport top —
-		// about 733px at a 900px viewport, and less on shorter ones, since the heading's own
-		// sticky offset is clamped at 12rem. Finishing the fade at 800 clears that worst case
-		// on every viewport height, so the mark is fully transparent before it ever reaches the
-		// text. Don't lower this without re-running the overlap check.
+		// Derived from the two elements' live rects rather than a scroll offset. Keying it off
+		// the card's own position was tried first and revealed the mark ~800px too early: while
+		// the section is still scrolling in, the heading has not pinned yet and sits low enough
+		// to land inside the mark's box, so the two overlapped at full opacity (152px, measured)
+		// even though the card was legitimately on screen. Measuring the actual gap encodes the
+		// real constraint instead of a proxy for it, and self-corrects across viewport heights
+		// without hardcoding the heading's sticky offset or height.
+		var IN_DISTANCE = 120; // px of clearance before the mark reaches full opacity
+
+		// Fade OUT as the section hands off to Funds. FADE_END is 800, not 0, so the mark is
+		// gone before the section's tail brings it near the intro heading: the heading pins at
+		// clamp(7rem, 20vh, 12rem) and runs ~183px tall, and finishing by 800 clears that on
+		// every viewport height. Don't lower it without re-running the overlap check.
 		var FADE_START = 1600;
 		var FADE_END = 800;
 		var ticking = false;
 
 		function onScroll() {
+			var fadeIn = 1;
+			if (mark && intro) {
+				// Negative while the heading still sits inside the mark's box; grows as the
+				// heading pins and the pile scrolls up past it.
+				var clearance = mark.getBoundingClientRect().top - intro.getBoundingClientRect().bottom;
+				fadeIn = clearance / IN_DISTANCE;
+				fadeIn = Math.max(0, Math.min(1, fadeIn));
+			}
+
 			var bottom = section.getBoundingClientRect().bottom;
-			var progress = (bottom - FADE_END) / (FADE_START - FADE_END);
-			progress = Math.max(0, Math.min(1, progress));
-			section.style.setProperty('--amfc-philosophy-watermark-fade', progress);
+			var fadeOut = (bottom - FADE_END) / (FADE_START - FADE_END);
+			fadeOut = Math.max(0, Math.min(1, fadeOut));
+
+			// Multiplied, not min(): either end can independently damp the mark, and the
+			// product stays smooth where the two ramps overlap on a short viewport.
+			section.style.setProperty('--amfc-philosophy-watermark-fade', fadeIn * fadeOut);
 			ticking = false;
 		}
 

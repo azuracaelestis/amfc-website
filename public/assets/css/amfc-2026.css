@@ -558,75 +558,45 @@ body {
 	position: relative;
 }
 
-/* Decorative AMFC wordmark sitting behind the intro text and card stack, per feedback
-   (reference: a mockup with the mark bleeding off the viewport's bottom-left corner at low
-   opacity, visible throughout the card-stack scroll — not just at the very end).
+/* Decorative AMFC wordmark sitting behind the intro text and card stack, per feedback.
 
-   Two elements, and both are load-bearing:
+   position: fixed, so it holds a single spot in the viewport and never travels. This replaced a
+   sticky implementation: a sticky element only holds its offset once scrolling has pushed it
+   there, so before that it sat at its natural position and visibly RODE UP into place, and at
+   the section's end it ran out of track and rode up out of view again. Per feedback the mark
+   should not move at all — it is revealed and hidden purely by opacity now, and fixed is what
+   makes that possible. Fixed also keeps it out of flow, so it cannot push the section's content
+   down (a bare sticky <img> here previously reserved a ~370px block and did exactly that).
 
-   1. The TRACK is absolutely positioned, so it spans the section while being OUT OF FLOW. This
-      is the fix for a real bug hit on the first attempt: `position: sticky` does NOT remove an
-      element from normal flow (unlike absolute), so a bare sticky <img> here reserved its own
-      ~370px-tall block at the top of the section and pushed every bit of real content down that
-      far. Absolute on the wrapper is what prevents that.
+   The max(..., 420px) floor keeps it clear of the intro heading on short viewports. The heading
+   pins at clamp(7rem, 20vh, 12rem) and runs ~183px tall, so its bottom edge tops out at ~394px
+   once 20vh passes the 12rem clamp. Without the floor a 700px-tall window would place the mark
+   at 280px — straight through the text. 420px clears that worst case at every viewport height;
+   the mark simply bleeds further off the bottom edge on short screens.
 
-      The track starts 100vh down the section rather than at its top (inset: 100vh 0 0 0). A
-      sticky element only holds its offset once scrolling has pushed it there; before that it
-      sits at its natural position, which — with a track starting at the section's top — is the
-      section's top-left, exactly where the intro eyebrow/headline lives. The two collided on
-      screen for the whole first screenful, per feedback. Starting the track a viewport height
-      in means the mark's natural position begins below the fold, so it rises into view from the
-      bottom edge as the reader scrolls into the card stack and never shares space with the
-      headline. Expressed in vh rather than px so it scales with the viewport instead of needing
-      a magic number tuned to one screen height.
+   z-index 0 keeps it behind the stat cards (z-index 1-4), and being first in the section's DOM
+   keeps it behind the sticky intro column, which is positioned at z-index auto.
 
-   2. The IMG is sticky *within* that track. Plain absolute positioning can't do this job:
-      .amfc-philosophy's box spans the whole multi-viewport-tall scroll track (four sticky cards
-      plus the .amfc-philosophy__stack-tail runway), so an absolute "bottom: Npx" would only
-      scroll into view near the very end of the section. Sticky instead parks it near the
-      viewport's bottom edge for the section's entire scroll duration — the same mechanism
-      .amfc-philosophy__intro uses to pin near the top — and releases naturally at the track's
-      bottom, right where the fade below completes. top (not bottom) drives the stickiness:
-      calc(100vh - 420px) holds the mark's top edge that far down the viewport, i.e. bottom-
-      anchored in effect, but expressed as the offset sticky actually honors here.
+   Opacity comes from --amfc-philosophy-watermark-fade (0->1, default 1 so the resting state is
+   correct even before JS runs), set by initPhilosophyWatermarkFade() in amfc-2026.js: it fades
+   IN as the first stat card comes into view and back OUT as the section hands off to Funds.
+   Same custom-property-driven pattern as --amfc-nav-shift-y for the nav pill.
 
-      The max(..., 420px) floor keeps that parking spot clear of the intro heading on short
-      viewports. The heading pins at clamp(7rem, 20vh, 12rem) and runs ~183px tall, so its
-      bottom edge tops out at ~394px once 20vh passes the 12rem clamp. Without the floor, a
-      700px-tall window parks the mark at 280px — above that, straight through the text at full
-      opacity (measured). 420px clears the worst case at every viewport height; the mark simply
-      bleeds further off the bottom edge on short screens, which matches the reference anyway.
-
-   Fades out via --amfc-philosophy-watermark-fade (0->1, default 1 so the resting state is
-   correct even before JS runs), a scroll-driven custom property set by
-   initPhilosophyWatermarkFade() in amfc-2026.js as the section's bottom edge approaches the
-   top of the viewport — i.e. as the whole section (not just the last card) hands off to the
-   Funds section below. Same custom-property-driven pattern as --amfc-nav-shift-y for the nav
-   pill.
-
-   The fade value is used as the opacity DIRECTLY (no extra dimming multiplier). The asset's own
-   fill is #ebebeb — the light grey is baked into the SVG, and is already the intended final
-   appearance. An earlier pass multiplied it by 0.06 on top of that to make it "subtle", which
-   rendered the mark at rgb(254,254,254) against a white background: a one-value-out-of-255
-   difference, i.e. invisible on a real display (confirmed by sampling rendered pixels, not by
-   eyeballing a screenshot — at this contrast an image viewer is not a trustworthy check). If
-   this ever needs to be fainter, lighten the SVG's fill rather than stacking opacity on it. */
-.amfc-philosophy__watermark-track {
-	position: absolute;
-	inset: 100vh 0 0 0; /* starts a screenful in — see (1) above */
-	z-index: 0; /* behind the stat cards (z-index 1-4) and the intro column */
-	pointer-events: none;
-}
-
+   The fade value is the opacity DIRECTLY (no extra dimming multiplier). The asset's own fill is
+   #ebebeb — the light grey is baked into the SVG and is already the intended final appearance.
+   An earlier pass multiplied it by 0.06 on top of that, which rendered the mark at
+   rgb(254,254,254) against white: a one-value-out-of-255 difference, i.e. invisible on a real
+   display. If this ever needs to be fainter, lighten the SVG's fill rather than stacking
+   opacity on it. */
 .amfc-philosophy__watermark {
-	position: sticky;
+	position: fixed;
 	top: max(calc(100vh - 420px), 420px);
+	left: -48px; /* bleeds off the viewport's left edge; moved right 32px per feedback */
 	display: block; /* an inline img would add a baseline gap under it */
-	/* margin, not `left` — on a sticky element `left` is a stickiness constraint for horizontal
-	   scrolling, not a static offset, so it wouldn't reliably produce this bleed. */
-	margin-left: -48px; /* bleeds off the viewport's left edge; moved right 32px per feedback */
 	width: clamp(28rem, calc(700 / 1440 * 100vw), 700px);
 	height: auto;
+	z-index: 0;
+	pointer-events: none;
 	opacity: var(--amfc-philosophy-watermark-fade, 1);
 }
 
@@ -634,15 +604,15 @@ body {
    breakpoint the sticky pile itself collapses at below) rather than trying to make a
    left-bleeding watermark work next to a narrow single-column card list. */
 @media (max-width: 991.98px) {
-	.amfc-philosophy__watermark-track {
+	.amfc-philosophy__watermark {
 		display: none;
 	}
 }
 
 /* amfc-2026.js skips attaching the scroll listener under reduced motion, so
-   --amfc-philosophy-watermark-fade is never set and the mark would otherwise sit at a constant
-   0.06 for the section's whole (very tall) scroll track with no fade-out at the end. Park it
-   statically near the top of the section instead — still decorative, just not scroll-linked. */
+   --amfc-philosophy-watermark-fade is never set and a fixed mark would otherwise sit at full
+   opacity over EVERY section of the page, not just this one. Pin it absolutely inside the
+   section instead — still decorative, just not scroll-linked. */
 @media (prefers-reduced-motion: reduce) {
 	.amfc-philosophy__watermark {
 		position: absolute;
