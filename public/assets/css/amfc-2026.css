@@ -739,12 +739,23 @@ body {
    rather than tuned. AOS is time-based once triggered, so sticky can't stall it, and it also
    drops the @supports gate that left Firefox/pre-26 Safari with no effect at all. */
 
+/* Grow-in: cards 2-4 start smaller and scale up to full size as they enter, per feedback
+   (reference: bol.com careers page — cards visibly grow, not just fade). Card 1 has no
+   data-aos so this attribute selector doesn't touch it — it stays at the plain resting
+   scale(1) rotate(tilt) from the base rule, matching its "no fade, already resting" role.
+   AOS's own `transition-property: opacity, transform` (from its base [data-aos^=fade] rule)
+   already covers this new transform change — no extra transition rule needed here. */
+.amfc-philosophy__stat-card[data-aos] {
+	transform: scale(0.55) rotate(var(--amfc-card-tilt));
+}
+
 /* AOS's own `[data-aos^=fade][data-aos^=fade].aos-animate` sets `transform: translateZ(0)` at
    specificity (0,3,0), which would otherwise override the card's resting tilt (0,1,0) and snap
-   every card straight the moment it animated in. This selector matches that (0,3,0) and, since
-   amfc-2026.css loads after aos.css (see head.php), wins the tie and restores the tilt. */
+   every card straight/full-size the moment it animated in. This selector matches that (0,3,0)
+   and, since amfc-2026.css loads after aos.css (see head.php), wins the tie and restores the
+   tilt — now combined with the settled scale(1) for the grow-in above. */
 .amfc-philosophy__stat-card[data-aos].aos-animate {
-	transform: rotate(var(--amfc-card-tilt));
+	transform: scale(1) rotate(var(--amfc-card-tilt));
 }
 
 /* Mobile: a narrow sticky pile reads badly — fall back to a plain vertical list. */
@@ -752,9 +763,12 @@ body {
 	.amfc-philosophy__stack {
 		gap: var(--amfc-space-lg);
 	}
-	/* Second selector matches the (0,3,0) tilt-restore rule above, which would otherwise win
-	   here and re-tilt the cards in this flat list layout. */
+	/* Three selectors match every specificity tier introduced above (the (0,2,0) pre-trigger
+	   grow-in scale, and the (0,3,0) settled tilt+scale restore) — otherwise one of them would
+	   win over this plain (0,1,0) reset and leave mobile cards stuck scaled-down or re-tilted
+	   in this flat list layout. */
 	.amfc-philosophy__stat-card,
+	.amfc-philosophy__stat-card[data-aos],
 	.amfc-philosophy__stat-card[data-aos].aos-animate {
 		position: static;
 		transform: none;

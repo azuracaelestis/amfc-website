@@ -10,12 +10,20 @@
    own height scrolls past the sticky offset and it releases, the next card — already just
    behind it — reaches that same offset and takes over.
 
-   The stacking motion above is the sticky mechanic alone. The separate fade-in on cards 2-4 is
+   The stacking motion above is the sticky mechanic alone. The separate grow-in on cards 2-4 is
    AOS (already loaded site-wide), triggered at anchor-placement "top-center" so it fires as the
    card climbs the upper half of the viewport toward its pin rather than when it first peeks in
-   at the bottom. Card 1 has no fade — it's the resting top of the pile. A scroll-driven
+   at the bottom. Card 1 has no grow-in — it's the resting top of the pile. A scroll-driven
    `animation-timeline: view()` was tried for this first and abandoned; see the long comment on
    .amfc-philosophy__stat-card in amfc-2026.css for why sticky subjects break it.
+
+   data-aos-once="false" on cards 2-4 (per feedback, reference: bol.com careers page) — the
+   grow-in replays every time a card's trigger point is crossed in either scroll direction, not
+   just the first time. Verified this doesn't hit the same premature-exit bug documented on
+   .amfc-philosophy__intro below: tested a full down-then-up scroll pass with real AOS, and each
+   card's aos-animate class only toggles once its OWN pin position genuinely crosses the trigger
+   threshold — it stays on the whole time a card is stacked-but-covered by a later one, so a
+   covered card never flickers or shrinks while still part of the visible pile.
 
    Intro text (eyebrow + heading) uses plain data-aos="fade-up" — matches the Funds partnership
    section below (funds.php) and every other below-fold section, per feedback to keep this
@@ -57,7 +65,7 @@
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat1.label')) ?></div>
 				</article>
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--2"
-					data-aos="fade" data-aos-once="true" data-aos-anchor-placement="top-center"
+					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat2.tag')) ?></span>
 					<img class="amfc-philosophy__stat-icon" src="<?= e(asset('images/stat-ai-chip.svg')) ?>" alt="<?= e(t('home.philosophy.stat2.icon_alt')) ?>" width="72" height="72" />
@@ -65,7 +73,7 @@
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat2.label')) ?></div>
 				</article>
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--3"
-					data-aos="fade" data-aos-once="true" data-aos-anchor-placement="top-center"
+					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat3.tag')) ?></span>
 					<img class="amfc-philosophy__stat-icon" src="<?= e(asset('images/stat-thumbs-up.svg')) ?>" alt="<?= e(t('home.philosophy.stat3.icon_alt')) ?>" width="72" height="72" />
@@ -73,7 +81,7 @@
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat3.label')) ?></div>
 				</article>
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--4"
-					data-aos="fade" data-aos-once="true" data-aos-anchor-placement="top-center"
+					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat4.tag')) ?></span>
 					<!-- Real design uses a "flag" icon here — placeholder until exported flat from Figma -->
