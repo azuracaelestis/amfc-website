@@ -93,8 +93,7 @@
 					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat4.tag')) ?></span>
-					<!-- Real design uses a "flag" icon here — placeholder until exported flat from Figma -->
-					<img class="amfc-philosophy__stat-icon" src="<?= e(asset('images/placeholder-icon.svg')) ?>" alt="<?= e(t('home.philosophy.stat4.icon_alt')) ?>" width="72" height="72" />
+					<img class="amfc-philosophy__stat-icon" src="<?= e(asset('images/flag.svg')) ?>" alt="<?= e(t('home.philosophy.stat4.icon_alt')) ?>" width="72" height="72" />
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat4.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat4.label')) ?></div>
 				</article>

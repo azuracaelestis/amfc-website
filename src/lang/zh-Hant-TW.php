@@ -51,7 +51,10 @@ return [
     'home.philosophy.stat3.number' => '20萬+',
     'home.philosophy.stat3.label' => '用戶誠摯推薦',
     'home.philosophy.stat3.icon_alt' => '效率：用戶誠摯推薦圖示',
-    'home.philosophy.stat4.tag' => '創新', // as-authored in Figma — tag/content pairing is the source design's own choice, not ours to "fix"
+    // Was '創新' as-authored in Figma, which duplicated stat2's tag and left 專業 unused. Changed
+    // per feedback, so the four cards' tags now cover the four principles named in this section's
+    // own headline (創新、專業、效率、誠信) one each, rather than repeating one and dropping another.
+    'home.philosophy.stat4.tag' => '專業',
     'home.philosophy.stat4.number' => '20年+',
     'home.philosophy.stat4.label' => '金融實務經驗',
     'home.philosophy.stat4.icon_alt' => '20年以上金融實務經驗標誌',
