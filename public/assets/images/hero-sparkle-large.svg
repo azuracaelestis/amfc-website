@@ -1,10 +1,27 @@
-<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="117.863" height="117.863" viewBox="0 0 117.863 117.863" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Layer_1" clip-path="url(#clip0_0_184)">
-<path id="Vector" d="M104.162 43.168L103.19 51.3225C103.015 52.788 103.477 54.2419 104.456 55.3082L109.904 61.2424C112.15 63.6896 110.13 67.7144 106.826 67.3767L98.8119 66.5551C97.3716 66.4071 95.9299 66.9056 94.8595 67.9219L88.9026 73.5748C86.4461 75.9046 82.5219 73.9353 82.9217 70.5734L83.8938 62.4189C84.0689 60.9533 83.607 59.4995 82.6275 58.4332L77.1792 52.499C74.9338 50.0517 76.9536 46.027 80.2576 46.3647L88.2716 47.1863C89.7119 47.3343 91.1536 46.8357 92.224 45.8195L98.1809 40.1666C100.637 37.8368 104.562 39.806 104.162 43.168Z" fill="#F5F7FF"/>
-</g>
-<defs>
-<clipPath id="clip0_0_184">
-<rect width="117.863" height="117.863" fill="white"/>
-</clipPath>
-</defs>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 117.9 117.9">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+      }
+
+      .st1 {
+        clip-path: url(#clippath);
+      }
+
+      .st2 {
+        fill: #f5f7ff;
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st0" width="117.9" height="117.9"/>
+    </clipPath>
+  </defs>
+  <g class="st1">
+    <g id="Layer_11" data-name="Layer_1">
+      <path id="Vector" class="st2" d="M77.8,35.3l-1.7,14.5c-.3,2.6.5,5.2,2.2,7.1l9.7,10.5c4,4.3.4,11.5-5.5,10.9l-14.2-1.5c-2.6-.3-5.1.6-7,2.4l-10.6,10c-4.4,4.1-11.3.6-10.6-5.3l1.7-14.5c.3-2.6-.5-5.2-2.2-7.1l-9.7-10.5c-4-4.3-.4-11.5,5.5-10.9l14.2,1.5c2.6.3,5.1-.6,7-2.4l10.6-10c4.4-4.1,11.3-.6,10.6,5.3Z"/>
+    </g>
+  </g>
 </svg>
