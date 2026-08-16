@@ -162,7 +162,12 @@
 	position: fixed;
 	top: 1.5rem;
 	left: 50%;
-	transform: translateX(-50%);
+	/* --amfc-nav-shift-y carries just the show/hide state (toggled by amfc-2026.js via the
+	   --amfc-nav-pill--hidden class below) so it can combine with the existing -50% horizontal
+	   centering without the two fighting over the same `transform` property. */
+	--amfc-nav-shift-y: 0%;
+	transform: translate(-50%, var(--amfc-nav-shift-y));
+	transition: transform var(--amfc-duration-base) var(--amfc-ease-out);
 	width: calc(100% - 2 * var(--amfc-space-lg));
 	max-width: 1264px;
 	background: rgba(255, 255, 255, 0.8);
@@ -174,6 +179,26 @@
 	   down 10% per the user's request (font-size held fixed separately below) -> 28.8px. */
 	padding-inline: clamp(0.9rem, calc(28.8 / 1440 * 100vw), 1.8rem);
 	z-index: 1000;
+}
+
+/* Hide-on-scroll-down / reveal-on-scroll-up, per feedback. Class toggled by amfc-2026.js
+   (initNavAutoHide) — -150%, not -100%, so the pill's drop shadow/blur also clears the
+   viewport top completely rather than leaving a sliver visible right at the edge. */
+.amfc-nav-pill--hidden {
+	--amfc-nav-shift-y: -150%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-nav-pill {
+		transition: none;
+	}
+	/* Keep primary navigation always reachable for reduced-motion users rather than have it
+	   vanish/reappear with no animation to signal what happened — amfc-2026.js also skips
+	   attaching the scroll listener entirely under this same media query, so this is a belt-
+	   and-suspenders CSS fallback, not the only thing preventing the hide. */
+	.amfc-nav-pill--hidden {
+		--amfc-nav-shift-y: 0%;
+	}
 }
 
 .amfc-nav-pill .navbar {
