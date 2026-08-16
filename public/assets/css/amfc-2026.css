@@ -330,7 +330,10 @@
 	padding-block: 14px;
 	padding-inline: 28px;
 	border-radius: 16px;
-	background: linear-gradient(135deg, #4768e6, #2d50d7);
+	/* 225deg: a 45-degree diagonal with the light stop anchored top-right (the "right side"),
+	   flowing down to the dark stop at bottom-left — mirrors the previous 135deg (light
+	   top-left), per feedback to source the gradient from the right instead. */
+	background: linear-gradient(225deg, #4768e6, #2d50d7);
 	border: none;
 	box-shadow: none;
 	color: var(--amfc-white);
