@@ -10,9 +10,9 @@
 			<div class="amfc-hero__content">
 				<p class="amfc-hero__eyebrow"><?= e(t('home.hero.eyebrow')) ?></p>
 				<h1 class="amfc-hero__headline">
-					<?= e(t('home.hero.headline_1')) ?><br />
-					<?= e(t('home.hero.headline_2')) ?><br />
-					<?= e(t('home.hero.headline_3')) ?>
+					<span class="amfc-hero__headline-line"><span class="amfc-hero__headline-line-inner"><?= e(t('home.hero.headline_1')) ?></span></span>
+					<span class="amfc-hero__headline-line"><span class="amfc-hero__headline-line-inner"><?= e(t('home.hero.headline_2')) ?></span></span>
+					<span class="amfc-hero__headline-line"><span class="amfc-hero__headline-line-inner"><?= e(t('home.hero.headline_3')) ?></span></span>
 				</h1>
 				<a href="#service" class="btn btn-primary rounded-pill amfc-hero__cta amfc-btn">
 					<?= e(t('home.hero.cta')) ?>

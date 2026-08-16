@@ -58,5 +58,8 @@
 	/* motion — named per the project's --amfc-* token convention rather than bare
 	   --ease-out/--duration-fast, so this stays consistent with every other token here */
 	--amfc-ease-out: cubic-bezier(0, 0, 0.2, 1); /* standard decelerate curve */
+	--amfc-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* slight overshoot then settle */
 	--amfc-duration-fast: 150ms;
+	--amfc-duration-base: 400ms;
+	--amfc-duration-slower: 800ms;
 }

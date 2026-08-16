@@ -265,6 +265,7 @@
 	font-weight: 700;
 	font-size: 1.25rem;
 	margin-bottom: var(--amfc-space-md);
+	animation: amfc-hero-fade-up var(--amfc-duration-base) var(--amfc-ease-out) 250ms backwards;
 }
 
 .amfc-hero__headline {
@@ -279,6 +280,27 @@
 	margin-bottom: clamp(1.5rem, calc(48 / 1440 * 100vw), 3rem);
 }
 
+/* Masked reveal: the outer span clips (overflow:hidden) while the inner span slides up from
+   fully below its own height into place — the "mask" is the clip, not a literal CSS mask.
+   font: inherit is required here — AMFC's custom.css has `* { font-size: 1.1rem }` (see
+   CLAUDE.md Bug A), which directly matches these new spans and would otherwise win over
+   inheriting the h1's clamp()'d font-size/weight/family. */
+.amfc-hero__headline-line {
+	display: block;
+	overflow: hidden;
+	font: inherit;
+}
+
+.amfc-hero__headline-line-inner {
+	display: inline-block;
+	font: inherit;
+	animation: amfc-hero-headline-line var(--amfc-duration-base) var(--amfc-ease-out) backwards;
+}
+
+.amfc-hero__headline-line:nth-child(1) .amfc-hero__headline-line-inner { animation-delay: 350ms; }
+.amfc-hero__headline-line:nth-child(2) .amfc-hero__headline-line-inner { animation-delay: 450ms; }
+.amfc-hero__headline-line:nth-child(3) .amfc-hero__headline-line-inner { animation-delay: 550ms; }
+
 .amfc-hero__photo-wrap {
 	position: relative;
 	text-align: center;
@@ -292,18 +314,22 @@
 	height: auto;
 	/* Net +8% (was +20%, then -10% per follow-up: 1.2 * 0.9 = 1.08), shifted 40px left.
 	   Order matters: translate is listed first (outer/applied last) so the shift is a flat
-	   40px regardless of the scale factor. */
+	   40px regardless of the scale factor. The entrance keyframe scales an *additional* 0.92->1
+	   factor on top of this fixed 1.08, so the animated growth ratio matches the requested
+	   0.92->1 regardless of the permanent enlargement. */
 	transform: translateX(-40px) scale(1.08);
+	animation: amfc-hero-photo-in var(--amfc-duration-slower) var(--amfc-ease-out) 0ms backwards;
 }
 
 .amfc-hero__sparkle {
 	position: absolute;
 	color: var(--amfc-blue-500);
 	opacity: 0.8;
+	animation: amfc-hero-sparkle-in var(--amfc-duration-base) var(--amfc-ease-spring) backwards;
 }
 
 /* Small sparkle: right side, near the shoulder */
-.amfc-hero__sparkle--a { top: 30%; right: 2%; width: 24px; height: 24px; }
+.amfc-hero__sparkle--a { top: 30%; right: 2%; width: 24px; height: 24px; animation-delay: 800ms; }
 /* Large sparkle: moved to the LEFT side of the photo per reference screenshot. Size now set
    as 37px at the 1440px reference width, fluid-scaled like the other measurements (was 38px). */
 .amfc-hero__sparkle--c {
@@ -311,6 +337,32 @@
 	left: -2%;
 	width: clamp(1.25rem, calc(37 / 1440 * 100vw), 37px);
 	height: clamp(1.25rem, calc(37 / 1440 * 100vw), 37px);
+	animation-delay: 950ms; /* 150ms after sparkle--a, per feedback */
+}
+
+/* --- Hero entrance sequence, per feedback: photo -> eyebrow -> headline lines -> CTA ->
+   sparkles (last to land). Every animation uses fill-mode "backwards" so the 0% keyframe
+   applies before its delay elapses, instead of a flash of the final state — and after
+   prefers-reduced-motion disables the animation outright (see the media query below), the
+   element just renders its normal, unanimated (i.e. final) CSS with no extra overrides needed. */
+@keyframes amfc-hero-fade-up {
+	from { opacity: 0; transform: translateY(8px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes amfc-hero-headline-line {
+	from { transform: translateY(100%); }
+	to { transform: translateY(0); }
+}
+
+@keyframes amfc-hero-photo-in {
+	from { opacity: 0; transform: translateX(-40px) scale(calc(1.08 * 0.92)); }
+	to { opacity: 1; transform: translateX(-40px) scale(1.08); }
+}
+
+@keyframes amfc-hero-sparkle-in {
+	from { opacity: 0; transform: scale(0); }
+	to { opacity: 0.8; transform: scale(1); }
 }
 
 /* Hero CTA — glossy gradient treatment, per feedback. Overrides .amfc-btn's flat height/
@@ -340,6 +392,7 @@
 	font-weight: 600;
 	transition: box-shadow var(--amfc-duration-fast) var(--amfc-ease-out),
 		transform var(--amfc-duration-fast) var(--amfc-ease-out);
+	animation: amfc-hero-fade-up var(--amfc-duration-base) var(--amfc-ease-out) 700ms backwards;
 }
 
 /* Glossy highlight: top ~55% of the button, clipped to the button's rounded corners by its
@@ -364,6 +417,14 @@
 @media (prefers-reduced-motion: reduce) {
 	.amfc-hero__cta {
 		transition: none;
+	}
+
+	.amfc-hero__photo,
+	.amfc-hero__eyebrow,
+	.amfc-hero__headline-line-inner,
+	.amfc-hero__cta,
+	.amfc-hero__sparkle {
+		animation: none;
 	}
 }
 
