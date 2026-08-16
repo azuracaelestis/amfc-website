@@ -639,19 +639,23 @@ body {
 .amfc-philosophy__stat-card--3 { top: var(--amfc-stack-top); z-index: 3; --amfc-card-tilt: -3deg;  background: var(--amfc-periwinkle-100); }
 .amfc-philosophy__stat-card--4 { top: var(--amfc-stack-top); z-index: 4; --amfc-card-tilt: 4deg;   background: var(--amfc-lavender-100); }
 
-/* Eased entrance as each card approaches the stack, per feedback ("push up more naturally...
-   ease in appear up when scrolling"). Layered on TOP of the sticky mechanic above, not
-   replacing it: position:sticky ties a card's rise 1:1 to scroll position, which is exactly
-   right for the stacking/covering logic, but that's direct position-tracking, not an eased
-   animation — there's no way to get an eased curve out of sticky alone. A scroll-driven
-   view() timeline solves this: it plays a normal (eased) CSS keyframe animation, but scrubbed
-   by scroll position instead of time, so as a card scrolls up from below into the stack, it
-   fades/rises/settles with real easing, then holds its resting state once it reaches the pin.
-   If this isn't supported (Firefox, and Safari before 26), the @supports guard means the
-   browser just keeps today's plain sticky pop-in — no broken states. */
+/* Eased entrance as cards 2-4 approach the stack, per feedback ("the second, third, and forth
+   card have a fade in effect... goes up in fade effect" when scrolling) — card 1 is excluded
+   since it's already resting in view at the top of the pile with nothing to fade in from.
+   Layered on TOP of the sticky mechanic above, not replacing it: position:sticky ties a card's
+   rise 1:1 to scroll position, which is exactly right for the stacking/covering logic, but
+   that's direct position-tracking, not an eased animation — there's no way to get an eased
+   curve out of sticky alone. A scroll-driven view() timeline solves this: it plays a normal
+   (eased) CSS keyframe animation, but scrubbed by scroll position instead of time, so as a card
+   scrolls up from below into the stack, it fades/rises/settles with real easing, then holds its
+   resting state once it reaches the pin. If this isn't supported (Firefox, and Safari before
+   26), the @supports guard means the browser just keeps today's plain sticky pop-in — no
+   broken states. */
 @supports (animation-timeline: view()) {
 	@media (prefers-reduced-motion: no-preference) {
-		.amfc-philosophy__stat-card {
+		.amfc-philosophy__stat-card--2,
+		.amfc-philosophy__stat-card--3,
+		.amfc-philosophy__stat-card--4 {
 			animation-name: amfc-stat-card-enter;
 			animation-timeline: view();
 			animation-timing-function: var(--amfc-ease-out);
