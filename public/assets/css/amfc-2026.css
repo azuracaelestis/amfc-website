@@ -975,6 +975,7 @@ body {
 }
 
 .amfc-service-card {
+	position: relative; /* containing block for the ::before hover wash below */
 	background: var(--amfc-surface);
 	/* Borderless per feedback. The border was previously the ONLY thing giving these cards an
 	   edge at rest — they're white on a section background that fades to white — so the resting
@@ -997,11 +998,38 @@ body {
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Deeper than the resting shadow, not equal to it — now that the card carries a shadow at rest,
-   reusing the same one would make the hover read as the card sliding up rather than lifting. */
+/* Hover wash: white -> #D9E1FF top-to-bottom, per feedback, in a 3:1 ratio — white holds the
+   first three quarters, the blend to periwinkle occupies the last quarter.
+
+   Carried on a ::before overlay rather than swapping the card's own `background`, because CSS
+   cannot interpolate background-image: setting the gradient directly on :hover would snap in
+   instantly while the card's lift eased over 200ms. Fading the overlay's opacity is the
+   standard way to get an actual transition, and it matches the lift's timing.
+
+   z-index: -1 keeps the wash above the card's own background but behind its content. The card's
+   non-positioned children (icon, text) would otherwise paint UNDER an absolutely-positioned
+   pseudo-element at z-index 0 or auto, hiding them. border-radius: inherit so the wash follows
+   the card's 2rem corners instead of squaring them off. */
+.amfc-service-card::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	border-radius: inherit;
+	background: linear-gradient(to bottom, var(--amfc-white) 75%, var(--amfc-periwinkle-100) 100%);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+	pointer-events: none;
+}
+
+/* Elevation no longer deepens on hover, per feedback — the resting shadow carries through and
+   the wash above is what signals the state instead. The 8px lift is kept. */
 .amfc-service-card:hover {
 	transform: translateY(-8px);
-	box-shadow: var(--amfc-shadow-card-hover);
+}
+
+.amfc-service-card:hover::before {
+	opacity: 1;
 }
 
 /* Fixed height (not just the icon's own max-width) because car-loan.svg (342x188) and
