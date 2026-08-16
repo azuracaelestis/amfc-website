@@ -483,18 +483,13 @@ body {
 }
 
 /* Shifted 20px right (matching .amfc-hero__content's identical shift so this heading lines up
-   with the hero headline above it) and 32px down, per feedback. */
+   with the hero headline above it) and 62px down (32px + 30px more, per feedback). Expressed as
+   margin, not transform — .amfc-philosophy__intro now uses plain data-aos="fade-up" (see below),
+   which animates via `transform`, so this permanent offset can't also live on `transform` or
+   it would fight/overwrite AOS's own translate3d on every frame. */
 .amfc-philosophy__intro {
-	transform: translate(20px, 32px);
-	/* AOS (data-aos="fade-up" in the markup) is used here purely as the scroll trigger — it
-	   adds .aos-animate at the right moment and is already wired to disable site-wide under
-	   prefers-reduced-motion (see layout/scripts.php) — not for its own default fade/offset
-	   effect. The masked slide-up below (.amfc-philosophy__mask-inner) is the only visible
-	   reveal. The static transform above already wins the cascade over AOS's own
-	   `[data-aos^=fade]` transform (equal specificity, this stylesheet loads after aos.css —
-	   see head.php — so source order decides the tie); opacity needs the same override
-	   explicitly since nothing else here sets it. */
-	opacity: 1;
+	margin-left: 20px;
+	margin-top: 62px;
 }
 
 /* Gold to match the reference — every other section's eyebrow stays the blue accent color, so
@@ -502,48 +497,6 @@ body {
 .amfc-philosophy__eyebrow {
 	color: var(--amfc-gold-500);
 	font-size: 1rem; /* 16px, per feedback */
-}
-
-/* Masked slide-up reveal for the eyebrow + both heading lines, per feedback ("slide 90 degree
-   from bottom to top ease in") — same technique as the hero headline
-   (.amfc-hero__headline-line/-inner): an overflow:hidden outer clips an inner span that
-   translates from fully below its own height up into place, so the text appears to rise out
-   from behind a mask rather than just fading. Triggered by AOS adding .aos-animate to the
-   shared .amfc-philosophy__intro ancestor (see above) instead of a per-element data-aos, since
-   these are inline text runs, not independently-observable elements. */
-.amfc-philosophy__mask {
-	display: block;
-	overflow: hidden;
-	/* font: inherit — AMFC's custom.css `* { font-size: 1.1rem }` (CLAUDE.md Bug A) directly
-	   matches bare spans like this one and wins over inheriting the eyebrow/heading's real
-	   font-size otherwise. Same fix already needed twice on the hero headline. */
-	font: inherit;
-}
-
-.amfc-philosophy__mask-inner {
-	display: inline-block;
-	font: inherit;
-	transform: translateY(100%);
-	transition: transform var(--amfc-duration-base) var(--amfc-ease-out);
-}
-
-.amfc-philosophy__intro.aos-animate .amfc-philosophy__mask-inner {
-	transform: translateY(0);
-}
-
-/* Staggered like the hero headline lines (100ms apart): eyebrow first, then each heading line. */
-.amfc-philosophy__eyebrow .amfc-philosophy__mask-inner { transition-delay: 0ms; }
-.amfc-philosophy__heading-line:nth-child(1) .amfc-philosophy__mask-inner { transition-delay: 100ms; }
-.amfc-philosophy__heading-line:nth-child(2) .amfc-philosophy__mask-inner { transition-delay: 200ms; }
-
-/* AOS disables itself entirely under prefers-reduced-motion (see layout/scripts.php), meaning
-   .aos-animate is NEVER added — without this, the rule above would never fire and the masked
-   text would stay translateY(100%) (invisible) forever for those users. */
-@media (prefers-reduced-motion: reduce) {
-	.amfc-philosophy__mask-inner {
-		transform: translateY(0);
-		transition: none;
-	}
 }
 
 .amfc-philosophy__heading {

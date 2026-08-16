@@ -17,6 +17,15 @@
    `animation-timeline: view()` was tried for this first and abandoned; see the long comment on
    .amfc-philosophy__stat-card in amfc-2026.css for why sticky subjects break it.
 
+   Intro text (eyebrow + heading) uses plain data-aos="fade-up" — matches the Funds partnership
+   section below (funds.php) and every other below-fold section, per feedback to keep this
+   text's motion consistent with theirs rather than the custom masked slide-up it briefly had
+   (see amfc-2026.css .amfc-philosophy__mask history in git log for that attempt). data-aos-once
+   is still set to "true" here specifically (Funds doesn't need it) because .amfc-philosophy__intro
+   is position:sticky — AOS's default (once:false) removes .aos-animate once it judges an element
+   has left the viewport, which for a sticky-pinned element can happen well before the reader has
+   actually scrolled past it, the same bug already hit and fixed on the stat cards above.
+
    Two prior approaches were tried and rejected:
    1. A tall 400vh scroll-track + JS scrubbing every card's opacity from scroll position.
       Scroll progress 0 gave EVERY card (including the first) opacity 0, so the pile was
@@ -34,12 +43,10 @@
 	<div class="amfc-container">
 		<div class="amfc-philosophy__grid">
 			<div class="amfc-philosophy__intro" data-aos="fade-up" data-aos-once="true">
-				<p class="amfc-eyebrow amfc-philosophy__eyebrow">
-					<span class="amfc-philosophy__mask"><span class="amfc-philosophy__mask-inner"><?= e(t('home.philosophy.eyebrow')) ?></span></span>
-				</p>
+				<p class="amfc-eyebrow amfc-philosophy__eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
 				<h2 class="amfc-philosophy__heading">
-					<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__mask"><span class="amfc-philosophy__mask-inner"><?= e(t('home.philosophy.headline_line1')) ?></span></span></span>
-					<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__mask"><span class="amfc-philosophy__mask-inner"><?= e(t('home.philosophy.headline_line2')) ?></span></span></span>
+					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1')) ?></span>
+					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line2')) ?></span>
 				</h2>
 			</div>
 			<div class="amfc-philosophy__stack">
