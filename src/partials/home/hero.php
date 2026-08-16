@@ -16,9 +16,6 @@
 				</h1>
 				<a href="#service" class="btn btn-primary rounded-pill amfc-hero__cta amfc-btn">
 					<?= e(t('home.hero.cta')) ?>
-					<span class="amfc-hero__cta-arrow">
-						<img src="<?= e(asset('images/icon-arrow-right.svg')) ?>" alt="" width="19" height="19" aria-hidden="true" />
-					</span>
 				</a>
 			</div>
 			<div class="amfc-hero__photo-wrap">
