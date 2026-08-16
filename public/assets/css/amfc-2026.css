@@ -498,6 +498,78 @@ body {
 	   section's own padding-top) — see .amfc-funds. */
 	padding-block: var(--amfc-space-xl) 90px;
 	background: var(--amfc-surface);
+	/* Containing block for .amfc-philosophy__watermark below — doesn't interfere with the
+	   position:sticky intro/cards, which are positioned relative to their own nearest
+	   scrolling ancestor regardless of this. */
+	position: relative;
+}
+
+/* Decorative AMFC wordmark sitting behind the intro text and card stack, per feedback
+   (reference: a mockup with the mark bleeding off the viewport's bottom-left corner at low
+   opacity, visible throughout the card-stack scroll — not just at the very end).
+
+   Two elements, and both are load-bearing:
+
+   1. The TRACK is absolutely positioned (inset: 0), so it spans the section's full height while
+      being OUT OF FLOW. This is the fix for a real bug hit on the first attempt: `position:
+      sticky` does NOT remove an element from normal flow (unlike absolute), so a bare sticky
+      <img> here reserved its own ~370px-tall block at the top of the section and pushed every
+      bit of real content down that far. Absolute on the wrapper is what prevents that.
+
+   2. The IMG is sticky *within* that track. Plain absolute positioning can't do this job:
+      .amfc-philosophy's box spans the whole multi-viewport-tall scroll track (four sticky cards
+      plus the .amfc-philosophy__stack-tail runway), so an absolute "bottom: Npx" would only
+      scroll into view near the very end of the section. Sticky instead parks it near the
+      viewport's bottom edge for the section's entire scroll duration — the same mechanism
+      .amfc-philosophy__intro uses to pin near the top — and releases naturally at the track's
+      bottom, right where the fade below completes. top (not bottom) drives the stickiness:
+      calc(100vh - 420px) holds the mark's top edge that far down the viewport, i.e. bottom-
+      anchored in effect, but expressed as the offset sticky actually honors here.
+
+   Fades out via --amfc-philosophy-watermark-fade (0->1, default 1 so the resting state is
+   correct even before JS runs), a scroll-driven custom property set by
+   initPhilosophyWatermarkFade() in amfc-2026.js as the section's bottom edge approaches the
+   top of the viewport — i.e. as the whole section (not just the last card) hands off to the
+   Funds section below. Same custom-property-driven pattern as --amfc-nav-shift-y for the nav
+   pill. 0.06 is the resting (fully-visible) opacity — subtle by design, a background flourish
+   rather than a prominent logo. */
+.amfc-philosophy__watermark-track {
+	position: absolute;
+	inset: 0;
+	z-index: 0; /* behind the stat cards (z-index 1-4) and the intro column */
+	pointer-events: none;
+}
+
+.amfc-philosophy__watermark {
+	position: sticky;
+	top: calc(100vh - 420px);
+	display: block; /* an inline img would add a baseline gap under it */
+	/* margin, not `left` — on a sticky element `left` is a stickiness constraint for horizontal
+	   scrolling, not a static offset, so it wouldn't reliably produce this bleed. */
+	margin-left: -80px; /* bleeds off the viewport's left edge, per the reference */
+	width: clamp(28rem, calc(700 / 1440 * 100vw), 700px);
+	height: auto;
+	opacity: calc(0.06 * var(--amfc-philosophy-watermark-fade, 1));
+}
+
+/* Decorative flourish, not core content — hidden on the mobile flat-list layout (same
+   breakpoint the sticky pile itself collapses at below) rather than trying to make a
+   left-bleeding watermark work next to a narrow single-column card list. */
+@media (max-width: 991.98px) {
+	.amfc-philosophy__watermark-track {
+		display: none;
+	}
+}
+
+/* amfc-2026.js skips attaching the scroll listener under reduced motion, so
+   --amfc-philosophy-watermark-fade is never set and the mark would otherwise sit at a constant
+   0.06 for the section's whole (very tall) scroll track with no fade-out at the end. Park it
+   statically near the top of the section instead — still decorative, just not scroll-linked. */
+@media (prefers-reduced-motion: reduce) {
+	.amfc-philosophy__watermark {
+		position: absolute;
+		top: 90px;
+	}
 }
 
 .amfc-philosophy__grid {

@@ -46,6 +46,15 @@
       fix. Sticky must directly wrap the visible card, not a tall spacer around it. */
 ?>
 <section id="about" class="amfc-curve-top amfc-philosophy">
+	<!-- Decorative watermark. The track is absolutely positioned (out of flow) so the watermark
+	     inside it can't push the section's real content down, and sits outside .amfc-container
+	     so it can bleed off the left edge independent of the content column's max-width/padding.
+	     The img itself is sticky WITHIN that track, which keeps it parked near the viewport's
+	     bottom for the section's whole scroll duration. See .amfc-philosophy__watermark in
+	     amfc-2026.css and initPhilosophyWatermarkFade() in amfc-2026.js for the scroll fade. -->
+	<div class="amfc-philosophy__watermark-track" aria-hidden="true">
+		<img class="amfc-philosophy__watermark" src="<?= e(asset('images/amfc-logo-grey.svg')) ?>" alt="" />
+	</div>
 	<!-- .amfc-container (not Bootstrap's .container) so this column's left edge lines up
 	     exactly with the hero headline above it — same reasoning as hero.php. -->
 	<div class="amfc-container">
