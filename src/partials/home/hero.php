@@ -12,7 +12,12 @@
 				<h1 class="amfc-hero__headline">
 					<span class="amfc-hero__headline-line"><span class="amfc-hero__headline-line-inner"><?= e(t('home.hero.headline_1')) ?></span></span>
 					<span class="amfc-hero__headline-line"><span class="amfc-hero__headline-line-inner"><?= e(t('home.hero.headline_2')) ?></span></span>
-					<span class="amfc-hero__headline-line"><span class="amfc-hero__headline-line-inner"><?= e(t('home.hero.headline_3')) ?></span></span>
+					<span class="amfc-hero__headline-line3-wrap">
+						<span class="amfc-hero__headline-line"><span class="amfc-hero__headline-line-inner"><?= e(t('home.hero.headline_3')) ?></span></span>
+						<svg class="amfc-hero__headline-underline" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true">
+							<path d="M4,14 C50,2 90,24 140,13 C180,4 210,22 250,12 C266,8 276,16 292,9" />
+						</svg>
+					</span>
 				</h1>
 				<a href="#service" class="btn btn-primary rounded-pill amfc-hero__cta amfc-btn">
 					<?= e(t('home.hero.cta')) ?>

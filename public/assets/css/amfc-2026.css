@@ -299,7 +299,59 @@
 
 .amfc-hero__headline-line:nth-child(1) .amfc-hero__headline-line-inner { animation-delay: 350ms; }
 .amfc-hero__headline-line:nth-child(2) .amfc-hero__headline-line-inner { animation-delay: 450ms; }
-.amfc-hero__headline-line:nth-child(3) .amfc-hero__headline-line-inner { animation-delay: 550ms; }
+/* Not :nth-child(3) — line 3's .amfc-hero__headline-line is now nested one level deeper inside
+   .amfc-hero__headline-line3-wrap (for the underline below), so it's the 1st child of ITS OWN
+   parent, not the h1's 3rd child. Target the wrap instead. */
+.amfc-hero__headline-line3-wrap .amfc-hero__headline-line-inner { animation-delay: 550ms; }
+
+/* Hand-drawn underline under headline line 3 only, per reference (richart.tw hero — a wavy
+   stroke that draws itself in under "All in Richart" after the text lands).
+   inline-block (not block) so this wrapper shrink-wraps to the ACTUAL rendered text width —
+   the underline SVG below is width:100% of this wrapper, so if this were a full-width block
+   (like .amfc-hero__headline-line normally is) the line would span the whole heading column
+   instead of just the glyphs. A block sibling before an inline-block still forces the usual
+   line break, so this still lands on its own row like lines 1–2. */
+.amfc-hero__headline-line3-wrap {
+	position: relative;
+	display: inline-block;
+	/* font: inherit required — same AMFC `* { font-size: 1.1rem }` collision (CLAUDE.md Bug A)
+	   as .amfc-hero__headline-line/-inner above. Without this, the wrap itself falls to 17.6px
+	   and everything nested inside it inherits FROM that wrong value, not from the h1. */
+	font: inherit;
+}
+
+.amfc-hero__headline-underline {
+	position: absolute;
+	left: 0;
+	top: 100%;
+	margin-top: -0.3em; /* tucks the squiggle up under the text baseline instead of floating below it */
+	width: 100%;
+	height: 0.4em; /* scales with the headline's own fluid clamp() font-size via em */
+	overflow: visible;
+}
+
+.amfc-hero__headline-underline path {
+	fill: none;
+	stroke: var(--amfc-accent-gold);
+	stroke-width: 6;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	/* "Draw" technique: dasharray longer than the path's real length (~340px for this path,
+	   400 comfortably overshoots so the whole stroke is one continuous dash), animated from
+	   fully offset (hidden) to 0 (fully drawn). stroke-dashoffset:0 here (not just in the
+	   keyframe) is the resting/final value, so if the animation is removed under reduced
+	   motion (see below) the line still renders fully drawn rather than invisible. */
+	stroke-dasharray: 400;
+	stroke-dashoffset: 0;
+	/* Starts at 1000ms — a beat after line 3's own reveal finishes (550ms delay + 400ms
+	   duration-base = 950ms) — so the pen only starts once the word has actually landed. */
+	animation: amfc-hero-underline-draw 700ms var(--amfc-ease-out) 1000ms backwards;
+}
+
+@keyframes amfc-hero-underline-draw {
+	from { stroke-dashoffset: 400; }
+	to { stroke-dashoffset: 0; }
+}
 
 .amfc-hero__photo-wrap {
 	position: relative;
@@ -422,6 +474,7 @@
 	.amfc-hero__photo,
 	.amfc-hero__eyebrow,
 	.amfc-hero__headline-line-inner,
+	.amfc-hero__headline-underline path,
 	.amfc-hero__cta,
 	.amfc-hero__sparkle {
 		animation: none;
