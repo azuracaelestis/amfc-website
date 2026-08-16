@@ -285,13 +285,12 @@
 /* Small sparkle: right side, near the shoulder */
 .amfc-hero__sparkle--a { top: 30%; right: 2%; width: 24px; height: 24px; }
 /* Large sparkle: moved to the LEFT side of the photo per reference screenshot. Size now set
-   as 38px at the 1440px reference width, fluid-scaled like the other measurements (was a
-   fixed 67.5px from two prior +50% requests). */
+   as 37px at the 1440px reference width, fluid-scaled like the other measurements (was 38px). */
 .amfc-hero__sparkle--c {
 	top: 22%;
 	left: -2%;
-	width: clamp(1.25rem, calc(38 / 1440 * 100vw), 38px);
-	height: clamp(1.25rem, calc(38 / 1440 * 100vw), 38px);
+	width: clamp(1.25rem, calc(37 / 1440 * 100vw), 37px);
+	height: clamp(1.25rem, calc(37 / 1440 * 100vw), 37px);
 }
 
 /* Hero CTA hover/press micro-interaction, per feedback. Default color matches the existing
