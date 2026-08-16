@@ -585,8 +585,8 @@ body {
 .amfc-philosophy__heading-underline path {
 	fill: none;
 	stroke: var(--amfc-accent-gold);
-	stroke-width: 5.27px;
-	stroke-linecap: round;
+	stroke-width: 8px; /* per feedback (was 5.27px, matched to the old straight bar) */
+	stroke-linecap: round; /* rounded ends, per feedback */
 	stroke-linejoin: round;
 	stroke-dasharray: 400;
 	stroke-dashoffset: 400; /* hidden until the .aos-animate gate below starts the draw */
@@ -636,7 +636,7 @@ body {
 	--amfc-stack-top: clamp(6rem, 16vh, 10rem); /* where the pile settles below the nav */
 	display: flex;
 	flex-direction: column;
-	gap: var(--amfc-space-md); /* small — just enough breathing room, not scroll distance */
+	gap: 20px; /* per feedback (was var(--amfc-space-md), 16px) — still small, not scroll distance */
 }
 
 /* Provides the scroll runway for the last card to release before Funds partnership begins.
@@ -668,6 +668,17 @@ body {
 	   scroll-driven entrance keyframe below can reference the SAME per-card angle — one shared
 	   @keyframes for all four cards instead of four near-duplicate ones. */
 	transform: rotate(var(--amfc-card-tilt));
+	transition: transform 250ms var(--amfc-ease-out); /* for the hover-straighten below */
+}
+
+/* Straighten on hover, per feedback. Also matched combined with [data-aos].aos-animate:hover —
+   the aos-animate tilt-restore rule above is (0,3,0) specificity, so a plain :hover alone
+   (0,2,0) would lose to it and never visibly straighten cards 2-4 once they'd scrolled into
+   view and picked up that class (i.e. almost the entire time a reader could actually hover
+   one). This combined selector is (0,4,0), so it wins regardless of aos-animate state. */
+.amfc-philosophy__stat-card:hover,
+.amfc-philosophy__stat-card[data-aos].aos-animate:hover {
+	transform: rotate(0deg);
 }
 
 /* Per-card: all four share the exact same sticky `top` so each new card lands directly on top
