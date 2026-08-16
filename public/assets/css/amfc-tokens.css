@@ -56,6 +56,10 @@
 	--amfc-radius-lg: 1.25rem;
 	--amfc-radius-xl: 2rem; /* service card corner radius — confirmed via Figma (node 87:159) */
 	--amfc-shadow-card: 0 12px 32px rgba(22, 35, 79, 0.08);
+	/* Deeper counterpart for a card that is already carrying --amfc-shadow-card at rest, so a
+	   hover still reads as a rise in elevation rather than just a position change: larger
+	   offset and blur, and about 1.75x the opacity. */
+	--amfc-shadow-card-hover: 0 20px 48px rgba(22, 35, 79, 0.14);
 
 	/* motion — named per the project's --amfc-* token convention rather than bare
 	   --ease-out/--duration-fast, so this stays consistent with every other token here */

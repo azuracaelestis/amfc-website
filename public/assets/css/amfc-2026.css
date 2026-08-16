@@ -976,7 +976,13 @@ body {
 
 .amfc-service-card {
 	background: var(--amfc-surface);
-	border: 1px solid var(--amfc-card-border);
+	/* Borderless per feedback. The border was previously the ONLY thing giving these cards an
+	   edge at rest — they're white on a section background that fades to white — so the resting
+	   shadow below replaces it as the boundary rather than being additive. `none` rather than
+	   omitting the property, for the same reason as the KSP stat cards: AMFC's custom.css isn't
+	   vendored here. */
+	border: none;
+	box-shadow: var(--amfc-shadow-card);
 	border-radius: var(--amfc-radius-xl);
 	display: flex;
 	flex-direction: column;
@@ -991,9 +997,11 @@ body {
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Deeper than the resting shadow, not equal to it — now that the card carries a shadow at rest,
+   reusing the same one would make the hover read as the card sliding up rather than lifting. */
 .amfc-service-card:hover {
 	transform: translateY(-8px);
-	box-shadow: var(--amfc-shadow-card);
+	box-shadow: var(--amfc-shadow-card-hover);
 }
 
 /* Fixed height (not just the icon's own max-width) because car-loan.svg (342x188) and
