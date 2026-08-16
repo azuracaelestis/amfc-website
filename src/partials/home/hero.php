@@ -14,7 +14,7 @@
 					<?= e(t('home.hero.headline_2')) ?><br />
 					<?= e(t('home.hero.headline_3')) ?>
 				</h1>
-				<a href="#service" class="btn btn-primary btn-lg rounded-pill px-4 d-inline-flex align-items-center amfc-hero__cta">
+				<a href="#service" class="btn btn-primary rounded-pill amfc-hero__cta amfc-btn">
 					<?= e(t('home.hero.cta')) ?>
 					<span class="amfc-hero__cta-arrow">
 						<img src="<?= e(asset('images/icon-arrow-right.svg')) ?>" alt="" width="19" height="19" aria-hidden="true" />

@@ -21,7 +21,7 @@
 					<h3 class="amfc-service-card__title"><?= e(t('home.services.vehicle.title')) ?></h3>
 					<p class="amfc-service-card__body"><?= e(t('home.services.vehicle.body')) ?></p>
 				</div>
-				<a href="/product_1" class="btn btn-primary rounded-pill amfc-service-card__cta"><?= e(t('home.services.vehicle.cta')) ?></a>
+				<a href="/product_1" class="btn btn-primary rounded-pill amfc-service-card__cta amfc-btn"><?= e(t('home.services.vehicle.cta')) ?></a>
 			</div>
 			<div class="amfc-service-card">
 				<div class="amfc-service-card__icon-wrap">
@@ -31,7 +31,7 @@
 					<h3 class="amfc-service-card__title"><?= e(t('home.services.personal.title')) ?></h3>
 					<p class="amfc-service-card__body"><?= e(t('home.services.personal.body')) ?></p>
 				</div>
-				<a href="/product_2" class="btn btn-primary rounded-pill amfc-service-card__cta"><?= e(t('home.services.personal.cta')) ?></a>
+				<a href="/product_2" class="btn btn-primary rounded-pill amfc-service-card__cta amfc-btn"><?= e(t('home.services.personal.cta')) ?></a>
 			</div>
 		</div>
 	</div>

@@ -18,6 +18,26 @@
 	}
 }
 
+/* Shared button box model — every filled/pill CTA on the homepage (hero, app-download, both
+   service cards) uses this for a consistent 48px height and fit-to-text width, per feedback
+   referencing a reference button image. Bootstrap's btn/btn-primary/rounded-pill utility
+   classes stay in the markup for base semantics + the shared background color (see
+   amfc-bootstrap-overrides.css); this class overrides the box model with literal px values,
+   which win over Bootstrap's --bs-btn-* vars since this stylesheet loads after Bootstrap.
+   Width is deliberately not set — it falls out of padding-inline + text content instead of a
+   fixed px target. */
+.amfc-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 48px;
+	padding-inline: 32px;
+	font-family: var(--amfc-font-zh);
+	font-size: 1rem; /* 16px */
+	font-weight: 600;
+	white-space: nowrap;
+}
+
 /* --- Trust / compliance section --- */
 
 .amfc-trust {
@@ -716,16 +736,11 @@ body {
 	margin-inline: auto;
 }
 
+/* Box model (height/width/font) now comes from the shared .amfc-btn class — this rule keeps
+   only what's still specific to sitting inside the service card. */
 .amfc-service-card__cta {
-	width: 223px;
-	height: 64px;
 	flex-shrink: 0; /* see .amfc-service-card__icon-wrap comment — this was silently
 	                   compressing to ~48px before the card's content budget was fixed */
-	font-size: 1.25rem; /* 20px, restored to the original Figma value */
-	font-weight: 700;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
 	margin-top: auto; /* pins the button to the bottom of the card, per feedback */
 	margin-bottom: 32px; /* nudges it back up from that bottom edge — 32px per feedback */
 }
@@ -785,17 +800,6 @@ body {
 	font-size: clamp(0.875rem, calc(16 / 1440 * 100vw), 16px);
 	line-height: 1.5;
 	margin-bottom: 1.875rem; /* 30px, confirmed via Figma */
-}
-
-.amfc-app__cta {
-	width: 327px;
-	height: 64px;
-	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
-	font-size: 1.25rem; /* 20px, confirmed via Figma */
-	font-weight: 700;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
 }
 
 /* --- Investor relations --- */
