@@ -835,6 +835,44 @@ body {
 	width: 24.17%;
 }
 
+/* Lightbulb entrance bounce, per feedback, card 2 only. .bulb-zone is the inlined SVG root
+   itself (it already carries .amfc-philosophy__stat-icon--lightbulb's positioning above — see
+   illustration-ksp-bulb.php), and .bulb-group is the <g> that actually moves.
+
+   translateY(-14px) is the RESTING state, not just the animation's 0% keyframe: before
+   initPhilosophyStat2Reveal() (amfc-2026.js) adds the reveal class, the bulb sits pre-offset up
+   by 14px so there's something for the entrance to visibly drop from the moment the card comes
+   into view, rather than a jump-then-animate.
+
+   transform-box: fill-box + transform-origin: 50px 10px puts the pivot at the bulb's own local
+   (0,0)-relative top-center — roughly where it would attach to a fixture — rather than the
+   default view-box coordinate space (which for this crop's viewBox="294 52 116 171" would put
+   "50px 10px" absurdly outside the artwork entirely, near its top-left corner in raw SVG user
+   units rather than relative to the shape). fill-box is what makes "50px 10px" resolve against
+   the bulb's own drawn bounds instead. */
+.bulb-group {
+	transform-box: fill-box;
+	transform-origin: 50px 10px;
+	transform: translateY(-14px);
+}
+
+.amfc-philosophy__stat-card--2.amfc-philosophy__stat-card--revealed .bulb-group {
+	animation: amfc-bulb-bounce 550ms cubic-bezier(0.16, 1, 0.3, 1) 1 forwards;
+}
+
+@keyframes amfc-bulb-bounce {
+	0% { transform: translateY(-14px); }
+	60% { transform: translateY(2px); }
+	80% { transform: translateY(-2px); }
+	100% { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bulb-group {
+		transform: translateY(0); /* full disablement — this animation carries no information */
+	}
+}
+
 .amfc-philosophy__stat-icon--thumbsup {
 	left: 60.2%;
 	top: 10%;

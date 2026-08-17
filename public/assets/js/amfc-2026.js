@@ -186,10 +186,38 @@ window.AMFC = (function () {
 		observer.observe(card);
 	}
 
+	/* KSP card 2 only, per feedback: the lightbulb's entrance bounce (see .bulb-group in
+	   amfc-2026.css) fires once, the moment the card scrolls into view. Same
+	   IntersectionObserver-once shape as initPhilosophyStat1Reveal above, reusing the same
+	   .amfc-philosophy__stat-card--revealed class name — each function observes only its own
+	   card, so there's no cross-talk between the two triggers.
+
+	   No reduced-motion branch needed here beyond skipping the observer: the CSS itself already
+	   forces .bulb-group to translateY(0) under prefers-reduced-motion regardless of whether
+	   this class ever gets added, so there's no final-state value to set here the way card 1's
+	   count-up needed one. */
+	function initPhilosophyStat2Reveal() {
+		var card = document.querySelector('.amfc-philosophy__stat-card--2');
+		if (!card) return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		if (!('IntersectionObserver' in window)) return;
+
+		var observer = new IntersectionObserver(function (entries, obs) {
+			entries.forEach(function (entry) {
+				if (!entry.isIntersecting) return;
+				card.classList.add('amfc-philosophy__stat-card--revealed');
+				obs.unobserve(card); // once, no replay on repeated scroll in/out
+			});
+		}, { threshold: 0.5 });
+
+		observer.observe(card);
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
 		initPhilosophyStat1Reveal();
+		initPhilosophyStat2Reveal();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

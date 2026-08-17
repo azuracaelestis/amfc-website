@@ -89,10 +89,12 @@
 					</div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat1.label')) ?></div>
 				</article>
+				<!-- Card 2 only: lightbulb entrance bounce on scroll-into-view, per feedback. See
+				     .bulb-group/.bulb-zone and initPhilosophyStat2Reveal() in amfc-2026.js. -->
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--2"
 					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
-					<img class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--lightbulb" src="<?= e(asset('images/stat-icon-lightbulb.svg')) ?>" alt="" aria-hidden="true" />
+					<?php require __DIR__ . '/illustration-ksp-bulb.php'; ?>
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat2.tag')) ?></span>
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat2.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat2.label')) ?></div>
