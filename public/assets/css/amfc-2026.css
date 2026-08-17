@@ -839,23 +839,32 @@ body {
    itself (it already carries .amfc-philosophy__stat-icon--lightbulb's positioning above — see
    illustration-ksp-bulb.php), and .bulb-group is the <g> that actually moves.
 
-   translateY(-32px) is the RESTING state, not just the animation's 0% keyframe: before
+   translateY(-48px) is the RESTING state, not just the animation's 0% keyframe: before
    initPhilosophyCardAosReveal() (amfc-2026.js) adds the reveal class, the bulb sits pre-offset up
    so there's something for the entrance to visibly drop from the moment the card comes into
    view, rather than a jump-then-animate.
 
-   BUGFIX: was translateY(-14px)/2px/-2px. The lightbulb icon renders far smaller on screen
-   (56x78px) than the other three cards' icons (thumbsup 98x85px, coin 131x131px, stars
+   BUGFIX (round 1): was translateY(-14px)/2px/-2px. The lightbulb icon renders far smaller on
+   screen (56x78px) than the other three cards' icons (thumbsup 98x85px, coin 131x131px, stars
    110x57px), and — unlike this icon's `px` transform values, which SVG resolves in the SVG's own
    user-coordinate space, not screen pixels — that user-space/screen-space ratio for this crop
    works out to ~0.5px on screen per 1px of transform value. So the original -14px only ever
-   moved the bulb ~7px on screen (measured via getBoundingClientRect() through the animation),
-   against a 78px-tall icon — clearly visible in isolation, in practice too small next to the
-   other three cards' much larger motion (a 360° coin flip, a full-hand rotation with an ~18px
-   tip arc, and a bubble+stars opacity/scale entrance) to actually be noticed while scrolling.
-   Scaled the resting offset and both overshoot keyframes up ~2.3x (same ratio between them) to
-   land the bulb's real on-screen travel around 16px — back in the same visible range as the
-   other cards' motion, same easing/duration/character otherwise.
+   moved the bulb ~7px on screen, against a 78px-tall icon. First pass scaled that up to
+   -32/5/-5px (~16px on screen) with the same single-wobble shape.
+
+   BUGFIX (round 2, per feedback): -32px's ~16px of travel was still too subtle, and the single
+   overshoot-then-settle read as one soft wobble, not a "bounce." Replaced with a genuine
+   three-bounce sequence, each rebound peak roughly halving the last (drop -48px -> rebound
+   -20px -> -9px -> -3px -> rest), separated by small past-rest "impact" overshoots (8px/3px/1px)
+   that shrink the same way — real on-screen amplitude now ~24px on the initial drop, decaying
+   through three clearly readable bounces rather than one. Duration extended 550ms -> 900ms so
+   three bounces have room to read individually instead of blurring together. Each keyframe stop
+   sets its own animation-timing-function (steep ease-in falls, ease-out rebounds — the interval
+   FROM that stop TO the next uses it, per spec) rather than one flat curve for the whole
+   sequence, so each fall/rebound pair feels like accelerating down and decelerating up under
+   gravity instead of a single mechanical easing spanning all four passes — this is what makes it
+   read as "smooth" rather than robotic despite the extra direction changes. Translate-only, no
+   color/opacity/scale change, same as every other stage of this animation.
 
    transform-box: fill-box + transform-origin: 50px 10px puts the pivot at the bulb's own local
    (0,0)-relative top-center — roughly where it would attach to a fixture — rather than the
@@ -866,17 +875,22 @@ body {
 .bulb-group {
 	transform-box: fill-box;
 	transform-origin: 50px 10px;
-	transform: translateY(-32px);
+	transform: translateY(-48px);
 }
 
 .amfc-philosophy__stat-card--2.amfc-philosophy__stat-card--revealed .bulb-group {
-	animation: amfc-bulb-bounce 550ms cubic-bezier(0.16, 1, 0.3, 1) 1 forwards;
+	animation: amfc-bulb-bounce 900ms linear 1 forwards; /* per-keyframe easing below drives the
+	   actual curve; linear here just avoids double-applying a second easing on top of it */
 }
 
 @keyframes amfc-bulb-bounce {
-	0% { transform: translateY(-32px); }
-	60% { transform: translateY(5px); }
-	80% { transform: translateY(-5px); }
+	0%   { transform: translateY(-48px); animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45); }  /* fall 1: accelerating down */
+	38%  { transform: translateY(8px);   animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }       /* impact 1 (past rest) -> rebound up */
+	52%  { transform: translateY(-20px); animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45); }   /* bounce 1 peak -> fall 2 */
+	66%  { transform: translateY(3px);   animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }       /* impact 2 -> rebound up */
+	77%  { transform: translateY(-9px);  animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45); }   /* bounce 2 peak -> fall 3 */
+	88%  { transform: translateY(1px);   animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }       /* impact 3 -> rebound up */
+	95%  { transform: translateY(-3px);  animation-timing-function: ease-in; }                          /* bounce 3 peak (tiny) -> settle */
 	100% { transform: translateY(0); }
 }
 
