@@ -77,10 +77,16 @@
 				     canvas, matching the file's own "-20% from 480px" card-size convention
 				     noted below. Card background colours are unchanged: each source file's bg
 				     happens to already match the token this card was assigned to. -->
+				<!-- Card 1 only: count-up number + coin flip on scroll-into-view, per feedback.
+				     See .coin-zone/.coin-disc and initPhilosophyStat1Reveal() in amfc-2026.js. -->
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--1">
-					<img class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--coin" src="<?= e(asset('images/stat-icon-coin.svg')) ?>" alt="" aria-hidden="true" />
+					<div class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--coin coin-zone">
+						<img class="coin-disc" src="<?= e(asset('images/stat-icon-coin.svg')) ?>" alt="" aria-hidden="true" />
+					</div>
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat1.tag')) ?></span>
-					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat1.number')) ?></div>
+					<div class="amfc-philosophy__stat-number">
+						<span class="amfc-philosophy__stat-number-affix"><?= e(t('home.philosophy.stat1.number_prefix')) ?></span><span class="amfc-philosophy__stat-number-value" data-count-to="<?= e(t('home.philosophy.stat1.number_value')) ?>">0</span><span class="amfc-philosophy__stat-number-affix"><?= e(t('home.philosophy.stat1.number_suffix')) ?></span>
+					</div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat1.label')) ?></div>
 				</article>
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--2"

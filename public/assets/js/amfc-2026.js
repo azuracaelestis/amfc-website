@@ -121,9 +121,75 @@ window.AMFC = (function () {
 		onScroll(); // set the initial value — don't wait for the first scroll event
 	}
 
+	/* KSP card 1 only, per feedback: number count-up (0 -> data-count-to, ease-out-cubic,
+	   1200ms) and coin flip (see .coin-disc in amfc-2026.css) fire together, once, the moment
+	   the card scrolls into view. IntersectionObserver rather than the scroll-listener pattern
+	   above — this is a one-shot trigger, not something that needs continuous scroll position,
+	   so there's no reason to hand-roll that with rAF-throttled scroll math. */
+	function initPhilosophyStat1Reveal() {
+		var card = document.querySelector('.amfc-philosophy__stat-card--1');
+		if (!card) return;
+		var valueEl = card.querySelector('.amfc-philosophy__stat-number-value');
+		var target = valueEl ? parseInt(valueEl.getAttribute('data-count-to'), 10) : NaN;
+
+		// Reduced motion: show the final state immediately, no count-up, no coin flip. Skip the
+		// observer entirely rather than attach-then-immediately-fire — there's nothing for it
+		// to watch for.
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			if (valueEl && !isNaN(target)) valueEl.textContent = target;
+			return;
+		}
+
+		if (!('IntersectionObserver' in window)) {
+			// No graceful-degradation path worth building for a browser this old — just land
+			// on the final state, same as reduced motion above.
+			if (valueEl && !isNaN(target)) valueEl.textContent = target;
+			return;
+		}
+
+		var COUNT_DURATION = 1200;
+
+		// Cubic ease-out: fast start, decelerating finish — 1 - (1-t)^3.
+		function easeOutCubic(t) {
+			return 1 - Math.pow(1 - t, 3);
+		}
+
+		function runCountUp() {
+			if (!valueEl || isNaN(target)) return;
+			var start = null;
+			function frame(now) {
+				if (start === null) start = now;
+				var t = Math.min(1, (now - start) / COUNT_DURATION);
+				var eased = easeOutCubic(t);
+				valueEl.textContent = Math.round(eased * target);
+				if (t < 1) {
+					window.requestAnimationFrame(frame);
+				} else {
+					valueEl.textContent = target; // guarantees an exact landing, not a rounding-off-by-one
+				}
+			}
+			window.requestAnimationFrame(frame);
+		}
+
+		var observer = new IntersectionObserver(function (entries, obs) {
+			entries.forEach(function (entry) {
+				if (!entry.isIntersecting) return;
+				// Both animations start at the same moment: the coin flip is a plain CSS
+				// animation gated on this class (see amfc-2026.css), and the count-up starts
+				// in the very same tick.
+				card.classList.add('amfc-philosophy__stat-card--revealed');
+				runCountUp();
+				obs.unobserve(card); // once, no replay on repeated scroll in/out
+			});
+		}, { threshold: 0.5 });
+
+		observer.observe(card);
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
+		initPhilosophyStat1Reveal();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

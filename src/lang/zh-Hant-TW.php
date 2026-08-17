@@ -44,7 +44,13 @@ return [
     // and the KSP watermark) since the number+label text already carries the meaning — see
     // philosophy.php.
     'home.philosophy.stat1.tag' => '誠信',
-    'home.philosophy.stat1.number' => 'NT$200億+',
+    // Split into three parts (was one 'number' string) so the count-up animation in
+    // amfc-2026.js can animate just the numeral while "NT$" and "億+" stay static — see
+    // philosophy.php. number_value is consumed as data-count-to, a plain integer, not display
+    // text — no thousands separator or other formatting here.
+    'home.philosophy.stat1.number_prefix' => 'NT$',
+    'home.philosophy.stat1.number_value' => '200',
+    'home.philosophy.stat1.number_suffix' => '億+',
     'home.philosophy.stat1.label' => '資產管理總量',
     'home.philosophy.stat2.tag' => '創新',
     'home.philosophy.stat2.number' => 'AI',

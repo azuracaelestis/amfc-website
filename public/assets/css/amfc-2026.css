@@ -792,6 +792,43 @@ body {
 	width: 31.875%;
 }
 
+/* Coin flip, per feedback, card 1 only. .coin-zone carries the positioning inherited from
+   .amfc-philosophy__stat-icon(--coin) above (it has both classes — see philosophy.php) plus
+   the 3D viewing context; .coin-disc (the actual <img>) is what rotates. perspective has to
+   live on the PARENT of the rotated element for the 3D foreshortening to render — putting it
+   directly on .coin-disc would do nothing, since an element can't provide perspective for its
+   own transform. */
+.coin-zone {
+	perspective: 500px;
+}
+
+.coin-disc {
+	display: block;
+	width: 100%;
+	height: auto;
+	transform-style: preserve-3d;
+}
+
+/* animation-play-state starts paused — initPhilosophyStat1Reveal() (amfc-2026.js) only ever
+   sets it to running, via IntersectionObserver, once, when the card scrolls into view. Without
+   this the animation would run on page load (from `animation` being set, not from any trigger),
+   long before the card is visible — the same pattern already used for the KSP headline's
+   hand-drawn underline draw-in, for the same reason. */
+.amfc-philosophy__stat-card--1.amfc-philosophy__stat-card--revealed .coin-disc {
+	animation: amfc-coin-flip 800ms ease-out 1 forwards;
+}
+
+@keyframes amfc-coin-flip {
+	from { transform: rotateY(0deg); }
+	to { transform: rotateY(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-philosophy__stat-card--1.amfc-philosophy__stat-card--revealed .coin-disc {
+		animation: none;
+	}
+}
+
 .amfc-philosophy__stat-icon--lightbulb {
 	left: 61.25%;
 	top: 10.83%;
@@ -913,6 +950,16 @@ body {
 	font-family: var(--amfc-font-zh);
 	font-weight: 700;
 	font-size: 3rem;
+}
+
+/* font: inherit on both — bare new <span>s, needed for the same reason documented throughout
+   this file (AMFC's `*, html, body { font-size: 1.1rem }` directly matches every element,
+   including these, and wins over inheriting .amfc-philosophy__stat-number's own font-size/
+   family/weight otherwise). Card 1 only; the other three cards' numbers are still one plain
+   text node each. */
+.amfc-philosophy__stat-number-affix,
+.amfc-philosophy__stat-number-value {
+	font: inherit;
 }
 
 /* +10% per feedback, on AI / 20萬+ / 20年+ only — NT$200億+ (card 1) is already the widest
