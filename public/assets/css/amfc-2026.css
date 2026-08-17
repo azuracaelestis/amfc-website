@@ -1039,9 +1039,21 @@ body {
 	flex-direction: column;
 	align-items: center;
 	gap: 1.5rem; /* 24px, per feedback */
-	/* Fixed 447x500 at the 1440px Figma reference width, fluid-scaled below it, per feedback. */
-	width: clamp(16.75rem, calc(447 / 1440 * 100vw), 447px);
+	/* 447x500 at the 1440px Figma reference width widened +24px per feedback (to 471px, so the
+	   body copy below gets the same +24px of wrap room and can fit back on 2 lines at 16px —
+	   see .amfc-service-card__body), fluid-scaled below it same as before. Floor bumped by the
+	   same flat 24px (268px -> 292px) rather than recomputing the floor/ceiling ratio, so this
+	   stays a uniform +24px at every viewport width, not just at the 1440px reference. */
+	width: clamp(18.25rem, calc(471 / 1440 * 100vw), 471px);
 	height: clamp(18.75rem, calc(500 / 1440 * 100vw), 500px);
+	/* Real bug this surfaced, per feedback ("make each card responsive"): flex-shrink defaults
+	   to 1, which lets the card compress BELOW its own clamp() floor whenever
+	   .amfc-services__grid (flex-wrap: wrap, both cards side by side) is narrower than one
+	   card's floor width — at a 375px viewport this measured 272.9px actual vs. the intended
+	   292px (18.25rem) floor, squashing the card's proportions instead of the grid wrapping it
+	   onto its own line the way flex-wrap is there for. flex-shrink: 0 makes the clamp() floor
+	   an actual hard minimum, so a too-narrow row wraps instead of squeezing. */
+	flex-shrink: 0;
 	padding: 3rem; /* 48px, per feedback */
 	text-align: center;
 	/* Hover elevation, per feedback */
@@ -1142,7 +1154,9 @@ body {
 	font-size: clamp(0.5rem, calc(16 / 1440 * 100vw), 16px);
 	line-height: 1.5;
 	height: 4.5em; /* 3 lines */
-	max-width: 351px;
+	/* 351px -> 375px: matches the card's own +24px width increase above exactly (padding is
+	   unchanged, so the card's inner content width grows by the same 24px this caps at). */
+	max-width: 375px;
 	margin-inline: auto;
 }
 
