@@ -1529,6 +1529,17 @@ body {
 	aspect-ratio: 333 / 201;
 	overflow: hidden;
 	border-radius: 16px; /* per Figma — not var(--amfc-radius-lg), which is 20px */
+	/* Hover elevation, per feedback. filter: drop-shadow (not box-shadow) specifically because
+	   this element has overflow: hidden (required above, to clip the image to the rounded
+	   corners) — a box-shadow on the same element would itself get clipped by that overflow and
+	   never actually show; drop-shadow is a filter effect computed from the element's rendered
+	   output rather than its border box, so it isn't subject to that clipping. */
+	transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.amfc-news-card:hover {
+	transform: translateY(-8px);
+	filter: drop-shadow(var(--amfc-shadow-card));
 }
 
 .amfc-news-card__image {
