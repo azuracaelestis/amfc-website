@@ -1045,7 +1045,20 @@ body {
 	   same flat 24px (268px -> 292px) rather than recomputing the floor/ceiling ratio, so this
 	   stays a uniform +24px at every viewport width, not just at the 1440px reference. */
 	width: clamp(18.25rem, calc(471 / 1440 * 100vw), 471px);
-	height: clamp(18.75rem, calc(500 / 1440 * 100vw), 500px);
+	/* min-height, not height, per feedback (fixes the CTA overflowing past the card's bottom
+	   edge on narrower viewports). With a hard `height` the card's box was a fixed size that
+	   did NOT track its own content's real height — content grows toward the fixed CTA
+	   margin-bottom + padding-bottom + rem-based gaps below staying roughly constant in px
+	   while only the vw-scaled parts (icon, font-size) shrink, so content increasingly
+	   outgrows the box as the viewport narrows. flex-shrink: 0 is already set throughout this
+	   card specifically so mismatches overflow visibly instead of silently compressing — this
+	   is that overflow, made visible exactly as designed, and min-height is the fix: it lets
+	   the box grow to whatever its content actually needs, at every viewport, instead of
+	   capping it. Confirmed via computed style that .amfc-service-card__cta's own
+	   `margin-top: auto` (previously relied on to push it to the bottom of the fixed box) was
+	   resolving to 0px even at the 1440px reference width — the box was already too tight for
+	   there to be any free space left to distribute — so this was never reliable to begin with. */
+	min-height: clamp(18.75rem, calc(500 / 1440 * 100vw), 500px);
 	/* Real bug this surfaced, per feedback ("make each card responsive"): flex-shrink defaults
 	   to 1, which lets the card compress BELOW its own clamp() floor whenever
 	   .amfc-services__grid (flex-wrap: wrap, both cards side by side) is narrower than one
@@ -1264,8 +1277,15 @@ body {
 .amfc-service-card__cta {
 	flex-shrink: 0; /* see .amfc-service-card__icon-wrap comment — this was silently
 	                   compressing to ~48px before the card's content budget was fixed */
-	margin-top: auto; /* pins the button to the bottom of the card, per feedback */
-	margin-bottom: 32px; /* nudges it back up from that bottom edge — 32px per feedback */
+	/* No more margin-top: auto — with the card's height now min-height (see above), the box
+	   sizes to its content instead of the other way around, so there is never guaranteed
+	   leftover space for an auto margin to push into (and per the debugging note above, it had
+	   already stopped working before this change). The button's gap above it is now just the
+	   card's own shared `gap` (24px, same rhythm as the icon-to-text gap), and this
+	   margin-bottom is the deliberate, explicit space below it — 64px, i.e. the previous 32px
+	   plus 32px more, per feedback ("move the button up 32px"), now guaranteed to render
+	   exactly as written since nothing upstream can eat into it. */
+	margin-bottom: 64px;
 }
 
 /* --- App download ("KingDo") --- */
