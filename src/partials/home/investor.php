@@ -7,7 +7,7 @@
 	<div class="amfc-container">
 		<div class="amfc-investor__card">
 			<div class="amfc-investor__photo-wrap">
-				<img class="amfc-investor__photo" src="<?= e(asset('images/investor-photo.png')) ?>" alt="<?= e(t('home.investor.photo_alt')) ?>" />
+				<img class="amfc-investor__photo" src="<?= e(asset('images/investment.png')) ?>" alt="<?= e(t('home.investor.photo_alt')) ?>" />
 			</div>
 			<div class="amfc-investor__text">
 				<h2 class="amfc-investor__heading"><?= e(t('home.investor.headline')) ?></h2>
