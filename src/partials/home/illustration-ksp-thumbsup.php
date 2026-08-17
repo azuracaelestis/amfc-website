@@ -1,6 +1,6 @@
 <?php
 /* PORT THIS — KSP card 3 (效率/20萬+) thumbs-up icon, INLINED rather than referenced as
-   <img src="stat-icon-thumbsup.svg">, for the same reason as illustration-ksp-bulb.php: CSS in
+   <img src="stat-icon-thumbsup.svg">, for the same reason as illustration-car-loan.php: CSS in
    this document cannot reach inside an SVG loaded through <img>, so the entrance "nod" animation
    (see .thumb-group in amfc-2026.css) would be silently inert.
 
@@ -8,7 +8,7 @@
    truth) is the <g class="thumb-group"> wrapper around the hand/thumb path (fill #EDABA7) —
    every path is otherwise byte-identical. The card (fill #F7BF4F) and its fold-line stroke stay
    outside the group: only the hand itself nods, per feedback. Bare "thumb-group" rather than an
-   amfc- prefixed name, matching the equally-bare .coin-zone/.coin-disc and .bulb-group used for
+   amfc- prefixed name, matching the equally-bare .coin-zone/.coin-disc used for
    cards 1-2's entrance animations — confirmed neither collides with anything already in this
    codebase.
 

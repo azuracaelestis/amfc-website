@@ -186,10 +186,12 @@ window.AMFC = (function () {
 		observer.observe(card);
 	}
 
-	/* KSP cards 2 and 3 only, per feedback: the lightbulb's entrance bounce (.bulb-group) and
-	   the thumb's entrance nod (.thumb-group) each fire once, the moment their card becomes
-	   visible, reusing the shared .amfc-philosophy__stat-card--revealed class name — cards 2 and
-	   3 don't cross-talk since each only ever touches its own card element.
+	/* KSP cards 3 and 4 only, per feedback: the thumb's entrance nod (.thumb-group) and the
+	   bubble-drop + star-cascade (.bubble-shape/.stars-row/.star) each fire once, the moment
+	   their card becomes visible, reusing the shared .amfc-philosophy__stat-card--revealed class
+	   name — cards 3 and 4 don't cross-talk since each only ever touches its own card element.
+	   (Card 2's lightbulb had the same entrance treatment; removed per feedback — card 2 is now a
+	   plain static icon and no longer calls this.)
 
 	   BUGFIX: this used to be a plain IntersectionObserver(threshold: 0.5) on the card, same
 	   shape as initPhilosophyStat1Reveal below — but cards 2-4 (unlike card 1) carry
@@ -238,7 +240,6 @@ window.AMFC = (function () {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
 		initPhilosophyStat1Reveal();
-		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--2');
 		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--3');
 		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--4');
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is

@@ -1,6 +1,6 @@
 <?php
 /* PORT THIS — investor CTA arrow icon, INLINED rather than referenced as
-   <img src="icon-arrow-right.svg">, for the same reason as illustration-ksp-bulb.php: CSS in
+   <img src="icon-arrow-right.svg">, for the same reason as illustration-ksp-thumbsup.php: CSS in
    this document cannot reach inside an SVG loaded through <img>, so the hover color change to
    #647EEB (see .amfc-investor__cta:hover in amfc-2026.css) would be silently inert.
 

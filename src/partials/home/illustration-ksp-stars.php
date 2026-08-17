@@ -1,7 +1,7 @@
 <?php
 /* PORT THIS — KSP card 4 (專業/20年+) speech-bubble star rating icon, INLINED rather than
    referenced as <img src="stat-icon-stars.svg">, for the same reason as
-   illustration-ksp-bulb.php/illustration-ksp-thumbsup.php: CSS in this document cannot reach
+   illustration-ksp-thumbsup.php: CSS in this document cannot reach
    inside an SVG loaded through <img>, so the bubble-drop + star-cascade entrance (see
    .bubble-shape/.stars-row/.star in amfc-2026.css) would be silently inert.
 
