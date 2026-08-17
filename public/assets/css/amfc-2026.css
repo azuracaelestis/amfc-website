@@ -1038,6 +1038,13 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	/* Centers the icon/text/button block vertically within the card, per feedback — previously
+	   unset (default flex-start), which packed everything at the top and dumped any leftover
+	   height as dead space below the button instead of distributing it. Mostly a correctness
+	   fix for viewports where content is shorter than min-height below; at the common case
+	   where content already exceeds the floor (see min-height's own comment) there's no slack
+	   for this to redistribute, which is why the actual trim is the CTA's margin-bottom below. */
+	justify-content: center;
 	gap: 1.5rem; /* 24px, per feedback */
 	/* 447x500 at the 1440px Figma reference width widened +24px per feedback (to 471px, so the
 	   body copy below gets the same +24px of wrap room and can fit back on 2 lines at 16px —
@@ -1058,7 +1065,11 @@ body {
 	   `margin-top: auto` (previously relied on to push it to the bottom of the fixed box) was
 	   resolving to 0px even at the 1440px reference width — the box was already too tight for
 	   there to be any free space left to distribute — so this was never reliable to begin with. */
-	min-height: clamp(18.75rem, calc(500 / 1440 * 100vw), 500px);
+	/* 500px -> 470px, matching the -30px trim per feedback (floor moved by the same flat 30px,
+	   300px nominal -> 270px, same "shift both ends uniformly" approach used for the earlier
+	   +24px width change) — this rarely actually binds (see the CTA margin-bottom comment
+	   below for why), but keeps the floor's target size consistent with the trimmed content. */
+	min-height: clamp(16.875rem, calc(470 / 1440 * 100vw), 470px);
 	/* Real bug this surfaced, per feedback ("make each card responsive"): flex-shrink defaults
 	   to 1, which lets the card compress BELOW its own clamp() floor whenever
 	   .amfc-services__grid (flex-wrap: wrap, both cards side by side) is narrower than one
@@ -1282,10 +1293,14 @@ body {
 	   leftover space for an auto margin to push into (and per the debugging note above, it had
 	   already stopped working before this change). The button's gap above it is now just the
 	   card's own shared `gap` (24px, same rhythm as the icon-to-text gap), and this
-	   margin-bottom is the deliberate, explicit space below it — 64px, i.e. the previous 32px
-	   plus 32px more, per feedback ("move the button up 32px"), now guaranteed to render
-	   exactly as written since nothing upstream can eat into it. */
-	margin-bottom: 64px;
+	   margin-bottom is the deliberate, explicit space below it.
+
+	   64px -> 34px, per feedback: since actual content height already exceeds min-height above
+	   at typical viewport widths (measured 599px actual vs. a 500px floor at the 1440px
+	   reference before this change), this margin — not the floor — was the real driver of the
+	   card reading as "too long, with a big empty gap below the button". -30px here is the
+	   direct trim; matches the same -30px moved onto min-height above for consistency. */
+	margin-bottom: 34px;
 }
 
 /* --- App download ("KingDo") --- */
