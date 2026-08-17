@@ -918,7 +918,10 @@ body {
 
 .amfc-philosophy__stat-label {
 	color: var(--amfc-text-heading);
-	font-size: 1rem;
+	/* +20% and semi-bold, per feedback (was 1rem / regular-weight, inheriting whatever the
+	   surrounding cascade resolves font-weight to). */
+	font-size: 1.2rem;
+	font-weight: 600;
 }
 
 /* --- Funds partnership --- */
