@@ -734,10 +734,22 @@ body {
 	max-width: 384px; /* -20% from 480px, per feedback */
 	aspect-ratio: 1 / 1;
 	margin-inline: auto;
+	/* position: relative + overflow: hidden are for the icon below: relative gives it a
+	   containing block, and hidden clips it exactly at the card's own rounded corner — the
+	   source art (ksp cards/01.svg) bleeds its icon slightly past the card's right edge on
+	   purpose (confirmed: the source file clips it with its own alpha mask shaped exactly like
+	   the card, x=0 y=0 480x466 rx=32 — i.e. the card boundary itself), so this reproduces that
+	   with our own container instead of carrying the mask into the extracted icon asset. */
+	position: relative;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+	/* flex-start/flex-end (was center/center): the re-skinned cards anchor their tag/number/
+	   label as a left-aligned block toward the bottom, with the icon occupying the top-right
+	   corner independently (see .amfc-philosophy__stat-icon) rather than everything stacking
+	   centered — per feedback, reference: ksp cards/01-04.svg. */
+	align-items: flex-start;
+	justify-content: flex-end;
 	gap: var(--amfc-space-md);
 	padding: var(--amfc-space-lg);
 	/* Borderless per feedback — the cards separate by fill colour and the stack's drop shadows
@@ -747,12 +759,43 @@ body {
 	border: none;
 	border-radius: var(--amfc-radius-lg);
 	box-shadow: var(--amfc-shadow-card);
-	text-align: center;
+	text-align: left;
 	/* Resting tilt as a custom property (not a literal value baked into `transform`) so the
 	   scroll-driven entrance keyframe below can reference the SAME per-card angle — one shared
 	   @keyframes for all four cards instead of four near-duplicate ones. */
 	transform: rotate(var(--amfc-card-tilt));
 	transition: transform var(--amfc-duration-medium) var(--amfc-ease-out); /* for the hover-straighten below */
+}
+
+/* Decorative corner icon, per card — see philosophy.php for why each is alt="" aria-hidden. Each
+   asset was cropped to its own bounding box out of the matching ksp cards/NN.svg source, so
+   `left`/`top`/`width` below are that crop-box's origin/size expressed as a % of the source
+   file's 480px-wide canvas — the same reference width the card's own 384px max-width is already
+   derived from ("-20% from 480px", above), so these percentages land the icon in the same
+   relative spot regardless of how much the card itself has shrunk on a narrow viewport. Height
+   is intentionally not set — each SVG's own intrinsic aspect ratio (preserved from its source
+   crop) determines it. */
+.amfc-philosophy__stat-icon {
+	position: absolute;
+	pointer-events: none;
+}
+
+.amfc-philosophy__stat-icon--coin {
+	left: 56.04%;
+	top: 9.375%;
+	width: 31.875%;
+}
+
+.amfc-philosophy__stat-icon--lightbulb {
+	left: 61.25%;
+	top: 10.83%;
+	width: 24.17%;
+}
+
+.amfc-philosophy__stat-icon--thumbsup {
+	left: 60.2%;
+	top: 10%;
+	width: 44.375%;
 }
 
 /* Straighten on hover, per feedback. Also matched combined with [data-aos].aos-animate:hover —
@@ -818,11 +861,17 @@ body {
 	/* Three selectors match every specificity tier introduced above (the (0,2,0) pre-trigger
 	   grow-in scale, and the (0,3,0) settled tilt+scale restore) — otherwise one of them would
 	   win over this plain (0,1,0) reset and leave mobile cards stuck scaled-down or re-tilted
-	   in this flat list layout. */
+	   in this flat list layout.
+
+	   position: relative, not static: static would also drop the card as the containing block
+	   for its absolutely-positioned .amfc-philosophy__stat-icon, which would then jump to
+	   position itself against the next positioned ancestor up the tree instead of the card.
+	   relative removes the same sticky/stacking behaviour static would while keeping the icon
+	   correctly contained. */
 	.amfc-philosophy__stat-card,
 	.amfc-philosophy__stat-card[data-aos],
 	.amfc-philosophy__stat-card[data-aos].aos-animate {
-		position: static;
+		position: relative;
 		transform: none;
 	}
 	.amfc-philosophy__stack-tail {
@@ -838,11 +887,6 @@ body {
 	font-weight: 700;
 	border-radius: 999px;
 	padding: 0.35rem 1rem;
-}
-
-.amfc-philosophy__stat-icon {
-	width: 72px;
-	height: 72px;
 }
 
 .amfc-philosophy__stat-number {

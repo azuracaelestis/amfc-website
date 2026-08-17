@@ -39,25 +39,25 @@ return [
     'home.philosophy.headline_line1_highlight' => '創新、專業、',
     'home.philosophy.headline_line2_highlight' => '效率、誠信',
     'home.philosophy.headline_line2_suffix' => '四項理念',
+    // icon_alt keys removed with the KSP card re-skin: the four stat-card icons are now purely
+    // decorative (alt="" aria-hidden="true" on each <img>, same convention as the hero sparkles
+    // and the KSP watermark) since the number+label text already carries the meaning — see
+    // philosophy.php.
     'home.philosophy.stat1.tag' => '誠信',
     'home.philosophy.stat1.number' => 'NT$200億+',
     'home.philosophy.stat1.label' => '資產管理總量',
-    'home.philosophy.stat1.icon_alt' => '誠信：資產管理總量圖示',
     'home.philosophy.stat2.tag' => '創新',
     'home.philosophy.stat2.number' => 'AI',
     'home.philosophy.stat2.label' => '智能數據風控',
-    'home.philosophy.stat2.icon_alt' => '創新：AI 智能數據風控圖示',
     'home.philosophy.stat3.tag' => '效率',
     'home.philosophy.stat3.number' => '20萬+',
     'home.philosophy.stat3.label' => '用戶誠摯推薦',
-    'home.philosophy.stat3.icon_alt' => '效率：用戶誠摯推薦圖示',
     // Was '創新' as-authored in Figma, which duplicated stat2's tag and left 專業 unused. Changed
     // per feedback, so the four cards' tags now cover the four principles named in this section's
     // own headline (創新、專業、效率、誠信) one each, rather than repeating one and dropping another.
     'home.philosophy.stat4.tag' => '專業',
     'home.philosophy.stat4.number' => '20年+',
     'home.philosophy.stat4.label' => '金融實務經驗',
-    'home.philosophy.stat4.icon_alt' => '20年以上金融實務經驗標誌',
 
     // --- Funds partnership ---
     'home.funds.logo_alt' => 'Funds Inc 標誌',

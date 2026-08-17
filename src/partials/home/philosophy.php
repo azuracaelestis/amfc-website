@@ -64,33 +64,47 @@
 				</h2>
 			</div>
 			<div class="amfc-philosophy__stack">
+				<!-- Re-skinned per feedback (reference: public/assets/images/ksp cards/01-04.svg,
+				     supplied as flattened full-card exports). Tag/number/label stay real HTML
+				     driven by the same t() strings as before — not the baked-in text from the
+				     supplied files — per this repo's i18n/accessibility rules; one of the four
+				     source files (04.svg, 誠信/NT$200億+) has its label baked in wrong (copies
+				     03's "智能數據風控" instead of "資產管理總量"), which rebuilding with real
+				     text sidesteps entirely. Only each icon's artwork was extracted from its
+				     source file (cropped to the icon's own bounding box) as a new asset under
+				     public/assets/images/ — see amfc-2026.css for how each is positioned; the
+				     numbers are that art's crop-box origin as a % of the 480px-wide source
+				     canvas, matching the file's own "-20% from 480px" card-size convention
+				     noted below. Card background colours are unchanged: each source file's bg
+				     happens to already match the token this card was assigned to. -->
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--1">
+					<img class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--coin" src="<?= e(asset('images/stat-icon-coin.svg')) ?>" alt="" aria-hidden="true" />
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat1.tag')) ?></span>
-					<img class="amfc-philosophy__stat-icon" src="<?= e(asset('images/stat-coin.svg')) ?>" alt="<?= e(t('home.philosophy.stat1.icon_alt')) ?>" width="72" height="72" />
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat1.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat1.label')) ?></div>
 				</article>
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--2"
 					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
+					<img class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--lightbulb" src="<?= e(asset('images/stat-icon-lightbulb.svg')) ?>" alt="" aria-hidden="true" />
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat2.tag')) ?></span>
-					<img class="amfc-philosophy__stat-icon" src="<?= e(asset('images/stat-ai-chip.svg')) ?>" alt="<?= e(t('home.philosophy.stat2.icon_alt')) ?>" width="72" height="72" />
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat2.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat2.label')) ?></div>
 				</article>
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--3"
 					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
+					<img class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--thumbsup" src="<?= e(asset('images/stat-icon-thumbsup.svg')) ?>" alt="" aria-hidden="true" />
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat3.tag')) ?></span>
-					<img class="amfc-philosophy__stat-icon" src="<?= e(asset('images/stat-thumbs-up.svg')) ?>" alt="<?= e(t('home.philosophy.stat3.icon_alt')) ?>" width="72" height="72" />
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat3.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat3.label')) ?></div>
 				</article>
+				<!-- No icon: the source file for this card (02.svg, 專業/20年+) ships without
+				     one — confirmed by inspecting its paths, not an extraction gap on our end. -->
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--4"
 					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat4.tag')) ?></span>
-					<img class="amfc-philosophy__stat-icon" src="<?= e(asset('images/flag.svg')) ?>" alt="<?= e(t('home.philosophy.stat4.icon_alt')) ?>" width="72" height="72" />
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat4.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat4.label')) ?></div>
 				</article>
