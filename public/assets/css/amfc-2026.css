@@ -840,7 +840,7 @@ body {
    illustration-ksp-bulb.php), and .bulb-group is the <g> that actually moves.
 
    translateY(-14px) is the RESTING state, not just the animation's 0% keyframe: before
-   initPhilosophyStat2Reveal() (amfc-2026.js) adds the reveal class, the bulb sits pre-offset up
+   initPhilosophyCardAosReveal() (amfc-2026.js) adds the reveal class, the bulb sits pre-offset up
    by 14px so there's something for the entrance to visibly drop from the moment the card comes
    into view, rather than a jump-then-animate.
 
@@ -891,7 +891,7 @@ body {
    Two nod cycles (0 -> -8deg -> 0 -> -8deg -> 0) over 900ms, ease-in-out, rotation only — no
    translate/scale/color, and -8deg is small enough not to clip the hand against the card's own
    edge (same crop constraint noted in illustration-ksp-thumbsup.php). Runs once via the
-   .amfc-philosophy__stat-card--revealed class (see initPhilosophyStat3Reveal() in
+   .amfc-philosophy__stat-card--revealed class (see initPhilosophyCardAosReveal() in
    amfc-2026.js) — no hover trigger, no loop, same one-shot IntersectionObserver pattern as
    cards 1-2. */
 .thumb-group {

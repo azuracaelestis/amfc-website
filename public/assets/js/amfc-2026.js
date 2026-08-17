@@ -186,67 +186,60 @@ window.AMFC = (function () {
 		observer.observe(card);
 	}
 
-	/* KSP card 2 only, per feedback: the lightbulb's entrance bounce (see .bulb-group in
-	   amfc-2026.css) fires once, the moment the card scrolls into view. Same
-	   IntersectionObserver-once shape as initPhilosophyStat1Reveal above, reusing the same
-	   .amfc-philosophy__stat-card--revealed class name — each function observes only its own
-	   card, so there's no cross-talk between the two triggers.
+	/* KSP cards 2 and 3 only, per feedback: the lightbulb's entrance bounce (.bulb-group) and
+	   the thumb's entrance nod (.thumb-group) each fire once, the moment their card becomes
+	   visible, reusing the shared .amfc-philosophy__stat-card--revealed class name — cards 2 and
+	   3 don't cross-talk since each only ever touches its own card element.
 
-	   No reduced-motion branch needed here beyond skipping the observer: the CSS itself already
-	   forces .bulb-group to translateY(0) under prefers-reduced-motion regardless of whether
-	   this class ever gets added, so there's no final-state value to set here the way card 1's
-	   count-up needed one. */
-	function initPhilosophyStat2Reveal() {
-		var card = document.querySelector('.amfc-philosophy__stat-card--2');
+	   BUGFIX: this used to be a plain IntersectionObserver(threshold: 0.5) on the card, same
+	   shape as initPhilosophyStat1Reveal below — but cards 2-4 (unlike card 1) carry
+	   data-aos="fade" (see philosophy.php), which starts them at opacity: 0 and fades them in on
+	   AOS's OWN trigger (anchor-placement "top-center" — a different geometry than a plain
+	   50%-of-area check). Geometric intersection crosses 50% well before AOS's trigger fires, so
+	   the one-shot bounce/nod was starting — and, being a fast single-shot animation (550-900ms),
+	   often finishing and settling back to rest — while the card was still opacity: 0 or barely
+	   past it. Measured on a 900px viewport: the old trigger fired at scrollY 650, AOS's
+	   .aos-animate (the point the card starts actually fading in) didn't land until scrollY 950,
+	   and the card wasn't fully opaque until scrollY 1400 — so the whole animation played out
+	   invisibly, well before the user could see the card at all. Card 1 has no data-aos (it's
+	   always opaque, "the resting top of the pile"), which is why its own count-up/coin-flip
+	   trigger below was never affected by this.
+
+	   Fix: watch the card's own class attribute for AOS's .aos-animate — the actual signal for
+	   "this card is visually appearing" — instead of raw viewport geometry, and fire the reveal
+	   the first time that happens. AOS re-toggles .aos-animate on repeated scroll in/out
+	   (data-aos-once="false" on these cards), but disconnecting the observer after the first hit
+	   means the entrance animation itself still only ever plays once, same guarantee as before. */
+	function initPhilosophyCardAosReveal(cardSelector) {
+		var card = document.querySelector(cardSelector);
 		if (!card) return;
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-		if (!('IntersectionObserver' in window)) return;
+		if (!('MutationObserver' in window)) return;
 
-		var observer = new IntersectionObserver(function (entries, obs) {
-			entries.forEach(function (entry) {
-				if (!entry.isIntersecting) return;
-				card.classList.add('amfc-philosophy__stat-card--revealed');
-				obs.unobserve(card); // once, no replay on repeated scroll in/out
-			});
-		}, { threshold: 0.5 });
+		function reveal(obs) {
+			card.classList.add('amfc-philosophy__stat-card--revealed');
+			obs.disconnect(); // once, no replay — even though AOS itself keeps toggling aos-animate
+		}
 
-		observer.observe(card);
-	}
+		// Covers the (unlikely but possible) case where AOS has already marked the card animated
+		// in by the time this runs, e.g. a page load that starts already scrolled.
+		if (card.classList.contains('aos-animate')) {
+			reveal({ disconnect: function () {} });
+			return;
+		}
 
-	/* KSP card 3 only, per feedback: the thumb's entrance nod (see .thumb-group in
-	   amfc-2026.css) fires once, the moment the card scrolls into view. Same
-	   IntersectionObserver-once shape as initPhilosophyStat2Reveal above, reusing the same
-	   .amfc-philosophy__stat-card--revealed class name — each function observes only its own
-	   card, so there's no cross-talk between the three triggers. No hover trigger anywhere in
-	   this codebase for the thumb, per feedback — scroll-into-view only.
-
-	   No reduced-motion branch needed here beyond skipping the observer: the CSS itself already
-	   disables the animation under prefers-reduced-motion regardless of whether this class ever
-	   gets added, landing the thumb at its rest rotate(0deg) with no separate final-state value
-	   to set here. */
-	function initPhilosophyStat3Reveal() {
-		var card = document.querySelector('.amfc-philosophy__stat-card--3');
-		if (!card) return;
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-		if (!('IntersectionObserver' in window)) return;
-
-		var observer = new IntersectionObserver(function (entries, obs) {
-			entries.forEach(function (entry) {
-				if (!entry.isIntersecting) return;
-				card.classList.add('amfc-philosophy__stat-card--revealed');
-				obs.unobserve(card); // once, no replay on repeated scroll in/out
-			});
-		}, { threshold: 0.5 });
-
-		observer.observe(card);
+		var observer = new MutationObserver(function () {
+			if (card.classList.contains('aos-animate')) reveal(observer);
+		});
+		observer.observe(card, { attributes: true, attributeFilter: ['class'] });
 	}
 
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
 		initPhilosophyStat1Reveal();
-		initPhilosophyStat2Reveal();
-		initPhilosophyStat3Reveal();
+		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--2');
+		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--3');
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}
