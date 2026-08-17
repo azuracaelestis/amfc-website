@@ -753,7 +753,10 @@ body {
 	   centered — per feedback, reference: ksp cards/01-04.svg. */
 	align-items: flex-start;
 	justify-content: flex-end;
-	gap: var(--amfc-space-md);
+	/* No shared `gap` here (was a uniform var(--amfc-space-md) between all three text children):
+	   the tag-to-number and number-to-label distances now need to be independently controlled
+	   (see .amfc-philosophy__stat-tag's margin-bottom and .amfc-philosophy__stat-label's
+	   margin-top below), which a single flex `gap` can't express. */
 	padding: var(--amfc-space-lg);
 	/* Borderless per feedback — the cards separate by fill colour and the stack's drop shadows
 	   instead. `none` rather than omitting the property: AMFC's live custom.css isn't vendored
@@ -899,6 +902,10 @@ body {
 	font-weight: 700;
 	border-radius: 999px;
 	padding: 0.35rem 1rem;
+	/* Preserves the tag-to-number spacing now that .amfc-philosophy__stat-card no longer has a
+	   shared `gap` — same value (1rem) the gap used to contribute here, just moved onto this
+	   element so it's independent of the number-to-label distance below. */
+	margin-bottom: var(--amfc-space-md);
 }
 
 .amfc-philosophy__stat-number {
@@ -918,10 +925,16 @@ body {
 
 .amfc-philosophy__stat-label {
 	color: var(--amfc-text-heading);
-	/* +20% and semi-bold, per feedback (was 1rem / regular-weight, inheriting whatever the
-	   surrounding cascade resolves font-weight to). */
+	/* +20% per earlier feedback (was 1rem). */
 	font-size: 1.2rem;
-	font-weight: 600;
+	/* Regular per feedback — was briefly 600 (semi-bold), reverted. Explicit 400 rather than
+	   removing the property, so this doesn't silently start inheriting whatever weight the
+	   surrounding cascade resolves to if that ever changes. */
+	font-weight: 400;
+	/* 24px at the 1440px reference width, fluid-scaled below it, per feedback — the number-to-
+	   label distance specifically; .amfc-philosophy__stat-tag's margin-bottom (above) now
+	   independently covers tag-to-number. */
+	margin-top: clamp(0.75rem, calc(24 / 1440 * 100vw), 24px);
 }
 
 /* --- Funds partnership --- */
@@ -1035,9 +1048,9 @@ body {
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Hover wash: white -> #EBEFFF top-to-bottom, per feedback. White holds the top 65% and the
-   blend occupies the bottom 35%. (#EBEFFF is --amfc-mint-100 — the token name is a misnomer
-   carried over from the palette import; the value is a pale blue, not a mint.)
+/* Hover wash: white -> #B9C8FF top-to-bottom, per feedback. White holds the top 65% and the
+   blend occupies the bottom 35%. #B9C8FF is --amfc-blue-300 (already used for the hero CTA's
+   focus-visible ring and --amfc-grad-hero's inner gradient stop).
 
    Carried on a ::before overlay rather than swapping the card's own `background`, because CSS
    cannot interpolate background-image: setting the gradient directly on :hover would snap in
@@ -1054,7 +1067,7 @@ body {
 	inset: 0;
 	z-index: -1;
 	border-radius: inherit;
-	background: linear-gradient(to bottom, var(--amfc-white) 65%, var(--amfc-mint-100) 100%);
+	background: linear-gradient(to bottom, var(--amfc-white) 65%, var(--amfc-blue-300) 100%);
 	opacity: 0;
 	transition: opacity 0.2s ease;
 	pointer-events: none;
@@ -1121,11 +1134,14 @@ body {
    CTA button land at the same y regardless of which card's body text is actually longer. */
 .amfc-service-card__body {
 	color: var(--amfc-text-heading); /* same navy as the title in Figma, not the muted body color */
-	/* 15px (not 16px) — tested against both cards' real copy at the fixed 351px content
-	   width: personal-loan text wraps to 3 lines at 16px, 2 lines at 15px. */
-	font-size: clamp(0.8125rem, calc(15 / 1440 * 100vw), 15px);
+	/* 16px at the 1440px reference width, fluid-scaled below it, per feedback. Back to 3 lines'
+	   worth of height (4.5em, was temporarily 3em/2-line at the smaller 15px this replaces) —
+	   at 16px, personal-loan's copy wraps to 3 lines at the fixed 351px content width, and
+	   without the taller box that third line would paint past this element's own fixed height
+	   (no overflow:hidden here) and visually collide with the CTA button below it. */
+	font-size: clamp(0.5rem, calc(16 / 1440 * 100vw), 16px);
 	line-height: 1.5;
-	height: 3em; /* 2 lines — was 4.5em (3 lines) */
+	height: 4.5em; /* 3 lines */
 	max-width: 351px;
 	margin-inline: auto;
 }

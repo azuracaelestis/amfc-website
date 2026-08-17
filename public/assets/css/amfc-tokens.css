@@ -10,8 +10,8 @@
 	--amfc-blue-600: #2d50d7; /* button/link/accent — exact from Figma */
 	--amfc-blue-550: #4161e1; /* hero CTA hover state */
 	--amfc-blue-500: #4a68e0;
-	--amfc-blue-300: #b9c8ff; /* hero CTA focus-visible ring — same hex already used inline as
-	                             --amfc-grad-hero's inner gradient stop, below */
+	--amfc-blue-300: #b9c8ff; /* hero CTA focus-visible ring + service-card hover wash — same hex
+	                             already used inline as --amfc-grad-hero's inner gradient stop */
 	--amfc-blue-100: #e8ecfb;
 	--amfc-lavender-100: #f5f7ff; /* investor band / one stat card / hero gradient stop */
 	--amfc-periwinkle-100: #d9e1ff; /* news-grid band / one stat card */
