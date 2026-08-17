@@ -102,7 +102,9 @@
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--3"
 					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
-					<img class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--thumbsup" src="<?= e(asset('images/stat-icon-thumbsup.svg')) ?>" alt="" aria-hidden="true" />
+					<!-- Thumb nod entrance animation on scroll-into-view, per feedback. See
+					     .thumb-group and initPhilosophyStat3Reveal() in amfc-2026.js. -->
+					<?php require __DIR__ . '/illustration-ksp-thumbsup.php'; ?>
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat3.tag')) ?></span>
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat3.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat3.label')) ?></div>

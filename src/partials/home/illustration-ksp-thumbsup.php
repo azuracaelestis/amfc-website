@@ -1,0 +1,31 @@
+<?php
+/* PORT THIS — KSP card 3 (效率/20萬+) thumbs-up icon, INLINED rather than referenced as
+   <img src="stat-icon-thumbsup.svg">, for the same reason as illustration-ksp-bulb.php: CSS in
+   this document cannot reach inside an SVG loaded through <img>, so the entrance "nod" animation
+   (see .thumb-group in amfc-2026.css) would be silently inert.
+
+   The only addition vs. public/assets/images/stat-icon-thumbsup.svg (retained as the source of
+   truth) is the <g class="thumb-group"> wrapper around the hand/thumb path (fill #EDABA7) —
+   every path is otherwise byte-identical. The card (fill #F7BF4F) and its fold-line stroke stay
+   outside the group: only the hand itself nods, per feedback. Bare "thumb-group" rather than an
+   amfc- prefixed name, matching the equally-bare .coin-zone/.coin-disc and .bulb-group used for
+   cards 1-2's entrance animations — confirmed neither collides with anything already in this
+   codebase.
+
+   The hand shape's right edge (~x 482-488, y 140-217 in the source's own viewBox coordinates) is
+   a straight cut edge, not a rounded fingertip/knuckle contour like the rest of the path — that's
+   where the wrist/arm exits the illustration's crop, per the source artwork. transform-origin is
+   set at the midpoint of that edge (see .thumb-group in amfc-2026.css) so the nod pivots from the
+   wrist, not the shape's/illustration's center.
+
+   Purely decorative (matches the coin/bulb/stars icons on the other three cards), so
+   aria-hidden="true" goes directly on the inlined <svg> root — inline SVGs are otherwise
+   exposed to the accessibility tree by default in some browsers, unlike an <img alt="">. */
+?>
+<svg class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--thumbsup" viewBox="289 48 213 182" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<g class="thumb-group">
+<path d="M487.533 139.968C469.164 130.084 447.902 128.608 427.579 124.695C407.255 120.781 385.883 113.136 374.14 95.3922C368.324 86.5865 365.384 75.7411 365.925 65.0615C366.131 61.0318 366.497 56.2226 363.43 53.7683C356.343 48.1134 351.465 59.6222 349.574 64.7298C346.761 72.3415 345.792 80.716 346.92 88.7921C347.158 90.4504 347.46 92.1253 347.301 93.8002C347.127 95.4751 346.38 97.1666 344.965 97.9792C343.329 98.9079 341.327 98.4269 339.531 97.9294C334.589 96.5365 329.631 95.1601 324.69 93.7671C320.383 92.5565 315.966 90.6826 311.517 90.6992C306.32 90.6992 300.203 91.8102 297.914 96.6691C296.357 99.9692 297.215 104.065 299.17 107.133C301.124 110.201 304.016 112.456 306.861 114.645C300.775 114.082 294.657 118.741 293.29 124.944C291.924 131.146 295.515 138.127 301.22 140.383C297.184 141.792 294.307 146.22 294.562 150.664C294.816 155.108 298.169 159.138 302.348 160.034C299.329 162.488 298.407 167.082 299.519 170.912C300.616 174.743 303.428 177.827 306.622 180C313.439 184.627 321.893 185.555 329.981 186.368C339.642 187.33 349.304 188.291 358.965 189.253C367.832 190.132 377.048 190.381 385.66 192.587C394.813 194.941 404.3 196.169 413.516 198.324C422.764 200.48 431.965 202.868 441.133 205.372C454.894 209.137 468.576 213.2 482.257 217.262L487.565 139.968H487.533Z" fill="#EDABA7"/>
+</g>
+<path d="M391.159 107.465L372.059 197.346L487.914 226.715L497.973 137.215L391.159 107.465Z" fill="#F7BF4F"/>
+<path d="M400.915 204.676C401.376 201.79 401.853 198.921 402.313 196.036C406.365 171.227 410.417 146.402 414.469 121.594C414.867 119.156 415.264 116.718 415.661 114.297" stroke="white" stroke-width="4" stroke-miterlimit="10"/>
+</svg>

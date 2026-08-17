@@ -213,11 +213,40 @@ window.AMFC = (function () {
 		observer.observe(card);
 	}
 
+	/* KSP card 3 only, per feedback: the thumb's entrance nod (see .thumb-group in
+	   amfc-2026.css) fires once, the moment the card scrolls into view. Same
+	   IntersectionObserver-once shape as initPhilosophyStat2Reveal above, reusing the same
+	   .amfc-philosophy__stat-card--revealed class name — each function observes only its own
+	   card, so there's no cross-talk between the three triggers. No hover trigger anywhere in
+	   this codebase for the thumb, per feedback — scroll-into-view only.
+
+	   No reduced-motion branch needed here beyond skipping the observer: the CSS itself already
+	   disables the animation under prefers-reduced-motion regardless of whether this class ever
+	   gets added, landing the thumb at its rest rotate(0deg) with no separate final-state value
+	   to set here. */
+	function initPhilosophyStat3Reveal() {
+		var card = document.querySelector('.amfc-philosophy__stat-card--3');
+		if (!card) return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		if (!('IntersectionObserver' in window)) return;
+
+		var observer = new IntersectionObserver(function (entries, obs) {
+			entries.forEach(function (entry) {
+				if (!entry.isIntersecting) return;
+				card.classList.add('amfc-philosophy__stat-card--revealed');
+				obs.unobserve(card); // once, no replay on repeated scroll in/out
+			});
+		}, { threshold: 0.5 });
+
+		observer.observe(card);
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
 		initPhilosophyStat1Reveal();
 		initPhilosophyStat2Reveal();
+		initPhilosophyStat3Reveal();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}
