@@ -926,6 +926,68 @@ body {
 	width: 50.625%;
 }
 
+/* Bubble drop + star cascade, per feedback, card 4 only. .bubble-shape is the <g> wrapping the
+   speech-bubble body/tail (inside the inlined SVG — see illustration-ksp-stars.php); .stars-row
+   is the <g> wrapping five individual .star <g>s, one per rating star, already left-to-right in
+   source path order so nth-child below maps directly to visual left-to-right position.
+
+   Two-stage sequence, single autoplay, gated on the same .amfc-philosophy__stat-card--revealed
+   class as the other three cards (see initPhilosophyCardAosReveal() in amfc-2026.js — card 4
+   uses the same AOS-synced trigger as cards 2-3, not a raw viewport-geometry check, for the same
+   reason documented there: card 4 also carries data-aos="fade", so a geometry-only trigger would
+   fire and finish before the card is visually faded in).
+
+   Stage 1 (bubble, 0-400ms): opacity 0/translateY(-20px) -> opacity 1/translateY(0), ease-out.
+   Stage 2 (stars, 400-750ms/950ms): opacity 0/scale(0) -> opacity 1/scale(1), a spring easing for
+   a slight overshoot pop, staggered 50ms apart starting exactly when the bubble's drop finishes
+   (star 1 at 400ms delay, star 5 at 600ms delay, each running 350ms). transform-box: fill-box +
+   center transform-origin (the default for fill-box) so each star scales from its own middle,
+   not the shared viewBox origin. */
+.bubble-shape {
+	opacity: 0;
+	transform: translateY(-20px);
+}
+
+.star {
+	transform-box: fill-box;
+	opacity: 0;
+	transform: scale(0);
+}
+
+.amfc-philosophy__stat-card--4.amfc-philosophy__stat-card--revealed .bubble-shape {
+	animation: amfc-bubble-drop 400ms cubic-bezier(0.16, 1, 0.3, 1) 0ms 1 forwards;
+}
+
+.amfc-philosophy__stat-card--4.amfc-philosophy__stat-card--revealed .star {
+	animation: amfc-star-pop 350ms cubic-bezier(0.34, 1.56, 0.64, 1) 1 forwards;
+}
+
+.amfc-philosophy__stat-card--4.amfc-philosophy__stat-card--revealed .star:nth-child(1) { animation-delay: 400ms; }
+.amfc-philosophy__stat-card--4.amfc-philosophy__stat-card--revealed .star:nth-child(2) { animation-delay: 450ms; }
+.amfc-philosophy__stat-card--4.amfc-philosophy__stat-card--revealed .star:nth-child(3) { animation-delay: 500ms; }
+.amfc-philosophy__stat-card--4.amfc-philosophy__stat-card--revealed .star:nth-child(4) { animation-delay: 550ms; }
+.amfc-philosophy__stat-card--4.amfc-philosophy__stat-card--revealed .star:nth-child(5) { animation-delay: 600ms; }
+
+@keyframes amfc-bubble-drop {
+	from { opacity: 0; transform: translateY(-20px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes amfc-star-pop {
+	from { opacity: 0; transform: scale(0); }
+	to { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bubble-shape,
+	.star {
+		animation: none;
+		opacity: 1;
+		transform: none; /* full disablement — this animation carries no information beyond the
+		                     rating itself, which stays visible at rest */
+	}
+}
+
 /* Straighten on hover, per feedback. Also matched combined with [data-aos].aos-animate:hover —
    the aos-animate tilt-restore rule above is (0,3,0) specificity, so a plain :hover alone
    (0,2,0) would lose to it and never visibly straighten cards 2-4 once they'd scrolled into

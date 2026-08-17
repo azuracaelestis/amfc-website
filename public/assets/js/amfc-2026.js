@@ -240,6 +240,7 @@ window.AMFC = (function () {
 		initPhilosophyStat1Reveal();
 		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--2');
 		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--3');
+		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--4');
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

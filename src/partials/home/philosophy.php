@@ -112,7 +112,10 @@
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--4"
 					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
-					<img class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--stars" src="<?= e(asset('images/stat-icon-stars.svg')) ?>" alt="" aria-hidden="true" />
+					<!-- Bubble-drop + star-cascade entrance on scroll-into-view, per feedback. See
+					     .bubble-shape/.stars-row/.star and initPhilosophyCardAosReveal() in
+					     amfc-2026.js. -->
+					<?php require __DIR__ . '/illustration-ksp-stars.php'; ?>
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat4.tag')) ?></span>
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat4.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat4.label')) ?></div>
