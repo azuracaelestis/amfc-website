@@ -839,10 +839,23 @@ body {
    itself (it already carries .amfc-philosophy__stat-icon--lightbulb's positioning above — see
    illustration-ksp-bulb.php), and .bulb-group is the <g> that actually moves.
 
-   translateY(-14px) is the RESTING state, not just the animation's 0% keyframe: before
+   translateY(-32px) is the RESTING state, not just the animation's 0% keyframe: before
    initPhilosophyCardAosReveal() (amfc-2026.js) adds the reveal class, the bulb sits pre-offset up
-   by 14px so there's something for the entrance to visibly drop from the moment the card comes
-   into view, rather than a jump-then-animate.
+   so there's something for the entrance to visibly drop from the moment the card comes into
+   view, rather than a jump-then-animate.
+
+   BUGFIX: was translateY(-14px)/2px/-2px. The lightbulb icon renders far smaller on screen
+   (56x78px) than the other three cards' icons (thumbsup 98x85px, coin 131x131px, stars
+   110x57px), and — unlike this icon's `px` transform values, which SVG resolves in the SVG's own
+   user-coordinate space, not screen pixels — that user-space/screen-space ratio for this crop
+   works out to ~0.5px on screen per 1px of transform value. So the original -14px only ever
+   moved the bulb ~7px on screen (measured via getBoundingClientRect() through the animation),
+   against a 78px-tall icon — clearly visible in isolation, in practice too small next to the
+   other three cards' much larger motion (a 360° coin flip, a full-hand rotation with an ~18px
+   tip arc, and a bubble+stars opacity/scale entrance) to actually be noticed while scrolling.
+   Scaled the resting offset and both overshoot keyframes up ~2.3x (same ratio between them) to
+   land the bulb's real on-screen travel around 16px — back in the same visible range as the
+   other cards' motion, same easing/duration/character otherwise.
 
    transform-box: fill-box + transform-origin: 50px 10px puts the pivot at the bulb's own local
    (0,0)-relative top-center — roughly where it would attach to a fixture — rather than the
@@ -853,7 +866,7 @@ body {
 .bulb-group {
 	transform-box: fill-box;
 	transform-origin: 50px 10px;
-	transform: translateY(-14px);
+	transform: translateY(-32px);
 }
 
 .amfc-philosophy__stat-card--2.amfc-philosophy__stat-card--revealed .bulb-group {
@@ -861,9 +874,9 @@ body {
 }
 
 @keyframes amfc-bulb-bounce {
-	0% { transform: translateY(-14px); }
-	60% { transform: translateY(2px); }
-	80% { transform: translateY(-2px); }
+	0% { transform: translateY(-32px); }
+	60% { transform: translateY(5px); }
+	80% { transform: translateY(-5px); }
 	100% { transform: translateY(0); }
 }
 
