@@ -1543,11 +1543,23 @@ body {
 	color: var(--amfc-text-heading); /* #1A2F86 */
 	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
 	font-weight: 500; /* Noto Sans Medium, confirmed via Figma */
-	font-size: 0.75rem; /* 12px, per feedback */
+	/* 16px at the 1440px Figma reference width, fluid-scaled below it, per feedback — same size
+	   as .amfc-investor__body, was 0.75rem (12px) */
+	font-size: clamp(0.875rem, calc(16 / 1440 * 100vw), 16px);
 	text-decoration: none; /* underline only on hover, per feedback */
 }
 
+/* Arrow is now an inlined SVG (see illustration-investor-arrow.php) so its stroke can track
+   this link's color via currentColor — sized here since it no longer carries its own
+   width/height attrs the way the <img> it replaced did. */
+.amfc-investor__cta-arrow {
+	width: 19px;
+	height: 19px;
+	flex-shrink: 0;
+}
+
 .amfc-investor__cta:hover {
+	color: #647EEB; /* per feedback — the inlined arrow's stroke="currentColor" follows automatically */
 	text-decoration: underline;
 }
 

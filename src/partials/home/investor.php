@@ -14,7 +14,7 @@
 				<p class="amfc-investor__body"><?= e(t('home.investor.body')) ?></p>
 				<a href="/info" class="amfc-investor__cta">
 					<?= e(t('home.investor.cta')) ?>
-					<img src="<?= e(asset('images/icon-arrow-right.svg')) ?>" alt="" width="19" height="19" aria-hidden="true" />
+					<?php require __DIR__ . '/illustration-investor-arrow.php'; ?>
 				</a>
 			</div>
 		</div>
