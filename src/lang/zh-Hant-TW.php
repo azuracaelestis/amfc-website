@@ -101,9 +101,12 @@ return [
     'home.investor.cta' => '了解更多',
 
     // --- 3-card grid ---
-    // These are single flattened illustration images with text baked in (confirmed via Figma
+    'home.news.heading' => '最新消息', // section's own heading (Figma node 96:926) — distinct from
+                                       // the per-card alt text below and from nav.news, which
+                                       // happens to share the same string for an unrelated element
+    // Cards are single flattened illustration images with text baked in (confirmed via Figma
     // source — no separate title/icon layers), so alt text carries the full meaning, no
-    // separate heading markup needed.
+    // separate per-card heading markup needed.
     'home.grid.media.alt' => '媒體報導：插畫，一人拿著印有 NEWS 的報紙',
     'home.grid.event.alt' => '活動花絮：插畫，一人揮手歡呼',
     'home.grid.antifraud.alt' => '防詐騙公告：插畫，一人講電話並面露疑惑',

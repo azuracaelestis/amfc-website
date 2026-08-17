@@ -1440,14 +1440,43 @@ body {
 
 /* --- 3-card grid (media / events / anti-fraud) --- */
 
-/* CORRECTED: real cards are single flattened illustration images (text baked in) on a
-   periwiknle band, not a muted card + separate icon/title as first built. */
+/* Re-verified against Figma (node 87:139). Real cards are single flattened illustration images
+   (text baked in) on a mint band, not a muted card + separate icon/title as first built.
+
+   Sizing corrected to match the design exactly, per feedback — several things were off, not
+   just padding:
+   - Background was --amfc-periwinkle-100 (#D9E1FF); Figma's actual fill is #EBEFFF, which is
+     --amfc-mint-100 (a misnomer name, but the right token — see its definition).
+   - Horizontal padding used a Bootstrap .container wrapper (breakpoint max-widths: 540/720/
+     960/1140/1320px), which tracks nothing about this design. Figma's own inset is a bespoke
+     189px at the 1440px reference — not the ~88-120px .amfc-container uses either, since that's
+     sized for a different content width — so it's written directly on this section instead of
+     reusing either.
+   - No rounded top corners at all; Figma has 32px. Written as a raw px pair here rather than
+     via a rem-based radius token, for the same reason CLAUDE.md documents for .amfc-curve-top:
+     the site's html{font-size:1.1rem} bug corrupts what any `rem` value actually renders as.
+   - No section heading; Figma has one ("最新消息", a real text layer, not baked into any card
+     image) — see news-grid.php. */
 .amfc-news-grid {
-	/* Top half of the 180px gap from the investor section above (other half is that
-	   section's own padding-bottom) — see .amfc-investor. 90px at the 1440px reference
-	   width, fluid-scaled below it, per feedback. */
-	padding-block: clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px) var(--amfc-space-xl);
-	background: var(--amfc-periwinkle-100);
+	display: flex;
+	flex-direction: column;
+	/* 32px at the 1440px reference width, fluid-scaled below it — gap between the heading and
+	   the card row. */
+	gap: clamp(1rem, calc(32 / 1440 * 100vw), 32px);
+	/* 189px horizontal / 70px vertical (both edges, symmetric — confirmed via Figma, not the
+	   180px-shared-with-neighbor split most other sections use) at the 1440px reference width,
+	   fluid-scaled below it. */
+	padding-inline: clamp(5.90625rem, calc(189 / 1440 * 100vw), 189px);
+	padding-block: clamp(2.1875rem, calc(70 / 1440 * 100vw), 70px);
+	background: var(--amfc-mint-100);
+	border-radius: 32px 32px 0 0;
+}
+
+.amfc-news-grid__heading {
+	color: var(--amfc-text-heading);
+	font-weight: 700;
+	/* 24px at the 1440px reference width, fluid-scaled below it, confirmed via Figma. */
+	font-size: clamp(1.25rem, calc(24 / 1440 * 100vw), 24px);
 }
 
 .amfc-news-grid__grid {
@@ -1459,14 +1488,29 @@ body {
 @media (min-width: 768px) {
 	.amfc-news-grid__grid {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
+		/* 31px at the 1440px reference width, fluid-scaled below it — the three cards are
+		   333/334/333px wide in Figma (space-between on near-equal widths), which is just this
+		   31px gap falling out of three EQUAL 1fr columns at the row's actual 1062px content
+		   width: (1062 - 2*31) / 3 = 333.33px, matching Figma almost exactly. */
+		gap: clamp(0.96875rem, calc(31 / 1440 * 100vw), 31px);
 	}
+}
+
+.amfc-news-card {
+	display: block;
+	/* 333:201 per Figma, so the card's box (and therefore the image inside it, via object-fit
+	   below) keeps that exact proportion at every width instead of following whatever aspect
+	   ratio each source PNG happens to have. */
+	aspect-ratio: 333 / 201;
+	overflow: hidden;
+	border-radius: 16px; /* per Figma — not var(--amfc-radius-lg), which is 20px */
 }
 
 .amfc-news-card__image {
 	display: block;
 	width: 100%;
-	height: auto;
-	border-radius: var(--amfc-radius-lg);
+	height: 100%;
+	object-fit: cover;
 }
 
 /* --- Footer --- */
