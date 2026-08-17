@@ -734,13 +734,16 @@ body {
 	max-width: 384px; /* -20% from 480px, per feedback */
 	aspect-ratio: 1 / 1;
 	margin-inline: auto;
-	/* position: relative + overflow: hidden are for the icon below: relative gives it a
-	   containing block, and hidden clips it exactly at the card's own rounded corner — the
+	/* overflow: hidden clips the icon below exactly at the card's own rounded corner — the
 	   source art (ksp cards/01.svg) bleeds its icon slightly past the card's right edge on
 	   purpose (confirmed: the source file clips it with its own alpha mask shaped exactly like
 	   the card, x=0 y=0 480x466 rx=32 — i.e. the card boundary itself), so this reproduces that
-	   with our own container instead of carrying the mask into the extracted icon asset. */
-	position: relative;
+	   with our own container instead of carrying the mask into the extracted icon asset.
+	   No separate `position: relative` for the icon's containing block: `position: sticky`
+	   above already establishes one for absolutely-positioned descendants — any non-static
+	   value does. Adding `relative` here as a second declaration is what broke the sticky
+	   stacking in the first place: two `position` properties in one rule, and the later one
+	   silently wins, so it overrode `sticky` outright. */
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
