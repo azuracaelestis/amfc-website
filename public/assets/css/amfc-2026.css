@@ -1473,24 +1473,34 @@ body {
    - No section heading; Figma has one ("最新消息", a real text layer, not baked into any card
      image) — see news-grid.php. */
 .amfc-news-grid {
-	display: flex;
-	flex-direction: column;
-	/* 32px at the 1440px reference width, fluid-scaled below it — gap between the heading and
-	   the card row. */
-	gap: clamp(1rem, calc(32 / 1440 * 100vw), 32px);
-	/* 189px horizontal / 70px vertical (both edges, symmetric — confirmed via Figma, not the
-	   180px-shared-with-neighbor split most other sections use) at the 1440px reference width,
-	   fluid-scaled below it. */
-	padding-inline: clamp(5.90625rem, calc(189 / 1440 * 100vw), 189px);
+	/* Horizontal inset is now .amfc-container's job (see .amfc-news-grid__inner below) — this
+	   box stays full-bleed so the mint background band and rounded top corners still span edge
+	   to edge; only the content inside is width-constrained.
+	   70px vertical (both edges, symmetric — confirmed via Figma, not the 180px-shared-with-
+	   neighbor split most other sections use) at the 1440px reference width, fluid-scaled
+	   below it. */
 	padding-block: clamp(2.1875rem, calc(70 / 1440 * 100vw), 70px);
 	background: var(--amfc-mint-100);
 	border-radius: 32px 32px 0 0;
 }
 
+/* .amfc-container (width: min(100%, 1264px), centered) plus this section's own flex/gap layout
+   — per feedback, matches the footer's content width below it (footer.php uses the same
+   .amfc-container class) rather than Figma's own literal 189px-inset measurement, which was
+   narrower (1062px content vs. .amfc-container's ~1264px). */
+.amfc-news-grid__inner {
+	display: flex;
+	flex-direction: column;
+	/* 32px at the 1440px reference width, fluid-scaled below it — gap between the heading and
+	   the card row. */
+	gap: clamp(1rem, calc(32 / 1440 * 100vw), 32px);
+}
+
 .amfc-news-grid__heading {
 	color: var(--amfc-text-heading);
 	font-weight: 700;
-	/* 24px at the 1440px reference width, fluid-scaled below it, confirmed via Figma. */
+	/* 24px at the 1440px reference width, fluid-scaled below it, confirmed via Figma — kept
+	   unchanged by the width restructure above, per feedback. */
 	font-size: clamp(1.25rem, calc(24 / 1440 * 100vw), 24px);
 }
 
