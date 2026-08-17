@@ -908,6 +908,14 @@ body {
 	font-size: 3rem;
 }
 
+/* +10% per feedback, on AI / 20萬+ / 20年+ only — NT$200億+ (card 1) is already the widest
+   number and was left at 3rem, so this is scoped by card rather than changing the shared rule. */
+.amfc-philosophy__stat-card--2 .amfc-philosophy__stat-number,
+.amfc-philosophy__stat-card--3 .amfc-philosophy__stat-number,
+.amfc-philosophy__stat-card--4 .amfc-philosophy__stat-number {
+	font-size: 3.3rem;
+}
+
 .amfc-philosophy__stat-label {
 	color: var(--amfc-text-heading);
 	font-size: 1rem;
