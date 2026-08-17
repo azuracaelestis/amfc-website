@@ -99,11 +99,10 @@
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat3.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat3.label')) ?></div>
 				</article>
-				<!-- No icon: the source file for this card (02.svg, 專業/20年+) ships without
-				     one — confirmed by inspecting its paths, not an extraction gap on our end. -->
 				<article class="amfc-philosophy__stat-card amfc-philosophy__stat-card--4"
 					data-aos="fade" data-aos-once="false" data-aos-anchor-placement="top-center"
 					data-aos-easing="ease-out-cubic" data-aos-duration="600">
+					<img class="amfc-philosophy__stat-icon amfc-philosophy__stat-icon--stars" src="<?= e(asset('images/stat-icon-stars.svg')) ?>" alt="" aria-hidden="true" />
 					<span class="amfc-philosophy__stat-tag"><?= e(t('home.philosophy.stat4.tag')) ?></span>
 					<div class="amfc-philosophy__stat-number"><?= e(t('home.philosophy.stat4.number')) ?></div>
 					<div class="amfc-philosophy__stat-label"><?= e(t('home.philosophy.stat4.label')) ?></div>

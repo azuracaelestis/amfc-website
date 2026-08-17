@@ -801,6 +801,15 @@ body {
 	width: 44.375%;
 }
 
+/* 02.svg (專業/20年+) shipped with no icon when this card system was first built; the source
+   file was updated afterward to add one (a 5-star review-bubble), extracted the same way as
+   the other three. */
+.amfc-philosophy__stat-icon--stars {
+	left: 40.42%;
+	top: 9.375%;
+	width: 50.625%;
+}
+
 /* Straighten on hover, per feedback. Also matched combined with [data-aos].aos-animate:hover —
    the aos-animate tilt-restore rule above is (0,3,0) specificity, so a plain :hover alone
    (0,2,0) would lose to it and never visibly straighten cards 2-4 once they'd scrolled into
