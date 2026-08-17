@@ -1182,6 +1182,14 @@ body {
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
+	/* Matches the CTA's own margin-bottom (34px), per feedback ("I want the [top/bottom]
+	   margin ... the same"). Before this the top gap (just the card's 52.8px padding-top) and
+	   the bottom gap (52.8px padding-bottom + the CTA's 34px margin-bottom = 86.8px) were
+	   asymmetric — confirmed by measuring both directly: 52.8px vs 86.8px. Added here rather
+	   than removing the CTA's margin-bottom, since that 34px was deliberately tuned across two
+	   earlier rounds of feedback ("move the button up 32px", then trimmed to 34px) and this
+	   syncs the top to it instead of undoing that work. */
+	margin-top: 34px;
 	/* 173px, not 178 — recomputed after the CTA's margin-bottom (added later, +32px) pushed
 	   the card's total content 5px over its fixed 500px height. Flex items default to
 	   flex-shrink:1, so that overflow was silently compressing every child, including the CTA
@@ -1348,6 +1356,11 @@ body {
 	   card reading as "too long, with a big empty gap below the button". -30px here is the
 	   direct trim; matches the same -30px moved onto min-height above for consistency. */
 	margin-bottom: 34px;
+	/* +15px total width, per feedback — scoped here rather than on the shared .amfc-btn class,
+	   which also drives the hero and app-download buttons that weren't part of this ask.
+	   padding-inline 28px -> 35.5px each side (+7.5px x2 = +15px), leaving height/radius/
+	   everything else from .amfc-btn untouched. */
+	padding-inline: 35.5px;
 }
 
 /* --- App download ("KingDo") --- */
