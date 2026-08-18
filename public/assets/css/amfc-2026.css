@@ -1195,13 +1195,18 @@ body {
 	   where content already exceeds the floor (see min-height's own comment) there's no slack
 	   for this to redistribute, which is why the actual trim is the CTA's margin-bottom below. */
 	justify-content: center;
-	gap: 1.5rem; /* 24px, per feedback */
-	/* 447x500 at the 1440px Figma reference width widened +24px per feedback (to 471px, so the
-	   body copy below gets the same +24px of wrap room and can fit back on 2 lines at 16px —
-	   see .amfc-service-card__body), fluid-scaled below it same as before. Floor bumped by the
-	   same flat 24px (268px -> 292px) rather than recomputing the floor/ceiling ratio, so this
-	   stays a uniform +24px at every viewport width, not just at the 1440px reference. */
-	width: clamp(18.25rem, calc(471 / 1440 * 100vw), 471px);
+	/* 1.5rem (24px) -> 16px, per feedback (400px height trim below). Raw px, not rem, per
+	   CLAUDE.md's rem guidance — was already inflated to ~26.4px actual by AMFC's 1.1rem root
+	   bug, so switching to px both trims the gap AND makes it exact. */
+	gap: 16px;
+	/* 471px -> 540px, per feedback: trimming the card to a 400px height (see min-height below)
+	   left the icon/margins/gaps with much less room than before, so the card widened as the
+	   explicit compensation — a shorter, wider card reads more balanced than a shorter, cramped
+	   one, and the extra width keeps both cards' body copy comfortably at 2 lines (see
+	   .amfc-service-card__body) even after the vertical trims. Floor recomputed at the same
+	   ratio as the previous floor/ceiling pair (18.25rem / 471px) rather than a flat shift, since
+	   this is a proportionally larger jump than the earlier +24px-style trims. */
+	width: clamp(21rem, calc(540 / 1440 * 100vw), 540px);
 	/* min-height, not height, per feedback (fixes the CTA overflowing past the card's bottom
 	   edge on narrower viewports). With a hard `height` the card's box was a fixed size that
 	   did NOT track its own content's real height — content grows toward the fixed CTA
@@ -1215,11 +1220,12 @@ body {
 	   `margin-top: auto` (previously relied on to push it to the bottom of the fixed box) was
 	   resolving to 0px even at the 1440px reference width — the box was already too tight for
 	   there to be any free space left to distribute — so this was never reliable to begin with. */
-	/* 500px -> 470px, matching the -30px trim per feedback (floor moved by the same flat 30px,
-	   300px nominal -> 270px, same "shift both ends uniformly" approach used for the earlier
-	   +24px width change) — this rarely actually binds (see the CTA margin-bottom comment
-	   below for why), but keeps the floor's target size consistent with the trimmed content. */
-	min-height: clamp(16.875rem, calc(470 / 1440 * 100vw), 470px);
+	/* 470px -> 400px, per feedback (floor moved by the same flat 70px, 270px nominal -> 200px,
+	   same "shift both ends uniformly" approach used for the earlier trims) — this rarely
+	   actually binds (see the CTA margin-bottom comment below for why), but keeps the floor's
+	   target size consistent with the trimmed content. Still min-height, not height — see the
+	   comment above this block for why a hard height reintroduces the CTA-overflow bug. */
+	min-height: clamp(12.5rem, calc(400 / 1440 * 100vw), 400px);
 	/* Real bug this surfaced, per feedback ("make each card responsive"): flex-shrink defaults
 	   to 1, which lets the card compress BELOW its own clamp() floor whenever
 	   .amfc-services__grid (flex-wrap: wrap, both cards side by side) is narrower than one
@@ -1228,7 +1234,8 @@ body {
 	   onto its own line the way flex-wrap is there for. flex-shrink: 0 makes the clamp() floor
 	   an actual hard minimum, so a too-narrow row wraps instead of squeezing. */
 	flex-shrink: 0;
-	padding: 3rem; /* 48px, per feedback */
+	padding: 36px; /* was 3rem (48px), per feedback — raw px, not rem, per CLAUDE.md's rem
+	   guidance (AMFC's custom.css inflates the root font-size, so this stays exact regardless) */
 	text-align: center;
 	/* Hover elevation, per feedback */
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -1285,22 +1292,18 @@ body {
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
-	/* Matches the CTA's own margin-bottom (34px), per feedback ("I want the [top/bottom]
-	   margin ... the same"). Before this the top gap (just the card's 52.8px padding-top) and
-	   the bottom gap (52.8px padding-bottom + the CTA's 34px margin-bottom = 86.8px) were
-	   asymmetric — confirmed by measuring both directly: 52.8px vs 86.8px. Added here rather
-	   than removing the CTA's margin-bottom, since that 34px was deliberately tuned across two
-	   earlier rounds of feedback ("move the button up 32px", then trimmed to 34px) and this
-	   syncs the top to it instead of undoing that work. */
-	margin-top: 34px;
-	/* 173px, not 178 — recomputed after the CTA's margin-bottom (added later, +32px) pushed
-	   the card's total content 5px over its fixed 500px height. Flex items default to
-	   flex-shrink:1, so that overflow was silently compressing every child, including the CTA
-	   button below (measured rendering to ~48px instead of its declared 64px) — not obvious
-	   from reading the CSS alone, only from the actual computed height. flex-shrink:0 added
-	   throughout this card so any future mismatch overflows visibly instead of silently
-	   shrinking a fixed-size child like the button. */
-	height: clamp(7.2rem, calc(173 / 1440 * 100vw), 173px);
+	/* Still matches the CTA's own margin-bottom (see .amfc-service-card__cta) so the top and
+	   bottom gaps stay symmetric — both trimmed 34px -> 20px together as part of the 400px
+	   height budget below. */
+	margin-top: 20px;
+	/* 173px -> 120px, per feedback ("trim the height to 400px"): the card's fixed elements
+	   (padding, both margins, both gaps, the CTA) already summed to ~423px before any icon or
+	   text height was even added in, so hitting 400px required cutting into the icon's own
+	   height too, not just padding/margins. width:100%/height:auto on the icon itself (see
+	   .amfc-service-card__icon) means it scales down to fit this shorter box via the SVG's own
+	   viewBox scaling rather than distorting — confirmed via computed style after the change
+	   that both icons still render at their natural aspect ratio, just smaller. */
+	height: clamp(5rem, calc(120 / 1440 * 100vw), 120px);
 }
 
 .amfc-service-card__icon {
@@ -1314,7 +1317,8 @@ body {
 	display: flex;
 	flex-direction: column;
 	flex-shrink: 0;
-	gap: 1.125rem; /* 18px, per feedback */
+	gap: 10px; /* was 1.125rem (18px, inflated to ~19.8px actual by the rem bug) — tightened as
+	   part of the 400px height trim; raw px per CLAUDE.md's rem guidance */
 }
 
 .amfc-service-card__title {
@@ -1322,24 +1326,39 @@ body {
 	font-weight: 700;
 	/* 24px at the 1440px Figma reference width, fluid-scaled below it, per feedback */
 	font-size: clamp(1.25rem, calc(24 / 1440 * 100vw), 24px);
+	/* Zeroes Bootstrap reboot's default h3 margin-bottom (0.5rem — 8.8px here, inflated by
+	   AMFC's 1.1rem root bug), which was silently adding on top of .amfc-service-card__text's
+	   own `gap` and was never the intended source of the title-to-body spacing. Found while
+	   trimming the card to 400px: this stacked with .amfc-service-card__body's own leftover
+	   default margin (see that rule) for ~26px of unaccounted height neither rule declared. */
+	margin: 0;
 }
 
-/* Fixed height sized for 3 lines (the longer of the two cards' copy) so both cards' title and
-   CTA button land at the same y regardless of which card's body text is actually longer. */
+/* Fixed height sized for 2 lines (the longer of the two cards' copy), per feedback, so both
+   cards' title and CTA button land at the same y regardless of which card's body text is
+   actually longer. Was 3 lines' worth (4.5em) — no longer needed at this max-width: measured
+   both cards' real copy against the new 440px max-width below and both already wrap to 2 lines
+   there (personal-loan, the longer copy, first reaches 2 lines at ~360px, comfortably under
+   440px), so the 3-line reservation was excess room, not a requirement. */
 .amfc-service-card__body {
 	color: var(--amfc-text-heading); /* same navy as the title in Figma, not the muted body color */
-	/* 16px at the 1440px reference width, fluid-scaled below it, per feedback. Back to 3 lines'
-	   worth of height (4.5em, was temporarily 3em/2-line at the smaller 15px this replaces) —
-	   at 16px, personal-loan's copy wraps to 3 lines at the fixed 351px content width, and
-	   without the taller box that third line would paint past this element's own fixed height
-	   (no overflow:hidden here) and visually collide with the CTA button below it. */
+	/* 16px at the 1440px reference width, fluid-scaled below it, per feedback. */
 	font-size: clamp(0.5rem, calc(16 / 1440 * 100vw), 16px);
 	line-height: 1.5;
-	height: 4.5em; /* 3 lines */
-	/* 351px -> 375px: matches the card's own +24px width increase above exactly (padding is
-	   unchanged, so the card's inner content width grows by the same 24px this caps at). */
-	max-width: 375px;
-	margin-inline: auto;
+	height: 3em; /* 2 lines */
+	/* 375px -> 440px, deliberately short of the full 468px inner width (540 - 2*36 padding) —
+	   440px is the widest point where BOTH cards' copy still wraps to exactly 2 lines (measured:
+	   car-loan's copy drops to 1 line at 460px). Wider would let the car card's shorter copy
+	   collapse to 1 line while personal-loan's stayed at 2, breaking the "two line body copy"
+	   match between the pair even though the fixed height box would keep both CTAs aligned
+	   either way. */
+	max-width: 440px;
+	/* margin-inline handles horizontal centering; margin-block: 0 zeroes Bootstrap reboot's
+	   default p margin-bottom (1rem — 17.6px here, inflated by AMFC's 1.1rem root bug), which
+	   was silently adding trailing height on top of this element's own fixed `height` above and
+	   was never the intended source of spacing below it — see .amfc-service-card__title for the
+	   matching fix on the title side of this same gap. */
+	margin: 0 auto;
 }
 
 /* --- Service-card illustration hovers, per spec ---
@@ -1441,24 +1460,28 @@ body {
 	75% { transform: translateX(3px); }
 }
 
-/* Box model (height/width/font) now comes from the shared .amfc-btn class — this rule keeps
-   only what's still specific to sitting inside the service card. */
+/* Box model mostly comes from the shared .amfc-btn class — this rule keeps only what's
+   specific to sitting inside the service card, plus a local padding-block override (below) so
+   the button itself is part of the 400px height trim without touching .amfc-btn and affecting
+   the hero/app-download buttons that also use it. */
 .amfc-service-card__cta {
 	flex-shrink: 0; /* see .amfc-service-card__icon-wrap comment — this was silently
 	                   compressing to ~48px before the card's content budget was fixed */
 	/* No more margin-top: auto — with the card's height now min-height (see above), the box
 	   sizes to its content instead of the other way around, so there is never guaranteed
-	   leftover space for an auto margin to push into (and per the debugging note above, it had
-	   already stopped working before this change). The button's gap above it is now just the
-	   card's own shared `gap` (24px, same rhythm as the icon-to-text gap), and this
-	   margin-bottom is the deliberate, explicit space below it.
+	   leftover space for an auto margin to push into. The button's gap above it is now just the
+	   card's own shared `gap` (16px), and this margin-bottom is the deliberate, explicit space
+	   below it.
 
-	   64px -> 34px, per feedback: since actual content height already exceeds min-height above
-	   at typical viewport widths (measured 599px actual vs. a 500px floor at the 1440px
-	   reference before this change), this margin — not the floor — was the real driver of the
-	   card reading as "too long, with a big empty gap below the button". -30px here is the
-	   direct trim; matches the same -30px moved onto min-height above for consistency. */
-	margin-bottom: 34px;
+	   34px -> 20px, per feedback ("trim the height to 400px") — trimmed together with
+	   .amfc-service-card__icon-wrap's margin-top (see that rule) so the two stay equal and the
+	   card's top/bottom gaps stay symmetric, same relationship as before. */
+	margin-bottom: 20px;
+	/* 14px -> 10px each side, per feedback ("trim the height to 400px") — the button's own
+	   height was part of the vertical budget that needed cutting to fit 400px total, and this is
+	   the one part of that budget .amfc-btn itself owns. Scoped here, not on .amfc-btn, for the
+	   same reason as the padding-inline override below. */
+	padding-block: 10px;
 	/* +15px total width, per feedback — scoped here rather than on the shared .amfc-btn class,
 	   which also drives the hero and app-download buttons that weren't part of this ask.
 	   padding-inline 28px -> 35.5px each side (+7.5px x2 = +15px), leaving height/radius/
