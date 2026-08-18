@@ -658,10 +658,10 @@ body {
 	margin-top: 62px;
 }
 
-/* Gold to match the reference — every other section's eyebrow stays the blue accent color, so
-   this is scoped to the philosophy section rather than changing the shared .amfc-eyebrow rule. */
+/* Was gold to match the reference; changed to #647EEB per feedback — scoped to the philosophy
+   section rather than changing the shared .amfc-eyebrow rule, same reasoning as before. */
 .amfc-philosophy__eyebrow {
-	color: var(--amfc-gold-500);
+	color: #647EEB;
 	font-size: 1rem; /* 16px, per feedback */
 }
 
@@ -1150,10 +1150,11 @@ body {
 	margin-bottom: clamp(1.5rem, calc(48 / 1440 * 100vw), 48px);
 }
 
-/* Gold to match the reference — scoped to this section, same reasoning as
-   .amfc-philosophy__eyebrow (other sections keep the shared blue accent eyebrow). */
+/* Was gold to match the reference; changed to #647EEB per feedback — scoped to this section,
+   same reasoning as .amfc-philosophy__eyebrow (other sections keep the shared blue accent
+   eyebrow). */
 .amfc-services__eyebrow {
-	color: var(--amfc-gold-500);
+	color: #647EEB;
 	font-size: 1rem; /* 16px, per feedback (overrides the 24px confirmed via Figma) */
 }
 
