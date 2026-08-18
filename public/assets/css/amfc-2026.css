@@ -1199,11 +1199,14 @@ body {
 	   CLAUDE.md's rem guidance — was already inflated to ~26.4px actual by AMFC's 1.1rem root
 	   bug, so switching to px both trims the gap AND makes it exact. */
 	gap: 16px;
-	/* 540px -> 498px, per feedback ("too wide now, trim 42px, keep the 2-line body copy"). Floor
-	   recomputed at the same ratio as the previous floor/ceiling pair (21rem / 540px), matching
-	   the earlier trim's approach. See .amfc-service-card__body for why 498px still keeps both
-	   cards' copy at 2 lines. */
-	width: clamp(19.375rem, calc(498 / 1440 * 100vw), 498px);
+	/* 498px -> 432px, per feedback ("trim to 400px"). 432px, not 400px: at 400px the inner
+	   content width (400 - 2*36 padding = 328px) drops below the ~360px the longer of the two
+	   cards' body copy (personal-loan) needs to stay on 2 lines — measured it flipping to 3
+	   lines there. 432px is the narrowest width that keeps the padding untouched (36px/side, per
+	   the earlier explicit ask) AND both cards' copy at 2 lines (inner width exactly 360px, the
+	   measured minimum for personal-loan's copy). Floor recomputed at the same ratio as the
+	   previous floor/ceiling pair (19.375rem / 498px). */
+	width: clamp(16.8rem, calc(432 / 1440 * 100vw), 432px);
 	/* min-height, not height, per feedback (fixes the CTA overflowing past the card's bottom
 	   edge on narrower viewports). With a hard `height` the card's box was a fixed size that
 	   did NOT track its own content's real height — content grows toward the fixed CTA
@@ -1343,13 +1346,12 @@ body {
 	font-size: clamp(0.5rem, calc(16 / 1440 * 100vw), 16px);
 	line-height: 1.5;
 	height: 3em; /* 2 lines */
-	/* 440px -> 426px, tracking the card's own 540px -> 498px trim (card's full inner width is
-	   now 498 - 2*36 padding = 426, so this uses all of it, same "no extra side margin beyond
-	   padding" relationship the very first version of this card had). Still safely inside the
-	   "both cards' copy wraps to exactly 2 lines" window — personal-loan's copy (the longer of
-	   the two) needs >= 360px, car-loan's (the shorter) flips to 1 line at 460px — so 426px
-	   keeps both at 2 lines with room to spare on either side. */
-	max-width: 426px;
+	/* 426px -> 360px, tracking the card's own 498px -> 432px trim (card's full inner width is
+	   now 432 - 2*36 padding = 360px, so this uses all of it). This is right at personal-loan's
+	   measured 2-line minimum (360px) — confirmed via real-font measurement (Range.
+	   getClientRects()) at 355-370px that both cards' copy holds at 2 lines across that whole
+	   span, so 360px isn't a knife-edge value, just the narrowest the card's own width allows. */
+	max-width: 360px;
 	/* margin-inline handles horizontal centering; margin-block: 0 zeroes Bootstrap reboot's
 	   default p margin-bottom (1rem — 17.6px here, inflated by AMFC's 1.1rem root bug), which
 	   was silently adding trailing height on top of this element's own fixed `height` above and
