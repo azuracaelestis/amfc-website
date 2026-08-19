@@ -835,6 +835,63 @@ body {
 	width: 24.17%;
 }
 
+/* Ambient sparkle twinkle, card 2 only, per feedback — replaces the earlier hover/scroll-driven
+   micro-interactions on this icon. Runs continuously on page load, no hover or click trigger.
+   .bulb (glass + base stripes) is deliberately untouched here — no rule in this whole block
+   targets it — per the explicit "bulb stays completely static, no glow/scale/rotation/color"
+   requirement. Only .sparkle-a and .sparkle-b (see illustration-ksp-bulb.php) animate.
+
+   transform-box: fill-box + transform-origin: center (same pattern already used for
+   .amfc-illo-car__sparkle/.amfc-illo-personal__sparkle) so each sparkle scales from its own
+   middle, not the SVG's shared viewBox origin. The position of each sparkle relative to the bulb
+   is set on a separate, non-animated wrapping <g transform="translate(...)"> in the partial —
+   deliberately NOT on these classes themselves, because a CSS `transform` replaces an SVG
+   `transform` attribute rather than composing with it; putting the animated scale directly on an
+   already-positioned element would silently snap it back to the SVG's origin the moment the
+   animation started. */
+.sparkle-a,
+.sparkle-b {
+	transform-box: fill-box;
+	transform-origin: center;
+	/* Bright resting state — this is also the reduced-motion fallback (see below), so it has to
+	   be a value that reads correctly on its own, not mid-twinkle. */
+	opacity: 1;
+	transform: scale(1);
+}
+
+/* Opt-in under no-preference (same convention as the car/personal-loan illustration hovers
+   below) rather than opting out under `reduce` — behaviorally identical (prefers-reduced-motion:
+   reduce never gets this animation either way), but fails safe the same documented way: a
+   browser that doesn't report the feature at all matches no-preference and just gets the
+   ordinary twinkle, not an unstyled default. */
+@media (prefers-reduced-motion: no-preference) {
+	/* Durations deliberately not multiples of each other (2.4s / 3.1s, plus sparkle-b's own
+	   0.4s delay) so the two peaks drift apart instead of periodically lining up — a shared
+	   duration (or a 2s/4s-style multiple) would have them brighten together on a beat. */
+	.sparkle-a {
+		animation: amfc-sparkle-twinkle 2.4s ease-in-out infinite;
+	}
+
+	.sparkle-b {
+		animation: amfc-sparkle-twinkle 3.1s ease-in-out infinite 0.4s;
+	}
+}
+
+/* If this exact icon ever gets reused somewhere it repeats (a grid of identical cards, say) —
+   it's currently a single instance on this page, so this doesn't apply yet — every copy's
+   .sparkle-a would start its 2.4s cycle at the same page-load moment as every other copy's, so
+   the whole row would brighten in unison even though sparkle-a and sparkle-b stay offset from
+   EACH OTHER within any one card. Fixing that needs a per-instance randomized animation-delay
+   (e.g. set inline via a couple lines of JS at render time) added when that reuse actually
+   happens — not worth building against a repeat that doesn't exist on this page. */
+
+/* Soft pulse, not a mechanical blink: dim -> bright -> dim each cycle, eased throughout rather
+   than snapping between two states. Opacity/scale only — no fill, size, or position. */
+@keyframes amfc-sparkle-twinkle {
+	0%, 100% { opacity: 0.22; transform: scale(0.65); }
+	50% { opacity: 1; transform: scale(1.05); }
+}
+
 .amfc-philosophy__stat-icon--thumbsup {
 	left: 60.2%;
 	top: 10%;
