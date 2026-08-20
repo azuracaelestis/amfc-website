@@ -40,6 +40,12 @@
 	--amfc-footer-text: var(--amfc-blue-900);
 	/* Exact values confirmed by the user: inner #B9C8FF, outer #8EA4F5. */
 	--amfc-grad-hero: radial-gradient(circle at 50% 45%, #b9c8ff 0%, #8ea4f5 100%);
+	/* Same two stops, top-to-bottom instead of radial — matches the Figma MOBILE frame's own
+	   hero background asset exactly (extracted its gradient defs: stop-color #B9C8FF at 0%,
+	   #8EA4F5 at 100%, near-vertical). The desktop and mobile Figma frames use two different
+	   gradient shapes for this same background, so this is a genuinely separate token, not a
+	   duplicate — see .amfc-hero in amfc-2026.css for where each applies. */
+	--amfc-grad-hero-mobile: linear-gradient(180deg, #b9c8ff 0%, #8ea4f5 100%);
 
 	/* Typography — Noto Sans TC for Chinese headings/body, DM Sans for English subheadline
 	   copy (the hero eyebrow), matching the Figma source's font assignments. Neither is

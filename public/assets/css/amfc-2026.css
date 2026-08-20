@@ -288,13 +288,26 @@
 	outline-offset: 2px;
 }
 
+/* "+" glyph, not a 3-bar hamburger — matches the actual icon in the Figma mobile frame
+   (two crossed rounded bars, #2D50D7 / --amfc-accent), found once the real design was checked
+   rather than assumed. Bootstrap's own var (--bs-navbar-toggler-icon-bg) has no currentColor
+   hook, so the whole glyph is a replacement data-URI rather than a recolor of the original. */
 .amfc-nav__toggler .navbar-toggler-icon {
-	/* Same brand navy as the nav links, replacing Bootstrap's default black hamburger glyph —
-	   the icon is an inline SVG data-URI, so it's recolored via a currentColor-less approach:
-	   Bootstrap's own var (--bs-navbar-toggler-icon-bg) has no currentColor hook, so the bar
-	   color has to be baked into a replacement data-URI matching the original glyph exactly,
-	   just swapping its stroke color from Bootstrap's default to --amfc-text-heading (#1A2F86). */
-	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%231a2f86' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath stroke='%232d50d7' stroke-linecap='round' stroke-width='2.5' d='M12 4v16M4 12h16'/%3e%3c/svg%3e");
+	transition: transform var(--amfc-duration-base) var(--amfc-ease-out);
+}
+
+/* Plus -> cross, per common toggle convention — Bootstrap flips aria-expanded on the button
+   itself when its JS opens/closes the collapse, so that attribute is the trigger; no separate
+   JS needed for this part. */
+.amfc-nav__toggler[aria-expanded="true"] .navbar-toggler-icon {
+	transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-nav__toggler .navbar-toggler-icon {
+		transition: none;
+	}
 }
 
 /* Below `lg` (992px, matching navbar-expand-lg): the collapsed menu renders as its own
@@ -424,16 +437,45 @@
 	overflow: hidden;
 }
 
+/* Mobile-only: linear, not radial (see --amfc-grad-hero-mobile's own comment for why these are
+   two separate tokens, not a duplicate) — matches the Figma mobile frame's own background
+   asset. Same breakpoint as everywhere else needing a mobile/desktop split in this file. */
+@media (max-width: 991.98px) {
+	.amfc-hero {
+		background: var(--amfc-grad-hero-mobile);
+	}
+}
+
+/* Named grid areas (not just column count) because the CTA button's position relative to the
+   other two blocks genuinely differs per breakpoint, not just their width — see hero.php's own
+   comment on why .amfc-hero__cta is a direct grid child rather than nested in
+   .amfc-hero__content. Mobile: content, then photo, then cta, each full-width and stacked, per
+   the Figma mobile frame (the button sits below the photo there, not under the headline).
+   Row sizing is left to `auto` (unset) throughout — every block sizes to its own content. */
 .amfc-hero__grid {
 	display: grid;
 	grid-template-columns: 1fr;
+	grid-template-areas:
+		"content"
+		"photo"
+		"cta";
 	gap: var(--amfc-space-lg);
 	align-items: center;
 }
 
+.amfc-hero__content { grid-area: content; }
+.amfc-hero__photo-wrap { grid-area: photo; }
+.amfc-hero__cta { grid-area: cta; }
+
+/* Desktop: original two-column layout — content and cta stacked together in the left column,
+   photo spanning both rows in the right column (repeating "photo" across both grid-template-areas
+   rows makes it span them automatically, same mechanism CSS Grid always uses for area spanning). */
 @media (min-width: 992px) {
 	.amfc-hero__grid {
 		grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+		grid-template-areas:
+			"content photo"
+			"cta photo";
 	}
 }
 
@@ -556,6 +598,18 @@
    staggered reveal sequence (photo -> eyebrow -> headline -> CTA -> sparkles). */
 .amfc-hero__cta {
 	animation: amfc-hero-fade-up var(--amfc-duration-base) var(--amfc-ease-out) 700ms backwards;
+}
+
+/* Full-width on mobile, per the Figma mobile frame (button spans the content column exactly —
+   19px each side within the 375px canvas, i.e. the same edges .amfc-container's own padding
+   already produces, so width:100% is all that's needed, no extra margin). Desktop keeps the
+   shared .amfc-btn sizing (falls out of padding + text, not a fixed/full-width target) —
+   scoped here rather than on .amfc-btn itself so the service-card and app-download buttons
+   that also use it aren't affected. */
+@media (max-width: 991.98px) {
+	.amfc-hero__cta {
+		width: 100%;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {
