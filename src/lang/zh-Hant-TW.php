@@ -12,6 +12,7 @@ return [
     'nav.services' => '服務項目',
     'nav.news' => '最新消息',
     'nav.investor' => '發行資訊',
+    'nav.toggle' => '選單', // aria-label on the mobile hamburger toggle — never visible as text
     'nav.language' => 'Language',
     'nav.lang.en' => 'English',
     'nav.lang.ja' => '日本語',

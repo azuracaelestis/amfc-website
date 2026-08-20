@@ -272,6 +272,58 @@
 	transform: translateX(20px);
 }
 
+/* Mobile menu toggle — see header.php for why this exists (navbar-expand-lg had no way to
+   reveal its collapsed items before this). Bootstrap's own .navbar-toggler ships a black
+   hamburger icon var and a light focus box-shadow tuned for a dark navbar; both need
+   overriding here since this pill sits on a light/translucent background. */
+.amfc-nav__toggler {
+	border: none;
+	padding: 0.25rem;
+	box-shadow: none !important; /* !important matches Bootstrap's own focus-ring rule's
+	   specificity, which this needs to beat to actually remove the default blue glow */
+}
+
+.amfc-nav__toggler:focus-visible {
+	outline: 2px solid var(--amfc-accent);
+	outline-offset: 2px;
+}
+
+.amfc-nav__toggler .navbar-toggler-icon {
+	/* Same brand navy as the nav links, replacing Bootstrap's default black hamburger glyph —
+	   the icon is an inline SVG data-URI, so it's recolored via a currentColor-less approach:
+	   Bootstrap's own var (--bs-navbar-toggler-icon-bg) has no currentColor hook, so the bar
+	   color has to be baked into a replacement data-URI matching the original glyph exactly,
+	   just swapping its stroke color from Bootstrap's default to --amfc-text-heading (#1A2F86). */
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%231a2f86' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Below `lg` (992px, matching navbar-expand-lg): the collapsed menu renders as its own
+   rounded panel floating below the pill, rather than expanding the pill itself. The pill is
+   border-radius: 999px (a true stadium shape) — letting Bootstrap's default inline collapse
+   grow taller inside that shape would poke rectangular content out past the rounded corners.
+   A separate panel sidesteps that entirely, and reads as a standard "pill nav -> dropdown
+   sheet" mobile pattern rather than a deformed pill. */
+@media (max-width: 991.98px) {
+	.amfc-nav__collapse {
+		position: absolute;
+		top: calc(100% + 0.75rem);
+		left: 0;
+		right: 0;
+		background: var(--amfc-white);
+		border-radius: 24px;
+		box-shadow: var(--amfc-shadow-card);
+		padding: 1.25rem 1.5rem;
+	}
+
+	.amfc-nav__items {
+		width: 100%;
+	}
+
+	.amfc-nav__lang-toggle {
+		padding-left: 0; /* aligns under the section links once stacked full-width */
+	}
+}
+
 .amfc-nav__items {
 	gap: clamp(0.9rem, calc(35.1 / 1440 * 100vw), 2.19375rem); /* 39px at 1440px, -10% */
 }

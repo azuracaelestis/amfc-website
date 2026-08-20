@@ -6,25 +6,37 @@
 <header class="amfc-nav-pill">
 	<nav class="navbar navbar-expand-lg py-2">
 		<a class="navbar-brand amfc-nav__brand" href="/"><img src="<?= e(asset('images/header-logo.svg')) ?>" alt="<?= e(t('site.logo_alt')) ?>" height="47" /></a>
-		<ul class="navbar-nav ms-auto flex-row align-items-center amfc-nav__items">
-			<li class="nav-item"><a class="nav-link" href="#about"><?= e(t('nav.about')) ?></a></li>
-			<li class="nav-item"><a class="nav-link" href="#service"><?= e(t('nav.services')) ?></a></li>
-			<li class="nav-item"><a class="nav-link" href="#news"><?= e(t('nav.news')) ?></a></li>
-			<li class="nav-item"><a class="nav-link" href="#investor"><?= e(t('nav.investor')) ?></a></li>
-			<li class="nav-item dropdown">
-				<!-- TODO (AMFC integration): wire selection to the existing AMFC_2025_WEBSITE_lang
-				     cookie / set_lang() already in their custom.js, per CLAUDE.md -->
-				<button class="nav-link dropdown-toggle amfc-nav__lang-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-					<?= e(t('nav.language')) ?>
-					<img src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" width="12" height="12" aria-hidden="true" />
-				</button>
-				<ul class="dropdown-menu dropdown-menu-end">
-					<li><a class="dropdown-item" href="#" data-lang="en-US"><?= e(t('nav.lang.en')) ?></a></li>
-					<li><a class="dropdown-item" href="#" data-lang="ja-JP"><?= e(t('nav.lang.ja')) ?></a></li>
-					<li><a class="dropdown-item" href="#" data-lang="id-ID"><?= e(t('nav.lang.id')) ?></a></li>
-				</ul>
-			</li>
-		</ul>
+		<!-- Mobile menu toggle, per the Figma mobile frame (AMFC - Homepage (Mobile) Final1).
+		     navbar-expand-lg was already collapsing the nav below 992px by Bootstrap's own rules,
+		     but with no toggler present the collapsed items had no way to be revealed — they were
+		     just rendering wrapped/cramped inside the pill instead of hidden behind a button. This
+		     completes the standard Bootstrap 5 collapse pattern rather than introducing a new one;
+		     the Figma frame's own two-bar icon isn't reproduced here — Bootstrap's built-in toggler
+		     icon (already shipped in the CDN bundle, no new asset) covers the same job. -->
+		<button class="navbar-toggler amfc-nav__toggler" type="button" data-bs-toggle="collapse" data-bs-target="#amfcNavCollapse" aria-controls="amfcNavCollapse" aria-expanded="false" aria-label="<?= e(t('nav.toggle')) ?>">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse amfc-nav__collapse" id="amfcNavCollapse">
+			<ul class="navbar-nav ms-auto flex-column flex-lg-row align-items-start align-items-lg-center amfc-nav__items">
+				<li class="nav-item"><a class="nav-link" href="#about"><?= e(t('nav.about')) ?></a></li>
+				<li class="nav-item"><a class="nav-link" href="#service"><?= e(t('nav.services')) ?></a></li>
+				<li class="nav-item"><a class="nav-link" href="#news"><?= e(t('nav.news')) ?></a></li>
+				<li class="nav-item"><a class="nav-link" href="#investor"><?= e(t('nav.investor')) ?></a></li>
+				<li class="nav-item dropdown">
+					<!-- TODO (AMFC integration): wire selection to the existing AMFC_2025_WEBSITE_lang
+					     cookie / set_lang() already in their custom.js, per CLAUDE.md -->
+					<button class="nav-link dropdown-toggle amfc-nav__lang-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+						<?= e(t('nav.language')) ?>
+						<img src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" width="12" height="12" aria-hidden="true" />
+					</button>
+					<ul class="dropdown-menu dropdown-menu-end">
+						<li><a class="dropdown-item" href="#" data-lang="en-US"><?= e(t('nav.lang.en')) ?></a></li>
+						<li><a class="dropdown-item" href="#" data-lang="ja-JP"><?= e(t('nav.lang.ja')) ?></a></li>
+						<li><a class="dropdown-item" href="#" data-lang="id-ID"><?= e(t('nav.lang.id')) ?></a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
 	</nav>
 </header>
 <?php /* No spacer div: the pill is translucent and floats over the hero's gradient background
