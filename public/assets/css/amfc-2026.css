@@ -534,6 +534,14 @@
 		width: 100%;
 		padding-inline: 18.5px;
 	}
+
+	/* Same fix, same reasoning, now confirmed against the KSP section's own Figma mobile frame
+	   too: the shared .amfc-container formula gives ~51px per side at 375px wide, not the 20px
+	   this section actually needs. */
+	.amfc-philosophy .amfc-container {
+		width: 100%;
+		padding-inline: 20px;
+	}
 }
 
 .amfc-hero {
@@ -1006,6 +1014,25 @@ body {
 	text-decoration: none;
 }
 
+/* Mobile: intro block is center-aligned, per the Figma mobile frame (desktop's is left-aligned,
+   pinned beside the sticky card stack — a completely different composition since the stack
+   itself isn't side-by-side on mobile, see .amfc-philosophy__grid's own mobile column count
+   below). Also drops .amfc-philosophy__intro's 20px left shift — that was tuned to line up with
+   the hero headline in the DESKTOP two-column layout; centered text has no such alignment
+   target, and .amfc-philosophy .amfc-container above now owns the section's actual 20px margin
+   instead. Placed after the unconditional rules above (equal specificity, later wins) so these
+   actually apply — see the hero headline/eyebrow commit for why this ordering matters. */
+@media (max-width: 991.98px) {
+	.amfc-philosophy__intro {
+		margin-left: 0;
+		text-align: center;
+	}
+
+	.amfc-philosophy__heading {
+		align-items: center;
+	}
+}
+
 /* font-size: inherit is required here — AMFC's live custom.css has a blanket
    `*, html, body { font-size: 1.1rem }` rule. Because that rule DIRECTLY matches every
    element (including this span), it wins over normal inheritance from the parent heading
@@ -1451,6 +1478,22 @@ body {
 .amfc-philosophy__stat-card--3 .amfc-philosophy__stat-number,
 .amfc-philosophy__stat-card--4 .amfc-philosophy__stat-number {
 	font-size: 3.3rem;
+}
+
+/* Mobile: one shared, smaller size for all four cards' numbers, per the KSP mobile audit — the
+   desktop sizes above (3rem / 3.3rem) badly overflowed the much smaller mobile card and
+   collided with the top-right icon (confirmed via screenshot: "NT$200億+" wrapped to 2 lines
+   and painted under the coin). 26px chosen by measuring the actual longest string in this
+   section (card 1's real "NT$200億+", not the shorter placeholder text the one card the Figma
+   mobile frame happens to show) against the icon's own real horizontal start position — the
+   widest content still clears the icon with margin to spare at that size. Targets
+   .amfc-philosophy__stack .amfc-philosophy__stat-number (also (0,2,0) specificity) rather than
+   the plain base rule, and is placed after both the base rule and the per-card 3.3rem bump
+   above so it wins by source order over both for every card uniformly, with one declaration. */
+@media (max-width: 991.98px) {
+	.amfc-philosophy__stack .amfc-philosophy__stat-number {
+		font-size: clamp(1.25rem, calc(26 / 375 * 100vw), 26px);
+	}
 }
 
 .amfc-philosophy__stat-label {
