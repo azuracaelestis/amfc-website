@@ -992,9 +992,43 @@ body {
 	.amfc-philosophy__watermark-overlay {
 		display: block;
 		position: absolute;
-		inset: 0;
+		/* bottom: -200px (not inset: 0's implicit 0) extends the overlay 200px past
+		   .amfc-philosophy__stack's own real bottom edge. Needed once clip-path (below) was
+		   added: at the exact scroll position where card 4 settles, the overlay's OWN
+		   viewport-mapped rectangle — a plain block following normal scroll, unlike its sticky
+		   contents — had already scrolled far enough that its remaining visible extent (~530px
+		   from the current viewport's top) fell short of where the transform-offset mark needed
+		   to render (~660px), clipping its bottom ~130px off (confirmed via measuring both rects
+		   at that exact scroll position). The 200px buffer is comfortably past that shortfall;
+		   extending past the stack's natural end doesn't reintroduce the Funds-bleed bug this
+		   clip-path exists to prevent — the mark is still fully clipped well before Funds'
+		   own content is what's on screen (confirmed via screenshot after this change). */
+		inset: 0 0 -200px 0;
 		z-index: 0;
 		pointer-events: none;
+		/* Clips the sticky slot (and its transform-shifted image, see
+		   .amfc-philosophy__watermark-mobile) to the overlay's own box. Without this, the mark
+		   bled into Funds partnership below: once the slot's own sticky range is exhausted and
+		   it releases back into normal flow, its *document* position stops moving with the
+		   viewport, but the translateY offset on the image inside it is unconditional — as the
+		   released slot continued scrolling out of view, that fixed offset briefly dragged the
+		   image back INTO the viewport at an unrelated scroll position (confirmed via a
+		   screenshot: the mark showing up composited behind Funds' own body text, well past the
+		   KSP section it belongs to).
+
+		   clip-path: inset(0), not overflow: hidden — `overflow` other than visible on an
+		   ancestor makes it a valid "nearest scrolling ancestor" for a sticky descendant's own
+		   containing-block computation, which changed how .amfc-philosophy__watermark-slot's
+		   sticky range itself was resolved and made the mark disappear even during its normal,
+		   correctly-pinned window (confirmed: it stopped rendering at all in the "cards
+		   settled" screenshot after a first attempt with `overflow: hidden` here). clip-path
+		   produces the same visual clipping without being part of that spec algorithm, so the
+		   sticky computation for the slot is unaffected — it's scoped to this overlay alone,
+		   never touching .amfc-philosophy__stack's own overflow, which is what the cards'
+		   sticky containing-block chain actually runs through. Kept as a defensive backstop
+		   alongside the padding-top fix below, not as the primary mechanism — see that rule's
+		   own comment for why a transform-based offset couldn't rely on clipping alone. */
+		clip-path: inset(0);
 	}
 
 	/* top: var(--amfc-stack-top) — the exact same offset every card pins at, not a larger value
@@ -1004,9 +1038,18 @@ body {
 	   pinning by that same amount (confirmed: an earlier attempt used
 	   `calc(var(--amfc-stack-top) + 290px + 20px)` here directly, and the mark didn't appear
 	   until well after card 2 had already arrived — nearly a full card's worth of scroll late).
-	   The visual "peeking out below the pinned card" offset instead lives on `transform` below,
-	   on the image itself — transform doesn't participate in the sticky offset calculation, so
-	   it repositions the PAINTED pixels without touching when the trigger fires. */
+	   A later attempt tried moving the visual "peek out below the card" offset onto THIS
+	   element's own padding-top instead of the image's transform (below) — reasoning that a
+	   transform-based offset can desync from a released sticky element (see that rule's own
+	   comment for the bug this caused). That traded one bug for another: growing the slot's own
+	   box from ~158px to ~492px ate much more of .amfc-philosophy__watermark-overlay's shared
+	   sticky budget, and the slot started releasing before card 4 even finished settling
+	   (confirmed via a scroll sweep: at the scroll position where card 4 first lands on its
+	   shared pin point, the padded slot had already dropped from its pinned top:168 down to 38,
+	   mid-release) — failing "stay under while cards 2-4 stack on top" for the very last card.
+	   Keeping the slot itself short (no padding) preserves its original, already-verified
+	   release timing; the offset instead lives on the image's transform, backstopped by
+	   clip-path on the overlay (above) for the case that transform doesn't handle on its own. */
 	.amfc-philosophy__watermark-slot {
 		position: sticky;
 		top: var(--amfc-stack-top);
@@ -1023,11 +1066,15 @@ body {
 		width: clamp(13rem, calc(300 / 375 * 100vw), 300px);
 		height: auto;
 		/* Pushes the mark down to peek out below the pinned card instead of sitting directly
-		   behind it (same top offset as the card otherwise, see .amfc-philosophy__watermark-slot
-		   above) — a transform, not margin, specifically so it doesn't feed back into the
-		   slot's own sticky trigger timing. 290px matches .amfc-philosophy__stat-card's mobile
-		   max-width at >=375px viewports; 20px matches .amfc-philosophy__stack's own card-to-card
-		   gap; +24px more per feedback, moving the mark further down. */
+		   behind it — a transform, not margin/padding, specifically so it doesn't feed back into
+		   the SLOT's own sticky release timing (see that rule's comment for why that matters).
+		   The tradeoff: transform doesn't track the slot's release state, so once the slot
+		   releases and resumes normal scrolling, this offset keeps applying on top of that —
+		   without .amfc-philosophy__watermark-overlay's clip-path backstop (above), that
+		   combination is exactly what let the mark bleed into Funds partnership below.
+		   290px matches .amfc-philosophy__stat-card's mobile max-width at >=375px viewports;
+		   20px matches .amfc-philosophy__stack's own card-to-card gap; +24px more per feedback,
+		   moving the mark further down. */
 		transform: translateY(calc(290px + 20px + 24px));
 		opacity: 1; /* static, not wired to --amfc-philosophy-watermark-fade — that scroll-driven
 		               fade exists only to hide desktop's viewport-fixed mark before it can bleed
@@ -1667,6 +1714,20 @@ body {
 	background: var(--amfc-surface);
 }
 
+/* Mobile: shares .amfc-container's mobile margin bug with every other section here (the shared
+   class's width/padding formula gives ~51px per side at 375px wide, not this section's real
+   20px) — same fix as .amfc-hero/.amfc-philosophy's own overrides, confirmed against the
+   connected Figma mobile frame (node 145:371, "Funds"). This is the fix for the wrapping bug
+   flagged (but out of scope) while the KSP section above was being built: the row below being
+   forced into a side-by-side desktop layout inside an already-too-narrow container left the
+   body text with as little as ~44px of real width, wrapping it almost one character per line. */
+@media (max-width: 991.98px) {
+	.amfc-funds .amfc-container {
+		width: 100%;
+		padding-inline: 20px;
+	}
+}
+
 .amfc-funds__row {
 	display: flex;
 	align-items: center;
@@ -1688,6 +1749,35 @@ body {
 	/* 16px at the 1440px Figma reference width, fluid-scaled below it */
 	font-size: clamp(0.875rem, calc(16 / 1440 * 100vw), 1rem);
 	line-height: 1.8;
+}
+
+/* Mobile: the Figma mobile frame stacks logo above text (not desktop's side-by-side row) —
+   checked via get_design_context on node 145:371. Real values from that node: outer padding
+   20px inline / 48px block, 32px gap between logo and text, logo 173x37px, body 16px/22px
+   line-height, centered. Placed after every unconditional rule above (equal specificity, later
+   wins) — same reasoning documented throughout this file for why mobile overrides need to come
+   after their base rules. */
+@media (max-width: 991.98px) {
+	.amfc-funds {
+		padding-block: 48px;
+	}
+
+	.amfc-funds__row {
+		flex-direction: column;
+		gap: 32px;
+	}
+
+	.amfc-funds__logo {
+		width: 173px;
+		height: 37px;
+	}
+
+	.amfc-funds__body {
+		width: 100%;
+		font-size: 16px;
+		line-height: 22px;
+		text-align: center;
+	}
 }
 
 /* --- Services --- */
