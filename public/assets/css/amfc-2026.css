@@ -216,12 +216,21 @@
 /* Mobile: pull the white block up so it covers the BOTTOM PORTION of the mobile hero photo
    specifically — not just closing the gap below it (which -94.4px already did) but actually
    overlapping into the photo. Was -260px (a ~71px overlap matching the real Figma mobile
-   frame's own ratio), moved back down 32px per follow-up feedback to -228px (~39px overlap) —
-   the button's own position relative to the photo (its ~35px gap below it, unrelated to this
-   margin) stays exactly as it was; only the white block itself shifted. */
+   frame's own ratio), moved back down 32px per follow-up feedback to -228px (~39px overlap).
+
+   -178px here (not -228px): .amfc-hero__cta picked up its own margin-top: -48.4px in the same
+   follow-up round (see that rule) to close the button-to-white-block gap to 24px. A negative
+   margin on the button shrinks .amfc-hero's total flow height by roughly that same amount, and
+   this margin is a FIXED offset from wherever the block would sit in NORMAL flow (right after
+   .amfc-hero) — so without a matching adjustment here, the white block would drift up by
+   roughly that same amount too (confirmed: it did, on the first attempt, and the
+   button-to-white-block gap barely changed despite the button visibly moving, because both
+   shifted together). Added +50 here (-228 -> -178) to cancel that coupling and keep the white
+   block at the exact position the prior commit set it to; the two margins were then converged
+   together via measurement, which is why they aren't a clean 1:1 pair. */
 @media (max-width: 991.98px) {
 	.amfc-curve-top {
-		margin-top: -228px;
+		margin-top: -178px;
 	}
 }
 
@@ -793,6 +802,15 @@
 		   button has no other explicit position). */
 		position: relative;
 		z-index: 2;
+		/* Pulled up so the gap between the white block's own top edge and the button is 24px,
+		   per feedback — was ~74px (the button had stayed at its original distance below the
+		   photo while the white block moved independently in the prior two commits). -48.4px
+		   measured directly against the white block's real position (getBoundingClientRect) and
+		   tuned iteratively, not derived by formula in one shot — moving this margin also
+		   shrinks .amfc-hero's own flow height, which shifts .amfc-curve-top's position too
+		   (see that rule's own comment), so the two values were converged together rather than
+		   computed independently. */
+		margin-top: -48.4px;
 	}
 
 	.amfc-hero__cta .amfc-btn__label {
