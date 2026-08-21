@@ -59,12 +59,22 @@
 	     exactly with the hero headline above it — same reasoning as hero.php. -->
 	<div class="amfc-container">
 		<div class="amfc-philosophy__grid">
-			<div class="amfc-philosophy__intro" data-aos="fade-up" data-aos-once="true">
-				<p class="amfc-eyebrow amfc-philosophy__eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
-				<h2 class="amfc-philosophy__heading">
-					<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1_prefix')) ?><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line1_highlight')) ?></span></span>
-					<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line2_highlight')) ?></span><?= e(t('home.philosophy.headline_line2_suffix')) ?></span>
-				</h2>
+			<!-- .amfc-philosophy__intro-slot: on desktop this is a transparent pass-through (see its
+			     own align-self: stretch in amfc-2026.css, which keeps it filling the same tall
+			     grid area the intro itself used to occupy directly, so the desktop sticky travel
+			     is unaffected). On mobile it's what bounds .amfc-philosophy__intro's own sticky
+			     range to roughly "until card 4 settles" rather than the whole grid (intro+stack
+			     combined) — see that class's own comment for why a shorter, dedicated container is
+			     needed for the release-ordering feedback: eyebrow/headline stay while the cards
+			     stack, then go up FIRST, before the cards' own release, before the watermark's. -->
+			<div class="amfc-philosophy__intro-slot">
+				<div class="amfc-philosophy__intro" data-aos="fade-up" data-aos-once="true">
+					<p class="amfc-eyebrow amfc-philosophy__eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
+					<h2 class="amfc-philosophy__heading">
+						<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1_prefix')) ?><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line1_highlight')) ?></span></span>
+						<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line2_highlight')) ?></span><?= e(t('home.philosophy.headline_line2_suffix')) ?></span>
+					</h2>
+				</div>
 			</div>
 			<div class="amfc-philosophy__stack">
 				<!-- Mobile-only (see amfc-2026.css; display:none above 991.98px). Two nested wrappers,

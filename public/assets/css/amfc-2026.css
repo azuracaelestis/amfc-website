@@ -1097,6 +1097,9 @@ body {
 	   <section>, entirely unaffected by this grid's internal padding — only the section's
 	   total height grows to make room, content doesn't overflow it). */
 	padding-top: 90px;
+	/* Containing block for .amfc-philosophy__intro-slot's mobile position: absolute (see that
+	   rule) — harmless on desktop, where the slot stays a normal, non-positioned grid item. */
+	position: relative;
 }
 
 @media (min-width: 992px) {
@@ -1109,6 +1112,19 @@ body {
 		position: sticky;
 		top: clamp(7rem, 20vh, 12rem);
 	}
+}
+
+/* Wraps .amfc-philosophy__intro (see philosophy.php). On desktop, align-self: stretch keeps this
+   filling the same tall grid area .amfc-philosophy__intro used to occupy directly as a bare grid
+   item — despite .amfc-philosophy__grid's own align-items: start, a sticky descendant's
+   containing block for release purposes is still the full grid AREA, not its own shrunk-to-content
+   box, so this preserves that same behavior with one extra level of nesting in between: the
+   wrapper stretches to the area's height, and the (still sticky) intro inside travels within
+   THAT tall box exactly as it would have within the grid area itself. On mobile this same
+   element does the opposite job, bounding the intro to a SHORT box instead — see its own mobile
+   block for why. */
+.amfc-philosophy__intro-slot {
+	align-self: stretch;
 }
 
 /* Shifted 20px right (matching .amfc-hero__content's identical shift so this heading lines up
@@ -1166,17 +1182,21 @@ body {
 		   sits in between and isn't expressible as simple arithmetic. */
 		margin-top: 96px;
 		text-align: center;
-		/* NOT sticky (reverted per feedback, screenshot-confirmed): a prior attempt made this
-		   sticky, matching the desktop two-column layout's own intro (see the min-width: 992px
-		   block above). On mobile's single stacked column that produced a real bug instead of
-		   the desktop effect it was copying: as each card climbed up from below toward its own
-		   pin point, it visibly passed BEHIND/THROUGH the already-pinned headline before
-		   settling — the headline is a fixed viewport rectangle throughout the whole card
-		   sequence, but a climbing card's current (pre-settle) position isn't, so at some point
-		   during that climb the two occupy overlapping screen space no static gap can prevent.
-		   Plain normal flow means the headline scrolls up and off-screen on its own, well before
-		   any card arrives — "move up before the cards," per feedback — same as this element's
-		   behavior before the sticky attempt. */
+		/* Sticky again, per feedback — after a first attempt was reverted for overlapping the
+		   card stack (a climbing, not-yet-settled card visibly passing behind/through the
+		   already-pinned headline; see git log), the actual ask turned out to be more specific
+		   than plain "sticky" or "not sticky": stay pinned for the WHOLE time the four cards are
+		   stacking, then release and scroll away BEFORE the cards' own eventual release, before
+		   the watermark's. That release-ordering is what .amfc-philosophy__intro-slot's mobile
+		   block (below) engineers — bounding this element's sticky range to roughly "until card 4
+		   settles" via a dedicated container, rather than the whole grid (which is what caused
+		   both the overlap bug above AND, if simply left sticky, would keep this pinned through
+		   the entire stack + tail, releasing LAST instead of first). z-index: 5 (unchanged from
+		   the reverted attempt) still keeps it above every card and the watermark for as long as
+		   they're on screen together. */
+		position: sticky;
+		top: 24px;
+		z-index: 5;
 	}
 
 	.amfc-philosophy__heading {
@@ -1184,12 +1204,57 @@ body {
 		font-size: 24px; /* per feedback, replacing the desktop-tuned 42px */
 	}
 
-	/* gap: 32px per feedback (was 12px, tuned tight to fit the OLD 42px headline within the 9:16
-	   budget — see .amfc-philosophy__stack's mobile --amfc-stack-top override, recalculated
-	   alongside this change now that the headline above is both shorter and smaller). */
+	/* gap: 32px per feedback — no longer has a visible effect now that .amfc-philosophy__intro-slot
+	   is position: absolute on mobile (out of the grid's normal flow, see that rule), leaving only
+	   one real flow item for this row-gap to apply between. Left in place rather than removed:
+	   still correct/harmless, and would matter again if intro-slot's mobile positioning is ever
+	   revisited. .amfc-philosophy__stack's own margin-top (see that rule) is what actually
+	   reproduces this spacing now. */
 	.amfc-philosophy__grid {
 		padding-top: 0;
 		gap: 32px;
+	}
+
+	/* Bounds .amfc-philosophy__intro's sticky range on mobile — see that element's own comment
+	   for the release-ordering feedback this exists for (headline stays through the whole
+	   4-card stack, then releases BEFORE the cards' own eventual release, before the
+	   watermark's). Same two-box technique as .amfc-philosophy__watermark-overlay /
+	   -slot: position: absolute here (so it doesn't add real flow height the way a tall sticky
+	   box would — confirmed as a real bug on the watermark's own first attempt at this, see that
+	   rule's git history) with the actually-sticky intro living inside it.
+
+	   height: 1100px is deliberately shorter than the stack's own real total height (four
+	   290px cards + three 20px gaps + the 30vh tail runway, comfortably over 1400px at typical
+	   mobile viewport heights) — specifically so this releases well before the cards do. The
+	   target is "roughly until card 4 settles": from where the intro first starts pinning, that's
+	   about three more card handoffs (card 1 -> 2 -> 3 -> 4), each one taking roughly one card's
+	   height + gap (290 + 20 = 310px) of scroll, i.e. ~930px, plus this element's own ~112px
+	   height and the 32px gap that used to sit between intro and the stack = ~1074px; 1100px
+	   keeps a small buffer past that so the headline is still visible as card 4 finishes landing,
+	   without extending anywhere near the tail runway where the cards themselves finally release. */
+	.amfc-philosophy__intro-slot {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 1100px;
+		z-index: 5;
+		pointer-events: none; /* re-enabled on .amfc-philosophy__intro itself, below — this box is
+		                          much taller than the visible intro text, and shouldn't block
+		                          clicks/taps on the cards underneath for the rest of its height */
+	}
+
+	.amfc-philosophy__intro {
+		pointer-events: auto;
+	}
+
+	/* Replaces the real flow height .amfc-philosophy__intro-slot used to contribute as a normal
+	   grid row before it became position: absolute (above) — without this, .amfc-philosophy__stack
+	   would start at the very top of the grid instead of below the intro, visibly jumping up.
+	   96px (.amfc-philosophy__intro's own margin-top) + ~112px (its real height) + 32px (the grid
+	   gap that no longer applies between an out-of-flow item and a real one) = ~240px. */
+	.amfc-philosophy__stack {
+		margin-top: 240px;
 	}
 }
 
