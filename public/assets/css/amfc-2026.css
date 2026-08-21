@@ -1025,11 +1025,24 @@ body {
 @media (max-width: 991.98px) {
 	.amfc-philosophy__intro {
 		margin-left: 0;
+		/* Replaces the desktop-tuned 62px (that value exists to align this content with the
+		   sticky two-column layout above — irrelevant on mobile's single stacked column) with
+		   the real target: 96px from the hero CTA button's bottom edge to this eyebrow, per
+		   feedback. .amfc-philosophy__grid's own 90px padding-top is zeroed below so this
+		   margin is the ONLY offset between the two, measured directly via CDP
+		   (getBoundingClientRect) against the live .amfc-hero__cta bottom edge rather than
+		   computed from the desktop numbers, since .amfc-curve-top's mobile overlap tuning
+		   sits in between and isn't expressible as simple arithmetic. */
+		margin-top: 96px;
 		text-align: center;
 	}
 
 	.amfc-philosophy__heading {
 		align-items: center;
+	}
+
+	.amfc-philosophy__grid {
+		padding-top: 0;
 	}
 }
 
@@ -1415,31 +1428,13 @@ body {
 	transform: scale(1) rotate(var(--amfc-card-tilt));
 }
 
-/* Mobile: a narrow sticky pile reads badly — fall back to a plain vertical list. */
-@media (max-width: 991.98px) {
-	.amfc-philosophy__stack {
-		gap: var(--amfc-space-lg);
-	}
-	/* Three selectors match every specificity tier introduced above (the (0,2,0) pre-trigger
-	   grow-in scale, and the (0,3,0) settled tilt+scale restore) — otherwise one of them would
-	   win over this plain (0,1,0) reset and leave mobile cards stuck scaled-down or re-tilted
-	   in this flat list layout.
-
-	   position: relative, not static: static would also drop the card as the containing block
-	   for its absolutely-positioned .amfc-philosophy__stat-icon, which would then jump to
-	   position itself against the next positioned ancestor up the tree instead of the card.
-	   relative removes the same sticky/stacking behaviour static would while keeping the icon
-	   correctly contained. */
-	.amfc-philosophy__stat-card,
-	.amfc-philosophy__stat-card[data-aos],
-	.amfc-philosophy__stat-card[data-aos].aos-animate {
-		position: relative;
-		transform: none;
-	}
-	.amfc-philosophy__stack-tail {
-		height: 0;
-	}
-}
+/* Mobile previously fell back to a plain flattened vertical list here (position: relative,
+   transform: none, zeroed .amfc-philosophy__stack-tail) on the theory that a narrow sticky pile
+   would read badly. Per feedback, mobile should get the exact same micro-interaction as desktop
+   instead — sticky pin, fade+grow-in on cards 2-4, and the per-card left/right tilt — just at
+   the smaller mobile card size, so this override is removed rather than kept. .amfc-stack-top
+   (viewport-height-relative, not width-relative) and .amfc-philosophy__stack-tail's 30vh runway
+   both already work unchanged at any width; nothing here was actually desktop-specific. */
 
 .amfc-philosophy__stat-tag {
 	display: inline-block;
@@ -1480,19 +1475,22 @@ body {
 	font-size: 3.3rem;
 }
 
-/* Mobile: one shared, smaller size for all four cards' numbers, per the KSP mobile audit — the
-   desktop sizes above (3rem / 3.3rem) badly overflowed the much smaller mobile card and
-   collided with the top-right icon (confirmed via screenshot: "NT$200億+" wrapped to 2 lines
-   and painted under the coin). 26px chosen by measuring the actual longest string in this
-   section (card 1's real "NT$200億+", not the shorter placeholder text the one card the Figma
-   mobile frame happens to show) against the icon's own real horizontal start position — the
-   widest content still clears the icon with margin to spare at that size. Targets
-   .amfc-philosophy__stack .amfc-philosophy__stat-number (also (0,2,0) specificity) rather than
-   the plain base rule, and is placed after both the base rule and the per-card 3.3rem bump
-   above so it wins by source order over both for every card uniformly, with one declaration. */
+/* Mobile: 42px per feedback, one shared size for all four cards' numbers (same reasoning as the
+   removed 26px override this replaces — a single uniform mobile size across all four cards
+   rather than per-card values). Targets .amfc-philosophy__stack .amfc-philosophy__stat-number
+   (also (0,2,0) specificity) rather than the plain base rule, and is placed after both the base
+   rule and the per-card 3.3rem bump above so it wins by source order over both for every card
+   uniformly, with one declaration.
+
+   Note: at 42px, card 1's real content ("NT$200億+", the section's widest number) measures
+   ~174px wide and starts overlapping the coin icon's left edge (icon starts ~188px from the
+   card's own left padding at the 335px mobile card width) — the icon itself hasn't been
+   resized/repositioned for mobile yet (still using the desktop crop-box percentages, see
+   .amfc-philosophy__stat-icon above), so this is a known follow-up, not something this
+   font-size change alone can avoid at the requested 42px. */
 @media (max-width: 991.98px) {
 	.amfc-philosophy__stack .amfc-philosophy__stat-number {
-		font-size: clamp(1.25rem, calc(26 / 375 * 100vw), 26px);
+		font-size: clamp(1.75rem, calc(42 / 375 * 100vw), 42px);
 	}
 }
 
@@ -1508,6 +1506,16 @@ body {
 	   label distance specifically; .amfc-philosophy__stat-tag's margin-bottom (above) now
 	   independently covers tag-to-number. */
 	margin-top: clamp(0.75rem, calc(24 / 1440 * 100vw), 24px);
+}
+
+/* Mobile: 24px semibold per feedback — overrides the desktop 1.2rem/400 above (that pair was
+   deliberately reverted from 600 back to 400 for desktop per earlier feedback; this is a
+   separate, mobile-only ask, not a re-reversal of that decision). */
+@media (max-width: 991.98px) {
+	.amfc-philosophy__stat-label {
+		font-size: clamp(1rem, calc(24 / 375 * 100vw), 24px);
+		font-weight: 600;
+	}
 }
 
 /* --- Funds partnership --- */
