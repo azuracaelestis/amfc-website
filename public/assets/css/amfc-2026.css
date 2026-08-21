@@ -1919,6 +1919,20 @@ body {
 	text-align: center;
 }
 
+/* Mobile: same .amfc-container margin-bug fix as every other section here (the shared class's
+   formula gives ~35px per side at 375px wide, not this section's real margin) — 18px, not the
+   20px used elsewhere, confirmed via the connected Figma mobile frame: the services grid sits
+   at x=18 within the 375px-wide frame, and its cards are 339px wide (339 + 18 + 18 = 375). Each
+   section's own real margin has turned out slightly different when actually checked against
+   Figma (hero: 18.5px, philosophy/funds: 20px) rather than being one site-wide constant, so
+   this is this section's own value, not a copy-paste of the others. */
+@media (max-width: 991.98px) {
+	.amfc-services .amfc-container {
+		width: 100%;
+		padding-inline: 18px;
+	}
+}
+
 .amfc-services__header {
 	display: flex;
 	flex-direction: column;
@@ -1948,6 +1962,15 @@ body {
 	font-weight: 700;
 	/* 42px at the 1440px Figma reference width, fluid-scaled below it */
 	font-size: clamp(1.75rem, calc(42 / 1440 * 100vw), 42px);
+}
+
+/* Mobile: pinned to an exact 24px, per feedback — the desktop clamp above floors at 1.75rem
+   (30.8px under AMFC's 1.1rem root bug), which is both the wrong px value and not a clean one.
+   Placed after the unconditional rule (equal specificity, later wins). */
+@media (max-width: 991.98px) {
+	.amfc-services__heading {
+		font-size: 24px;
+	}
 }
 
 /* flex, not grid — .amfc-service-card now has a fixed (fluid-scaled) width of its own, so the
@@ -2033,6 +2056,16 @@ body {
 @media (max-width: 991.98px) {
 	.amfc-service-card {
 		padding-inline: 20px;
+		/* 339x462px, confirmed via the connected Figma mobile frame (node 145:384/442, inside
+		   "Frame 427321498" — the services section — at x=18 within a 375px-wide frame, i.e. an
+		   18px margin each side: 339 + 18 + 18 = 375, matching .amfc-services .amfc-container's
+		   own mobile padding below). A fixed height, not min-height like the desktop rule above:
+		   the desktop min-height exists because desktop's fluid clamp() let the card narrow
+		   enough on some viewports that its own content could outgrow a fixed box: mobile is a
+		   single fixed width, not fluid, so that failure mode doesn't apply here, and a fixed
+		   height is what the design actually specifies. */
+		width: 339px;
+		height: 462px;
 	}
 }
 
@@ -2134,6 +2167,16 @@ body {
 	   was never the intended source of spacing below it — see .amfc-service-card__title for the
 	   matching fix on the title side of this same gap. */
 	margin: 0 auto;
+}
+
+/* Mobile: pinned to an exact 16px, per feedback — the desktop clamp above floors at 0.5rem
+   (8.8px under AMFC's 1.1rem root bug), badly undersized and unreadable. height/max-width are
+   left as the desktop values; see the live check after this change for whether the copy still
+   holds 2 lines at the card's new, narrower 339px mobile width. */
+@media (max-width: 991.98px) {
+	.amfc-service-card__body {
+		font-size: 16px;
+	}
 }
 
 /* --- Service-card illustration hovers, per spec ---
