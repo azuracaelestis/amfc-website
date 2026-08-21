@@ -429,6 +429,23 @@
 	padding-inline: clamp(0.9rem, calc(28.8 / 1440 * 100vw), 1.8rem);
 }
 
+/* Hero-only mobile margin, per feedback ("338 x 48px" implies an 18.5px side margin at the
+   375px reference width: 375 - 338 = 37, split evenly). The shared .amfc-container formula
+   above stacks TWO reductions (the outer `2 * --amfc-space-lg` width cut, then its own
+   padding-inline on top) that were tuned for desktop's wider gutter — at 375px wide that comes
+   to ~51px per side, not the ~18.5px the Figma mobile frame actually uses, which is why the
+   338px CTA width above would otherwise overflow past this container's own padding. Scoped to
+   .amfc-hero specifically (not a blanket change to .amfc-container) since the other sections'
+   own mobile margins haven't been checked against their Figma frames yet — this selector's
+   extra specificity (0,2,0 vs .amfc-container's 0,1,0) wins outright, no source-order
+   dependency to get wrong this time. */
+@media (max-width: 991.98px) {
+	.amfc-hero .amfc-container {
+		width: 100%;
+		padding-inline: 18.5px;
+	}
+}
+
 .amfc-hero {
 	background: var(--amfc-grad-hero);
 	/* Top padding clears the fixed translucent nav pill (top:1.5rem + its own height) */
@@ -505,6 +522,28 @@
 	letter-spacing: 0.05em;
 	/* Headline-to-button gap: 48px at the 1440px reference, same fluid-scaling technique */
 	margin-bottom: clamp(1.5rem, calc(48 / 1440 * 100vw), 3rem);
+}
+
+/* Mobile-only eyebrow/headline font-sizes, per feedback ("this ratio is for 375px width
+   screen") — same clamp(floor, calc(N / 375 * 100vw), Npx) fluid-scaling technique already
+   used everywhere else in this file for the 1440px desktop reference, just keyed to the mobile
+   Figma frame's own 375px reference width instead. Placed AFTER the unconditional desktop
+   rules above rather than earlier in the file: both rules share the same specificity (single
+   class selector), and a media query's condition being true doesn't change that — when two
+   equal-specificity rules both apply, source order decides the winner regardless of which one
+   is wrapped in a media query, so this has to come later in the file to actually win. (First
+   pass got this backwards — placed the override earlier in the file, and it silently lost to
+   the unconditional rule below it despite the media query matching.) */
+@media (max-width: 991.98px) {
+	.amfc-hero__eyebrow {
+		/* 16px at the 375px mobile reference width, fluid-scaled below it, per feedback */
+		font-size: clamp(0.75rem, calc(16 / 375 * 100vw), 16px);
+	}
+
+	.amfc-hero__headline {
+		/* 42px at the 375px mobile reference width, fluid-scaled below it, per feedback */
+		font-size: clamp(1.5rem, calc(42 / 375 * 100vw), 42px);
+	}
 }
 
 /* Masked reveal: the outer span clips (overflow:hidden) while the inner span slides up from
@@ -587,6 +626,36 @@
 	to { opacity: 1; transform: translateX(-40px) scale(1.08); }
 }
 
+/* Mobile: matches the Figma mobile frame's REAL photo size, not an arbitrary multiplier — first
+   pass here just guessed "+30%" on top of the desktop scale(1.08), which (combined with a
+   necessary container-width fix elsewhere) ended up ~61% larger than intended. Checked the
+   actual Figma node instead (145:320, "hero-banner-draft 1"): its photo container is 373px wide
+   against a 375px canvas — i.e. genuinely full-bleed, breaking out of the same ~18.5px margin
+   the headline/button sit inside, not just a bigger version of the contained photo. */
+@keyframes amfc-hero-photo-in-mobile {
+	from { opacity: 0; transform: scale(0.92); }
+	to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 991.98px) {
+	/* Negative margin-inline pulls the wrapper flush to the viewport edges, escaping
+	   .amfc-hero .amfc-container's 18.5px padding (see that rule's own comment) — matches
+	   Figma's own photo container starting at x=0 rather than sitting in the text column. */
+	.amfc-hero__photo-wrap {
+		margin-inline: -18.5px;
+		width: calc(100% + 37px);
+	}
+
+	.amfc-hero__photo {
+		/* No permanent enlargement/shift on mobile: desktop's scale(1.08) + translateX(-40px)
+		   were tuned for ITS two-column, intentionally off-center composition (see that rule's
+		   own comment) — on mobile the photo is already full-bleed and centered by the wrapper
+		   above, so it just fills that width directly with no extra transform needed. */
+		transform: none;
+		animation-name: amfc-hero-photo-in-mobile;
+	}
+}
+
 @keyframes amfc-hero-sparkle-in {
 	from { opacity: 0; transform: scale(0); }
 	to { opacity: 0.8; transform: scale(1); }
@@ -600,15 +669,29 @@
 	animation: amfc-hero-fade-up var(--amfc-duration-base) var(--amfc-ease-out) 700ms backwards;
 }
 
-/* Full-width on mobile, per the Figma mobile frame (button spans the content column exactly —
-   19px each side within the 375px canvas, i.e. the same edges .amfc-container's own padding
-   already produces, so width:100% is all that's needed, no extra margin). Desktop keeps the
-   shared .amfc-btn sizing (falls out of padding + text, not a fixed/full-width target) —
+/* 338x48px at the 375px mobile reference width, fluid-scaled below it, per feedback — same
+   clamp(floor, calc(N / 375 * 100vw), Npx) technique as the eyebrow/headline above. Desktop
+   keeps the shared .amfc-btn sizing (falls out of padding + text, not a fixed target) —
    scoped here rather than on .amfc-btn itself so the service-card and app-download buttons
-   that also use it aren't affected. */
+   that also use it aren't affected.
+
+   padding-block reduced from .amfc-btn's desktop 14px to a smaller mobile value, and the
+   label gets an explicit line-height:1 — both needed so the larger 24px label text (below)
+   still fits inside the fixed 48px height without being clipped by .amfc-btn's own
+   overflow:hidden (there for the glossy highlight's rounded corners, but it clips anything
+   else that overflows too): 24px line-height-1 text + 2 * ~9px padding = ~42px, comfortably
+   under 48px. */
 @media (max-width: 991.98px) {
 	.amfc-hero__cta {
-		width: 100%;
+		width: clamp(15.75rem, calc(338 / 375 * 100vw), 338px);
+		height: clamp(2.75rem, calc(48 / 375 * 100vw), 48px);
+		padding-block: clamp(0.5rem, calc(9 / 375 * 100vw), 9px);
+	}
+
+	.amfc-hero__cta .amfc-btn__label {
+		/* 24px at the 375px mobile reference width, fluid-scaled below it, per feedback */
+		font-size: clamp(1.125rem, calc(24 / 375 * 100vw), 24px);
+		line-height: 1;
 	}
 }
 
