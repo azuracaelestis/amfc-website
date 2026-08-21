@@ -1166,17 +1166,17 @@ body {
 		   sits in between and isn't expressible as simple arithmetic. */
 		margin-top: 96px;
 		text-align: center;
-		/* Sticky here too, per feedback — "make the headline sticky while the cards below are
-		   stacking," the same idea the desktop two-column layout already has (see the
-		   min-width: 992px block above), just single-column instead of side-by-side. margin-top
-		   above still governs where it FIRST appears in normal flow; top here is only where it
-		   pins once scrolled that far. z-index: 5 keeps it above every card (1-4) and the
-		   watermark (0) for the whole time both are on screen together — without it, DOM order
-		   alone would let a card at an equal-or-higher z-index paint over it during the overlap
-		   window right as the intro finishes pinning and card 1 arrives. */
-		position: sticky;
-		top: 24px;
-		z-index: 5;
+		/* NOT sticky (reverted per feedback, screenshot-confirmed): a prior attempt made this
+		   sticky, matching the desktop two-column layout's own intro (see the min-width: 992px
+		   block above). On mobile's single stacked column that produced a real bug instead of
+		   the desktop effect it was copying: as each card climbed up from below toward its own
+		   pin point, it visibly passed BEHIND/THROUGH the already-pinned headline before
+		   settling — the headline is a fixed viewport rectangle throughout the whole card
+		   sequence, but a climbing card's current (pre-settle) position isn't, so at some point
+		   during that climb the two occupy overlapping screen space no static gap can prevent.
+		   Plain normal flow means the headline scrolls up and off-screen on its own, well before
+		   any card arrives — "move up before the cards," per feedback — same as this element's
+		   behavior before the sticky attempt. */
 	}
 
 	.amfc-philosophy__heading {
@@ -1233,23 +1233,13 @@ body {
 	position: relative;
 }
 
-/* Mobile: --amfc-stack-top switches from the desktop value's viewport-height-relative clamp (it
-   only had to clear the nav) to a fixed px derived from real content height, per feedback that
-   the eyebrow, headline, card stack, and watermark together should fit within one 9:16 screen
-   (375x667 at the mobile reference width). With the headline now sticky above the stack (see
-   .amfc-philosophy__intro's mobile block) rather than scrolling away first, the stack's own pin
-   point has to start BELOW wherever the headline settles, not just below the nav — 24px
-   (.amfc-philosophy__intro's own sticky top) + ~112.16px (its real measured height, re-measured
-   after the headline's font-size dropped to 24px per feedback) + 32px (.amfc-philosophy__grid's
-   mobile gap, also raised to 32px by that same feedback) = ~168.16px, rounded to 168px. The 9:16
-   budget this unlocks: 24 + 112.16 + 32 + 290 (card) + 44 (the .amfc-philosophy__watermark-mobile
-   gap below, including an earlier feedback's +24px) + ~157.9 (watermark height at its own 300px
-   mobile width) = ~660px, under 667px with a small margin — see that rule for the width value. */
-@media (max-width: 991.98px) {
-	.amfc-philosophy__stack {
-		--amfc-stack-top: 168px;
-	}
-}
+/* No mobile override here anymore: a prior attempt set --amfc-stack-top to a fixed 168px on the
+   reasoning that once the intro became sticky, cards had to pin BELOW wherever it settled, not
+   just below the nav. That sticky-intro attempt was reverted (see .amfc-philosophy__intro's
+   mobile block for the overlap bug that caused it) — with the intro back to scrolling away
+   normally before any card arrives, there's nothing left pinned above the stack to clear except
+   the nav, so the unconditional clamp(6rem, 16vh, 10rem) above (already written for exactly
+   that) applies unchanged on mobile too. */
 
 /* Provides the scroll runway for the last card to release before Funds partnership begins.
    This used to be padding-bottom on .amfc-philosophy__stack itself, but padding on a flex
