@@ -1765,7 +1765,8 @@ body {
 	.amfc-funds__body {
 		width: 100%;
 		font-size: 16px;
-		line-height: 22px;
+		/* +10% per feedback (was 22px, the Figma mobile frame's own value). */
+		line-height: 24.2px;
 		text-align: center;
 	}
 }
@@ -1892,6 +1893,17 @@ body {
 	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Mobile: 20px inline padding, per feedback ("20px as the left-right margin" on the CTA below —
+   the button has no side margin of its own; this padding on the card IS that margin, since the
+   button is set to width: 100% of this padded content box). Block padding stays the desktop 36px
+   — only asked to change left/right. Placed after the unconditional rule (equal specificity,
+   later wins). */
+@media (max-width: 991.98px) {
+	.amfc-service-card {
+		padding-inline: 20px;
+	}
+}
+
 /* Hover wash (white -> #B9C8FF gradient overlay, via ::before) removed per feedback — the 8px
    lift below is now the only hover signal, same resting shadow throughout. */
 .amfc-service-card:hover {
@@ -1954,6 +1966,16 @@ body {
 	   trimming the card to 400px: this stacked with .amfc-service-card__body's own leftover
 	   default margin (see that rule) for ~26px of unaccounted height neither rule declared. */
 	margin: 0;
+}
+
+/* Mobile: pinned to an exact 24px per feedback, rather than left to the clamp() floor above
+   (1.25rem, which measured 22px at 375px wide — under AMFC's 1.1rem root bug the floor doesn't
+   land on a clean px value the way the desktop ceiling does). Placed after the unconditional
+   rule (equal specificity, later wins) — same reasoning documented throughout this file. */
+@media (max-width: 991.98px) {
+	.amfc-service-card__title {
+		font-size: 24px;
+	}
 }
 
 /* Fixed height sized for 2 lines (the longer of the two cards' copy), per feedback, so both
@@ -2108,6 +2130,19 @@ body {
 	   padding-inline 28px -> 35.5px each side (+7.5px x2 = +15px), leaving height/radius/
 	   everything else from .amfc-btn untouched. */
 	padding-inline: 35.5px;
+}
+
+/* Mobile: full-width, per feedback ("extend from end to end") — replaces the auto/content-sized
+   width every other viewport uses. .amfc-service-card's align-items: center (base rule) only
+   centers a child that's narrower than the card; an explicit width here is what actually
+   stretches it to fill the card's own (now 20px-padded, see .amfc-service-card's mobile block)
+   content box edge to edge. Centering the LABEL inside the button was already free — .amfc-btn's
+   own justify-content: center (see that shared rule) already centers it regardless of the
+   button's width, so it stays centered once the button itself is full-width too. */
+@media (max-width: 991.98px) {
+	.amfc-service-card__cta {
+		width: 100%;
+	}
 }
 
 /* --- App download ("KingDo") --- */
