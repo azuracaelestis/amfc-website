@@ -1176,13 +1176,25 @@ body {
    display: contents on the active one lets its .amfc-philosophy__heading-line children
    participate directly in .amfc-philosophy__heading's own flex column (and its `gap`) as if
    this wrapper span weren't there at all; display: none on the inactive one removes it from
-   rendering AND from the accessibility tree, so nothing is ever announced twice. */
+   rendering AND from the accessibility tree, so nothing is ever announced twice.
+
+   font-size: inherit on both — a display: contents element generates no box, but it's still
+   the DOM parent its children inherit from, and AMFC's `*, html, body { font-size: 1.1rem }`
+   directly matches it too (same collision documented throughout this file, e.g. on
+   .amfc-philosophy__heading-line just below). Without this, .amfc-philosophy__heading-line's
+   own `font-size: inherit` was inheriting from THIS wrapper's collapsed ~19px instead of
+   .amfc-philosophy__heading's real font-size, silently capping the headline at ~19px
+   regardless of what that rule's own font-size was set to (found while enlarging it to 32px —
+   the computed value on .amfc-philosophy__heading itself read correctly, but the actual line
+   spans didn't move at all). */
 .amfc-philosophy__heading-lines--desktop {
 	display: contents;
+	font-size: inherit;
 }
 
 .amfc-philosophy__heading-lines--mobile {
 	display: none;
+	font-size: inherit;
 }
 
 @media (max-width: 991.98px) {
@@ -1235,7 +1247,13 @@ body {
 
 	.amfc-philosophy__heading {
 		align-items: center;
-		font-size: 24px; /* per feedback, replacing the desktop-tuned 42px */
+		/* 24px per feedback — 32px was tried first but "我們以創新、專業、效率、" (line 1 of the
+		   mobile-only split, see .amfc-philosophy__heading-lines--mobile) needs ~384px at that
+		   size against only 335px of available width, wrapping into an unintended 3rd line;
+		   confirmed with the user they want to keep this line's wording as-is, so 24px (where it
+		   measures 232px, comfortably on one line) is the resolution rather than re-splitting
+		   the text. Replaces the desktop-tuned 42px. */
+		font-size: 24px;
 	}
 
 	/* gap: 32px per feedback — no longer has a visible effect now that .amfc-philosophy__intro-slot
@@ -1334,20 +1352,24 @@ body {
 	position: relative;
 }
 
-/* Mobile: --amfc-stack-top is a fixed 147px here, not the unconditional clamp(6rem, 16vh, 10rem)
+/* Mobile: --amfc-stack-top is a fixed 159px here, not the unconditional clamp(6rem, 16vh, 10rem)
    above (that vh-based value only has to clear the nav, and predates the intro becoming sticky
    again on mobile — see .amfc-philosophy__intro's own mobile block for the current state of
-   that). While the intro is pinned (top: 24px) it renders ~91.3px tall, so its own pinned
-   bottom edge sits at ~115.3px — 147px (115.3 + 32) is what actually keeps a real 32px gap
-   between the pinned headline and wherever the cards pin, per feedback (a screenshot showing
-   the two much closer together than that during the card-stacking scroll — confirmed via
-   measurement that the OLD vh-based value landed the cards 3-5px short of the intended 32px at
-   common viewport heights, since it was never tied to the intro's own real height to begin
-   with). A fixed px (not vh-relative) is correct here specifically because the thing this needs
+   that). While the intro is pinned (top: 24px) it renders ~103.4px tall, so its own pinned
+   bottom edge sits at ~127.4px — 159px (127.4 + 32) is what actually keeps a real 32px gap
+   between the pinned headline and wherever the cards pin, per feedback. Re-measured from an
+   earlier 147px (based on a ~91.3px intro height): that number turned out to be built on a real
+   bug — .amfc-philosophy__heading-lines--mobile/--desktop (the two alternate line-break
+   wrappers) had no font-size of their own, so AMFC's `*, html, body { font-size: 1.1rem }`
+   caught them directly and broke the inheritance chain .amfc-philosophy__heading-line depends
+   on, silently capping the rendered headline around 19px regardless of what
+   .amfc-philosophy__heading's own font-size was set to (see those wrapper rules' own comment).
+   Once that was fixed, the intro's real height came out taller, so this needed re-deriving
+   too. A fixed px (not vh-relative) is correct here specifically because the thing this needs
    to clear — the intro's own rendered height — doesn't scale with viewport height either. */
 @media (max-width: 991.98px) {
 	.amfc-philosophy__stack {
-		--amfc-stack-top: 147px;
+		--amfc-stack-top: 159px;
 	}
 }
 
