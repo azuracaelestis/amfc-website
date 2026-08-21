@@ -709,10 +709,18 @@
 @media (max-width: 991.98px) {
 	/* Negative margin-inline pulls the wrapper flush to the viewport edges, escaping
 	   .amfc-hero .amfc-container's 18.5px padding (see that rule's own comment) — matches
-	   Figma's own photo container starting at x=0 rather than sitting in the text column. */
+	   Figma's own photo container starting at x=0 rather than sitting in the text column.
+
+	   margin-top cancels .amfc-hero__grid's own `gap` (--amfc-space-lg, ~35px) specifically
+	   above the photo, per feedback ("0 padding between the headline and the image") — grid
+	   `gap` applies uniformly between EVERY row, so it can't be zeroed for just one gap via the
+	   grid itself without also zeroing the gap below the photo (before the CTA), which wasn't
+	   asked for. A negative margin-top equal to that gap cancels it out locally instead, leaving
+	   the photo-to-CTA spacing untouched. */
 	.amfc-hero__photo-wrap {
 		margin-inline: -18.5px;
 		width: calc(100% + 37px);
+		margin-top: calc(-1 * var(--amfc-space-lg));
 	}
 
 	.amfc-hero__photo {
