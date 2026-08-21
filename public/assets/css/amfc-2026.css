@@ -992,18 +992,24 @@ body {
 	.amfc-philosophy__watermark-overlay {
 		display: block;
 		position: absolute;
-		/* bottom: -200px (not inset: 0's implicit 0) extends the overlay 200px past
-		   .amfc-philosophy__stack's own real bottom edge. Needed once clip-path (below) was
-		   added: at the exact scroll position where card 4 settles, the overlay's OWN
-		   viewport-mapped rectangle — a plain block following normal scroll, unlike its sticky
-		   contents — had already scrolled far enough that its remaining visible extent (~530px
-		   from the current viewport's top) fell short of where the transform-offset mark needed
-		   to render (~660px), clipping its bottom ~130px off (confirmed via measuring both rects
-		   at that exact scroll position). The 200px buffer is comfortably past that shortfall;
-		   extending past the stack's natural end doesn't reintroduce the Funds-bleed bug this
-		   clip-path exists to prevent — the mark is still fully clipped well before Funds'
-		   own content is what's on screen (confirmed via screenshot after this change). */
-		inset: 0 0 -200px 0;
+		/* inset: 0 (no extra bottom extension) — an earlier version of this rule extended 200px
+		   past .amfc-philosophy__stack's own real bottom edge, to stop the mark's bottom edge
+		   getting clipped mid-display at the moment card 4 settles. That extension turned out to
+		   be the wrong fix and caused a worse bug later found via feedback: it gave
+		   .amfc-philosophy__watermark-slot roughly 200px of EXTRA sticky dwell beyond
+		   .amfc-philosophy__stack's own real height, on top of the dwell its short height (see
+		   that rule's own comment: a shorter sticky element releases LATER against the same
+		   container than a taller one would, not earlier) already adds relative to the cards —
+		   compounding to over 1000px of scroll where the mark stayed visibly pinned on screen,
+		   comfortably outlasting Funds partnership's entire scroll-through and painting over its
+		   logo the whole time (confirmed via a scroll sweep: the mark's position stayed constant
+		   from well before Funds appeared to well after it had completely scrolled past).
+		   Matching the overlay's height to the stack's own real height instead gives the mark
+		   the SAME container the cards themselves release against, so it inherits their timing
+		   almost exactly — just slightly later, from its own shorter height alone, which is
+		   already enough to read as "the cards go up, then the mark goes up" without needing an
+		   artificial extension on top of it. */
+		inset: 0;
 		z-index: 0;
 		pointer-events: none;
 		/* Clips the sticky slot (and its transform-shifted image, see
@@ -1068,18 +1074,22 @@ body {
 		/* Pushes the mark down to peek out below the pinned card instead of sitting directly
 		   behind it — a transform, not margin/padding, specifically so it doesn't feed back into
 		   the SLOT's own sticky release timing (see that rule's comment for why that matters).
-		   The tradeoff: transform doesn't track the slot's release state, so once the slot
-		   releases and resumes normal scrolling, this offset keeps applying on top of that —
-		   without .amfc-philosophy__watermark-overlay's clip-path backstop (above), that
-		   combination is exactly what let the mark bleed into Funds partnership below.
 		   290px matches .amfc-philosophy__stat-card's mobile max-width at >=375px viewports;
 		   20px matches .amfc-philosophy__stack's own card-to-card gap; +24px more per feedback,
 		   moving the mark further down. */
 		transform: translateY(calc(290px + 20px + 24px));
-		opacity: 1; /* static, not wired to --amfc-philosophy-watermark-fade — that scroll-driven
-		               fade exists only to hide desktop's viewport-fixed mark before it can bleed
-		               into Funds partnership below; this mark is already contained within the
-		               stack's own sticky slot and never needs to fade for that reason */
+		/* Wired to the same --amfc-philosophy-watermark-fade custom property desktop's mark
+		   uses (set by initPhilosophyWatermarkFade() in amfc-2026.js, which is breakpoint-aware
+		   and uses different thresholds for this element than for desktop's). A prior version
+		   pinned this to a flat opacity: 1, reasoning .amfc-philosophy__watermark-overlay's
+		   clip-path already fully contained the mark — that didn't hold up: a sticky element
+		   holds a fixed viewport position for a real scroll distance while pinned, and even
+		   after release it's still on screen at wherever it was pinned, needing that same
+		   distance again (now scrolling normally) to actually clear — confirmed via feedback
+		   (a screenshot showing the mark overlapping Funds partnership's own logo) that the mark
+		   was staying visible well past where Funds had already scrolled fully past. Fading
+		   opacity to 0 sidesteps needing the box to physically clear at all. */
+		opacity: var(--amfc-philosophy-watermark-fade, 1);
 	}
 }
 

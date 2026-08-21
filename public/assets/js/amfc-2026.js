@@ -65,9 +65,16 @@ window.AMFC = (function () {
 		if (!section) return;
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-		// The mark is position: fixed, so it never moves — opacity is the whole effect, and
-		// this is the only thing standing between it and being visible over the entire page.
-		var mark = section.querySelector('.amfc-philosophy__watermark');
+		// Mobile has its own copy of the mark (.amfc-philosophy__watermark-mobile, sticky-pinned
+		// inside the card stack — see amfc-2026.css) alongside desktop's original
+		// position: fixed .amfc-philosophy__watermark; only one is ever display:block at a time.
+		// Checked once at init, same level of rigor as the rest of this file's breakpoint
+		// handling (no resize listener anywhere here) — a mid-session resize across the 992px
+		// breakpoint is not a case this project's other scroll-driven effects handle either.
+		var isMobile = window.matchMedia('(max-width: 991.98px)').matches;
+		var mark = section.querySelector(
+			isMobile ? '.amfc-philosophy__watermark-mobile' : '.amfc-philosophy__watermark'
+		);
 		var intro = section.querySelector('.amfc-philosophy__intro');
 
 		// Fade IN as the intro heading clears the mark's fixed position, which in practice is
@@ -81,19 +88,45 @@ window.AMFC = (function () {
 		// even though the card was legitimately on screen. Measuring the actual gap encodes the
 		// real constraint instead of a proxy for it, and self-corrects across viewport heights
 		// without hardcoding the heading's sticky offset or height.
+		//
+		// Desktop only: on mobile the mark already starts hidden behind card 1 (same
+		// --amfc-stack-top offset, lower z-index — see .amfc-philosophy__watermark-slot) rather
+		// than sitting in open space waiting to be covered, so there's no equivalent "intro
+		// hasn't cleared yet" state to fade in from; mobile's mark is always fadeIn: 1 and only
+		// the fade-out ramp below applies to it.
 		var IN_DISTANCE = 120; // px of clearance before the mark reaches full opacity
 
-		// Fade OUT as the section hands off to Funds. FADE_END is 800, not 0, so the mark is
-		// gone before the section's tail brings it near the intro heading: the heading pins at
-		// clamp(7rem, 20vh, 12rem) and runs ~183px tall, and finishing by 800 clears that on
-		// every viewport height. Don't lower it without re-running the overlap check.
-		var FADE_START = 1600;
-		var FADE_END = 800;
+		// Fade OUT as the section hands off to the next one below. Two different pairs of
+		// thresholds, because desktop and mobile hand off completely differently:
+		//
+		// Desktop: FADE_END is 800, not 0, so the mark is gone before the section's tail brings
+		// it near the intro heading: the heading pins at clamp(7rem, 20vh, 12rem) and runs
+		// ~183px tall, and finishing by 800 clears that on every viewport height. Don't lower it
+		// without re-running the overlap check.
+		//
+		// Mobile: found via feedback (a screenshot showing the mark overlapping Funds
+		// partnership's own logo) that leaving mobile's mark permanently opaque (this rule's own
+		// prior version pinned it to 1, reasoning the clip-path on
+		// .amfc-philosophy__watermark-overlay already contained it) doesn't actually stop it
+		// bleeding into the next section — a sticky element holds a FIXED viewport position for
+		// a real scroll distance while pinned, and even after release it's still on screen at
+		// wherever it was pinned, taking that same distance again (moving normally) to scroll off
+		// — confirmed via a sweep: the mark's pinned position stayed constant from well before
+		// Funds became visible until well after Funds had scrolled completely past. Fading
+		// opacity to 0 sidesteps needing the box to physically clear at all: it's invisible
+		// regardless of its remaining bounding-box position. 500/150 were measured against this
+		// section's own real .getBoundingClientRect().bottom at a 900px-tall test viewport: 500
+		// keeps the mark fully opaque through card 4 settling and the cards' own release starting
+		// (~sectionBottom 469-675 across that window), completing the fade to 0 by
+		// sectionBottom 150 — well before this section's box fully leaves the viewport
+		// (sectionBottom 0) and well before Funds' own content is on screen at all.
+		var FADE_START = isMobile ? 500 : 1600;
+		var FADE_END = isMobile ? 150 : 800;
 		var ticking = false;
 
 		function onScroll() {
 			var fadeIn = 1;
-			if (mark && intro) {
+			if (!isMobile && mark && intro) {
 				// Negative while the heading still sits inside the mark's box; grows as the
 				// heading pins and the pile scrolls up past it.
 				var clearance = mark.getBoundingClientRect().top - intro.getBoundingClientRect().bottom;
