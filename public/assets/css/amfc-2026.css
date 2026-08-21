@@ -213,18 +213,15 @@
 	z-index: 1;
 }
 
-/* Mobile: pull the white block up further so it covers the BOTTOM PORTION of the mobile hero
-   photo specifically, per feedback — not just closing the gap below it (which -94.4px already
-   did) but actually overlapping into the photo. Matches the real Figma mobile frame's own
-   composition: its white section (Rectangle 80, node 145:323) starts 19% of the way up from
-   the photo's own bottom edge (measured against the photo's real 433px height there). Applied
-   to our photo's actual 375px height: 0.19 * 375 = ~71px of overlap, so the white block's top
-   needs to sit 71px above (mobile) .amfc-hero__photo-wrap's bottom edge — confirmed via
-   getBoundingClientRect, not just computed from the ratio alone, since the desktop -94.4px
-   margin above already closes part of the gap on its own and the two don't simply add. */
+/* Mobile: pull the white block up so it covers the BOTTOM PORTION of the mobile hero photo
+   specifically — not just closing the gap below it (which -94.4px already did) but actually
+   overlapping into the photo. Was -260px (a ~71px overlap matching the real Figma mobile
+   frame's own ratio), moved back down 32px per follow-up feedback to -228px (~39px overlap) —
+   the button's own position relative to the photo (its ~35px gap below it, unrelated to this
+   margin) stays exactly as it was; only the white block itself shifted. */
 @media (max-width: 991.98px) {
 	.amfc-curve-top {
-		margin-top: -260px;
+		margin-top: -228px;
 	}
 }
 
