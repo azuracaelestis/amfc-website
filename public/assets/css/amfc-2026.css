@@ -1334,13 +1334,22 @@ body {
 	position: relative;
 }
 
-/* No mobile override here anymore: a prior attempt set --amfc-stack-top to a fixed 168px on the
-   reasoning that once the intro became sticky, cards had to pin BELOW wherever it settled, not
-   just below the nav. That sticky-intro attempt was reverted (see .amfc-philosophy__intro's
-   mobile block for the overlap bug that caused it) — with the intro back to scrolling away
-   normally before any card arrives, there's nothing left pinned above the stack to clear except
-   the nav, so the unconditional clamp(6rem, 16vh, 10rem) above (already written for exactly
-   that) applies unchanged on mobile too. */
+/* Mobile: --amfc-stack-top is a fixed 147px here, not the unconditional clamp(6rem, 16vh, 10rem)
+   above (that vh-based value only has to clear the nav, and predates the intro becoming sticky
+   again on mobile — see .amfc-philosophy__intro's own mobile block for the current state of
+   that). While the intro is pinned (top: 24px) it renders ~91.3px tall, so its own pinned
+   bottom edge sits at ~115.3px — 147px (115.3 + 32) is what actually keeps a real 32px gap
+   between the pinned headline and wherever the cards pin, per feedback (a screenshot showing
+   the two much closer together than that during the card-stacking scroll — confirmed via
+   measurement that the OLD vh-based value landed the cards 3-5px short of the intended 32px at
+   common viewport heights, since it was never tied to the intro's own real height to begin
+   with). A fixed px (not vh-relative) is correct here specifically because the thing this needs
+   to clear — the intro's own rendered height — doesn't scale with viewport height either. */
+@media (max-width: 991.98px) {
+	.amfc-philosophy__stack {
+		--amfc-stack-top: 147px;
+	}
+}
 
 /* Provides the scroll runway for the last card to release before Funds partnership begins.
    This used to be padding-bottom on .amfc-philosophy__stack itself, but padding on a flex
