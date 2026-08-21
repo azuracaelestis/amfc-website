@@ -272,6 +272,43 @@
 	transform: translateX(20px);
 }
 
+/* Mobile nav sizing, per feedback — "339 x 53px" (pill), "66 x 33px" (logo), "20.51 x 20.51px"
+   (the + icon), all ratios for the 375px mobile reference width. Same
+   clamp(floor, calc(N / 375 * 100vw), Npx) fluid-scaling technique as the hero fixes. Placed
+   after the base .amfc-nav-pill/.amfc-nav__brand rules above (equal specificity, later wins —
+   see the hero headline/eyebrow commit for why this ordering matters) so these actually apply
+   rather than silently losing to them. */
+@media (max-width: 991.98px) {
+	.amfc-nav-pill {
+		/* Replaces the shared calc(100% - 2 * --amfc-space-lg) formula (tuned for desktop's wider
+		   gutter) with the real 339px target directly. */
+		width: clamp(15.5rem, calc(339 / 375 * 100vw), 339px);
+		height: clamp(2.5rem, calc(53 / 375 * 100vw), 53px);
+	}
+
+	.amfc-nav-pill .navbar {
+		/* height above is now explicit, so the navbar's own vertical centering (align-items is
+		   Bootstrap's default on .navbar, already centers its row) just needs padding-block
+		   reset to 0 — otherwise 0.45rem top+bottom would push the (now-fixed-height) row's
+		   content taller than the pill and get clipped by nothing (no overflow:hidden here),
+		   but would still visually mismatch the intended 53px. */
+		padding-block: 0;
+		height: 100%;
+	}
+
+	.amfc-nav__brand img {
+		/* Overrides the <img height="47"> HTML attribute — CSS wins regardless, but width also
+		   needs setting explicitly since the attribute only ever constrained height. */
+		width: clamp(3rem, calc(66 / 375 * 100vw), 66px);
+		height: clamp(1.5rem, calc(33 / 375 * 100vw), 33px);
+	}
+
+	.amfc-nav__toggler .navbar-toggler-icon {
+		width: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 20.51px);
+		height: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 20.51px);
+	}
+}
+
 /* Mobile menu toggle — see header.php for why this exists (navbar-expand-lg had no way to
    reveal its collapsed items before this). Bootstrap's own .navbar-toggler ships a black
    hamburger icon var and a light focus box-shadow tuned for a dark navbar; both need
