@@ -1134,15 +1134,15 @@ body {
 
 	.amfc-philosophy__heading {
 		align-items: center;
+		font-size: 24px; /* per feedback, replacing the desktop-tuned 42px */
 	}
 
-	/* gap: 12px (was the unconditional var(--amfc-space-lg), 35.2px) is deliberately part of the
-	   9:16 budget below (see .amfc-philosophy__stack's mobile --amfc-stack-top override) — with
-	   the intro now sticky above the stack rather than scrolling away, its height also counts
-	   against how much room is left for the card + watermark within one screen. */
+	/* gap: 32px per feedback (was 12px, tuned tight to fit the OLD 42px headline within the 9:16
+	   budget — see .amfc-philosophy__stack's mobile --amfc-stack-top override, recalculated
+	   alongside this change now that the headline above is both shorter and smaller). */
 	.amfc-philosophy__grid {
 		padding-top: 0;
-		gap: 12px;
+		gap: 32px;
 	}
 }
 
@@ -1192,15 +1192,15 @@ body {
    (375x667 at the mobile reference width). With the headline now sticky above the stack (see
    .amfc-philosophy__intro's mobile block) rather than scrolling away first, the stack's own pin
    point has to start BELOW wherever the headline settles, not just below the nav — 24px
-   (.amfc-philosophy__intro's own sticky top) + ~129.84px (its real measured height at the
-   375px reference width) + 12px (.amfc-philosophy__grid's mobile gap) = ~165.84px, rounded to
-   166px. The 9:16 budget this unlocks: 24 + 129.84 + 12 + 290 (card) + 44 (the
-   .amfc-philosophy__watermark-mobile gap below, including this same feedback's +24px) + ~157.9
-   (watermark height at its own reduced 300px mobile width) = ~657.7px, under 667px with a small
-   margin — see that rule for the matching width reduction. */
+   (.amfc-philosophy__intro's own sticky top) + ~112.16px (its real measured height, re-measured
+   after the headline's font-size dropped to 24px per feedback) + 32px (.amfc-philosophy__grid's
+   mobile gap, also raised to 32px by that same feedback) = ~168.16px, rounded to 168px. The 9:16
+   budget this unlocks: 24 + 112.16 + 32 + 290 (card) + 44 (the .amfc-philosophy__watermark-mobile
+   gap below, including an earlier feedback's +24px) + ~157.9 (watermark height at its own 300px
+   mobile width) = ~660px, under 667px with a small margin — see that rule for the width value. */
 @media (max-width: 991.98px) {
 	.amfc-philosophy__stack {
-		--amfc-stack-top: 166px;
+		--amfc-stack-top: 168px;
 	}
 }
 
