@@ -706,6 +706,16 @@
 	animation-delay: 950ms; /* 150ms after sparkle--a, per feedback */
 }
 
+/* Mobile: shifted right 42px, per feedback. calc() mixing the existing -2% with a flat px
+   offset, rather than replacing the percentage outright, so it still tracks
+   .amfc-hero__photo-wrap's own width (position: relative container) the same way the desktop
+   value does — only the extra 42px is new. */
+@media (max-width: 991.98px) {
+	.amfc-hero__sparkle--c {
+		left: calc(-2% + 42px);
+	}
+}
+
 /* --- Hero entrance sequence, per feedback: photo -> eyebrow -> headline lines -> CTA ->
    sparkles (last to land). Every animation uses fill-mode "backwards" so the 0% keyframe
    applies before its delay elapses, instead of a flash of the final state — and after
