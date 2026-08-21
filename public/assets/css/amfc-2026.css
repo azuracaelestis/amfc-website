@@ -932,15 +932,6 @@ body {
 	opacity: var(--amfc-philosophy-watermark-fade, 1);
 }
 
-/* Decorative flourish, not core content — hidden on the mobile flat-list layout (same
-   breakpoint the sticky pile itself collapses at below) rather than trying to make a
-   left-bleeding watermark work next to a narrow single-column card list. */
-@media (max-width: 991.98px) {
-	.amfc-philosophy__watermark {
-		display: none;
-	}
-}
-
 /* amfc-2026.js skips attaching the scroll listener under reduced motion, so
    --amfc-philosophy-watermark-fade is never set and a fixed mark would otherwise sit at full
    opacity over EVERY section of the page, not just this one. Pin it absolutely inside the
@@ -949,6 +940,43 @@ body {
 	.amfc-philosophy__watermark {
 		position: absolute;
 		top: 90px;
+	}
+}
+
+/* Mobile: per feedback, shown under the card stack rather than hidden (this previously carried
+   a `display: none` here, written back when mobile still fell back to a flattened card list —
+   now that mobile shares the real sticky stack (see .amfc-philosophy__stat-card's own mobile
+   section), there's no more layout reason to hide it). No watermark layer exists in the KSP
+   section of the connected Figma mobile frame (checked via get_metadata/get_design_context on
+   "AMFC - Homepage (Mobile) Final1" — only the four stat cards' own content), so placement here
+   is this feedback's own direction, not a traced value: `position: absolute` (not desktop's
+   `fixed` — mobile's card pile isn't itself pinned to the viewport the way the desktop
+   two-column layout is, so a fixed mark would drift out of sync with where the stack visually
+   ends) anchored to `.amfc-philosophy`'s own bottom edge (that ancestor's `position: relative`
+   already provides the containing block, see above) — .amfc-philosophy__stack-tail's 270px/30vh
+   scroll runway sits directly above that edge, so the mark reads as sitting under the settled
+   pile once the last card releases. Placed after the reduced-motion block above (equal
+   specificity) so `bottom` positioning wins even under that combination rather than being
+   dragged back to `top: 90px`.
+
+   opacity: 1 (not the inherited `var(--amfc-philosophy-watermark-fade, 1)`) intentionally
+   ignores initPhilosophyWatermarkFade()'s scroll-driven value: that JS's fade-OUT ramp
+   (FADE_START/FADE_END, keyed off .amfc-philosophy's own bottom edge) exists so a desktop
+   `position: fixed` mark — which would otherwise still be glued to the viewport once the
+   section has scrolled past — disappears before it can bleed into Funds partnership below. This
+   mark is `position: absolute` here, already contained within .amfc-philosophy and naturally
+   scrolling away with it, so that concern doesn't apply — and left wired to the same fade, the
+   mark went fully transparent (measured: opacity 0) by the time scroll actually reaches "under
+   the stack", the one moment it's meant to be visible. */
+@media (max-width: 991.98px) {
+	.amfc-philosophy__watermark {
+		position: absolute;
+		top: auto;
+		left: 50%;
+		bottom: 0;
+		transform: translateX(-50%);
+		width: clamp(14rem, calc(320 / 375 * 100vw), 320px);
+		opacity: 1;
 	}
 }
 
@@ -1435,6 +1463,20 @@ body {
    the smaller mobile card size, so this override is removed rather than kept. .amfc-stack-top
    (viewport-height-relative, not width-relative) and .amfc-philosophy__stack-tail's 30vh runway
    both already work unchanged at any width; nothing here was actually desktop-specific. */
+
+/* Mobile: smaller cards, per feedback. Checked against the connected Figma mobile frame
+   ("AMFC - Homepage (Mobile) Final1", node 145:331, the one real KSP card it contains) rather
+   than applying a flat 20% to the current 335px rendered size — the design's own unrotated
+   card square is 290px (`size-[290px]` in its returned code, independent of the ~-4.2deg
+   rotation that inflates its on-canvas bounding box to ~310px). 290px is a ~13.4% reduction
+   from 335px, not a literal 20%, but it's the real spec value rather than an approximation of
+   one. margin-inline: auto (base rule, above) keeps it centered within the section's 335px
+   content column now that it's narrower than that column. */
+@media (max-width: 991.98px) {
+	.amfc-philosophy__stat-card {
+		max-width: clamp(14rem, calc(290 / 375 * 100vw), 290px);
+	}
+}
 
 .amfc-philosophy__stat-tag {
 	display: inline-block;
