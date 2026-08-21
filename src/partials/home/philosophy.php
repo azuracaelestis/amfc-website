@@ -46,11 +46,14 @@
       fix. Sticky must directly wrap the visible card, not a tall spacer around it. */
 ?>
 <section id="about" class="amfc-curve-top amfc-philosophy">
-	<!-- Decorative watermark. position: fixed (see amfc-2026.css), so it holds one spot in the
-	     viewport and never travels — it's revealed and hidden purely by opacity, driven by
+	<!-- Desktop: position: fixed (see amfc-2026.css), so it holds one spot in the viewport and
+	     never travels — it's revealed and hidden purely by opacity, driven by
 	     initPhilosophyWatermarkFade() in amfc-2026.js. Fixed also keeps it out of flow, so it
-	     can't push the section's real content down, and outside .amfc-container so it can bleed
-	     off the left edge independent of the content column's max-width/padding. -->
+	     can't push the section's real content down. This DOM position (outside .amfc-container,
+	     ahead of everything) only matters for that fixed positioning; on mobile the same <img>
+	     is picked up by .amfc-philosophy__watermark-slot below instead (a second copy, since the
+	     two breakpoints need genuinely different DOM placement — see that element's own comment)
+	     and this one is display:none there (mobile CSS on .amfc-philosophy__watermark). -->
 	<img class="amfc-philosophy__watermark" src="<?= e(asset('images/amfc-logo-grey.svg')) ?>" alt="" aria-hidden="true" />
 	<!-- .amfc-container (not Bootstrap's .container) so this column's left edge lines up
 	     exactly with the hero headline above it — same reasoning as hero.php. -->
@@ -64,6 +67,26 @@
 				</h2>
 			</div>
 			<div class="amfc-philosophy__stack">
+				<!-- Mobile-only (see amfc-2026.css; display:none above 991.98px). Two nested wrappers,
+				     not one, because a single element can't be both "doesn't add flow height" and
+				     "position: sticky" at once:
+				     - .amfc-philosophy__watermark-overlay is position: absolute, sized to exactly
+				       cover the stack's own real height (the four cards + their gaps) without adding
+				       anything to it — an absolutely positioned box is out of flow, so it can't push
+				       .amfc-philosophy__stack-tail or anything else down the way a real flex sibling
+				       with the same height would.
+				     - .amfc-philosophy__watermark-slot, inside that overlay, is the one that's
+				       actually position: sticky. Because its containing block (the overlay) already
+				       spans the whole stack, the slot pins at the shared --amfc-stack-top offset
+				       right as card 1 does ("appear together with the first card," per feedback) and
+				       doesn't release until the overlay's bottom — i.e. the LAST card's own release
+				       point — scrolls past, so it stays put under cards 2-4 as they stack on top of
+				       it in turn instead of disappearing after just card 1. -->
+				<div class="amfc-philosophy__watermark-overlay">
+					<div class="amfc-philosophy__watermark-slot">
+						<img class="amfc-philosophy__watermark-mobile" src="<?= e(asset('images/amfc-logo-grey.svg')) ?>" alt="" aria-hidden="true" />
+					</div>
+				</div>
 				<!-- Re-skinned per feedback (reference: public/assets/images/ksp cards/01-04.svg,
 				     supplied as flattened full-card exports). Tag/number/label stay real HTML
 				     driven by the same t() strings as before — not the baked-in text from the

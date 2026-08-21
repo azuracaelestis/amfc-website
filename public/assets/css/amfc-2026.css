@@ -943,40 +943,91 @@ body {
 	}
 }
 
-/* Mobile: per feedback, shown under the card stack rather than hidden (this previously carried
-   a `display: none` here, written back when mobile still fell back to a flattened card list —
-   now that mobile shares the real sticky stack (see .amfc-philosophy__stat-card's own mobile
-   section), there's no more layout reason to hide it). No watermark layer exists in the KSP
-   section of the connected Figma mobile frame (checked via get_metadata/get_design_context on
-   "AMFC - Homepage (Mobile) Final1" — only the four stat cards' own content), so placement here
-   is this feedback's own direction, not a traced value: `position: absolute` (not desktop's
-   `fixed` — mobile's card pile isn't itself pinned to the viewport the way the desktop
-   two-column layout is, so a fixed mark would drift out of sync with where the stack visually
-   ends) anchored to `.amfc-philosophy`'s own bottom edge (that ancestor's `position: relative`
-   already provides the containing block, see above) — .amfc-philosophy__stack-tail's 270px/30vh
-   scroll runway sits directly above that edge, so the mark reads as sitting under the settled
-   pile once the last card releases. Placed after the reduced-motion block above (equal
-   specificity) so `bottom` positioning wins even under that combination rather than being
-   dragged back to `top: 90px`.
-
-   opacity: 1 (not the inherited `var(--amfc-philosophy-watermark-fade, 1)`) intentionally
-   ignores initPhilosophyWatermarkFade()'s scroll-driven value: that JS's fade-OUT ramp
-   (FADE_START/FADE_END, keyed off .amfc-philosophy's own bottom edge) exists so a desktop
-   `position: fixed` mark — which would otherwise still be glued to the viewport once the
-   section has scrolled past — disappears before it can bleed into Funds partnership below. This
-   mark is `position: absolute` here, already contained within .amfc-philosophy and naturally
-   scrolling away with it, so that concern doesn't apply — and left wired to the same fade, the
-   mark went fully transparent (measured: opacity 0) by the time scroll actually reaches "under
-   the stack", the one moment it's meant to be visible. */
+/* Mobile: the fixed-position mark above is desktop-only from here down (this element is a
+   second copy in the DOM, see philosophy.php — .amfc-philosophy__watermark-slot below is the
+   mobile one). display: none rather than leaving it shown-but-unused avoids two overlapping
+   copies painting at once. */
 @media (max-width: 991.98px) {
 	.amfc-philosophy__watermark {
+		display: none;
+	}
+}
+
+/* Mobile watermark: hidden above the mobile breakpoint — these elements only exist for mobile
+   (see philosophy.php: .amfc-philosophy__watermark-overlay is the stack's first flex child,
+   ahead of card 1). No watermark layer exists in the KSP section of the connected Figma mobile
+   frame itself (checked via get_metadata/get_design_context on "AMFC - Homepage (Mobile)
+   Final1" — only the four stat cards' own content), so this placement is feedback's own
+   direction, not a traced value: per feedback, the mark should appear together with card 1 and
+   stay pinned underneath while cards 2-4 stack on top of it, rather than only being revealed
+   after the last card releases (an earlier version of this section did exactly that — see git
+   log for why it was replaced).
+
+   Two nested wrappers, because a single element can't be both "doesn't add flow height" (needed
+   so the mark doesn't push .amfc-philosophy__stack-tail and the section's total height down)
+   and "position: sticky" (needed for the actual pin behavior) at once. First attempt tried a
+   single sticky element with an artificially tall height standing in for "outlasts the whole
+   stack" — that backfired: position: sticky elements still reserve their full height in normal
+   flow, so a 1220px-tall one pushed card 1 (and everything after it) down by 1220px, breaking
+   the stack's own scroll timing entirely (confirmed via a broken screenshot: no card visible
+   for well over a full page of scroll). Splitting it in two avoids that:
+   - .amfc-philosophy__watermark-overlay: position: absolute, sized via inset: 0 to exactly
+     match .amfc-philosophy__stack's own real content height (the four cards + gaps) — an
+     absolutely positioned box is out of flow, so it adds nothing to that height itself.
+   - .amfc-philosophy__watermark-slot, inside the overlay: this is the one that's actually
+     position: sticky. Its containing block is the overlay, which already spans the stack's full
+     height, so the slot pins at the shared --amfc-stack-top offset right as card 1 does, and
+     doesn't release until the overlay's own bottom — i.e. the last card's release point —
+     scrolls past. z-index 0 (below every card's 1-4) is what lets cards stack visibly on top of
+     it in turn rather than the mark ever painting over them. */
+.amfc-philosophy__watermark-overlay {
+	display: none;
+}
+
+.amfc-philosophy__watermark-mobile {
+	display: none;
+}
+
+@media (max-width: 991.98px) {
+	.amfc-philosophy__watermark-overlay {
+		display: block;
 		position: absolute;
-		top: auto;
-		left: 50%;
-		bottom: 0;
-		transform: translateX(-50%);
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	/* top: var(--amfc-stack-top) — the exact same offset every card pins at, not a larger value
+	   — is what makes this trigger "together with the first card": a sticky element's trigger
+	   scroll position is set by how far its OWN natural (pre-sticky) flow position is from this
+	   offset, so giving it a bigger top to sit lower in the viewport also delays when it starts
+	   pinning by that same amount (confirmed: an earlier attempt used
+	   `calc(var(--amfc-stack-top) + 290px + 20px)` here directly, and the mark didn't appear
+	   until well after card 2 had already arrived — nearly a full card's worth of scroll late).
+	   The visual "peeking out below the pinned card" offset instead lives on `transform` below,
+	   on the image itself — transform doesn't participate in the sticky offset calculation, so
+	   it repositions the PAINTED pixels without touching when the trigger fires. */
+	.amfc-philosophy__watermark-slot {
+		position: sticky;
+		top: var(--amfc-stack-top);
+	}
+
+	.amfc-philosophy__watermark-mobile {
+		display: block;
+		margin-inline: auto;
 		width: clamp(14rem, calc(320 / 375 * 100vw), 320px);
-		opacity: 1;
+		height: auto;
+		/* Pushes the mark down to peek out below the pinned card instead of sitting directly
+		   behind it (same top offset as the card otherwise, see .amfc-philosophy__watermark-slot
+		   above) — a transform, not margin, specifically so it doesn't feed back into the
+		   slot's own sticky trigger timing. 290px matches .amfc-philosophy__stat-card's mobile
+		   max-width at >=375px viewports; 20px matches .amfc-philosophy__stack's own card-to-card
+		   gap, so the mark trails the pinned card by the same distance the next card would. */
+		transform: translateY(calc(290px + 20px));
+		opacity: 1; /* static, not wired to --amfc-philosophy-watermark-fade — that scroll-driven
+		               fade exists only to hide desktop's viewport-fixed mark before it can bleed
+		               into Funds partnership below; this mark is already contained within the
+		               stack's own sticky slot and never needs to fade for that reason */
 	}
 }
 
@@ -1109,6 +1160,9 @@ body {
 	display: flex;
 	flex-direction: column;
 	gap: 20px; /* per feedback (was var(--amfc-space-md), 16px) — still small, not scroll distance */
+	/* Containing block for .amfc-philosophy__watermark-overlay's mobile inset: 0 (see that
+	   rule) — harmless on desktop, where nothing here is absolutely positioned against it. */
+	position: relative;
 }
 
 /* Provides the scroll runway for the last card to release before Funds partnership begins.
@@ -1524,15 +1578,20 @@ body {
    rule and the per-card 3.3rem bump above so it wins by source order over both for every card
    uniformly, with one declaration.
 
-   Note: at 42px, card 1's real content ("NT$200億+", the section's widest number) measures
-   ~174px wide and starts overlapping the coin icon's left edge (icon starts ~188px from the
-   card's own left padding at the 335px mobile card width) — the icon itself hasn't been
-   resized/repositioned for mobile yet (still using the desktop crop-box percentages, see
-   .amfc-philosophy__stat-icon above), so this is a known follow-up, not something this
-   font-size change alone can avoid at the requested 42px. */
+   white-space: nowrap is required here (not just a nice-to-have): card 1's real content
+   ("NT$200億+", the section's widest number, split across 3 spans — see
+   .amfc-philosophy__stat-number-affix/-value above) measures ~218.8px at 42px, against ~219.6px
+   of available width inside the card's own 290px size (see .amfc-philosophy__stat-card's mobile
+   max-width) minus its 35.2px padding each side — under 1px of clearance. Left free to wrap
+   (this element's normal block default), that margin was too thin to hold reliably: confirmed
+   via screenshot, the browser wrapped mid-suffix-span ("NT$200億" / "+" on its own line) even
+   though the unwrapped width measured narrower than the container. nowrap forces the single
+   line the design intends; the ~1px of potential overflow it trades for that is inside the
+   card's own padding cushion and imperceptible against overflow: hidden on the card. */
 @media (max-width: 991.98px) {
 	.amfc-philosophy__stack .amfc-philosophy__stat-number {
 		font-size: clamp(1.75rem, calc(42 / 375 * 100vw), 42px);
+		white-space: nowrap;
 	}
 }
 
