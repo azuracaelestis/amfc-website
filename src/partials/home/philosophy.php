@@ -71,8 +71,19 @@
 				<div class="amfc-philosophy__intro" data-aos="fade-up" data-aos-once="true">
 					<p class="amfc-eyebrow amfc-philosophy__eyebrow"><?= e(t('home.philosophy.eyebrow')) ?></p>
 					<h2 class="amfc-philosophy__heading">
-						<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1_prefix')) ?><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line1_highlight')) ?></span></span>
-						<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line2_highlight')) ?></span><?= e(t('home.philosophy.headline_line2_suffix')) ?></span>
+						<!-- Desktop line break (2 principles / 2 principles) — hidden on mobile via CSS
+						     display (see .amfc-philosophy__heading-lines--desktop in amfc-2026.css), not
+						     removed from the DOM, but display: none content isn't exposed to assistive
+						     tech either, so only one of these two versions is ever actually announced. -->
+						<span class="amfc-philosophy__heading-lines--desktop">
+							<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1_prefix')) ?><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line1_highlight')) ?></span></span>
+							<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line2_highlight')) ?></span><?= e(t('home.philosophy.headline_line2_suffix')) ?></span>
+						</span>
+						<!-- Mobile line break (3 principles / 1 principle), per feedback. -->
+						<span class="amfc-philosophy__heading-lines--mobile">
+							<span class="amfc-philosophy__heading-line"><?= e(t('home.philosophy.headline_line1_prefix')) ?><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line1_mobile_highlight')) ?></span></span>
+							<span class="amfc-philosophy__heading-line"><span class="amfc-philosophy__heading-highlight"><?= e(t('home.philosophy.headline_line2_mobile_highlight')) ?></span><?= e(t('home.philosophy.headline_line2_suffix')) ?></span>
+						</span>
 					</h2>
 				</div>
 			</div>

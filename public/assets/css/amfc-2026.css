@@ -1161,6 +1161,30 @@ body {
 	text-decoration: none;
 }
 
+/* Two alternate line breaks live in the DOM at once (see philosophy.php) — desktop's existing
+   2-principle/2-principle split, and mobile's 3-principle/1-principle split, per feedback.
+   display: contents on the active one lets its .amfc-philosophy__heading-line children
+   participate directly in .amfc-philosophy__heading's own flex column (and its `gap`) as if
+   this wrapper span weren't there at all; display: none on the inactive one removes it from
+   rendering AND from the accessibility tree, so nothing is ever announced twice. */
+.amfc-philosophy__heading-lines--desktop {
+	display: contents;
+}
+
+.amfc-philosophy__heading-lines--mobile {
+	display: none;
+}
+
+@media (max-width: 991.98px) {
+	.amfc-philosophy__heading-lines--desktop {
+		display: none;
+	}
+
+	.amfc-philosophy__heading-lines--mobile {
+		display: contents;
+	}
+}
+
 /* Mobile: intro block is center-aligned, per the Figma mobile frame (desktop's is left-aligned,
    pinned beside the sticky card stack — a completely different composition since the stack
    itself isn't side-by-side on mobile, see .amfc-philosophy__grid's own mobile column count
@@ -1251,10 +1275,12 @@ body {
 	/* Replaces the real flow height .amfc-philosophy__intro-slot used to contribute as a normal
 	   grid row before it became position: absolute (above) — without this, .amfc-philosophy__stack
 	   would start at the very top of the grid instead of below the intro, visibly jumping up.
-	   96px (.amfc-philosophy__intro's own margin-top) + ~112px (its real height) + 32px (the grid
-	   gap that no longer applies between an out-of-flow item and a real one) = ~240px. */
+	   96px (.amfc-philosophy__intro's own margin-top) + ~91.3px (its real height, re-measured
+	   after the mobile-only 3-line/1-line headline split — shorter than the desktop split's
+	   ~112px, since .amfc-philosophy__heading-lines--mobile's own two lines render more evenly)
+	   + 32px (the explicit gap to the card stack, per feedback) = ~219px. */
 	.amfc-philosophy__stack {
-		margin-top: 240px;
+		margin-top: 219px;
 	}
 }
 

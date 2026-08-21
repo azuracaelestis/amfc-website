@@ -40,6 +40,12 @@ return [
     'home.philosophy.headline_line1_highlight' => '創新、專業、',
     'home.philosophy.headline_line2_highlight' => '效率、誠信',
     'home.philosophy.headline_line2_suffix' => '四項理念',
+    // Mobile-only alternate line break, per feedback ("我們以創新、專業、效率、" / "誠信四項理念" —
+    // 3 principles on the first line instead of 2). Desktop keeps the pair above unchanged; see
+    // philosophy.php for how the two versions are toggled by breakpoint (CSS display, not PHP,
+    // so this stays a single build with no server-side breakpoint detection).
+    'home.philosophy.headline_line1_mobile_highlight' => '創新、專業、效率、',
+    'home.philosophy.headline_line2_mobile_highlight' => '誠信',
     // icon_alt keys removed with the KSP card re-skin: the four stat-card icons are now purely
     // decorative (alt="" aria-hidden="true" on each <img>, same convention as the hero sparkles
     // and the KSP watermark) since the number+label text already carries the meaning — see
