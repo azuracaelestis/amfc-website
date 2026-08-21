@@ -213,6 +213,21 @@
 	z-index: 1;
 }
 
+/* Mobile: pull the white block up further so it covers the BOTTOM PORTION of the mobile hero
+   photo specifically, per feedback — not just closing the gap below it (which -94.4px already
+   did) but actually overlapping into the photo. Matches the real Figma mobile frame's own
+   composition: its white section (Rectangle 80, node 145:323) starts 19% of the way up from
+   the photo's own bottom edge (measured against the photo's real 433px height there). Applied
+   to our photo's actual 375px height: 0.19 * 375 = ~71px of overlap, so the white block's top
+   needs to sit 71px above (mobile) .amfc-hero__photo-wrap's bottom edge — confirmed via
+   getBoundingClientRect, not just computed from the ratio alone, since the desktop -94.4px
+   margin above already closes part of the gap on its own and the two don't simply add. */
+@media (max-width: 991.98px) {
+	.amfc-curve-top {
+		margin-top: -260px;
+	}
+}
+
 /* --- Header / nav ---
    Floating rounded pill per the reference screenshot: translucent white, rounded-full,
    offset from the top edge and from the side edges (not full-width, not flush to top). */
@@ -529,6 +544,13 @@
 @media (max-width: 991.98px) {
 	.amfc-hero {
 		background: var(--amfc-grad-hero-mobile);
+		/* 32px between the nav pill and the eyebrow, per feedback. The nav pill is
+		   position:fixed (not in flow), so this "gap" is really just the hero's own top
+		   padding — the eyebrow is the first thing inside it. Target = the pill's own fixed
+		   position (top: 1.5rem = 26.4px here) + its mobile height (53px, see .amfc-nav-pill)
+		   + the requested 32px = 111.4px. Fluid-scaled at the 375px mobile reference like
+		   everything else in this file's mobile overrides. */
+		padding-top: clamp(5rem, calc(111.4 / 375 * 100vw), 111.4px);
 	}
 }
 
@@ -607,6 +629,9 @@
 	.amfc-hero__eyebrow {
 		/* 16px at the 375px mobile reference width, fluid-scaled below it, per feedback */
 		font-size: clamp(0.75rem, calc(16 / 375 * 100vw), 16px);
+		/* Eyebrow-to-headline gap: 16px at the 375px reference, per feedback (was the shared
+		   --amfc-space-md, 1rem/17.6px — close but not exact). */
+		margin-bottom: clamp(0.75rem, calc(16 / 375 * 100vw), 16px);
 	}
 
 	.amfc-hero__headline {
@@ -763,6 +788,14 @@
 		width: clamp(15.75rem, calc(338 / 375 * 100vw), 338px);
 		height: clamp(2.75rem, calc(48 / 375 * 100vw), 48px);
 		padding-block: clamp(0.5rem, calc(9 / 375 * 100vw), 9px);
+		/* The white .amfc-curve-top block below (see that rule's own mobile override) now pulls
+		   up far enough to reach where the CTA sits, not just the photo — without this, the
+		   next section's white block (z-index: 1) would paint over/hide the button entirely,
+		   since .amfc-hero itself has no z-index of its own to keep its content above a later
+		   sibling. position: relative is required for z-index to take effect at all here (the
+		   button has no other explicit position). */
+		position: relative;
+		z-index: 2;
 	}
 
 	.amfc-hero__cta .amfc-btn__label {
