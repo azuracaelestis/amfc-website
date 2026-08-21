@@ -1015,15 +1015,20 @@ body {
 	.amfc-philosophy__watermark-mobile {
 		display: block;
 		margin-inline: auto;
-		width: clamp(14rem, calc(320 / 375 * 100vw), 320px);
+		/* Narrowed from 320px per the 9:16 fit budget (see .amfc-philosophy__stack's mobile
+		   --amfc-stack-top override for the full arithmetic) — the mark is the one element here
+		   with no Figma reference to preserve, so it's the one that absorbs most of the
+		   reduction needed to fit the eyebrow + headline + card + watermark together in one
+		   screen. Height follows from the asset's own intrinsic ratio (285:150) via height:auto. */
+		width: clamp(13rem, calc(300 / 375 * 100vw), 300px);
 		height: auto;
 		/* Pushes the mark down to peek out below the pinned card instead of sitting directly
 		   behind it (same top offset as the card otherwise, see .amfc-philosophy__watermark-slot
 		   above) — a transform, not margin, specifically so it doesn't feed back into the
 		   slot's own sticky trigger timing. 290px matches .amfc-philosophy__stat-card's mobile
 		   max-width at >=375px viewports; 20px matches .amfc-philosophy__stack's own card-to-card
-		   gap, so the mark trails the pinned card by the same distance the next card would. */
-		transform: translateY(calc(290px + 20px));
+		   gap; +24px more per feedback, moving the mark further down. */
+		transform: translateY(calc(290px + 20px + 24px));
 		opacity: 1; /* static, not wired to --amfc-philosophy-watermark-fade — that scroll-driven
 		               fade exists only to hide desktop's viewport-fixed mark before it can bleed
 		               into Funds partnership below; this mark is already contained within the
@@ -1114,14 +1119,30 @@ body {
 		   sits in between and isn't expressible as simple arithmetic. */
 		margin-top: 96px;
 		text-align: center;
+		/* Sticky here too, per feedback — "make the headline sticky while the cards below are
+		   stacking," the same idea the desktop two-column layout already has (see the
+		   min-width: 992px block above), just single-column instead of side-by-side. margin-top
+		   above still governs where it FIRST appears in normal flow; top here is only where it
+		   pins once scrolled that far. z-index: 5 keeps it above every card (1-4) and the
+		   watermark (0) for the whole time both are on screen together — without it, DOM order
+		   alone would let a card at an equal-or-higher z-index paint over it during the overlap
+		   window right as the intro finishes pinning and card 1 arrives. */
+		position: sticky;
+		top: 24px;
+		z-index: 5;
 	}
 
 	.amfc-philosophy__heading {
 		align-items: center;
 	}
 
+	/* gap: 12px (was the unconditional var(--amfc-space-lg), 35.2px) is deliberately part of the
+	   9:16 budget below (see .amfc-philosophy__stack's mobile --amfc-stack-top override) — with
+	   the intro now sticky above the stack rather than scrolling away, its height also counts
+	   against how much room is left for the card + watermark within one screen. */
 	.amfc-philosophy__grid {
 		padding-top: 0;
+		gap: 12px;
 	}
 }
 
@@ -1163,6 +1184,24 @@ body {
 	/* Containing block for .amfc-philosophy__watermark-overlay's mobile inset: 0 (see that
 	   rule) — harmless on desktop, where nothing here is absolutely positioned against it. */
 	position: relative;
+}
+
+/* Mobile: --amfc-stack-top switches from the desktop value's viewport-height-relative clamp (it
+   only had to clear the nav) to a fixed px derived from real content height, per feedback that
+   the eyebrow, headline, card stack, and watermark together should fit within one 9:16 screen
+   (375x667 at the mobile reference width). With the headline now sticky above the stack (see
+   .amfc-philosophy__intro's mobile block) rather than scrolling away first, the stack's own pin
+   point has to start BELOW wherever the headline settles, not just below the nav — 24px
+   (.amfc-philosophy__intro's own sticky top) + ~129.84px (its real measured height at the
+   375px reference width) + 12px (.amfc-philosophy__grid's mobile gap) = ~165.84px, rounded to
+   166px. The 9:16 budget this unlocks: 24 + 129.84 + 12 + 290 (card) + 44 (the
+   .amfc-philosophy__watermark-mobile gap below, including this same feedback's +24px) + ~157.9
+   (watermark height at its own reduced 300px mobile width) = ~657.7px, under 667px with a small
+   margin — see that rule for the matching width reduction. */
+@media (max-width: 991.98px) {
+	.amfc-philosophy__stack {
+		--amfc-stack-top: 166px;
+	}
 }
 
 /* Provides the scroll runway for the last card to release before Funds partnership begins.
