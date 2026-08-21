@@ -268,7 +268,14 @@
 /* Shifted 20px right per feedback — the hero content block (.amfc-hero__content) gets the
    identical shift below, so the two stay aligned with each other, just both moved right. */
 .amfc-nav__brand {
-	display: inline-block;
+	display: inline-flex; /* was inline-block — the .navbar row's own align-items:center only
+	   centers .amfc-nav__brand ITSELF within the row, not the logo image within an
+	   inline-block wrapper that's taller than the image (inline-block reserves extra
+	   line-height space below the image, the classic "gap under an inline image" quirk, still
+	   present even with display:block on the img alone — confirmed via measurement: logo/icon
+	   centers were still ~1.5px apart with just that fix). inline-flex + align-items:center
+	   here centers the image precisely within its own wrapper too, closing that residual gap. */
+	align-items: center;
 	transform: translateX(20px);
 }
 
@@ -287,13 +294,23 @@
 	}
 
 	.amfc-nav-pill .navbar {
-		/* height above is now explicit, so the navbar's own vertical centering (align-items is
+		/* !important required on padding-block: the <nav> element carries a literal `py-2`
+		   utility class in the markup (header.php), and Bootstrap's spacing utilities ship with
+		   !important — a plain override here was silently losing to it (traced via
+		   CSS.getMatchedStylesForNode, same technique as the toggler background fix below).
+		   height above is now explicit, so the navbar's own vertical centering (align-items is
 		   Bootstrap's default on .navbar, already centers its row) just needs padding-block
-		   reset to 0 — otherwise 0.45rem top+bottom would push the (now-fixed-height) row's
-		   content taller than the pill and get clipped by nothing (no overflow:hidden here),
-		   but would still visually mismatch the intended 53px. */
-		padding-block: 0;
+		   reset to 0 — otherwise the row's content would sit taller than the pill and get
+		   pushed off-center within it. */
+		padding-block: 0 !important;
 		height: 100%;
+		/* nowrap: Bootstrap's .navbar defaults to flex-wrap:wrap, and per feedback ("center
+		   align for the height") the logo and + icon were landing ~4px below the row's true
+		   center — traced to align-content's default (multi-line) distribution kicking in
+		   whenever the row was computed as wrapped, even though only one visible line of
+		   content is ever present here. Forcing nowrap removes that ambiguity, leaving plain
+		   align-items: center (single line) to center them exactly. */
+		flex-wrap: nowrap;
 	}
 
 	.amfc-nav__brand img {
@@ -307,6 +324,16 @@
 		width: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 20.51px);
 		height: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 20.51px);
 	}
+
+	/* The button itself was already centered correctly in the row (fixed above via
+	   flex-wrap:nowrap), but the icon span INSIDE the button was still ~1.5px off — the button
+	   is display:block (Bootstrap default), so the icon was subject to the same inline
+	   baseline/line-height gap the logo image had before its own flex fix. Same remedy here. */
+	.amfc-nav__toggler {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 }
 
 /* Mobile menu toggle — see header.php for why this exists (navbar-expand-lg had no way to
@@ -316,6 +343,11 @@
 .amfc-nav__toggler {
 	border: none;
 	padding: 0.25rem;
+	background-color: transparent !important; /* per feedback — was rendering solid white.
+	   Traced via CSS.getMatchedStylesForNode: AMFC's own live custom.css has
+	   `.navbar-toggler { background-color: #fff !important; }` (their original site's nav
+	   styling, inherited unintentionally since we reuse Bootstrap's .navbar-toggler class name)
+	   — !important is required to beat it, same reasoning as box-shadow below. */
 	box-shadow: none !important; /* !important matches Bootstrap's own focus-ring rule's
 	   specificity, which this needs to beat to actually remove the default blue glow */
 }
