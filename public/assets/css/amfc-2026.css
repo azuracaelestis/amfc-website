@@ -2432,17 +2432,20 @@ body {
    view. Each card triggers independently — card 1 entering view never touches card 2's class —
    and each card is unobserved once it fires, so scrolling it out and back in never replays it.
 
-   The animations below reuse the exact desktop hover keyframes unchanged — only the trigger (a
-   class instead of :hover) and the timing differ, so this reads as the same card's own delight,
-   not a different effect. animation-iteration-count: 1 is what turns each infinite hover loop
-   into a one-shot. Duration is 4600ms (600ms + 4s), per feedback asking for the touch one-shot
-   to play noticeably longer than its first pass — since each of these keyframes already loops
-   through its own motion as a percentage of its own duration (e.g. amfc-illo-twinkle peaks at
-   its own 50%), stretching the duration slows the whole gesture down into a slower, more
-   lingering version of the same motion rather than changing what it does. The sparkle stagger
-   below is scaled up by the same ~7.7x factor (200ms -> 1500ms) so it still reads as a
-   proportional offset within the new, longer duration instead of becoming imperceptible next
-   to it. */
+   The animations below reuse the exact desktop hover keyframes AND their exact desktop
+   per-cycle durations unchanged — only the trigger (a class instead of :hover) and the
+   iteration-count differ. A first attempt at "play longer" simply stretched each keyframe's own
+   duration out to ~4.6s, which technically lasted longer but also slowed the motion itself down
+   into a sluggish crawl (each keyframe expresses its motion as a % of its own duration, so a
+   longer duration is a slower pass, not a longer one) — wrong per feedback ("I want the motion
+   pace the same like the desktop version, but extend it to 4 seconds longer"). The fix: keep
+   each animation-duration identical to its own desktop hover value (that IS "the same pace"),
+   and instead repeat it enough times to fill ~4.6s (the original ~0.6s one-shot length + the
+   requested +4s) — the same trick desktop's own hover already relies on (infinite, capped here
+   to a finite count instead of an indefinite hover). amfc-illo-coin-bounce is the one exception:
+   it's already single-shot on desktop (nothing to loop), so it stays exactly as it was there,
+   playing its one quick bounce early and then holding rest while the looping parts continue —
+   the same relationship it has to the other motions during a real desktop hover. */
 @media (hover: none) and (pointer: coarse) {
 	@media (prefers-reduced-motion: no-preference) {
 		.amfc-illo-car__sparkle,
@@ -2451,24 +2454,28 @@ body {
 			transform-origin: center;
 		}
 
+		/* 900ms per cycle, matching the desktop hover value exactly; 5 iterations = 4.5s. */
 		.amfc-service-card--played .amfc-illo-car__sparkle,
 		.amfc-service-card--played .amfc-illo-personal__sparkle {
-			animation: amfc-illo-twinkle 4600ms ease-in-out 1;
+			animation: amfc-illo-twinkle 900ms ease-in-out 5;
 		}
 
-		/* Same reasoning as the hover version's own stagger: the car card's two sparkles
-		   shouldn't peak together. */
+		/* Same 300ms desktop stagger, unchanged — the car card's two sparkles shouldn't peak
+		   together. */
 		.amfc-service-card--played .amfc-illo-car__sparkle--2 {
-			animation-delay: 1500ms;
+			animation-delay: 300ms;
 		}
 
+		/* Unchanged from desktop — already single-shot there, so there's nothing to loop; see
+		   this block's own opening comment for why. */
 		.amfc-service-card--played .amfc-illo-car__coin,
 		.amfc-service-card--played .amfc-illo-personal__coin {
-			animation: amfc-illo-coin-bounce 4600ms var(--amfc-ease-out) 1;
+			animation: amfc-illo-coin-bounce 600ms var(--amfc-ease-out) 1;
 		}
 
+		/* 1400ms per cycle, matching desktop; 3 iterations = 4.2s. */
 		.amfc-service-card--played .amfc-illo-car__car {
-			animation: amfc-illo-car-rock 4600ms ease-in-out 1;
+			animation: amfc-illo-car-rock 1400ms ease-in-out 3;
 		}
 
 		.amfc-illo-personal__bag {
@@ -2476,8 +2483,9 @@ body {
 			transform-origin: 99% 60%;
 		}
 
+		/* 1200ms per cycle, matching desktop; 4 iterations = 4.8s. */
 		.amfc-service-card--played .amfc-illo-personal__bag {
-			animation: amfc-illo-bag-swing 4600ms ease-in-out 1;
+			animation: amfc-illo-bag-swing 1200ms ease-in-out 4;
 		}
 	}
 
