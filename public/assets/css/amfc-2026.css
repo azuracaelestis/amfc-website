@@ -113,6 +113,12 @@
 		width: 100%;
 		padding-inline: 20px;
 	}
+
+	/* 90px gap to the sections on either side (Services above, App-download below), split
+	   45/45 — per feedback, mobile's own gap convention. */
+	.amfc-trust {
+		padding-block: 45px;
+	}
 }
 
 .amfc-trust__grid {
@@ -186,6 +192,9 @@
 	.amfc-trust__text {
 		align-items: center;
 		text-align: center;
+		/* 16px between headline and body, per feedback (was 1.125rem, ~19.8px under AMFC's
+		   1.1rem root bug). */
+		gap: 16px;
 	}
 }
 
@@ -1946,7 +1955,11 @@ body {
    after their base rules. */
 @media (max-width: 991.98px) {
 	.amfc-funds {
-		padding-block: 48px;
+		/* Top (facing the KSP section, which per feedback stays untouched) keeps its original
+		   Figma-confirmed 48px. Bottom changed to 45px so the gap to Services below lands on
+		   the shared 90px mobile convention (45 + 45), per feedback. */
+		padding-top: 48px;
+		padding-bottom: 45px;
 	}
 
 	.amfc-funds__row {
@@ -1982,6 +1995,15 @@ body {
 	   #F5F7FF is the same hex as --amfc-lavender-100. */
 	background: linear-gradient(to bottom, var(--amfc-lavender-100) 36.03%, var(--amfc-white) 90.18%);
 	text-align: center;
+}
+
+/* Mobile: 90px gap to the sections on either side (Funds above, Trust below), split 45/45 —
+   per feedback, mobile's own gap convention (KSP and Hero are excluded from this, per
+   feedback — Funds' own top padding facing KSP is left as-is, see .amfc-funds). */
+@media (max-width: 991.98px) {
+	.amfc-services {
+		padding-block: 45px;
+	}
 }
 
 /* Mobile: same .amfc-container margin-bug fix as every other section here (the shared class's
@@ -2575,6 +2597,12 @@ body {
 		width: 100%;
 		padding-inline: 19px;
 	}
+
+	/* 90px gap to the sections on either side (Trust above, Investor below), split 45/45 —
+	   per feedback, mobile's own gap convention. */
+	.amfc-app {
+		padding-block: 45px;
+	}
 }
 
 /* Full-bleed, edge-to-edge across the whole viewport width with no corner radius — confirmed
@@ -2661,6 +2689,9 @@ body {
 @media (max-width: 991.98px) {
 	.amfc-app__headline {
 		font-size: 24px;
+		/* 16px to the body copy below, per feedback (was 1.125rem, ~19.8px under AMFC's 1.1rem
+		   root bug). */
+		margin-bottom: 16px;
 	}
 }
 
@@ -2706,6 +2737,12 @@ body {
 	.amfc-investor .amfc-container {
 		width: 100%;
 		padding-inline: 20px;
+	}
+
+	/* 90px gap to the sections on either side (App-download above, News below), split 45/45 —
+	   per feedback, mobile's own gap convention. */
+	.amfc-investor {
+		padding-block: 45px;
 	}
 }
 
@@ -2782,6 +2819,25 @@ body {
 	line-height: 1.5;
 }
 
+/* Mobile: headline-to-body set to an exact 16px, per feedback. .amfc-investor__text's shared
+   `gap` (24px) applies uniformly to ALL of its children (heading, body, cta), so it can't
+   target just this one pair — switched to gap: 0 here plus explicit margin-bottom on the
+   heading (16px) and the body (24px, preserving the existing body-to-cta spacing, which wasn't
+   part of this request). */
+@media (max-width: 991.98px) {
+	.amfc-investor__text {
+		gap: 0;
+	}
+
+	.amfc-investor__heading {
+		margin-bottom: 16px;
+	}
+
+	.amfc-investor__body {
+		margin-bottom: 24px;
+	}
+}
+
 .amfc-investor__cta {
 	display: inline-flex;
 	align-items: center;
@@ -2838,6 +2894,16 @@ body {
 	padding-block: clamp(2.1875rem, calc(70 / 1440 * 100vw), 70px);
 	background: var(--amfc-mint-100);
 	border-radius: 32px 32px 0 0;
+}
+
+/* Mobile: top half of the 90px gap to the Investor section above set to 45px, per feedback
+   ("padding between each section" convention) — bottom stays this section's own Figma-confirmed
+   70px symmetric value (see comment above) since it faces the footer, not another content
+   section. */
+@media (max-width: 991.98px) {
+	.amfc-news-grid {
+		padding-top: 45px;
+	}
 }
 
 /* .amfc-container (width: min(100%, 1264px), centered) plus this section's own flex/gap layout
