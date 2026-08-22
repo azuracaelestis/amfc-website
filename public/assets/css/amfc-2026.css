@@ -737,21 +737,30 @@
 		margin-top: 52px;
 	}
 
+	/* Desktop-only 20px right shift, matching .amfc-hero__content's own (see that rule) so the
+	   button's left edge lines up with the eyebrow/headline above it.
+
+	   margin-left, NOT transform: translate(20px, 0), which is what this used to be. `transform`
+	   is a single property that can't be composed across separate rules, and this button already
+	   has two OTHER rules that legitimately want it — .amfc-btn:hover's scale(1.05) and the
+	   amfc-hero-fade-up entrance animation's translateY — so using it for static positioning too
+	   meant whichever won simply erased the shift. That caused two real bugs:
+	     1. Hover: .amfc-btn:hover (0,2,0) beat the static translate (0,1,0), dropping the offset
+	        so the button jumped ~23px left mid-hover instead of scaling in place.
+	     2. Load: animations outrank normal declarations, so through the 700ms delay (fill-mode
+	        backwards) plus the animation itself the button sat un-shifted, then snapped 20px
+	        right the moment the animation ended.
+	   Moving the offset to margin-left takes it out of that contention entirely — transform is
+	   now free for the hover scale and the entrance animation, and the button inherits
+	   .amfc-btn:hover's plain scale(1.05) with no override needed, making it behave identically
+	   to .amfc-service-card__cta (the product-card button) rather than approximating it.
+
+	   Scoped to desktop because mobile's button is width: 100% of the container's content box
+	   (see its own mobile rule) — already flush/centered there, so any shift pushes it off
+	   center and past the viewport's right edge. */
 	.amfc-hero__cta {
 		margin-top: -110.3px;
-	}
-
-	/* Bug fix, per feedback ("hover state is wrong... should follow the product section's card
-	   button"): .amfc-btn:hover sets transform: scale(1.05) at higher specificity (0,2,0) than
-	   this button's own static transform: translate(20px, 0) (0,1,0) — on hover, that COMPLETELY
-	   replaces the translate (transform is a single property, not additive across separate
-	   rules), so the button visibly jumped ~23px left on hover instead of just scaling in place.
-	   .amfc-service-card__cta never hit this because it has no static transform of its own to
-	   lose. Re-combining both here (translate first, scale second, same order CSS transform
-	   functions compose in) restores the clean in-place scale the product cards already have. */
-	.amfc-hero__cta:hover,
-	.amfc-hero__cta:focus-visible {
-		transform: translate(20px, 0) scale(1.05);
+		margin-left: 20px;
 	}
 }
 
@@ -762,13 +771,9 @@
 	transform: translate(20px, 0);
 }
 
-/* Same 20px shift as .amfc-hero__content above, per feedback ("aligned with the headline") —
-   the button was never given this shift when content originally picked it up (matching
-   .amfc-nav__brand's own identical shift, per that rule's comment), so its left edge sat 20px
-   left of the headline's real position at every breakpoint, not just desktop. */
-.amfc-hero__cta {
-	transform: translate(20px, 0);
-}
+/* The button's matching 20px shift is NOT here — it lives in the desktop @media block above as
+   margin-left, deliberately. As an unconditional transform it broke both breakpoints; see that
+   rule's own comment for the full reasoning. */
 
 .amfc-hero__eyebrow {
 	color: var(--amfc-white);
