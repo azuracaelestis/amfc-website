@@ -2085,7 +2085,10 @@ body {
 	   vendored here. */
 	border: none;
 	box-shadow: var(--amfc-shadow-card);
-	border-radius: var(--amfc-radius-xl);
+	/* 16px, per feedback (was var(--amfc-radius-xl), 2rem — 35.2px under AMFC's 1.1rem root
+	   bug), applied to both desktop and mobile — same fix as .amfc-investor__photo-wrap and
+	   matching .amfc-news-card's own flat 16px. */
+	border-radius: 16px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
