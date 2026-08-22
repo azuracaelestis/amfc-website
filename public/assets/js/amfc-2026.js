@@ -327,6 +327,33 @@ window.AMFC = (function () {
 		});
 	}
 
+	/* Touch tap affordance for the "最新消息" news cards — per feedback, these have no button and
+	   rely on desktop's hover-float to signal tappability, which doesn't exist on touch. Only the
+	   press-down dip needs JS (the chevron is pure CSS, always visible under the same media
+	   query — see .amfc-news-card__chevron in amfc-2026.css); this mirrors
+	   initServiceCardTouchDelight's press-feedback half exactly, since it's the same interaction
+	   pattern (finger-down dip, finger-up/cancel release, one card's press never affecting its
+	   siblings). No IntersectionObserver/one-shot half here — these cards have no auto-play
+	   motion to trigger, only the always-present chevron plus this per-touch dip. */
+	function initNewsCardTouchAffordance() {
+		if (!window.matchMedia('(hover: none)').matches) return;
+
+		var cards = document.querySelectorAll('.amfc-news-card');
+		if (!cards.length) return;
+
+		cards.forEach(function (card) {
+			card.addEventListener('touchstart', function () {
+				card.classList.add('amfc-news-card--pressed');
+			}, { passive: true });
+
+			['touchend', 'touchcancel'].forEach(function (type) {
+				card.addEventListener(type, function () {
+					card.classList.remove('amfc-news-card--pressed');
+				}, { passive: true });
+			});
+		});
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
@@ -334,6 +361,7 @@ window.AMFC = (function () {
 		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--3');
 		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--4');
 		initServiceCardTouchDelight();
+		initNewsCardTouchAffordance();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

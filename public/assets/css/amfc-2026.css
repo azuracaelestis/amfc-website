@@ -2992,6 +2992,63 @@ body {
 	object-fit: cover;
 }
 
+/* Hidden by default/on hover devices — the existing hover-float above already signals
+   tappability there, per feedback ("chevron should NOT appear on desktop"). Shown only inside
+   the touch-only block below. */
+.amfc-news-card__chevron {
+	display: none;
+}
+
+/* Touch tap affordance, per feedback: a persistent chevron (advertises tappability before the
+   tap) plus a press-down dip (confirms it during the tap) — hover devices get neither, since
+   the existing hover-float already does both jobs there. `(hover: none) and (pointer: coarse)`,
+   not a width breakpoint, so a trackpad laptop keeps float-only and a tablet gets both. */
+@media (hover: none) and (pointer: coarse) {
+	.amfc-news-card {
+		position: relative;
+		/* Press timing (0.16s, cubic-bezier(.4,0,.2,1)) is deliberately its own values, not a
+		   reuse of the hover transition above (0.2s ease) — the two are triggered by different
+		   devices and never run at the same time, so there's no need for them to share a curve. */
+		transition: transform 0.16s cubic-bezier(0.4, 0, 0.2, 1), filter 0.16s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.amfc-news-card__chevron {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		right: 12px;
+		bottom: 12px;
+		width: 28px;
+		height: 28px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.16);
+		color: rgba(255, 255, 255, 0.88);
+		font-size: 20px;
+		line-height: 1;
+		/* Visual cue only — the whole card is the tap target, per feedback. */
+		pointer-events: none;
+	}
+
+	/* Toggled by touchstart/touchend/touchcancel in amfc-2026.js. filter: drop-shadow, not
+	   box-shadow, for the same reason as the hover rule above — this element's own
+	   overflow: hidden would clip a box-shadow before it ever became visible. */
+	.amfc-news-card--pressed {
+		transform: scale(0.97);
+		filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.15));
+	}
+}
+
+/* Reduced motion: the chevron is a static affordance, not animation, so it's unaffected either
+   way (it never animates in the rule above). The press dip is essential touch feedback, per
+   feedback, so it also stays — this block exists only to document that neither needs to be
+   stripped, not to change anything. */
+@media (hover: none) and (pointer: coarse) and (prefers-reduced-motion: reduce) {
+	.amfc-news-card {
+		transition: none;
+	}
+}
+
 /* --- Footer --- */
 
 /* CORRECTED: real design (Figma get_design_context, node 87:76-138) has a WHITE footer with

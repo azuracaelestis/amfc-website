@@ -19,14 +19,21 @@
 	<div class="amfc-container amfc-news-grid__inner">
 		<h2 class="amfc-news-grid__heading"><?= e(t('home.news.heading')) ?></h2>
 		<div class="amfc-news-grid__grid">
+			<!-- .amfc-news-card__chevron: touch-only tap affordance (see amfc-2026.css) — hidden by
+			     default/on hover devices, since the existing hover-float already signals
+			     tappability there. Decorative (the whole card is the link/tap target, not just
+			     this glyph), so aria-hidden. -->
 			<a href="/media" class="amfc-news-card text-decoration-none">
 				<img class="amfc-news-card__image" src="<?= e(asset('images/news-media.png')) ?>" alt="<?= e(t('home.grid.media.alt')) ?>" />
+				<span class="amfc-news-card__chevron" aria-hidden="true">&rsaquo;</span>
 			</a>
 			<a href="/active" class="amfc-news-card text-decoration-none">
 				<img class="amfc-news-card__image" src="<?= e(asset('images/news-event.png')) ?>" alt="<?= e(t('home.grid.event.alt')) ?>" />
+				<span class="amfc-news-card__chevron" aria-hidden="true">&rsaquo;</span>
 			</a>
 			<a href="/anti_fraud" class="amfc-news-card text-decoration-none">
 				<img class="amfc-news-card__image" src="<?= e(asset('images/news-antifraud.png')) ?>" alt="<?= e(t('home.grid.antifraud.alt')) ?>" />
+				<span class="amfc-news-card__chevron" aria-hidden="true">&rsaquo;</span>
 			</a>
 		</div>
 	</div>
