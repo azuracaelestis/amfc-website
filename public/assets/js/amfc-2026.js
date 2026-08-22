@@ -120,8 +120,19 @@ window.AMFC = (function () {
 		// (~sectionBottom 469-675 across that window), completing the fade to 0 by
 		// sectionBottom 150 — well before this section's box fully leaves the viewport
 		// (sectionBottom 0) and well before Funds' own content is on screen at all.
-		var FADE_START = isMobile ? 500 : 1600;
-		var FADE_END = isMobile ? 150 : 800;
+		//
+		// Bug fix, per feedback (mark missing under the card stack in real Chrome, but present in
+		// a taller preview environment): those 500/150 were literal pixel constants, not scaled to
+		// the viewport they were measured against — so on any real window SHORTER than 900px
+		// (the vast majority of actual phones/browser chrome), --amfc-stack-top and the cards'
+		// other vh-relative pin points settle at a smaller on-screen position than they did in
+		// that 900px test, while these two thresholds stayed fixed — the fade-out could complete
+		// well before card 4 actually finishes settling. Scaled by window.innerHeight (read once,
+		// same "no resize listener" convention as the rest of this file) using the ORIGINAL
+		// numbers' own ratio to 900px, so behavior at exactly 900px is unchanged and other heights
+		// now scale proportionally instead of using a mismatched fixed offset.
+		var FADE_START = isMobile ? (window.innerHeight * (500 / 900)) : 1600;
+		var FADE_END = isMobile ? (window.innerHeight * (150 / 900)) : 800;
 		var ticking = false;
 
 		function onScroll() {
