@@ -269,12 +269,71 @@ window.AMFC = (function () {
 		observer.observe(card, { attributes: true, attributeFilter: ['class'] });
 	}
 
+	/* Touch-only counterpart to the service cards' desktop :hover delight (see amfc-2026.css,
+	   ".amfc-service-card:hover .amfc-illo-*"). Two independent behaviors, both gated on the
+	   SAME device capability check as the CSS they drive:
+
+	   1. A one-shot illustration animation, played once per card the first time that specific
+	      card scrolls ~25% into view (adds .amfc-service-card--played, which the CSS above turns
+	      into a single ~600ms pass of that card's own hover keyframes).
+	   2. Tap press feedback (.amfc-service-card--pressed) on every touchstart/touchend, available
+	      on every tap regardless of whether that card's one-shot has already played.
+
+	   (hover: none) and (pointer: coarse) — not a width breakpoint — is what actually answers
+	   "is there a cursor to hover with": a narrow desktop window stays on the :hover path above,
+	   a wide touch tablet gets this one, matching the same query the CSS gates on. Generic over
+	   however many .amfc-service-card elements exist (currently two — car-loan and
+	   personal-loan), each wired up identically and triggered independently, so a future card
+	   added to this section picks up both behaviors with no JS change. */
+	function initServiceCardTouchDelight() {
+		if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
+
+		var cards = document.querySelectorAll('.amfc-service-card');
+		if (!cards.length) return;
+
+		var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		var canObserve = 'IntersectionObserver' in window;
+
+		cards.forEach(function (card) {
+			// Press feedback: independent of the one-shot below and unaffected by
+			// prefers-reduced-motion — this is direct feedback for a touch already in progress,
+			// not decorative motion. touchcancel is covered alongside touchend so a scroll that
+			// interrupts the touch still releases the dip instead of leaving it stuck down.
+			card.addEventListener('touchstart', function () {
+				card.classList.add('amfc-service-card--pressed');
+			}, { passive: true });
+
+			['touchend', 'touchcancel'].forEach(function (type) {
+				card.addEventListener(type, function () {
+					card.classList.remove('amfc-service-card--pressed');
+				}, { passive: true });
+			});
+
+			// One-shot illustration delight: skipped entirely under reduced motion (per
+			// feedback, "skip the auto-play entirely and render the card static") rather than
+			// attached and left inert — there's nothing for it to watch for once the CSS side
+			// won't animate anyway.
+			if (reduceMotion || !canObserve) return;
+
+			var observer = new IntersectionObserver(function (entries, obs) {
+				entries.forEach(function (entry) {
+					if (!entry.isIntersecting) return;
+					card.classList.add('amfc-service-card--played');
+					obs.unobserve(card); // once — scrolling this card out and back in doesn't replay it
+				});
+			}, { threshold: 0.25 });
+
+			observer.observe(card);
+		});
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
 		initPhilosophyStat1Reveal();
 		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--3');
 		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--4');
+		initServiceCardTouchDelight();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

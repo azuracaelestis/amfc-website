@@ -2407,6 +2407,91 @@ body {
 	75% { transform: translateX(3px); }
 }
 
+/* --- Service-card illustration one-shot (touch/mobile only) ---
+
+   Touch-appropriate counterpart to the hover delight above, gated on device CAPABILITY rather
+   than a screen-width breakpoint: (hover: none) and (pointer: coarse) asks "is there a cursor
+   to hover with," which is the thing that actually matters here. A narrow desktop window is
+   still a hover device and must keep the :hover behavior above completely untouched; a large
+   touch tablet should get this instead regardless of its width — a max-width query would get
+   both of those wrong.
+
+   Additive and behind that query on purpose: comment this whole block out and the :hover-only
+   rules above are the complete, byte-for-byte desktop implementation again — nothing here
+   should ever need touching the hover rules to stay correct.
+
+   .amfc-service-card--played is added once per card by initServiceCardTouchDelight() in
+   amfc-2026.js, via IntersectionObserver, the first time that specific card scrolls ~25% into
+   view. Each card triggers independently — card 1 entering view never touches card 2's class —
+   and each card is unobserved once it fires, so scrolling it out and back in never replays it.
+
+   The animations below reuse the exact desktop hover keyframes unchanged — only the trigger (a
+   class instead of :hover) and the timing (a single ~600ms pass instead of an infinite loop)
+   differ, so this reads as the same card's own delight, not a different effect.
+   animation-iteration-count: 1 is what turns each infinite hover loop into a one-shot;
+   amfc-illo-coin-bounce was already single-shot on desktop, so its own duration carries over
+   untouched. */
+@media (hover: none) and (pointer: coarse) {
+	@media (prefers-reduced-motion: no-preference) {
+		.amfc-illo-car__sparkle,
+		.amfc-illo-personal__sparkle {
+			transform-box: fill-box;
+			transform-origin: center;
+		}
+
+		.amfc-service-card--played .amfc-illo-car__sparkle,
+		.amfc-service-card--played .amfc-illo-personal__sparkle {
+			animation: amfc-illo-twinkle 600ms ease-in-out 1;
+		}
+
+		/* Same reasoning as the hover version's own stagger: the car card's two sparkles
+		   shouldn't peak together. */
+		.amfc-service-card--played .amfc-illo-car__sparkle--2 {
+			animation-delay: 200ms;
+		}
+
+		.amfc-service-card--played .amfc-illo-car__coin,
+		.amfc-service-card--played .amfc-illo-personal__coin {
+			animation: amfc-illo-coin-bounce 600ms var(--amfc-ease-out) 1;
+		}
+
+		.amfc-service-card--played .amfc-illo-car__car {
+			animation: amfc-illo-car-rock 600ms ease-in-out 1;
+		}
+
+		.amfc-illo-personal__bag {
+			transform-box: fill-box;
+			transform-origin: 99% 60%;
+		}
+
+		.amfc-service-card--played .amfc-illo-personal__bag {
+			animation: amfc-illo-bag-swing 600ms ease-in-out 1;
+		}
+	}
+
+	/* Tap press feedback — independent of the one-shot above and available on every tap
+	   regardless of whether that card has already played: this answers "is this tappable,"
+	   the one-shot answers "is this lively," and they're kept as two separate behaviors rather
+	   than one combined effect for that reason. NOT gated on prefers-reduced-motion — this is
+	   direct-manipulation feedback for a press already in progress, not decorative motion, so
+	   `reduce` still gets it (only the auto-play above is skipped under that setting).
+	   .amfc-service-card--pressed is toggled by touchstart/touchend in
+	   initServiceCardTouchDelight(); touchstart specifically (not a click or tap-end handler) is
+	   what makes the dip register the instant a finger touches down rather than after the tap
+	   completes. The transition override below replaces the base rule's 0.2s (tuned for the
+	   hover-only lift) with something snappier — 0.2s reads sluggish for finger-down feedback. */
+	.amfc-service-card {
+		transition: transform 100ms ease-out, box-shadow 100ms ease-out;
+	}
+
+	.amfc-service-card--pressed {
+		transform: scale(0.96);
+		/* Tighter than --amfc-shadow-card's resting 0 12px 32px — a smaller offset/blur reads
+		   as the card sitting closer to the surface while pressed. */
+		box-shadow: 0 4px 12px rgba(22, 35, 79, 0.08);
+	}
+}
+
 /* Box model mostly comes from the shared .amfc-btn class — this rule keeps only what's
    specific to sitting inside the service card, plus a local padding-block override (below) so
    the button itself is part of the 400px height trim without touching .amfc-btn and affecting
