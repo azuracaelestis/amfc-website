@@ -896,9 +896,16 @@
    under 48px. */
 @media (max-width: 991.98px) {
 	.amfc-hero__cta {
-		width: clamp(15.75rem, calc(338 / 375 * 100vw), 338px);
-		height: clamp(2.75rem, calc(48 / 375 * 100vw), 48px);
-		padding-block: clamp(0.5rem, calc(9 / 375 * 100vw), 9px);
+		/* width: 100%, not a flat/frozen 338px — regression fix, per feedback ("I remember it
+		   responsive before"). 338px was tied exactly to .amfc-hero .amfc-container's own
+		   18.5px padding at the 375px reference (375 - 2*18.5 = 338); .amfc-hero__grid is a
+		   single 1fr column on mobile (see that rule above), so the button naturally fills
+		   whatever that column's real width is — same fix/reasoning as .amfc-app__cta's own
+		   width: 100%. Height/padding-block stay fixed, same as that button too — a pill CTA's
+		   height shouldn't grow just because it's wider. */
+		width: 100%;
+		height: 48px;
+		padding-block: 9px;
 		/* The white .amfc-curve-top block below (see that rule's own mobile override) now pulls
 		   up far enough to reach where the CTA sits, not just the photo — without this, the
 		   next section's white block (z-index: 1) would paint over/hide the button entirely,
@@ -919,8 +926,7 @@
 	}
 
 	.amfc-hero__cta .amfc-btn__label {
-		/* 24px at the 375px mobile reference width, fluid-scaled below it, per feedback */
-		font-size: clamp(1.125rem, calc(24 / 375 * 100vw), 24px);
+		font-size: 24px;
 		line-height: 1;
 	}
 }
@@ -2824,15 +2830,19 @@ body {
 	height: clamp(12.7rem, calc(407 / 1440 * 100vw), 407px);
 }
 
-/* Mobile: 339x253px at the 375px reference, per feedback — but fluid (not flat), per later
-   feedback ("make it responsive"), scaling up to 375x280px, which is what the desktop clamp()
-   above actually computes at the 992px handoff (545/1440*991.98 and 407/1440*991.98) — chosen
-   as the ceiling specifically so this bridges into the desktop formula with no jump at the
-   breakpoint, instead of a same-ratio projection that would wildly overshoot it. */
+/* Mobile: 339x253px at the 375px reference, per feedback — fluid (not flat), per later feedback
+   ("make it responsive"). Previous ceiling (375x280, bridging to what the desktop clamp() above
+   computes at 992px) maxed out by ~416px viewport, leaving the photo frozen again for the
+   ~350px of range between there and the 768px row-layout breakpoint below — the same
+   "marooned at a small fixed size while the container keeps growing" bug, just with a higher
+   floor. Ceiling raised to 694x518, the value the same 339/375 ratio reaches right at 768px
+   (.amfc-investor__card's own breakpoint, see @media(min-width:768px) below, where the photo
+   stops being alone in a single column and starts sharing a row with the text) — capped there,
+   not projected further out to 991.98px, so it doesn't fight that row layout for space. */
 @media (max-width: 991.98px) {
 	.amfc-investor__photo-wrap {
-		width: clamp(339px, calc(339 / 375 * 100vw), 375px);
-		height: clamp(253px, calc(253 / 375 * 100vw), 280px);
+		width: clamp(339px, calc(339 / 375 * 100vw), 694px);
+		height: clamp(253px, calc(253 / 375 * 100vw), 518px);
 	}
 }
 
