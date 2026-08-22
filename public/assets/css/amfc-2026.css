@@ -740,6 +740,19 @@
 	.amfc-hero__cta {
 		margin-top: -110.3px;
 	}
+
+	/* Bug fix, per feedback ("hover state is wrong... should follow the product section's card
+	   button"): .amfc-btn:hover sets transform: scale(1.05) at higher specificity (0,2,0) than
+	   this button's own static transform: translate(20px, 0) (0,1,0) — on hover, that COMPLETELY
+	   replaces the translate (transform is a single property, not additive across separate
+	   rules), so the button visibly jumped ~23px left on hover instead of just scaling in place.
+	   .amfc-service-card__cta never hit this because it has no static transform of its own to
+	   lose. Re-combining both here (translate first, scale second, same order CSS transform
+	   functions compose in) restores the clean in-place scale the product cards already have. */
+	.amfc-hero__cta:hover,
+	.amfc-hero__cta:focus-visible {
+		transform: translate(20px, 0) scale(1.05);
+	}
 }
 
 /* Shifted 20px right per feedback (matching .amfc-nav__brand's identical shift so the logo
