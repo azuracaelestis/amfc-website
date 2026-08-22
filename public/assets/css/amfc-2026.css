@@ -2655,6 +2655,15 @@ body {
 	margin-bottom: 1.125rem; /* 18px, confirmed via Figma */
 }
 
+/* Mobile: pinned to an exact 24px, per feedback — the desktop clamp above floors at 1.75rem
+   (30.8px under AMFC's 1.1rem root bug), the same collision already fixed on the KSP/services/
+   trust headlines. Placed after the unconditional rule (equal specificity, later wins). */
+@media (max-width: 991.98px) {
+	.amfc-app__headline {
+		font-size: 24px;
+	}
+}
+
 .amfc-app__body {
 	color: var(--amfc-text-heading); /* #1A2F86, per feedback */
 	font-family: var(--amfc-font-zh); /* Noto Sans TC, per feedback */
