@@ -726,8 +726,19 @@
 		align-self: start;
 	}
 
+	/* Moves the eyebrow/headline/button down 52px as one unit, per feedback. .amfc-hero__content
+	   gets the full 52px directly. .amfc-hero__cta's own position is a fixed margin-top offset
+	   relative to its grid row's start (see the -136.3px comment above) — growing content's
+	   margin-top by 52px only grew that row's start by 26px in practice (confirmed via
+	   getBoundingClientRect; grid's auto-track distribution isn't 1:1 with a spanning item's own
+	   margin), so the button needed its own additional +26px on top of the existing -136.3px to
+	   land the full 52px down while preserving the 48px headline-to-button gap. */
+	.amfc-hero__content {
+		margin-top: 52px;
+	}
+
 	.amfc-hero__cta {
-		margin-top: -136.3px;
+		margin-top: -110.3px;
 	}
 }
 
