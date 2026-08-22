@@ -2599,6 +2599,22 @@ body {
 	display: block;
 }
 
+/* Mobile: height: auto, per feedback (screenshot showing the top of the phone photo cropped
+   off). The desktop height above is tuned against app-photo.png's own aspect ratio; the mobile
+   photo (app-photo-mobile.png, see .amfc-app picture's own comment) is a different image with
+   its own ratio (375x240, 1.5625:1) that the desktop clamp's mobile floor (9.4rem, 165.44px —
+   itself tuned for the OTHER image) doesn't match. At that floor, object-fit: cover had to
+   scale the mobile photo up to cover the full 375px width, pushing its rendered height to
+   ~240px and cropping the ~75px difference — by default split evenly top/bottom via
+   object-position's 50% 50%, which is what was eating into the top of the phone. height: auto
+   instead lets the image render at its own natural 240px for a 375px width, matching exactly —
+   no scaling, no cropping, object-fit: cover becomes a no-op rather than something to fight. */
+@media (max-width: 991.98px) {
+	.amfc-app__photo {
+		height: auto;
+	}
+}
+
 .amfc-app__store-badges {
 	display: flex;
 	justify-content: center;
