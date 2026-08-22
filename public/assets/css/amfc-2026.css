@@ -956,9 +956,12 @@
 	.amfc-hero__eyebrow {
 		/* 16px at the 375px mobile reference width, fluid-scaled below it, per feedback */
 		font-size: clamp(0.75rem, calc(16 / 375 * 100vw), 16px);
-		/* Eyebrow-to-headline gap: 16px at the 375px reference, per feedback (was the shared
-		   --amfc-space-md, 1rem/17.6px — close but not exact). */
-		margin-bottom: clamp(0.75rem, calc(16 / 375 * 100vw), 16px);
+		/* Eyebrow-to-headline gap: 8px at the 375px reference, per feedback (was 16px) — tightens
+		   the block so the headline, photo, CTA, and white panel below all shift up together.
+		   Raw px floor (6px), not 0.5rem — this site's html{font-size:1.1rem} bug (CLAUDE.md)
+		   makes 0.5rem compute to 8.8px, not 8px, which also pushed the floor above the 8px
+		   ceiling (an invalid clamp() range that silently returns the floor at every viewport). */
+		margin-bottom: clamp(6px, calc(8 / 375 * 100vw), 8px);
 	}
 
 	.amfc-hero__headline {
@@ -1082,7 +1085,11 @@
 	.amfc-hero__photo-wrap {
 		margin-inline: -18.5px;
 		width: calc(100% + 37px);
-		margin-top: calc(-1 * var(--amfc-space-lg));
+		/* Cancels the grid's own gap above the photo (-1 * --amfc-space-lg, ~35.2px) same as
+		   before, plus an extra 20px on top — per feedback ("slightly move the image up") — to
+		   pull the (now shorter, see .amfc-hero__photo below) photo a bit closer to the
+		   headline. Photo-to-CTA spacing (the gap below the photo) is untouched either way. */
+		margin-top: calc(-1 * var(--amfc-space-lg) - 20px);
 	}
 
 	.amfc-hero__photo {
@@ -1092,6 +1099,15 @@
 		   above, so it just fills that width directly with no extra transform needed. */
 		transform: none;
 		animation-name: amfc-hero-photo-in-mobile;
+		/* Capped so the hero (incl. the CTA below it) fits within one screen on load — the
+		   source image is square (627x627) and was rendering height:auto at full-bleed width
+		   (~391px tall at 375px), the single largest contributor to the hero's ~874px total vs.
+		   iPhone 17's 852px viewport. object-fit: cover crops it to this shorter box instead of
+		   squashing it; object-position keeps the couple's faces (upper portion of the source
+		   photo) in frame rather than centering the crop. */
+		height: clamp(200px, calc(300 / 375 * 100vw), 300px);
+		object-fit: cover;
+		object-position: top center;
 	}
 }
 
@@ -1147,8 +1163,18 @@
 		   tuned iteratively, not derived by formula in one shot — moving this margin also
 		   shrinks .amfc-hero's own flow height, which shifts .amfc-curve-top's position too
 		   (see that rule's own comment), so the two values were converged together rather than
-		   computed independently. */
-		margin-top: -48.4px;
+		   computed independently.
+
+		   -24.4px, not -48.4px — per later feedback ("move the white background and the button
+		   down by 24px"). Counterintuitively, .amfc-curve-top's OWN margin-top (see that rule)
+		   is UNCHANGED here, not also shifted +24px: this margin's effect on .amfc-hero's flow
+		   height (previous paragraph) already pushes .amfc-curve-top down by the same +24px on
+		   its own, since curve-top's position is a fixed offset from wherever it'd sit right
+		   after the hero in normal flow. Shifting curve-top's own margin too, on top of that,
+		   double-counts the move — confirmed via getBoundingClientRect: doing so moved curve-top
+		   down ~48px against the button's ~24px, collapsing their 24px gap to ~0. This single
+		   change moves both by ~24px and keeps the gap intact. */
+		margin-top: -24.4px;
 	}
 
 	.amfc-hero__cta .amfc-btn__label {
