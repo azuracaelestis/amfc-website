@@ -2918,6 +2918,16 @@ body {
 	padding-block: clamp(2.1875rem, calc(70 / 1440 * 100vw), 70px);
 	background: var(--amfc-mint-100);
 	border-radius: 32px 32px 0 0;
+	/* Bug fix, per feedback ("white part behind the rounded edges, left and right"): the fluid
+	   clamp()-based heights used throughout the sections above this one can leave a sub-pixel
+	   gap between this section's top edge and the Investor section's bottom edge. A flat 1px
+	   gap like that is barely visible along the flat middle of the top edge, but the rounded
+	   corners amplify it into a visible wedge right at the left/right corners — the curve pulls
+	   this box's own edge inward/downward there, so a much larger sliver of whatever's behind
+	   (the plain white page background) shows through exactly at the corners, on both mobile and
+	   desktop. A small negative margin overlaps this section with the one above by 1px, closing
+	   the gap outright regardless of the exact fractional heights involved. */
+	margin-top: -1px;
 }
 
 /* Mobile: top half of the 90px gap to the Investor section above set to 45px, per feedback
