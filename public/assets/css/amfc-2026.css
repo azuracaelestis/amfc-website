@@ -2928,6 +2928,15 @@ body {
 	.amfc-news-grid {
 		padding-top: 45px;
 	}
+
+	/* 338px content width, per feedback — replaces the shared .amfc-container formula's ~304px
+	   at this width (35.2px outer margin + 15.84px own padding stacking, see the many other
+	   per-section overrides in this file for the same root cause). 18.5px per side:
+	   375 - 2*18.5 = 338. */
+	.amfc-news-grid .amfc-container {
+		width: 100%;
+		padding-inline: 18.5px;
+	}
 }
 
 /* .amfc-container (width: min(100%, 1264px), centered) plus this section's own flex/gap layout
@@ -2948,6 +2957,15 @@ body {
 	/* 24px at the 1440px reference width, fluid-scaled below it, confirmed via Figma — kept
 	   unchanged by the width restructure above, per feedback. */
 	font-size: clamp(1.25rem, calc(24 / 1440 * 100vw), 24px);
+}
+
+/* Explicit left align, per feedback — the heading was already effectively left (the browser's
+   default `start`), but stated explicitly here so it can't drift if a future ancestor sets
+   text-align: center the way several other sections in this file do for their mobile headline. */
+@media (max-width: 991.98px) {
+	.amfc-news-grid__heading {
+		text-align: left;
+	}
 }
 
 .amfc-news-grid__grid {
@@ -2981,6 +2999,18 @@ body {
 	   never actually show; drop-shadow is a filter effect computed from the element's rendered
 	   output rather than its border box, so it isn't subject to that clipping. */
 	transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* Explicit 333x201px, per feedback — replaces the fluid width the grid column/aspect-ratio
+   combination above gives it at mobile widths (was ~273px wide, shrunk along with the shared
+   .amfc-container margin bug this section had until the fix just above). aspect-ratio is left
+   in place on the unconditional rule above; these two numbers already match it exactly
+   (333/201), so this is a size pin, not a ratio change. */
+@media (max-width: 991.98px) {
+	.amfc-news-card {
+		width: 333px;
+		height: 201px;
+	}
 }
 
 .amfc-news-card:hover {
