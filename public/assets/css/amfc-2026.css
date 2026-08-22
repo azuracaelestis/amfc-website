@@ -2564,6 +2564,19 @@ body {
 	text-align: center;
 }
 
+/* Mobile: same .amfc-container margin-bug fix as every other section here (the shared class's
+   formula gives ~35px per side at 375px wide, not a real design margin) — 19px specifically:
+   this section's own CTA is a fixed 337px wide per feedback (see .amfc-app__cta), and
+   375 - 2*19 = 337 exactly, so 19px is the margin that fits it edge-to-edge without overflowing
+   the container. Without this fix the button (337px) would have been wider than the buggy
+   ~304px container it sat in. */
+@media (max-width: 991.98px) {
+	.amfc-app .amfc-container {
+		width: 100%;
+		padding-inline: 19px;
+	}
+}
+
 /* Full-bleed, edge-to-edge across the whole viewport width with no corner radius — confirmed
    via Figma (node 87:270): the photo is `w-full` inside its own 1443px-wide section frame, not
    constrained to the 1264px .amfc-container like the rest of this section's content. Height
@@ -2572,6 +2585,13 @@ body {
    portrait-cropped on narrow viewports. Markup-wise this means the <img> in app-download.php
    sits OUTSIDE .amfc-container, directly under <section>, so it isn't limited by the
    container's max-width/padding-inline. */
+/* <picture> is display: inline by default, which would let it shrink-to-fit around the <img>
+   instead of stretching full width the way a bare <img> did before — block here restores that,
+   independent of which <source>/fallback <img> is actually rendered inside. */
+.amfc-app picture {
+	display: block;
+}
+
 .amfc-app__photo {
 	width: 100%;
 	height: clamp(9.4rem, calc(439 / 1440 * 100vw), 439px);
@@ -2590,6 +2610,19 @@ body {
 .amfc-app__store-badges img {
 	height: 50px;
 	width: auto;
+}
+
+/* Mobile: both badges pinned to an explicit 145.08x41.97px each, per feedback. A single shared
+   size for both (not per-icon like the KSP/service-card illustrations elsewhere) is safe here
+   without distorting either: googleplay.svg and appstore.svg share the exact same 175x51
+   viewBox, and 145.08/41.97 (≈3.456:1) matches that same ~3.43:1 ratio closely enough that
+   neither warps. Replaces the desktop rule's height:50px/width:auto, which sizes each to its
+   own intrinsic width at that height instead of a shared explicit box. */
+@media (max-width: 991.98px) {
+	.amfc-app__store-badges img {
+		width: 145.08px;
+		height: 41.97px;
+	}
 }
 
 .amfc-app__headline {
@@ -2613,6 +2646,17 @@ body {
 	font-size: clamp(0.875rem, calc(16 / 1440 * 100vw), 16px);
 	line-height: 1.5;
 	margin-bottom: 1.875rem; /* 30px, confirmed via Figma */
+}
+
+/* Mobile: 337x48px, per feedback — replacing .amfc-btn's own auto/content-sized width and
+   padding-driven height. .amfc-btn's display: inline-flex + align-items/justify-content: center
+   (shared rule) keep the label centered within this fixed box without needing any further
+   changes here. */
+@media (max-width: 991.98px) {
+	.amfc-app__cta {
+		width: 337px;
+		height: 48px;
+	}
 }
 
 /* --- Investor relations --- */
