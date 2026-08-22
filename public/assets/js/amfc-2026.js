@@ -275,7 +275,7 @@ window.AMFC = (function () {
 
 	   1. A one-shot illustration animation, played once per card the first time that specific
 	      card scrolls ~25% into view (adds .amfc-service-card--played, which the CSS above turns
-	      into a single ~600ms pass of that card's own hover keyframes).
+	      into a single ~4.6s pass of that card's own hover keyframes).
 	   2. Tap press feedback (.amfc-service-card--pressed) on every touchstart/touchend, available
 	      on every tap regardless of whether that card's one-shot has already played.
 
