@@ -2218,13 +2218,28 @@ body {
 	margin: 0 auto;
 }
 
-/* Mobile: pinned to an exact 16px, per feedback — the desktop clamp above floors at 0.5rem
-   (8.8px under AMFC's 1.1rem root bug), badly undersized and unreadable. height/max-width are
-   left as the desktop values; see the live check after this change for whether the copy still
-   holds 2 lines at the card's new, narrower 339px mobile width. */
+/* Mobile: font-size pinned to an exact 16px, per feedback — the desktop clamp above floors at
+   0.5rem (8.8px under AMFC's 1.1rem root bug), badly undersized and unreadable.
+
+   height: auto replaces the desktop rule's fixed 3em (2 lines): at the card's narrower 339px
+   mobile width (299px inside its own padding), the personal-loan card's copy wraps to 3 lines,
+   not 2 — confirmed via scrollHeight (72px needed) vs. the fixed box's declared 48px. Bug this
+   caused, per feedback: since the box had no overflow:hidden, the 3rd line rendered BELOW the
+   box's own declared edge instead of inside it, visually eating into the very space
+   .amfc-service-card's gap (see that rule) reserves after this element for "body copy to
+   button" — the two card's LAYOUT gap both measured a correct 24px, but the visible text
+   physically overlapped that space in the personal-loan card because its container had already
+   run out of room a line early. auto lets the box's own height match however many lines the
+   copy actually needs, so nothing overflows it; mobile's two cards are independent
+   (fixed-height, individually centered — see .amfc-service-card's justify-content: center), so
+   there's no longer a "keep every card's button at the same y" requirement forcing a shared
+   fixed height the way there is on desktop's side-by-side layout. Confirmed there's room for
+   this: even the taller (3-line) card still had ~62px of slack between its CTA and the card's
+   own bottom edge before this change. */
 @media (max-width: 991.98px) {
 	.amfc-service-card__body {
 		font-size: 16px;
+		height: auto;
 	}
 }
 
