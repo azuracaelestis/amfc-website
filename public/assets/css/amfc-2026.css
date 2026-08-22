@@ -2698,6 +2698,17 @@ body {
 	background: linear-gradient(to bottom, var(--amfc-white) 0%, var(--amfc-lavender-100) 63.462%);
 }
 
+/* Mobile left-right margin, per feedback — same pattern as .amfc-app .amfc-container: the
+   generic .amfc-container's own padding is tuned for desktop and doesn't reliably resolve to
+   20px per side at mobile widths under AMFC's rem bug, so this section gets its own explicit
+   mobile override. */
+@media (max-width: 991.98px) {
+	.amfc-investor .amfc-container {
+		width: 100%;
+		padding-inline: 20px;
+	}
+}
+
 .amfc-investor__card {
 	display: flex;
 	flex-direction: column;
@@ -2717,11 +2728,24 @@ body {
 .amfc-investor__photo-wrap {
 	position: relative;
 	flex-shrink: 0;
-	border-radius: var(--amfc-radius-xl);
+	/* 16px, per feedback (was var(--amfc-radius-xl), 2rem — 35.2px under AMFC's 1.1rem root
+	   bug), applied to both desktop and mobile — this is a direct override rather than a
+	   mobile-scoped one, and set as a raw px value (not a token) since it's specific to this
+	   one photo, not a shared radius other elements should also pick up. */
+	border-radius: 16px;
 	overflow: hidden;
 	/* 545x407 at the 1440px Figma reference width, fluid-scaled below it, confirmed via Figma */
 	width: clamp(17rem, calc(545 / 1440 * 100vw), 545px);
 	height: clamp(12.7rem, calc(407 / 1440 * 100vw), 407px);
+}
+
+/* Mobile: 339x253px, per feedback, replacing the desktop clamp()'s fluid sizing above with an
+   explicit fixed size. */
+@media (max-width: 991.98px) {
+	.amfc-investor__photo-wrap {
+		width: 339px;
+		height: 253px;
+	}
 }
 
 .amfc-investor__photo {
