@@ -496,9 +496,23 @@
 	.amfc-nav__collapse {
 		position: absolute;
 		top: calc(100% + 0.75rem);
-		left: 0;
-		right: 0;
-		background: var(--amfc-white);
+		/* Bug fix, per feedback ("extend the width to follow the top navigation bar"): left/right
+		   of 0 alone made this panel narrower than the pill above it. Root cause: this element's
+		   containing block for position:absolute is <nav class="navbar">, not the outer
+		   .amfc-nav-pill — Bootstrap 5's own .navbar class sets position:relative by default, and
+		   <nav> sits inset from the pill's true outer edges by the pill's own padding-inline.
+		   Confirmed via getBoundingClientRect: pill spanned x 18->357 while this panel spanned
+		   33.8->341.2 — inset by exactly the pill's own 15.84px padding on each side. Negative
+		   insets of that SAME clamp() expression (not a hardcoded px) pull the panel back out to
+		   the pill's real outer edges at every mobile width, not just the 375px one measured. */
+		left: calc(-1 * clamp(0.9rem, calc(28.8 / 1440 * 100vw), 1.8rem));
+		right: calc(-1 * clamp(0.9rem, calc(28.8 / 1440 * 100vw), 1.8rem));
+		/* Same translucent material as .amfc-nav-pill (rgba(255,255,255,0.8) + blur(8px)), not a
+		   redefined "similar" value, per feedback ("same style... a bit transparent") — replaces
+		   the previous opaque var(--amfc-white). */
+		background: rgba(255, 255, 255, 0.8);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 		border-radius: 24px;
 		box-shadow: var(--amfc-shadow-card);
 		padding: 1.25rem 1.5rem;
@@ -512,11 +526,12 @@
 		padding-left: 0; /* aligns under the section links once stacked full-width */
 	}
 
-	/* Desktop-only dropdown row hidden here — the mobile menu panel uses the inline segmented
-	   toggle below instead. See header.php's own comment on why these are two separate <li>s
-	   rather than one restyled per breakpoint: the desktop one is a Bootstrap dropdown
-	   (data-bs-toggle), the mobile one is a radiogroup with its own JS — different enough
-	   interaction models that reskinning one into the other in place isn't practical. */
+	/* Desktop-only dropdown row hidden here — the mobile menu panel uses its own inline-expand
+	   disclosure below instead. See header.php's own comment on why these are two separate
+	   <li>s rather than one restyled per breakpoint: the desktop one is a Bootstrap dropdown
+	   (data-bs-toggle), the mobile one is a plain disclosure button + list with its own JS —
+	   different enough interaction models that reskinning one into the other in place isn't
+	   practical. */
 	.amfc-nav__lang-dropdown {
 		display: none;
 	}
@@ -533,93 +548,97 @@
 	.amfc-nav__lang-toggle-mobile {
 		display: list-item;
 		width: 100%;
-		/* Visually distinct from the four link rows above it, per feedback ("must look visually
-		   distinct... since tapping it changes a setting in place rather than navigating away") —
-		   the translucent pill treatment below already does this; this margin just gives it its
-		   own breathing room from the last link. */
-		margin-top: 0.5rem;
 	}
-}
 
-/* Segmented language toggle, replacing the mobile dropdown — per feedback. Background pulled
-   directly from .amfc-nav-pill's own values (rgba(255,255,255,0.8) + blur(8px) +
-   border-radius:999px, see that rule), not a redefined "similar" translucent gray, so this
-   control reads as the same material as the nav bar itself rather than a generic segmented
-   control from a different design system. */
-.amfc-lang-toggle {
-	position: relative;
-	display: flex;
-	width: 100%;
-	background: rgba(255, 255, 255, 0.8);
-	backdrop-filter: blur(8px);
-	-webkit-backdrop-filter: blur(8px);
-	border-radius: 999px;
-	padding: 4px;
-}
-
-/* Solid, higher-contrast fill (not translucent like the track) so the active selection stays
-   legible now that the track itself is translucent, per feedback. Sized/positioned as exactly
-   one segment's share of the track's inner (padded) width, so translateX(100%) — sized to its
-   own box, not the container's — lands it exactly one segment over per step; flush segments
-   (no gap between .amfc-lang-toggle__option below) is what keeps that math exact. */
-.amfc-lang-toggle__indicator {
-	position: absolute;
-	top: 4px;
-	bottom: 4px;
-	left: 4px;
-	width: calc((100% - 8px) / 3);
-	background: var(--amfc-accent);
-	border-radius: 999px;
-	transform: translateX(calc(var(--amfc-lang-index, 0) * 100%));
-	transition: transform 0.25s var(--amfc-ease-out); /* cubic-bezier(0,0,.2,1) */
-	z-index: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.amfc-lang-toggle__indicator {
-		transition: none;
+	/* .amfc-nav__lang-toggle is shared with the desktop dropdown button (same class, see
+	   header.php) — its base rule (display:inline-flex, DM Sans, etc.) already applies to both.
+	   This block only adds what the MOBILE disclosure specifically needs: full width (so its own
+	   tap target spans the panel, matching the link rows above it) and the same nav-link text
+	   styling those rows use, since it must read as part of the same list until expanded, per
+	   the reference screenshot. */
+	.amfc-nav__lang-toggle {
+		width: 100%;
+		justify-content: space-between;
+		color: var(--amfc-text-heading);
+		font-size: 1rem;
+		font-weight: 600;
+		font-family: inherit; /* overrides the shared rule's DM Sans — "Language" is set in
+		   Chinese-capable type here since this button also has to render 關於我們-style weight/
+		   size, unlike the desktop button which only ever shows the English word "Language" */
+		min-height: 44px; /* a11y: comfortable tap target, per feedback — the four link rows
+		   above it already clear this via their own padding/line-height, this makes it explicit
+		   for the one row that didn't */
 	}
-}
 
-.amfc-lang-toggle__option {
-	position: relative;
-	z-index: 1;
-	flex: 1 1 0;
-	min-width: 0; /* flex items default to min-width: auto, which refuses to shrink below the
-	   text's own intrinsic width — "Indonesian" (the longest label) was landing flush against
-	   its segment's rounded edges with near-zero margin (measured: an 82.9px box for an 83px-
-	   wide text run) instead of actually being clipped, but that reads as cramped/cut-off at a
-	   glance. min-width: 0 plus the smaller font-size below give it real breathing room. */
-	background: none;
-	border: none;
-	padding: 0.5rem 0;
-	font-family: var(--amfc-font-en); /* DM Sans, matching the desktop dropdown's own copy */
-	/* px, not rem — AMFC's custom.css sets *, html, body { font-size: 1.1rem }, so 0.75rem here
-	   would compute to 13.2px, not 12px (see CLAUDE.md's own rem/root-font-size gotcha). 14px ->
-	   12px, see the min-width comment above for why. */
-	font-size: 12px;
-	font-weight: 600;
-	white-space: nowrap;
-	color: var(--amfc-text-heading);
-	opacity: 0.55;
-	/* Only opacity animates (color itself changes instantly on selection, not transitioned) —
-	   per feedback's own constraint ("animate only transform and opacity"). */
-	transition: opacity 0.25s ease-out;
-}
+	.amfc-nav__lang-toggle .amfc-nav__lang-chevron {
+		transition: transform var(--amfc-duration-base) var(--amfc-ease-out);
+	}
 
-.amfc-lang-toggle__option[aria-checked="true"] {
-	color: var(--amfc-white);
-	opacity: 1;
-}
+	/* Base -90deg (see .amfc-nav__lang-toggle img above) points the chevron down; +180 on top of
+	   that points it up, matching the reference screenshot's "^" when the list is expanded.
+	   Scoped to this media query specifically (not the shared .amfc-nav__lang-toggle selector)
+	   so it can't also apply to the desktop dropdown button, which shares the same class and
+	   also gets aria-expanded toggled by Bootstrap — this rotate behavior is new, mobile-only
+	   UI, not something desktop had before. */
+	.amfc-nav__lang-toggle[aria-expanded="true"] .amfc-nav__lang-chevron {
+		transform: rotate(90deg);
+	}
 
-.amfc-lang-toggle__option:focus-visible {
-	outline: 2px solid var(--amfc-accent);
-	outline-offset: 2px;
-}
+	@media (prefers-reduced-motion: reduce) {
+		.amfc-nav__lang-toggle .amfc-nav__lang-chevron {
+			transition: none;
+		}
+	}
 
-@media (prefers-reduced-motion: reduce) {
-	.amfc-lang-toggle__option {
-		transition: none;
+	.amfc-lang-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+	}
+
+	.amfc-lang-list__option {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		min-height: 44px; /* a11y: comfortable tap target — directly answers "too small... does
+		   not meet the a11y requirement" from feedback (the previous segmented toggle measured
+		   ~40px tall) */
+		background: none;
+		border: none;
+		padding: 0.5rem 0;
+		font-family: var(--amfc-font-en); /* DM Sans, matching the desktop dropdown's own copy */
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--amfc-text-heading);
+	}
+
+	.amfc-lang-list__option:focus-visible {
+		outline: 2px solid var(--amfc-accent);
+		outline-offset: 2px;
+	}
+
+	/* Checkmark: a small CSS-drawn glyph (border, rotated into a check shape), not a new SVG
+	   asset — this project has no icon font actually wired up despite Font Awesome being listed
+	   as CDN-available (CLAUDE.md), and a single checkmark doesn't justify pulling one in. Empty
+	   by default (no visible mark); .amfc-lang-list__option[aria-pressed="true"] below reveals it. */
+	.amfc-lang-list__check {
+		display: block;
+		width: 12px;
+		height: 7px;
+		border-left: 2px solid var(--amfc-accent);
+		border-bottom: 2px solid var(--amfc-accent);
+		transform: rotate(-45deg);
+		opacity: 0;
+	}
+
+	.amfc-lang-list__option[aria-pressed="true"] .amfc-lang-list__check {
+		opacity: 1;
+	}
+
+	.amfc-lang-list__option[aria-pressed="true"] {
+		color: var(--amfc-accent);
 	}
 }
 

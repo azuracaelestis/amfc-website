@@ -365,30 +365,38 @@ window.AMFC = (function () {
 		});
 	}
 
-	/* Mobile menu's inline language toggle (.amfc-lang-toggle) — per feedback, replaces the
-	   nested dropdown with a segmented radiogroup. Owns two things: selection state
-	   (aria-checked on each .amfc-lang-toggle__option) and the indicator's position
-	   (--amfc-lang-index custom property the CSS transform reads — see that rule's own
-	   comment). Desktop's dropdown (.amfc-nav__lang-dropdown) is untouched, real Bootstrap
-	   markup, no JS of its own needed beyond what Bootstrap already provides — this function
-	   only ever touches .amfc-lang-toggle, which doesn't exist on desktop (display: none, see
-	   amfc-2026.css), so it's a no-op there regardless of viewport checks. */
+	/* Mobile menu's inline-expand language disclosure — per feedback, replaces the previous
+	   segmented toggle (tap targets too small for a11y) with a standard disclosure-widget
+	   pattern: a button (.amfc-nav__lang-toggle) that expands a list (.amfc-lang-list) inline
+	   below it, matching the reference screenshots. Owns two things: the expand/collapse state
+	   (aria-expanded on the button + the list's own `hidden` attribute) and each option's
+	   selection state (aria-pressed). Desktop's dropdown (.amfc-nav__lang-dropdown) is untouched,
+	   real Bootstrap markup, no JS of its own needed beyond what Bootstrap already provides —
+	   this function only ever touches .amfc-lang-list, which doesn't exist on desktop
+	   (.amfc-nav__lang-toggle-mobile is display: none there, see amfc-2026.css), so it's a no-op
+	   there regardless of viewport checks. */
 	function initLangToggle() {
-		var toggle = document.querySelector('.amfc-lang-toggle');
-		if (!toggle) return;
+		var list = document.querySelector('.amfc-lang-list');
+		if (!list) return;
 
-		var options = Array.prototype.slice.call(toggle.querySelectorAll('.amfc-lang-toggle__option'));
-		if (!options.length) return;
+		var toggle = document.querySelector('.amfc-nav__lang-toggle-mobile .amfc-nav__lang-toggle');
+		if (toggle) {
+			toggle.addEventListener('click', function () {
+				var expanded = toggle.getAttribute('aria-expanded') === 'true';
+				toggle.setAttribute('aria-expanded', String(!expanded));
+				list.hidden = expanded;
+			});
+		}
 
-		options.forEach(function (option, index) {
+		var options = Array.prototype.slice.call(list.querySelectorAll('.amfc-lang-list__option'));
+		options.forEach(function (option) {
 			option.addEventListener('click', function () {
-				if (option.getAttribute('aria-checked') === 'true') return;
+				if (option.getAttribute('aria-pressed') === 'true') return;
 
 				options.forEach(function (opt) {
-					opt.setAttribute('aria-checked', 'false');
+					opt.setAttribute('aria-pressed', 'false');
 				});
-				option.setAttribute('aria-checked', 'true');
-				toggle.style.setProperty('--amfc-lang-index', index);
+				option.setAttribute('aria-pressed', 'true');
 
 				// TODO (AMFC integration): wire selection to the existing
 				// AMFC_2025_WEBSITE_lang cookie / set_lang() in their custom.js, per CLAUDE.md —

@@ -38,20 +38,26 @@
 						<li><a class="dropdown-item" href="#" data-lang="id-ID"><?= e(t('nav.lang.id')) ?></a></li>
 					</ul>
 				</li>
-				<!-- Mobile-only — hidden on desktop (amfc-2026.css). Inline segmented toggle, per
-				     feedback: all three languages visible at once, no second overlay to open
-				     inside the mobile menu panel. role="radiogroup"/"radio" + aria-checked, not a
-				     <select> or Bootstrap dropdown, so it's a single always-visible control rather
-				     than a second collapsible layer. JS (initLangToggle in amfc-2026.js) owns
-				     selection state and the indicator's slide; this is UI-only, same integration
-				     boundary as the desktop dropdown above (TODO comment there applies here too). -->
+				<!-- Mobile-only — hidden on desktop (amfc-2026.css). Inline-expand disclosure, per
+				     feedback: the previous segmented toggle's tap targets were too small for a11y,
+				     and the wanted pattern is "tap Language, the list expands inline below it"
+				     (pushing the panel taller, not a floating overlay) rather than all three
+				     languages always visible side by side. aria-expanded/aria-controls + the native
+				     `hidden` attribute is the standard disclosure-widget pattern — hidden removes the
+				     list from the accessibility tree and tab order when collapsed, not just visually.
+				     JS (initLangToggle in amfc-2026.js) owns the expand/collapse state and each
+				     option's aria-pressed; this is UI-only, same integration boundary as the desktop
+				     dropdown above (TODO comment there applies here too). -->
 				<li class="nav-item amfc-nav__lang-toggle-mobile" role="presentation">
-					<div class="amfc-lang-toggle" role="radiogroup" aria-label="<?= e(t('nav.language')) ?>">
-						<span class="amfc-lang-toggle__indicator" aria-hidden="true"></span>
-						<button type="button" class="amfc-lang-toggle__option" role="radio" aria-checked="true" data-lang="en-US"><?= e(t('nav.lang.en')) ?></button>
-						<button type="button" class="amfc-lang-toggle__option" role="radio" aria-checked="false" data-lang="ja-JP"><?= e(t('nav.lang.ja')) ?></button>
-						<button type="button" class="amfc-lang-toggle__option" role="radio" aria-checked="false" data-lang="id-ID"><?= e(t('nav.lang.id')) ?></button>
-					</div>
+					<button type="button" class="nav-link amfc-nav__lang-toggle" aria-expanded="false" aria-controls="amfcLangList">
+						<?= e(t('nav.language')) ?>
+						<img class="amfc-nav__lang-chevron" src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" aria-hidden="true" />
+					</button>
+					<ul id="amfcLangList" class="amfc-lang-list" hidden>
+						<li><button type="button" class="amfc-lang-list__option" data-lang="en-US" aria-pressed="true"><?= e(t('nav.lang.en')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
+						<li><button type="button" class="amfc-lang-list__option" data-lang="ja-JP" aria-pressed="false"><?= e(t('nav.lang.ja')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
+						<li><button type="button" class="amfc-lang-list__option" data-lang="id-ID" aria-pressed="false"><?= e(t('nav.lang.id')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
+					</ul>
 				</li>
 			</ul>
 		</div>
