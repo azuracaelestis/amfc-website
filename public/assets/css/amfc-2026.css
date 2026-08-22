@@ -111,7 +111,10 @@
 @media (max-width: 991.98px) {
 	.amfc-trust .amfc-container {
 		width: 100%;
-		padding-inline: 20px;
+		/* Fluid, not flat, per feedback ("make it responsive") — a flat px value stays frozen at
+		   its 375px-reference size for the entire mobile range up to 991.98px, leaving a huge
+		   unused gutter on tablet-width screens instead of scaling to fill them. */
+		padding-inline: clamp(20px, calc(20 / 375 * 100vw), calc(20 / 375 * 991.98px));
 	}
 
 	/* 90px gap to the sections on either side (Services above, App-download below), split
@@ -383,9 +386,15 @@
 @media (max-width: 991.98px) {
 	.amfc-nav-pill {
 		/* Replaces the shared calc(100% - 2 * --amfc-space-lg) formula (tuned for desktop's wider
-		   gutter) with the real 339px target directly. */
-		width: clamp(15.5rem, calc(339 / 375 * 100vw), 339px);
-		height: clamp(2.5rem, calc(53 / 375 * 100vw), 53px);
+		   gutter) with the real 339px target directly. Fluid (not flat) up through 991.98px, per
+		   feedback ("make it responsive") — 339px was staying frozen at its 375px-reference size
+		   for the whole mobile range, leaving the pill tiny on a tablet-width screen. Width's
+		   ceiling (921.6px) is exactly what the desktop formula above computes at 992px
+		   (992 - 2 * 35.2), so it bridges into desktop with no jump; height has no desktop
+		   equivalent to bridge to (desktop's height is content-driven, not fixed), so its ceiling
+		   is just a modest, non-disruptive amount of growth. */
+		width: clamp(15.5rem, calc(339 / 375 * 100vw), 921.6px);
+		height: clamp(2.5rem, calc(53 / 375 * 100vw), 64px);
 	}
 
 	.amfc-nav-pill .navbar {
@@ -410,14 +419,17 @@
 
 	.amfc-nav__brand img {
 		/* Overrides the <img height="47"> HTML attribute — CSS wins regardless, but width also
-		   needs setting explicitly since the attribute only ever constrained height. */
-		width: clamp(3rem, calc(66 / 375 * 100vw), 66px);
-		height: clamp(1.5rem, calc(33 / 375 * 100vw), 33px);
+		   needs setting explicitly since the attribute only ever constrained height. Ceiling
+		   grows at the same ~1.2x ratio as .amfc-nav-pill's own 53px->64px height cap (see that
+		   rule's comment) — these two are meant to grow in proportion with the pill, not with an
+		   unrelated formula of their own. */
+		width: clamp(3rem, calc(66 / 375 * 100vw), 80px);
+		height: clamp(1.5rem, calc(33 / 375 * 100vw), 40px);
 	}
 
 	.amfc-nav__toggler .navbar-toggler-icon {
-		width: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 20.51px);
-		height: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 20.51px);
+		width: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 24.75px);
+		height: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 24.75px);
 	}
 
 	/* The button itself was already centered correctly in the row (fixed above via
@@ -606,7 +618,8 @@
 @media (max-width: 991.98px) {
 	.amfc-hero .amfc-container {
 		width: 100%;
-		padding-inline: 18.5px;
+		/* Fluid, not flat — see .amfc-trust .amfc-container's own comment on why. */
+		padding-inline: clamp(18.5px, calc(18.5 / 375 * 100vw), calc(18.5 / 375 * 991.98px));
 	}
 
 	/* Same fix, same reasoning, now confirmed against the KSP section's own Figma mobile frame
@@ -614,7 +627,7 @@
 	   this section actually needs. */
 	.amfc-philosophy .amfc-container {
 		width: 100%;
-		padding-inline: 20px;
+		padding-inline: clamp(20px, calc(20 / 375 * 100vw), calc(20 / 375 * 991.98px));
 	}
 }
 
@@ -1920,7 +1933,8 @@ body {
 @media (max-width: 991.98px) {
 	.amfc-funds .amfc-container {
 		width: 100%;
-		padding-inline: 20px;
+		/* Fluid, not flat — see .amfc-trust .amfc-container's own comment on why. */
+		padding-inline: clamp(20px, calc(20 / 375 * 100vw), calc(20 / 375 * 991.98px));
 	}
 }
 
@@ -2016,7 +2030,8 @@ body {
 @media (max-width: 991.98px) {
 	.amfc-services .amfc-container {
 		width: 100%;
-		padding-inline: 18px;
+		/* Fluid, not flat — see .amfc-trust .amfc-container's own comment on why. */
+		padding-inline: clamp(18px, calc(18 / 375 * 100vw), calc(18 / 375 * 991.98px));
 	}
 }
 
@@ -2161,8 +2176,17 @@ body {
 		   enough on some viewports that its own content could outgrow a fixed box: mobile is a
 		   single fixed width, not fluid, so that failure mode doesn't apply here, and a fixed
 		   height is what the design actually specifies. */
-		width: 339px;
-		height: 462px;
+		/* Fluid, not flat, per feedback ("make it responsive") — a flat px value stays frozen at
+		   its 375px-reference size for the entire mobile range up to 991.98px, leaving the card
+		   marooned at phone width inside a much wider tablet viewport. Capped at a modest 420px
+		   (not the full 339/375 ratio projected out to 991.98px, ~896px) — this card's desktop
+		   formula (clamp(16.8rem, calc(432/1440*100vw), 432px)) actually computes NARROWER
+		   (~297px) at the 992px handoff than this mobile floor, a pre-existing mismatch between
+		   the two independently-tuned formulas that's out of scope to fully reconcile here;
+		   420px gives real growth on tablet-width screens without ballooning to an absurd size.
+		   Height scales at the same ratio so the card's proportions stay consistent. */
+		width: clamp(339px, calc(339 / 375 * 100vw), 420px);
+		height: clamp(462px, calc(462 / 375 * 100vw), 572px);
 		/* 16px -> 24px, per feedback: "the padding between the illustration to the headline" and
 		   "from body copy to the button" are both 24px. This single shared `gap` covers both —
 		   it sits between .amfc-service-card__icon-wrap and .amfc-service-card__text (illustration
@@ -2240,13 +2264,16 @@ body {
    243x147.93 ≈ 323:197) rather than forcing a shared box that would distort one of them. */
 @media (max-width: 991.98px) {
 	.amfc-service-card__icon.amfc-illo-car {
-		width: 253.46px;
-		height: 138.76px;
+		/* Fluid, capped at the same ~1.239x ratio as .amfc-service-card's own 339px->420px cap
+		   (see that rule's comment), so the icon keeps scaling in proportion with the card
+		   instead of staying frozen at its 375px-reference size. */
+		width: clamp(253.46px, calc(253.46 / 375 * 100vw), 314px);
+		height: clamp(138.76px, calc(138.76 / 375 * 100vw), 172px);
 	}
 
 	.amfc-service-card__icon.amfc-illo-personal {
-		width: 243px;
-		height: 147.93px;
+		width: clamp(243px, calc(243 / 375 * 100vw), 301px);
+		height: clamp(147.93px, calc(147.93 / 375 * 100vw), 183px);
 	}
 }
 
@@ -2598,7 +2625,8 @@ body {
 @media (max-width: 991.98px) {
 	.amfc-app .amfc-container {
 		width: 100%;
-		padding-inline: 19px;
+		/* Fluid, not flat — see .amfc-trust .amfc-container's own comment on why. */
+		padding-inline: clamp(19px, calc(19 / 375 * 100vw), calc(19 / 375 * 991.98px));
 	}
 
 	/* 90px gap to the sections on either side (Trust above, Investor below), split 45/45 —
@@ -2713,7 +2741,13 @@ body {
    changes here. */
 @media (max-width: 991.98px) {
 	.amfc-app__cta {
-		width: 337px;
+		/* width: 100%, not a flat 337px, per feedback ("make it responsive") — 337px was tied
+		   exactly to .amfc-app .amfc-container's own 19px padding at the 375px reference
+		   (375 - 2*19 = 337); now that container padding is itself fluid, matching its width
+		   directly keeps the two in lockstep at every viewport instead of drifting apart.
+		   Height stays a fixed 48px — a pill button's height shouldn't grow just because it's
+		   wider. */
+		width: 100%;
 		height: 48px;
 	}
 }
@@ -2739,7 +2773,8 @@ body {
 @media (max-width: 991.98px) {
 	.amfc-investor .amfc-container {
 		width: 100%;
-		padding-inline: 20px;
+		/* Fluid, not flat — see .amfc-trust .amfc-container's own comment on why. */
+		padding-inline: clamp(20px, calc(20 / 375 * 100vw), calc(20 / 375 * 991.98px));
 	}
 
 	/* 90px gap to the sections on either side (App-download above, News below), split 45/45 —
@@ -2789,12 +2824,15 @@ body {
 	height: clamp(12.7rem, calc(407 / 1440 * 100vw), 407px);
 }
 
-/* Mobile: 339x253px, per feedback, replacing the desktop clamp()'s fluid sizing above with an
-   explicit fixed size. */
+/* Mobile: 339x253px at the 375px reference, per feedback — but fluid (not flat), per later
+   feedback ("make it responsive"), scaling up to 375x280px, which is what the desktop clamp()
+   above actually computes at the 992px handoff (545/1440*991.98 and 407/1440*991.98) — chosen
+   as the ceiling specifically so this bridges into the desktop formula with no jump at the
+   breakpoint, instead of a same-ratio projection that would wildly overshoot it. */
 @media (max-width: 991.98px) {
 	.amfc-investor__photo-wrap {
-		width: 339px;
-		height: 253px;
+		width: clamp(339px, calc(339 / 375 * 100vw), 375px);
+		height: clamp(253px, calc(253 / 375 * 100vw), 280px);
 	}
 }
 
@@ -2945,7 +2983,8 @@ body {
 	   375 - 2*18.5 = 338. */
 	.amfc-news-grid .amfc-container {
 		width: 100%;
-		padding-inline: 18.5px;
+		/* Fluid, not flat — see .amfc-trust .amfc-container's own comment on why. */
+		padding-inline: clamp(18.5px, calc(18.5 / 375 * 100vw), calc(18.5 / 375 * 991.98px));
 	}
 }
 
@@ -3011,17 +3050,14 @@ body {
 	transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-/* Explicit 333x201px, per feedback — replaces the fluid width the grid column/aspect-ratio
-   combination above gives it at mobile widths (was ~273px wide, shrunk along with the shared
-   .amfc-container margin bug this section had until the fix just above). aspect-ratio is left
-   in place on the unconditional rule above; these two numbers already match it exactly
-   (333/201), so this is a size pin, not a ratio change. */
-@media (max-width: 991.98px) {
-	.amfc-news-card {
-		width: 333px;
-		height: 201px;
-	}
-}
+/* Explicit width/height override removed, per feedback ("make it responsive") — it was pinning
+   the card to a flat 333x201px for the entire mobile range up to 991.98px, so on any viewport
+   wider than 375px the card stayed frozen at phone size instead of growing with its container.
+   Without it, the card falls back to the unconditional rule above: aspect-ratio (333/201) plus
+   the grid item's default stretch to its column's own width — which is exactly 333px at the
+   375px reference (matching the value this override used to hardcode) and now scales fluidly
+   with .amfc-news-grid .amfc-container's own (now-fluid) padding at every width in between,
+   including the 768px+ point where the grid itself switches to 3 columns. */
 
 .amfc-news-card:hover {
 	transform: translateY(-8px);
@@ -3281,7 +3317,8 @@ body {
 	   media query. */
 	.amfc-footer .amfc-container {
 		width: 100%;
-		padding-inline: 30px;
+		/* Fluid, not flat — see .amfc-trust .amfc-container's own comment on why. */
+		padding-inline: clamp(30px, calc(30 / 375 * 100vw), calc(30 / 375 * 991.98px));
 		display: flex;
 		flex-direction: column;
 	}
@@ -3333,9 +3370,12 @@ body {
 
 	/* Narrower cap so the address lines wrap inside the mobile container's real content width
 	   (315px) instead of the desktop-tuned 328px, which was overflowing past the viewport edge
-	   once the label (74px) and its gap (12px) are accounted for: 315 - 74 - 12 = 229px. */
+	   once the label (74px) and its gap (12px) are accounted for: 315 - 74 - 12 = 229px. Fluid
+	   up to that same 328px desktop value, per feedback ("make it responsive") — desktop's own
+	   max-width is a flat 328px at every width ≥992px, so growing to exactly that by 991.98px
+	   bridges the two with no jump at the breakpoint. */
 	.amfc-footer__contact-content {
-		max-width: 229px;
+		max-width: clamp(229px, calc(229 / 375 * 100vw), 328px);
 	}
 }
 
