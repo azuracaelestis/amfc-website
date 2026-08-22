@@ -2066,6 +2066,16 @@ body {
 		   height is what the design actually specifies. */
 		width: 339px;
 		height: 462px;
+		/* 16px -> 24px, per feedback: "the padding between the illustration to the headline" and
+		   "from body copy to the button" are both 24px. This single shared `gap` covers both —
+		   it sits between .amfc-service-card__icon-wrap and .amfc-service-card__text (illustration
+		   to headline, since the text block's own first child is the title) and between
+		   .amfc-service-card__text and .amfc-service-card__cta (body copy to button, since the
+		   text block's own last child is the body) — the same value works for both pairs, unlike
+		   the title-to-body distance inside .amfc-service-card__text, which needed its own
+		   separate override (see that rule's mobile block) since this feedback gives it a
+		   different value (16px). */
+		gap: 24px;
 	}
 }
 
@@ -2105,11 +2115,42 @@ body {
 	height: clamp(5rem, calc(120 / 1440 * 100vw), 120px);
 }
 
+/* Mobile: height: auto — the fixed clamp() above exists to fit BOTH icons into one shared box
+   despite their different natural heights (see that rule's own comment); the two mobile icon
+   sizes just set (.amfc-service-card__icon.amfc-illo-car/-personal) are already each their own
+   real height per feedback (138.76px / 147.93px, both taller than the clamp's ~80-120px mobile
+   range), so keeping a fixed height here would clip/rescale them straight back down. margin-top
+   is left as the desktop value — not part of this feedback. */
+@media (max-width: 991.98px) {
+	.amfc-service-card__icon-wrap {
+		height: auto;
+	}
+}
+
 .amfc-service-card__icon {
 	width: 100%;
 	max-width: 342px;
 	max-height: 100%;
 	height: auto;
+}
+
+/* Mobile: explicit sizes per feedback, replacing the shared width:100%/max-height:100% scaling
+   above (which fit each icon to .amfc-service-card__icon-wrap's own fixed height — see that
+   rule's mobile override, now height: auto specifically so it doesn't clip/rescale these). Each
+   icon gets its own real size rather than one shared box because the two source illustrations
+   have different aspect ratios (car-loan.svg 342x188, personal-loan.svg 323x197) and the
+   feedback's two target sizes preserve each one's own ratio (253.46x138.76 ≈ 342:188;
+   243x147.93 ≈ 323:197) rather than forcing a shared box that would distort one of them. */
+@media (max-width: 991.98px) {
+	.amfc-service-card__icon.amfc-illo-car {
+		width: 253.46px;
+		height: 138.76px;
+	}
+
+	.amfc-service-card__icon.amfc-illo-personal {
+		width: 243px;
+		height: 147.93px;
+	}
 }
 
 .amfc-service-card__text {
@@ -2118,6 +2159,14 @@ body {
 	flex-shrink: 0;
 	gap: 10px; /* was 1.125rem (18px, inflated to ~19.8px actual by the rem bug) — tightened as
 	   part of the 400px height trim; raw px per CLAUDE.md's rem guidance */
+}
+
+/* Mobile: 16px, per feedback ("from the headline to the body copy is 16px") — replacing the
+   desktop 10px above. Placed after the unconditional rule (equal specificity, later wins). */
+@media (max-width: 991.98px) {
+	.amfc-service-card__text {
+		gap: 16px;
+	}
 }
 
 .amfc-service-card__title {
