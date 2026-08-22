@@ -3017,7 +3017,9 @@ body {
 		align-items: center;
 		justify-content: center;
 		position: absolute;
-		right: 12px;
+		/* Left, not right, per feedback — the card illustrations have content on the right side
+		   that was covering the chevron there. */
+		left: 12px;
 		bottom: 12px;
 		width: 28px;
 		height: 28px;
