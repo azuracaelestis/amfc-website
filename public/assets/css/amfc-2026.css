@@ -3192,3 +3192,99 @@ body {
 .amfc-footer__contact-content--narrow {
 	max-width: 200px;
 }
+
+/* Mobile: re-verified against the Figma mobile frame (node 145:588, "footer-mobile") — a
+   deliberately reduced layout, not the desktop one squeezed narrower. Before this fix, the
+   footer on mobile still rendered the full 7-column nav (wrapping into an unreadable 2-column
+   grid) and the 3-group contact row's 328px-capped address text ran straight off the right edge
+   of the viewport (confirmed via screenshot — a real overflow bug, not just a visual mismatch). */
+@media (max-width: 991.98px) {
+	/* 30px per side, confirmed via the Figma mobile frame (the contact column sits at x=30 in
+	   its 375px-wide frame) — not the ~51px the shared .amfc-container formula gives at this
+	   width (see the many other per-section overrides in this file for the same root cause). */
+	.amfc-footer .amfc-container {
+		width: 100%;
+		padding-inline: 30px;
+	}
+
+	/* No nav columns at all on mobile, per Figma — the row now holds only the logo, so center
+	   it instead of the desktop-oriented flex-start. */
+	.amfc-footer__nav {
+		display: none;
+	}
+
+	.amfc-footer__row {
+		align-items: center;
+	}
+
+	/* Much larger and centered, per Figma (roughly full-width within the 30px-padded
+	   container) — replaces the small size + the translateY(-20px) nudge that only made sense
+	   next to desktop's nav row baseline. width: 100% (not a fixed px) so it scales with the
+	   container at any width below 992px rather than risking overflow the way a literal 378px
+	   copy of Figma's own number would (378 > this container's ~315px content width at exactly
+	   375px). */
+	.amfc-footer__logo {
+		width: 100%;
+		height: auto;
+		transform: none;
+	}
+
+	/* Desktop-only group, per Figma — the mobile frame has just Taiwan/Japan. */
+	.amfc-footer__contact-group--customer-service {
+		display: none;
+	}
+
+	/* Stacked, left-aligned, no divider — per Figma (the mobile frame has no border line above
+	   this block, unlike desktop's). 24px between the two remaining groups, confirmed via Figma. */
+	.amfc-footer__contact {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 24px;
+		border-top: none;
+		padding-top: 0;
+	}
+
+	/* Narrower cap so the address lines wrap inside the mobile container's real content width
+	   (315px) instead of the desktop-tuned 328px, which was overflowing past the viewport edge
+	   once the label (74px) and its gap (12px) are accounted for: 315 - 74 - 12 = 229px. */
+	.amfc-footer__contact-content {
+		max-width: 229px;
+	}
+}
+
+/* New block, confirmed via the Figma mobile frame (node 145:614/145:615) — didn't exist in this
+   markup at all before. Mobile-only for now since desktop's own Figma footer node wasn't
+   re-checked for an equivalent (see footer.php's own comment). Specificity has to match/beat
+   .amfc-footer, .amfc-footer * above (same (0,1,0) shape, later in the file so it wins) — same
+   technique documented in that rule's own comment, needed again here for the same reason
+   (AMFC's `*, html, body { font-size: 1.1rem }` would otherwise catch these paragraphs too). */
+.amfc-footer__legal,
+.amfc-footer__legal * {
+	font-size: 12px;
+}
+
+.amfc-footer__legal {
+	display: none;
+	color: var(--amfc-footer-text);
+	text-align: center;
+	line-height: 1.5;
+}
+
+.amfc-footer__legal a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.amfc-footer__legal a:hover {
+	text-decoration: underline;
+}
+
+@media (max-width: 991.98px) {
+	.amfc-footer__legal {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px; /* confirmed via Figma */
+		margin-top: 32px;
+	}
+}

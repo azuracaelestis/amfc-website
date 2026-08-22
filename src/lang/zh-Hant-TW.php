@@ -170,4 +170,8 @@ return [
     'footer.contact.japan.address_zh' => '〒530-0017大阪府大阪市北区角田町8-47 阪急グランドビル26階',
     'footer.contact.japan.address_en' => 'Hankyu Grand Building, 26F 8−47 Kakuda-cho, Kita Ward Osaka 530-0017 Japan',
     'footer.logo_alt' => 'FUNDS AMFC',
+    // Mobile-only legal line, confirmed via the Figma mobile frame (node 145:614/145:615) — no
+    // equivalent exists in the desktop footer's own Figma node, so not ported there yet.
+    'footer.legal.copyright' => '©2026 FUNDS AMFC 亞太普惠金融科技 版權所有',
+    'footer.legal.privacy' => '隱私權聲明',
 ];
