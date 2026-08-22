@@ -738,6 +738,14 @@
 	transform: translate(20px, 0);
 }
 
+/* Same 20px shift as .amfc-hero__content above, per feedback ("aligned with the headline") —
+   the button was never given this shift when content originally picked it up (matching
+   .amfc-nav__brand's own identical shift, per that rule's comment), so its left edge sat 20px
+   left of the headline's real position at every breakpoint, not just desktop. */
+.amfc-hero__cta {
+	transform: translate(20px, 0);
+}
+
 .amfc-hero__eyebrow {
 	color: var(--amfc-white);
 	font-family: var(--amfc-font-en);
