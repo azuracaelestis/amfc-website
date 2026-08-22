@@ -3286,6 +3286,9 @@ body {
 	.amfc-footer__row {
 		align-items: center;
 		order: 2;
+		/* Moved down 32px, per feedback. On the flex item itself (not the logo <img> inside it)
+		   so it can't get tangled up in margin-collapsing with the picture/img underneath. */
+		margin-top: 32px;
 	}
 
 	/* Much larger and centered, per Figma (roughly full-width within the 30px-padded
@@ -3342,6 +3345,14 @@ body {
 	color: var(--amfc-footer-text);
 	text-align: center;
 	line-height: 1.5;
+}
+
+/* Bug fix: <p> carries the browser's default margin-block (~1em top/bottom), which was
+   stacking on top of the flex `gap: 8px` below and making the two lines' real visual gap much
+   wider than 8px despite the gap value being correct — confirmed via computed style (gap really
+   was 8px; the <p>'s own margin was the actual extra space). */
+.amfc-footer__legal p {
+	margin: 0;
 }
 
 .amfc-footer__legal a {
