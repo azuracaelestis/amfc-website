@@ -68,7 +68,14 @@
 					</ul>
 				</div>
 			</div>
-			<img class="amfc-footer__logo" src="<?= e(asset('images/footer-logo.svg')) ?>" alt="<?= e(t('footer.logo_alt')) ?>" />
+			<!-- <picture>, not a duplicated <img> pair shown/hidden via CSS, per feedback ("make
+			     the logo a watermark") — mobile gets the same faint grey lockup already used for
+			     the KSP section's watermark (amfc-logo-grey.svg), desktop keeps the solid
+			     blue/gold mark. Same swap pattern as the app-download section's photo. -->
+			<picture>
+				<source media="(max-width: 991.98px)" srcset="<?= e(asset('images/amfc-logo-grey.svg')) ?>" />
+				<img class="amfc-footer__logo" src="<?= e(asset('images/footer-logo.svg')) ?>" alt="<?= e(t('footer.logo_alt')) ?>" />
+			</picture>
 		</div>
 
 		<div class="amfc-footer__contact">
@@ -89,21 +96,40 @@
 			<div class="amfc-footer__contact-group">
 				<div class="amfc-footer__contact-label">
 					<?= e(t('footer.contact.taiwan.title_zh')) ?><br />
-					<?= e(t('footer.contact.taiwan.title_en')) ?>
+					<span class="amfc-footer__contact-label-en"><?= e(t('footer.contact.taiwan.title_en')) ?></span>
 				</div>
-				<div class="amfc-footer__contact-content">
+				<!-- Desktop: Chinese + full romanized address, per the desktop Figma node.
+				     Mobile: per the Figma mobile frame (node 145:596/145:598) — company name +
+				     Chinese address + phone instead, no romanized address. Both variants stay in
+				     the DOM (CSS display toggle, see amfc-2026.css), same pattern as the KSP
+				     headline's mobile/desktop line-break split. -->
+				<div class="amfc-footer__contact-content amfc-footer__contact-content--desktop">
 					<div><?= e(t('footer.contact.taiwan.address_zh')) ?></div>
 					<div><?= e(t('footer.contact.taiwan.address_en')) ?></div>
+				</div>
+				<div class="amfc-footer__contact-content amfc-footer__contact-content--mobile">
+					<div><?= e(t('footer.contact.taiwan.company_name')) ?></div>
+					<div>
+						<?= e(t('footer.contact.taiwan.address_zh')) ?><br />
+						<!-- Same number as the desktop-only Customer Service group above — this
+						     mobile layout has no separate Customer Service block, so it's folded
+						     into the Taiwan office group instead, per Figma. -->
+						<span class="amfc-footer__contact-label-en"><?= e(t('footer.contact.customer_service.phone')) ?></span>
+					</div>
 				</div>
 			</div>
 			<div class="amfc-footer__contact-group">
 				<div class="amfc-footer__contact-label">
 					<?= e(t('footer.contact.japan.title_zh')) ?><br />
-					<?= e(t('footer.contact.japan.title_en')) ?>
+					<span class="amfc-footer__contact-label-en"><?= e(t('footer.contact.japan.title_en')) ?></span>
 				</div>
-				<div class="amfc-footer__contact-content">
+				<div class="amfc-footer__contact-content amfc-footer__contact-content--desktop">
 					<div><?= e(t('footer.contact.japan.address_zh')) ?></div>
 					<div><?= e(t('footer.contact.japan.address_en')) ?></div>
+				</div>
+				<div class="amfc-footer__contact-content amfc-footer__contact-content--mobile">
+					<div class="amfc-footer__contact-label-en"><?= e(t('footer.contact.japan.company_name_en')) ?></div>
+					<div><?= e(t('footer.contact.japan.address_zh')) ?></div>
 				</div>
 			</div>
 		</div>

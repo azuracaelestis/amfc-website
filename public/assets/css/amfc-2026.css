@@ -3167,6 +3167,13 @@ body {
 	color: var(--amfc-accent);
 }
 
+/* <picture> is display: inline by default, which would let it shrink-to-fit around the <img>
+   instead of stretching the way a bare <img> did before — block here restores that, independent
+   of which <source>/fallback <img> is actually rendered inside. Same fix as .amfc-app picture. */
+.amfc-footer picture {
+	display: block;
+}
+
 /* 285x147 at the 1440px Figma reference width, fluid-scaled below it, per feedback. The clamp
    floor is in px (not rem) for the same root-font-size reason as everything else in this file. */
 .amfc-footer__logo {
@@ -3216,6 +3223,32 @@ body {
 	line-height: 1.5;
 }
 
+/* Mobile shows a different Taiwan/Japan content variant (company name + phone, no romanized
+   address) than desktop (full romanized address) — see footer.php's own comment. Same
+   toggle-by-breakpoint pattern as the KSP headline's mobile/desktop line-break split: both
+   variants stay in the DOM, CSS display decides which one is actually shown. */
+.amfc-footer__contact-content--mobile {
+	display: none;
+}
+
+@media (max-width: 991.98px) {
+	.amfc-footer__contact-content--desktop {
+		display: none;
+	}
+
+	.amfc-footer__contact-content--mobile {
+		display: flex;
+	}
+}
+
+/* English-language fragments within the footer's contact labels/content (the "Taiwan
+   Office"/"Japan Office" line, "AMFC JAPAN", the phone number) — DM Sans, per feedback. Same
+   specificity-override technique as .amfc-footer__legal below: (0,1,0), same shape as
+   `.amfc-footer, .amfc-footer *` above, and later in the file so it wins the tie. */
+.amfc-footer__contact-label-en {
+	font-family: var(--amfc-font-en);
+}
+
 /* Customer Service group only — its content (phone/hours) is genuinely shorter in Figma
    (~200px) than the two address groups (328px); giving it the same 328px cap was part of why
    the three groups didn't fit on one row. */
@@ -3231,20 +3264,28 @@ body {
 @media (max-width: 991.98px) {
 	/* 30px per side, confirmed via the Figma mobile frame (the contact column sits at x=30 in
 	   its 375px-wide frame) — not the ~51px the shared .amfc-container formula gives at this
-	   width (see the many other per-section overrides in this file for the same root cause). */
+	   width (see the many other per-section overrides in this file for the same root cause).
+	   display:flex + order below reorders the three direct children (row/contact/legal) to
+	   contact -> row -> legal, per feedback/Figma — desktop's own DOM order (row, then contact)
+	   stays the actual source order, since order is purely a rendering hint scoped to this
+	   media query. */
 	.amfc-footer .amfc-container {
 		width: 100%;
 		padding-inline: 30px;
+		display: flex;
+		flex-direction: column;
 	}
 
 	/* No nav columns at all on mobile, per Figma — the row now holds only the logo, so center
-	   it instead of the desktop-oriented flex-start. */
+	   it instead of the desktop-oriented flex-start. order: 2 puts it after the contact info,
+	   per Figma (Taiwan/Japan office details come first, the watermark logo below them). */
 	.amfc-footer__nav {
 		display: none;
 	}
 
 	.amfc-footer__row {
 		align-items: center;
+		order: 2;
 	}
 
 	/* Much larger and centered, per Figma (roughly full-width within the 30px-padded
@@ -3265,13 +3306,16 @@ body {
 	}
 
 	/* Stacked, left-aligned, no divider — per Figma (the mobile frame has no border line above
-	   this block, unlike desktop's). 24px between the two remaining groups, confirmed via Figma. */
+	   this block, unlike desktop's). 24px between the two remaining groups, confirmed via Figma.
+	   order: 1 moves it ahead of the logo row (see .amfc-footer__row's own order: 2) — Figma's
+	   mobile frame shows the office details first, the watermark logo below them. */
 	.amfc-footer__contact {
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 24px;
 		border-top: none;
 		padding-top: 0;
+		order: 1;
 	}
 
 	/* Narrower cap so the address lines wrap inside the mobile container's real content width
@@ -3316,5 +3360,6 @@ body {
 		align-items: center;
 		gap: 8px; /* confirmed via Figma */
 		margin-top: 32px;
+		order: 3; /* last — see .amfc-footer__contact/.amfc-footer__row's own order values */
 	}
 }

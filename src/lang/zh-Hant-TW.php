@@ -165,10 +165,16 @@ return [
     'footer.contact.taiwan.title_en' => 'Taiwan Office',
     'footer.contact.taiwan.address_zh' => '104439 台北市中山區德惠街9-1號B2',
     'footer.contact.taiwan.address_en' => 'B2., No. 9-1, Dehui St., Zhongshan Dist., Taipei City, 104439, Taiwan (R.O.C)',
+    // Mobile-only, confirmed via the Figma mobile frame (node 145:598) — replaces the romanized
+    // address on that breakpoint, not shown on desktop.
+    'footer.contact.taiwan.company_name' => '亞太普惠金融科技股份有限公司',
     'footer.contact.japan.title_zh' => '日本據點',
     'footer.contact.japan.title_en' => 'Japan Office',
     'footer.contact.japan.address_zh' => '〒530-0017大阪府大阪市北区角田町8-47 阪急グランドビル26階',
     'footer.contact.japan.address_en' => 'Hankyu Grand Building, 26F 8−47 Kakuda-cho, Kita Ward Osaka 530-0017 Japan',
+    // Mobile-only, confirmed via the Figma mobile frame (node 145:601) — same role as
+    // taiwan.company_name above.
+    'footer.contact.japan.company_name_en' => 'AMFC JAPAN',
     'footer.logo_alt' => 'FUNDS AMFC',
     // Mobile-only legal line, confirmed via the Figma mobile frame (node 145:614/145:615) — no
     // equivalent exists in the desktop footer's own Figma node, so not ported there yet.
