@@ -2762,6 +2762,16 @@ body {
 	}
 }
 
+/* Mobile: left-align the whole text column against the container's left edge, per feedback
+   ("all text should be left aligned") — the base rule's align-items: center (needed for the
+   photo, which stays centered) was also centering this narrower text column as a block, even
+   though the text inside it was already text-align: left. */
+@media (max-width: 991.98px) {
+	.amfc-investor__card {
+		align-items: flex-start;
+	}
+}
+
 .amfc-investor__photo-wrap {
 	position: relative;
 	flex-shrink: 0;
@@ -2800,6 +2810,17 @@ body {
 	gap: 1.5rem; /* 24px, confirmed via Figma */
 	/* 464px at the 1440px Figma reference width, fluid-scaled below it, confirmed via Figma */
 	width: clamp(14.5rem, calc(464 / 1440 * 100vw), 464px);
+}
+
+/* Mobile: 336px, per feedback — replaces the desktop clamp() above, which floors at 14.5rem
+   (255.2px under AMFC's 1.1rem root bug) and was centering the whole text column well short of
+   the container's real 335px content width (see .amfc-investor .amfc-container's 20px margin).
+   The CTA link below sits inside this same column, so it picks up the same available width
+   without a separate rule. */
+@media (max-width: 991.98px) {
+	.amfc-investor__text {
+		width: 336px;
+	}
 }
 
 .amfc-investor__heading {
