@@ -674,7 +674,17 @@
 
 .amfc-hero__content { grid-area: content; }
 .amfc-hero__photo-wrap { grid-area: photo; }
-.amfc-hero__cta { grid-area: cta; }
+
+/* justify-self: start — pre-existing bug, confirmed via Figma (node 87:44): grid items default
+   to justify-self: stretch, and since a grid item's outer display is "blockified" regardless of
+   its own authored display (inline-flex here), that stretch DOES apply, filling the button's
+   entire grid column/area (~585.6px at 1440px, roughly half the two-column desktop row) even
+   though the comment on .amfc-hero__cta below already says "width is deliberately not set — it
+   falls out of content + padding." start overrides the stretch so it actually does that,
+   shrink-wrapping to the label + padding as intended, matching Figma's normal-width pill button
+   rather than one stretched to half the row. Mobile is unaffected: its own width: 100% override
+   (see that rule) sets an explicit size, which wins over justify-self regardless. */
+.amfc-hero__cta { grid-area: cta; justify-self: start; }
 
 /* Desktop: original two-column layout — content and cta stacked together in the left column,
    photo spanning both rows in the right column (repeating "photo" across both grid-template-areas
