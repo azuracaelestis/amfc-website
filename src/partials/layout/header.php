@@ -22,7 +22,10 @@
 				<li class="nav-item"><a class="nav-link" href="#service"><?= e(t('nav.services')) ?></a></li>
 				<li class="nav-item"><a class="nav-link" href="#news"><?= e(t('nav.news')) ?></a></li>
 				<li class="nav-item"><a class="nav-link" href="#investor"><?= e(t('nav.investor')) ?></a></li>
-				<li class="nav-item dropdown">
+				<!-- Desktop-only — unchanged. Hidden on mobile (amfc-2026.css); the mobile menu
+				     panel uses its own inline segmented toggle below instead (per feedback: "no
+				     nested dropdown inside the already-open menu"). -->
+				<li class="nav-item dropdown amfc-nav__lang-dropdown">
 					<!-- TODO (AMFC integration): wire selection to the existing AMFC_2025_WEBSITE_lang
 					     cookie / set_lang() already in their custom.js, per CLAUDE.md -->
 					<button class="nav-link dropdown-toggle amfc-nav__lang-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -34,6 +37,21 @@
 						<li><a class="dropdown-item" href="#" data-lang="ja-JP"><?= e(t('nav.lang.ja')) ?></a></li>
 						<li><a class="dropdown-item" href="#" data-lang="id-ID"><?= e(t('nav.lang.id')) ?></a></li>
 					</ul>
+				</li>
+				<!-- Mobile-only — hidden on desktop (amfc-2026.css). Inline segmented toggle, per
+				     feedback: all three languages visible at once, no second overlay to open
+				     inside the mobile menu panel. role="radiogroup"/"radio" + aria-checked, not a
+				     <select> or Bootstrap dropdown, so it's a single always-visible control rather
+				     than a second collapsible layer. JS (initLangToggle in amfc-2026.js) owns
+				     selection state and the indicator's slide; this is UI-only, same integration
+				     boundary as the desktop dropdown above (TODO comment there applies here too). -->
+				<li class="nav-item amfc-nav__lang-toggle-mobile" role="presentation">
+					<div class="amfc-lang-toggle" role="radiogroup" aria-label="<?= e(t('nav.language')) ?>">
+						<span class="amfc-lang-toggle__indicator" aria-hidden="true"></span>
+						<button type="button" class="amfc-lang-toggle__option" role="radio" aria-checked="true" data-lang="en-US"><?= e(t('nav.lang.en')) ?></button>
+						<button type="button" class="amfc-lang-toggle__option" role="radio" aria-checked="false" data-lang="ja-JP"><?= e(t('nav.lang.ja')) ?></button>
+						<button type="button" class="amfc-lang-toggle__option" role="radio" aria-checked="false" data-lang="id-ID"><?= e(t('nav.lang.id')) ?></button>
+					</div>
 				</li>
 			</ul>
 		</div>

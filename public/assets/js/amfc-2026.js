@@ -365,6 +365,38 @@ window.AMFC = (function () {
 		});
 	}
 
+	/* Mobile menu's inline language toggle (.amfc-lang-toggle) — per feedback, replaces the
+	   nested dropdown with a segmented radiogroup. Owns two things: selection state
+	   (aria-checked on each .amfc-lang-toggle__option) and the indicator's position
+	   (--amfc-lang-index custom property the CSS transform reads — see that rule's own
+	   comment). Desktop's dropdown (.amfc-nav__lang-dropdown) is untouched, real Bootstrap
+	   markup, no JS of its own needed beyond what Bootstrap already provides — this function
+	   only ever touches .amfc-lang-toggle, which doesn't exist on desktop (display: none, see
+	   amfc-2026.css), so it's a no-op there regardless of viewport checks. */
+	function initLangToggle() {
+		var toggle = document.querySelector('.amfc-lang-toggle');
+		if (!toggle) return;
+
+		var options = Array.prototype.slice.call(toggle.querySelectorAll('.amfc-lang-toggle__option'));
+		if (!options.length) return;
+
+		options.forEach(function (option, index) {
+			option.addEventListener('click', function () {
+				if (option.getAttribute('aria-checked') === 'true') return;
+
+				options.forEach(function (opt) {
+					opt.setAttribute('aria-checked', 'false');
+				});
+				option.setAttribute('aria-checked', 'true');
+				toggle.style.setProperty('--amfc-lang-index', index);
+
+				// TODO (AMFC integration): wire selection to the existing
+				// AMFC_2025_WEBSITE_lang cookie / set_lang() in their custom.js, per CLAUDE.md —
+				// same integration boundary as the desktop dropdown's own identical TODO.
+			});
+		});
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
@@ -373,6 +405,7 @@ window.AMFC = (function () {
 		initPhilosophyCardAosReveal('.amfc-philosophy__stat-card--4');
 		initServiceCardTouchDelight();
 		initNewsCardTouchAffordance();
+		initLangToggle();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

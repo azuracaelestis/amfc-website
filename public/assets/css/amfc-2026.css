@@ -511,6 +511,116 @@
 	.amfc-nav__lang-toggle {
 		padding-left: 0; /* aligns under the section links once stacked full-width */
 	}
+
+	/* Desktop-only dropdown row hidden here — the mobile menu panel uses the inline segmented
+	   toggle below instead. See header.php's own comment on why these are two separate <li>s
+	   rather than one restyled per breakpoint: the desktop one is a Bootstrap dropdown
+	   (data-bs-toggle), the mobile one is a radiogroup with its own JS — different enough
+	   interaction models that reskinning one into the other in place isn't practical. */
+	.amfc-nav__lang-dropdown {
+		display: none;
+	}
+}
+
+/* Hidden by default/on desktop — shown only inside the mobile breakpoint below. Kept outside
+   the media query (rather than only existing inside it) so the "default is hidden" state is
+   explicit and doesn't depend on cascade order the way a bare mobile-only rule would. */
+.amfc-nav__lang-toggle-mobile {
+	display: none;
+}
+
+@media (max-width: 991.98px) {
+	.amfc-nav__lang-toggle-mobile {
+		display: list-item;
+		width: 100%;
+		/* Visually distinct from the four link rows above it, per feedback ("must look visually
+		   distinct... since tapping it changes a setting in place rather than navigating away") —
+		   the translucent pill treatment below already does this; this margin just gives it its
+		   own breathing room from the last link. */
+		margin-top: 0.5rem;
+	}
+}
+
+/* Segmented language toggle, replacing the mobile dropdown — per feedback. Background pulled
+   directly from .amfc-nav-pill's own values (rgba(255,255,255,0.8) + blur(8px) +
+   border-radius:999px, see that rule), not a redefined "similar" translucent gray, so this
+   control reads as the same material as the nav bar itself rather than a generic segmented
+   control from a different design system. */
+.amfc-lang-toggle {
+	position: relative;
+	display: flex;
+	width: 100%;
+	background: rgba(255, 255, 255, 0.8);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border-radius: 999px;
+	padding: 4px;
+}
+
+/* Solid, higher-contrast fill (not translucent like the track) so the active selection stays
+   legible now that the track itself is translucent, per feedback. Sized/positioned as exactly
+   one segment's share of the track's inner (padded) width, so translateX(100%) — sized to its
+   own box, not the container's — lands it exactly one segment over per step; flush segments
+   (no gap between .amfc-lang-toggle__option below) is what keeps that math exact. */
+.amfc-lang-toggle__indicator {
+	position: absolute;
+	top: 4px;
+	bottom: 4px;
+	left: 4px;
+	width: calc((100% - 8px) / 3);
+	background: var(--amfc-accent);
+	border-radius: 999px;
+	transform: translateX(calc(var(--amfc-lang-index, 0) * 100%));
+	transition: transform 0.25s var(--amfc-ease-out); /* cubic-bezier(0,0,.2,1) */
+	z-index: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-lang-toggle__indicator {
+		transition: none;
+	}
+}
+
+.amfc-lang-toggle__option {
+	position: relative;
+	z-index: 1;
+	flex: 1 1 0;
+	min-width: 0; /* flex items default to min-width: auto, which refuses to shrink below the
+	   text's own intrinsic width — "Indonesian" (the longest label) was landing flush against
+	   its segment's rounded edges with near-zero margin (measured: an 82.9px box for an 83px-
+	   wide text run) instead of actually being clipped, but that reads as cramped/cut-off at a
+	   glance. min-width: 0 plus the smaller font-size below give it real breathing room. */
+	background: none;
+	border: none;
+	padding: 0.5rem 0;
+	font-family: var(--amfc-font-en); /* DM Sans, matching the desktop dropdown's own copy */
+	/* px, not rem — AMFC's custom.css sets *, html, body { font-size: 1.1rem }, so 0.75rem here
+	   would compute to 13.2px, not 12px (see CLAUDE.md's own rem/root-font-size gotcha). 14px ->
+	   12px, see the min-width comment above for why. */
+	font-size: 12px;
+	font-weight: 600;
+	white-space: nowrap;
+	color: var(--amfc-text-heading);
+	opacity: 0.55;
+	/* Only opacity animates (color itself changes instantly on selection, not transitioned) —
+	   per feedback's own constraint ("animate only transform and opacity"). */
+	transition: opacity 0.25s ease-out;
+}
+
+.amfc-lang-toggle__option[aria-checked="true"] {
+	color: var(--amfc-white);
+	opacity: 1;
+}
+
+.amfc-lang-toggle__option:focus-visible {
+	outline: 2px solid var(--amfc-accent);
+	outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-lang-toggle__option {
+		transition: none;
+	}
 }
 
 .amfc-nav__items {
