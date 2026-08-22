@@ -507,12 +507,23 @@
 		   the pill's real outer edges at every mobile width, not just the 375px one measured. */
 		left: calc(-1 * clamp(0.9rem, calc(28.8 / 1440 * 100vw), 1.8rem));
 		right: calc(-1 * clamp(0.9rem, calc(28.8 / 1440 * 100vw), 1.8rem));
-		/* Same translucent material as .amfc-nav-pill (rgba(255,255,255,0.8) + blur(8px)), not a
-		   redefined "similar" value, per feedback ("same style... a bit transparent") — replaces
-		   the previous opaque var(--amfc-white). */
-		background: rgba(255, 255, 255, 0.8);
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
+		/* Frosted-glass ("morph") treatment, per feedback — the pill's own light 0.8-opacity/
+		   8px-blur material (used here until now) reads fine over the pill's own single-color
+		   hero background, but this panel floats over the far busier hero PHOTO, and at that
+		   opacity/blur the photo's edges and the text underneath it were bleeding straight
+		   through, blending with this panel's own text on top and making it hard to read.
+		   Raising the opacity (0.8 -> 0.92) is what actually fixes legibility — it's the
+		   dominant factor in how much of what's behind shows through, far more than blur radius
+		   is. blur is pushed up too (8px -> 20px) so what little does show through is a soft,
+		   indistinct wash rather than recognizable shapes, plus saturate(180%) — the standard
+		   "glassmorphism" pairing — so the frosted look doesn't turn the same content flat/gray.
+		   A thin translucent white border is the other half of that same recipe: real glass
+		   catches a highlight at its edge, which is what actually reads as "glass" rather than
+		   "a blurred rectangle" at a glance. */
+		background: rgba(255, 255, 255, 0.92);
+		backdrop-filter: blur(20px) saturate(180%);
+		-webkit-backdrop-filter: blur(20px) saturate(180%);
+		border: 1px solid rgba(255, 255, 255, 0.6);
 		border-radius: 24px;
 		box-shadow: var(--amfc-shadow-card);
 		padding: 1.25rem 1.5rem;
@@ -605,6 +616,12 @@
 		min-height: 44px; /* a11y: comfortable tap target — directly answers "too small... does
 		   not meet the a11y requirement" from feedback (the previous segmented toggle measured
 		   ~40px tall) */
+		/* Shifts the whole row (label + checkmark together) 10px right, per feedback — a
+		   transform, not margin/width math, so both ends move as one unit instead of just the
+		   label shifting while the checkmark (justify-content: space-between, pinned to the
+		   row's own right edge) stays put. The panel's own right padding (1.5rem, ~26px) has
+		   plenty of room to absorb this without the checkmark visually crowding the panel edge. */
+		transform: translateX(10px);
 		background: none;
 		border: none;
 		padding: 0.5rem 0;

@@ -54,7 +54,11 @@
 						<img class="amfc-nav__lang-chevron" src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" aria-hidden="true" />
 					</button>
 					<ul id="amfcLangList" class="amfc-lang-list" hidden>
-						<li><button type="button" class="amfc-lang-list__option" data-lang="en-US" aria-pressed="true"><?= e(t('nav.lang.en')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
+						<!-- 中文 first and selected by default, per feedback — this site's actual
+						     current/only built content language (zh-Hant-TW, see CLAUDE.md "Content
+						     & i18n"), so it's the real starting selection, not a placeholder. -->
+						<li><button type="button" class="amfc-lang-list__option" data-lang="zh-TW" aria-pressed="true"><?= e(t('nav.lang.zh')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
+						<li><button type="button" class="amfc-lang-list__option" data-lang="en-US" aria-pressed="false"><?= e(t('nav.lang.en')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
 						<li><button type="button" class="amfc-lang-list__option" data-lang="ja-JP" aria-pressed="false"><?= e(t('nav.lang.ja')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
 						<li><button type="button" class="amfc-lang-list__option" data-lang="id-ID" aria-pressed="false"><?= e(t('nav.lang.id')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
 					</ul>
