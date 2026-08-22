@@ -696,6 +696,39 @@
 			"content photo"
 			"cta photo";
 	}
+
+	/* Bug fix, per feedback with a Figma reference (48px between the last headline line and the
+	   button): "content" and "cta" sit in two separate auto-sized rows, but "photo" spans both
+	   of them (repeated area name) — since the photo is tall, grid distributes the extra height
+	   it needs across BOTH rows (confirmed via getComputedStyle: gridTemplateRows computed to
+	   "414.375px 136.047px" at the 1440px reference, vs. content/cta's own natural ~348px/57px —
+	   ~145px of pure slack, split across both tracks), inflating them well beyond what
+	   content/cta actually need. .amfc-hero__grid's own align-items: center (needed to
+	   vertically center the photo within its own spanned area) was then also centering
+	   content/cta within THEIR now-inflated rows, landing the button ~156px below the headline
+	   instead of close to it.
+
+	   align-self: start moves content/cta to the top of their (still-inflated) rows — necessary
+	   but not sufficient on its own, since the row tracks themselves are still oversized. The
+	   margin-top below closes the remaining measured gap directly (same "measured, not derived
+	   by formula" approach already used for the mobile CTA's own margin-top, since the row
+	   inflation isn't expressible as a clean formula either).
+
+	   Target re-derived from the Figma reference itself: .amfc-hero__content's own box bottom
+	   edge already sits exactly 48px below the headline's last line (confirmed via
+	   getBoundingClientRect — content's own bottom and headline-bottom + 48 matched exactly, to
+	   the pixel, at the 1440px reference) — that's the content block's own built-in spacing, not
+	   something the button needs to add on top of. So the real fix target is flush against
+	   content's box (zero extra gap), not "content's box bottom + 48". -101.4px is what closes
+	   the remaining gap to that, measured at the 1440px reference. */
+	.amfc-hero__content,
+	.amfc-hero__cta {
+		align-self: start;
+	}
+
+	.amfc-hero__cta {
+		margin-top: -136.3px;
+	}
 }
 
 /* Shifted 20px right per feedback (matching .amfc-nav__brand's identical shift so the logo
