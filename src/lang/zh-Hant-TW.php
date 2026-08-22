@@ -94,6 +94,11 @@ return [
     // confirmed both from the Figma source text AND the real badge logo image itself.
     'home.trust.headline_line1' => '以專業與合規，',
     'home.trust.headline_line2' => '打造值得信賴的金融服務',
+    // Mobile-only alternate line break, per feedback — same pattern as the KSP headline's own
+    // mobile split (see philosophy.php / .amfc-philosophy__heading-lines--mobile): desktop
+    // keeps the pair above unchanged, toggled by breakpoint via CSS display in trust.php.
+    'home.trust.headline_mobile_line1' => '以專業與合規， 打造值得信賴',
+    'home.trust.headline_mobile_line2' => '的金融服務',
     'home.trust.body' => '本公司已加入臺灣金融科技協會（TFTA），取得 ISO 國際認證（ISO 27001 及 ISO 27701），並與瑞源證券投資顧問股份有限公司攜手合作，持續以專業標準、資訊安全與合規管理，提供值得信賴的金融服務。',
     'home.trust.badge.tfta_alt' => 'TFTA 台灣金融科技協會',
     'home.trust.badge.ias_iaf_alt' => 'IAS / IAF 國際認證標誌',

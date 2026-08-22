@@ -16,8 +16,19 @@
 			</div>
 			<div class="amfc-trust__text">
 				<h2 class="amfc-trust__heading">
-					<?= e(t('home.trust.headline_line1')) ?><br />
-					<?= e(t('home.trust.headline_line2')) ?>
+					<!-- Desktop line break — hidden on mobile via CSS display (see
+					     .amfc-trust__heading-lines--desktop in amfc-2026.css), not removed from the
+					     DOM, but display: none content isn't exposed to assistive tech either, so
+					     only one of these two versions is ever actually announced. -->
+					<span class="amfc-trust__heading-lines--desktop">
+						<?= e(t('home.trust.headline_line1')) ?><br />
+						<?= e(t('home.trust.headline_line2')) ?>
+					</span>
+					<!-- Mobile line break, per feedback. -->
+					<span class="amfc-trust__heading-lines--mobile">
+						<?= e(t('home.trust.headline_mobile_line1')) ?><br />
+						<?= e(t('home.trust.headline_mobile_line2')) ?>
+					</span>
 				</h2>
 				<p class="amfc-trust__body"><?= e(t('home.trust.body')) ?></p>
 			</div>

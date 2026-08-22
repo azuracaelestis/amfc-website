@@ -102,6 +102,19 @@
 	padding-block: clamp(2.8125rem, calc(90 / 1440 * 100vw), 90px) var(--amfc-space-xl);
 }
 
+/* Mobile: same .amfc-container margin-bug fix as every other section here (the shared class's
+   formula gives ~35px per side at 375px wide, not a real design margin) — 20px, matching the
+   majority of sections already checked against Figma (philosophy, funds); this section hasn't
+   had its own exact Figma margin re-confirmed since the MCP connection was unavailable while
+   working on this section, so 20px is the established convention rather than a fresh
+   measurement. Flag for a follow-up check if it's ever off. */
+@media (max-width: 991.98px) {
+	.amfc-trust .amfc-container {
+		width: 100%;
+		padding-inline: 20px;
+	}
+}
+
 .amfc-trust__grid {
 	display: flex;
 	flex-direction: column;
@@ -164,12 +177,64 @@
 	gap: 1.125rem; /* 18px, confirmed via Figma */
 }
 
+/* Mobile: both the headline and body copy centered, per feedback. align-items: center (not just
+   text-align) because .amfc-trust__body has its own explicit width narrower than this column —
+   text-align alone would center the text WITHIN that narrower box, but align-items is what
+   centers the box itself in the column; without it the (default stretch-then-flex-start) cross-
+   axis position would leave a narrower body flush left instead. */
+@media (max-width: 991.98px) {
+	.amfc-trust__text {
+		align-items: center;
+		text-align: center;
+	}
+}
+
 .amfc-trust__heading {
 	color: var(--amfc-text-heading); /* #1A2F86 */
 	font-weight: 600; /* Noto Sans SemiBold, confirmed via Figma */
 	/* 36px at the 1440px Figma reference width, fluid-scaled below it */
 	font-size: clamp(1.5rem, calc(36 / 1440 * 100vw), 36px);
 	line-height: 1.39; /* 50px at 36px font-size, confirmed via Figma */
+}
+
+/* Mobile: pinned to an exact 24px, per feedback — the desktop clamp above floors at 1.5rem
+   (26.4px under AMFC's 1.1rem root bug), and even that was too wide for line 1 of the mobile
+   split just below ("以專業與合規， 打造值得信賴" measured ~352px needed against ~335px
+   available), wrapping into an unwanted 3rd line. 24px was chosen directly by the user rather
+   than left to fit-checking, since the alternative (removing the line's own space) only saved
+   ~12px and might still have been tight depending on the container-margin fix below. */
+@media (max-width: 991.98px) {
+	.amfc-trust__heading {
+		font-size: 24px;
+	}
+}
+
+/* Two alternate line breaks live in the DOM at once (see trust.php) — desktop's existing split,
+   and mobile's own per feedback. font-size: inherit on both — without it, AMFC's live
+   `*, html, body { font-size: 1.1rem }` directly matches these bare wrapper spans (added purely
+   to toggle which line break is active) and silently shrinks the actual headline text to
+   ~19px regardless of .amfc-trust__heading's own font-size, the exact bug already hit and fixed
+   on the KSP headline's own mobile split — see that fix's own commit for the full mechanism.
+   display: none on the inactive one removes it from the accessibility tree too, so nothing is
+   ever announced twice. */
+.amfc-trust__heading-lines--desktop {
+	display: inline;
+	font-size: inherit;
+}
+
+.amfc-trust__heading-lines--mobile {
+	display: none;
+	font-size: inherit;
+}
+
+@media (max-width: 991.98px) {
+	.amfc-trust__heading-lines--desktop {
+		display: none;
+	}
+
+	.amfc-trust__heading-lines--mobile {
+		display: inline;
+	}
 }
 
 .amfc-trust__body {
