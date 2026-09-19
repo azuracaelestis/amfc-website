@@ -417,6 +417,11 @@ body.theme-en [tabindex]:focus-visible {
 	justify-content: center;
 	gap: 84px;
 	flex-wrap: wrap;
+	/* Containing block for .amfc-en-principles__watermark-overlay below. This box spans the
+	   full container content width — its left edge is exactly the page's nav-alignment line
+	   (measured: 119px at 1440px, same as the nav logo and the hero headline) — which is what
+	   lets the watermark anchor there without any hardcoded offset. */
+	position: relative;
 }
 
 /* Provides the tall containing block the sticky intro needs — see principles.php's own comment
@@ -471,11 +476,34 @@ body.theme-en [tabindex]:focus-visible {
 	flex: 0 0 auto;
 }
 
-/* Decorative AMFC wordmark, per feedback — a normal flex child after the body copy (not
-   absolutely positioned) so it simply joins the group that's already centered against card 1's
-   height (see .amfc-en-principles__intro above); the group re-centers as a whole rather than
-   pixel-locking the heading's own prior position. width fluid-scaled from a 220px reference,
-   capped so it stays clearly smaller than the 353px text column it sits under.
+/* Out-of-flow overlay the watermark anchors to — see principles.php's own comment for why the
+   watermark had to leave the centered intro/cards group entirely. inset: 0 matches
+   .amfc-en-principles__layout's own box exactly, so this starts at the page's nav-alignment
+   line, and spans the layout's full (tall) height so the sticky watermark inside can travel the
+   whole stacking sequence. z-index: 0 keeps it beneath the cards (z-index 1-4) and beneath the
+   intro text (positioned, z-index auto, later in DOM), so it reads as a watermark under both. */
+.amfc-en-principles__watermark-overlay {
+	position: absolute;
+	/* inset: 0 matches .amfc-en-principles__layout's own box exactly — the same box
+	   .amfc-en-principles__intro-slot is stretched to, which is what lets the slot below pin and
+	   release in lockstep with the intro. */
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+}
+
+/* Mirrors .amfc-en-principles__intro's own sticky geometry exactly — same top, same
+   card-height box, same (layout-height) containing block — so the watermark pins and releases
+   at exactly the same scroll positions the headline does. The mark inside is absolutely
+   positioned precisely so it can sit 360px lower and overflow this box without adding to its
+   height, which would otherwise push the release point earlier and desync the two again. */
+.amfc-en-principles__watermark-slot {
+	position: sticky;
+	top: var(--amfc-en-stack-top);
+	height: clamp(220px, calc(404.89 / 1440 * 100vw), 404.89px);
+}
+
+/* Decorative AMFC wordmark.
 
    mask-image + background-color, not an <img> + filter — per feedback, the watermark needs an
    EXACT color (#D9E1FF, which happens to equal --amfc-en-lavender already defined in this file)
@@ -489,14 +517,27 @@ body.theme-en [tabindex]:focus-visible {
    Safari as of this writing. */
 .amfc-en-principles__watermark {
 	display: block;
-	/* 606x312px at the 1440px reference, per feedback (was 220px wide, capped smaller than the
-	   text column on purpose at the time — that constraint is gone now), fluid-scaled below it
-	   like this file's other desktop-reference sizing. Its own aspect-ratio (606/312 ≈ 1.94) is
-	   close to but not identical to the source SVG's native 766:403 (≈1.90) — mask-size: contain
-	   fits the logo shape within this box without distorting it either way. */
+	/* Absolutely positioned inside .amfc-en-principles__watermark-slot (see that rule) — the
+	   slot supplies the sticky behavior, this just sits at a fixed offset within it.
+
+	   top: 360px preserves the 70px watermark-to-body-copy gap specified earlier, measured in
+	   the pinned state: with the watermark no longer part of the intro's own flow, the intro's
+	   h2+p re-centered within its card-height box, putting the paragraph's bottom edge 290px
+	   below the intro's pinned top — plus that 70px gap = 360px. (An earlier 246px value here
+	   was derived from the paragraph's position BEFORE that re-centering, and overlapped the
+	   body copy by ~44px as a result.)
+	   left: 0 is what actually delivers the requested alignment: the slot inherits the
+	   overlay's left edge, which is .amfc-en-principles__layout's own — the page's nav
+	   alignment line (119px at 1440px, same as the nav logo and hero headline). */
+	position: absolute;
+	top: 360px;
+	left: 0;
+	/* 606x312px at the 1440px reference, per feedback, fluid-scaled below it like this file's
+	   other desktop-reference sizing. Its own aspect-ratio (606/312 ≈ 1.94) is close to but not
+	   identical to the source SVG's native 766:403 (≈1.90) — mask-size: contain fits the logo
+	   shape within this box without distorting it either way. */
 	width: clamp(300px, calc(606 / 1440 * 100vw), 606px);
 	aspect-ratio: 606 / 312;
-	margin-top: 70px;
 	background-color: #d9e1ff;
 	/* Plain relative path, not the asset() PHP helper — this is a static .css file, never
 	   parsed by PHP, unlike the .php partials elsewhere in this project. Relative to this

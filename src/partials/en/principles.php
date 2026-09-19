@@ -9,6 +9,32 @@
 		     Figma node's own layout (intro block ends at x=353, the cards group starts at
 		     x=437 — 437-353=84). -->
 		<div class="amfc-en-principles__layout">
+			<!-- Watermark lives here, OUTSIDE the centered intro/cards group, per feedback
+			     ("it supposed to be left aligned... with the nav bar left margin"): anything
+			     inside that group inherits the group's own centering offset (measured: the
+			     watermark sat at x=298 rather than the nav's own 119 alignment line). This
+			     overlay is position: absolute against .amfc-en-principles__layout, whose box
+			     already spans the full container content width starting at exactly that 119
+			     line — so the watermark inside it lands there at every viewport, with no
+			     hardcoded offset that would need keeping in sync with the centering math.
+
+			     Two elements rather than one, matching the zh-Hant-TW site's own
+			     .amfc-philosophy__watermark-overlay/slot pattern: the absolute overlay adds no
+			     flow height (so it can't push the section taller) while the sticky element
+			     inside it still travels with the pinned intro through the whole stacking
+			     sequence, which a bare absolutely-positioned element wouldn't do. -->
+			<div class="amfc-en-principles__watermark-overlay">
+				<!-- The slot deliberately mirrors .amfc-en-principles__intro's own geometry
+				     (same sticky top, same card-height box) so the two pin AND release at
+				     identical scroll positions — the mark itself is absolutely positioned
+				     inside it, so it can sit lower and overflow without changing the slot's
+				     height and desyncing that. Without this the watermark pinned 360px of
+				     scroll earlier than the intro and released earlier too, visibly drifting
+				     into the body copy at both ends of the section. -->
+				<div class="amfc-en-principles__watermark-slot">
+					<span class="amfc-en-principles__watermark" role="presentation" aria-hidden="true"></span>
+				</div>
+			</div>
 			<!-- Two nested wrappers, same pattern as the zh-Hant-TW site's own
 			     .amfc-philosophy__intro-slot: a sticky element's RELEASE point (when it stops
 			     being pinned) is governed by its own normal-flow box height, not by how long
@@ -25,22 +51,6 @@
 				<div class="amfc-en-principles__intro">
 					<h2 class="amfc-en-principles__heading">Four Principles.<br />One Commitment.</h2>
 					<p>These four principles shape every solution we build and every partnership we create.</p>
-					<!-- Decorative AMFC wordmark watermark, per feedback — reuses the same
-					     logomark asset the zh-Hant-TW site's KSP section already uses for the
-					     same purpose (this page's own Figma frame doesn't have a dedicated
-					     watermark node for this section, unlike the hero's brand stamp — the
-					     request pointed at the page's general Figma URL, not a specific new
-					     node). Static placement under the intro text, not the zh page's fixed-
-					     position/scroll-fade behavior — that's tightly coupled to that page's
-					     own multi-card scroll timing and JS, well beyond a "place a watermark
-					     logo" placement request here.
-
-					     An empty <span> with mask-image (see amfc-en.css), not an <img> — the
-					     source asset's fill is baked into the SVG itself (#ebebeb), so an <img>
-					     can only be dimmed/darkened via filter, not recolored to an exact hex
-					     value like the #D9E1FF specified here. mask-image lets a plain
-					     background-color show through the logo's shape instead. -->
-					<span class="amfc-en-principles__watermark" role="presentation" aria-hidden="true"></span>
 				</div>
 			</div>
 			<div class="amfc-en-principles__stack-wrap">
