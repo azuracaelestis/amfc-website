@@ -869,10 +869,20 @@ body.theme-en [tabindex]:focus-visible {
 }
 
 .amfc-en-product-card img {
-	max-width: 80%;
-	max-height: 240px;
 	object-fit: contain;
 	margin-bottom: 16px;
+}
+
+/* Per-card image sizes, matching the source Figma exactly (was a shared 80%/240px max, a guess
+   made before this section had specific per-card specs to check against). */
+.amfc-en-product-card__img--large {
+	width: clamp(158px, calc(237 / 1440 * 100vw), 237px);
+	height: clamp(161px, calc(242 / 1440 * 100vw), 242px);
+}
+
+.amfc-en-product-card__img--small {
+	width: clamp(140px, calc(211 / 1440 * 100vw), 211px);
+	height: clamp(143px, calc(215 / 1440 * 100vw), 215px);
 }
 
 .amfc-en-product-card__label {
