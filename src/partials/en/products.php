@@ -3,7 +3,7 @@
 	<div class="container text-center">
 		<p class="amfc-en-eyebrow">Our Product</p>
 		<h2 class="fw-bold mt-3 mb-3" style="font-size: clamp(1.5rem, calc(32 / 1440 * 100vw), 2rem);">Financial Products &amp; Services</h2>
-		<p class="mx-auto mb-5" style="max-width: 788px;">Alongside our regional fintech initiatives, we provide consumer financing and investment services in Taiwan through compliant, technology-enabled financial products.</p>
+		<p class="amfc-en-products__intro mx-auto mb-5">Alongside our regional fintech initiatives, we provide consumer financing and investment services in Taiwan through compliant, technology-enabled financial products.</p>
 
 		<div class="amfc-en-products__grid">
 			<div class="amfc-en-product-card">

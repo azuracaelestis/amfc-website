@@ -837,6 +837,15 @@ body.theme-en [tabindex]:focus-visible {
 	background: #fff;
 }
 
+.amfc-en-products__intro {
+	max-width: 788px;
+	/* Raw px, not the default 1.1rem this <p> otherwise falls to (AMFC's html{font-size:1.1rem}
+	   bug directly matches every element via `*`, per CLAUDE.md) -- at the inflated 19.36px this
+	   copy wrapped to 3 lines instead of the requested 2. */
+	font-size: 16px;
+	line-height: 1.5;
+}
+
 .amfc-en-products__grid {
 	display: flex;
 	flex-wrap: wrap;
