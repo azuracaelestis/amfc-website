@@ -290,6 +290,12 @@ body.theme-en [tabindex]:focus-visible {
 	object-fit: contain;
 }
 
+.amfc-en-trust__row {
+	/* 64px flat gap between the badges/text columns, per feedback (see this class's own
+	   comment in trust.php for why --bs-gutter-x directly, not double it). */
+	--bs-gutter-x: 64px;
+}
+
 .amfc-en-trust__heading {
 	font-weight: 700;
 	/* 32px, matching the source Figma node exactly (was 1.25rem/20px, a guess made before this
@@ -303,9 +309,8 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-trust__body {
 	font-size: 1rem;
 	line-height: 1.5;
-	/* Lighter accent blue, not navy — matches the reference: this line reads visibly lighter
-	   than the bold navy heading above it. */
-	color: var(--amfc-en-blue-accent);
+	/* Navy, per feedback (was accent blue — a guess made before this exact color was specified). */
+	color: var(--amfc-en-navy);
 	margin-bottom: 0;
 }
 

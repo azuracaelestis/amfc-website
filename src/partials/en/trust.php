@@ -1,7 +1,12 @@
 <?php // PORT THIS — content is a hardcoded stub per CLAUDE.md (no CMS in this repo). ?>
 <section class="amfc-en-trust">
 	<div class="container amfc-en-container">
-		<div class="row align-items-center g-4">
+		<!-- amfc-en-trust__row overrides --bs-gutter-x to 64px, per feedback — the gap between
+		     the badges and text columns must be a flat 64px, not g-4's 1.5rem (26.4px on this
+		     site, see CLAUDE.md's rem-inflation bug). Bootstrap splits a row's gutter evenly as
+		     each column's own left/right padding, so the visual gap between two adjacent columns
+		     equals --bs-gutter-x directly (not double it). -->
+		<div class="row align-items-center amfc-en-trust__row">
 			<div class="col-lg-6">
 				<div class="d-flex align-items-center gap-4 amfc-en-trust__badges flex-wrap">
 					<img src="<?= e(asset('images/en/badge-tfta.png')) ?>" alt="TFTA member badge" width="1164" height="761" />
