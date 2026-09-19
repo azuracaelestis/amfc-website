@@ -148,67 +148,77 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-hero {
 	position: relative;
 	overflow: hidden;
-	/* Deep navy-to-accent gradient, not the pale one this replaced — the hero's headline/eyebrow
-	   are white, and the source hero-bg-shape.svg export (526 bytes, a small abstract accent
-	   shape, not a full backdrop) left the section too light for that text to read against.
-	   This guarantees contrast regardless of how the decorative shape/ellipse render. */
-	background: linear-gradient(135deg, var(--amfc-en-navy) 0%, var(--amfc-en-blue-accent) 100%);
-	padding-block: 40px 96px;
+	/* Per feedback: the actual background is hero-bg-shape.svg itself (a light lavender-to-blue
+	   gradient rectangle, EEF1FE -> B9C8FF) with navy text on top, not a dark navy gradient —
+	   corrects the earlier guess (made before this spec) that assumed white text needed a dark
+	   backdrop for contrast. */
+	background: #fff;
+	height: clamp(400px, calc(896 / 1440 * 100vw), 896px);
+	display: flex;
+	align-items: center;
 }
 
 .amfc-en-hero__bg-shape {
 	position: absolute;
 	inset: 0;
 	width: 100%;
-	height: auto;
+	height: 100%;
 	object-fit: cover;
 	z-index: 0;
-	opacity: 0.5;
-	mix-blend-mode: soft-light;
 }
 
 .amfc-en-hero__bg-glow {
 	position: absolute;
 	top: -20%;
 	right: -15%;
-	width: 55%;
-	height: auto;
-	max-width: 700px;
+	/* 1138x1138px at the 1440px reference, per feedback (matches the source Figma node's own
+	   size exactly), fluid-scaled below it like this file's other desktop-reference sizing. */
+	width: clamp(500px, calc(1138 / 1440 * 100vw), 1138px);
+	height: clamp(500px, calc(1138 / 1440 * 100vw), 1138px);
 	z-index: 0;
-	opacity: 0.35;
-	mix-blend-mode: soft-light;
+	/* Not transparent, per feedback (was opacity: 0.25). */
+	opacity: 1;
 }
 
 .amfc-en-hero__container {
 	position: relative;
 	z-index: 1;
+	width: 100%;
 }
 
 .amfc-en-hero__eyebrow {
-	font-size: 1.25rem;
-	color: #fff;
-	font-weight: 500;
+	/* 32px at the 1440px reference, per feedback, fluid-scaled below it like everything else
+	   in this file's desktop-reference sizing. */
+	font-size: clamp(1.25rem, calc(32 / 1440 * 100vw), 32px);
+	color: var(--amfc-en-navy);
+	font-weight: 400;
 	margin-bottom: 12px;
 }
 
 .amfc-en-hero__headline {
-	color: #fff;
+	color: var(--amfc-en-navy);
 	font-weight: 700;
-	font-size: clamp(2rem, calc(64 / 1440 * 100vw), 4rem);
+	/* 64px at the 1440px reference, per feedback, fluid-scaled below it. */
+	font-size: clamp(2rem, calc(64 / 1440 * 100vw), 64px);
 	line-height: 1.15;
 	margin-bottom: 0;
 }
 
 .amfc-en-hero__photo-wrap {
 	position: relative;
-	border-radius: var(--amfc-en-radius-lg);
-	overflow: hidden;
+	/* Enlarged 75% per feedback (scale(1.75)) — border-radius/overflow-hidden moved onto the
+	   img itself (below) rather than staying here: this wrap is what gets scaled, and clipping
+	   here would crop the scaled-up image back down to the wrap's own unscaled box, defeating
+	   the enlargement. .amfc-en-hero's own overflow:hidden still clips it at the section edge. */
+	transform: scale(1.75);
+	transform-origin: center;
 }
 
 .amfc-en-hero__photo {
 	width: 100%;
 	height: auto;
 	display: block;
+	border-radius: var(--amfc-en-radius-lg);
 }
 
 /* --- Trust / institutional strip --- */
