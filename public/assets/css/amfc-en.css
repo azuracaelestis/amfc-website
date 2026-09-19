@@ -113,12 +113,20 @@ body.theme-en [tabindex]:focus-visible {
 }
 
 /* --- Nav --- */
+/* Fixed, not sticky — per feedback, the nav must float OVER the hero (matching both the source
+   Figma, where the nav is absolutely positioned over the hero rectangle, and the zh-Hant-TW
+   site's own .amfc-nav-pill pattern) rather than sitting in normal flow and pushing the hero
+   down with a white gap above it. Taking it out of flow this way also means <main>'s first
+   child (the hero section) naturally starts at the very top of the page, behind it. */
 .amfc-en-nav {
-	position: sticky;
+	position: fixed;
 	top: 24px;
+	left: 50%;
+	transform: translateX(-50%);
 	z-index: 1000;
+	width: calc(100% - 64px);
 	max-width: 1264px;
-	margin: 24px auto 0;
+	margin: 0;
 	background: rgba(255, 255, 255, 0.8);
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
@@ -209,8 +217,15 @@ body.theme-en [tabindex]:focus-visible {
 	/* Enlarged 75% per feedback (scale(1.75)) — border-radius/overflow-hidden moved onto the
 	   img itself (below) rather than staying here: this wrap is what gets scaled, and clipping
 	   here would crop the scaled-up image back down to the wrap's own unscaled box, defeating
-	   the enlargement. .amfc-en-hero's own overflow:hidden still clips it at the section edge. */
-	transform: scale(1.75);
+	   the enlargement. .amfc-en-hero's own overflow:hidden still clips it at the section edge.
+
+	   translateY listed BEFORE scale, not after — transform functions apply right-to-left, so
+	   scale(1.75) runs first (against transform-origin) and the translateY runs second, on the
+	   already-scaled result, in the parent's unscaled coordinate space. That gives a flat 68px
+	   shift on screen. Writing it the other way (scale after translate) would apply the 68px
+	   shift in the pre-scale coordinate space instead, making the visible shift 68 * 1.75 =
+	   119px — not what "move down by 68px" asked for. */
+	transform: translateY(68px) scale(1.75);
 	transform-origin: center;
 }
 
