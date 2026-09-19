@@ -673,6 +673,39 @@ body.theme-en [tabindex]:focus-visible {
 	display: block;
 }
 
+/* --- Parent company (Funds Inc.) --- */
+.amfc-en-funds {
+	background: #fff;
+	/* 90px vertical / 140px horizontal, per the source Figma node (321:1100) exactly. Not
+	   wrapped in .amfc-en-container — this section centers its own row via justify-content on
+	   the row itself (see below), unlike every other section here which left-aligns its content
+	   to the nav's own alignment line. */
+	padding-block: 90px;
+	padding-inline: 140px;
+	display: flex;
+	justify-content: center;
+}
+
+.amfc-en-funds__row {
+	display: flex;
+	align-items: flex-end;
+	gap: 34px;
+	flex-wrap: wrap;
+}
+
+.amfc-en-funds__logo {
+	width: clamp(180px, calc(297 / 1440 * 100vw), 297px);
+	height: auto;
+}
+
+.amfc-en-funds__copy {
+	max-width: 505px;
+	font-size: 1rem;
+	line-height: 1.375;
+	color: var(--amfc-en-navy);
+	margin-bottom: 0;
+}
+
 /* --- What we do --- */
 .amfc-en-whatwedo {
 	padding-block: 90px;

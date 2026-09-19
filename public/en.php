@@ -13,6 +13,7 @@ require __DIR__ . '/../src/bootstrap.php';
 		<?php partial('en/hero') ?>
 		<?php partial('en/trust') ?>
 		<?php partial('en/principles') ?>
+		<?php partial('en/funds') ?>
 		<?php partial('en/whatwedo') ?>
 		<?php partial('en/products') ?>
 		<?php partial('en/media-grid') ?>
