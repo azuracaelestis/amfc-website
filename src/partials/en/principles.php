@@ -20,32 +20,37 @@
 				     share the same `top`, so each releases from flow and immediately pins at
 				     that same offset, landing directly on top of the one before it; then
 				     .amfc-en-principles__stack-tail supplies the scroll runway for the last
-				     card to release before the next section begins. Cards 3-4 (Innovation,
-				     Professionalism) added from Figma nodes 333:1315/333:1324 — no tilt was
-				     specified on those nodes (unlike cards 1-2's -2.57deg/2.42deg, baked into
-				     their own rotated wrappers in the source file), so their tilt values
-				     follow the zh-Hant-TW KSP set's own card-3/card-4 pattern instead
-				     (-3deg/4deg) for consistency. -->
+				     card to release before the next section begins.
+
+				     Stack order is Efficiency, Innovation, Integrity, Professionalism, per
+				     feedback — each card carries a CONTENT-based modifier class (its own
+				     color/tilt, matching its own Figma node) rather than a position-based one
+				     (--1/--2/etc.), specifically so this order can be changed by moving markup
+				     alone: z-index (stacking depth) is assigned by :nth-child in
+				     amfc-en.css, not baked into these classes, so reordering these divs is
+				     enough on its own — no CSS to touch. Innovation/Professionalism (Figma
+				     nodes 333:1315/333:1324) didn't specify a tilt angle themselves, so they
+				     use the zh-Hant-TW KSP set's own tilt pattern instead. -->
 				<div class="amfc-en-principles__stack">
-					<div class="amfc-en-stat-card amfc-en-stat-card--1">
+					<div class="amfc-en-stat-card amfc-en-stat-card--efficiency">
 						<img src="<?= e(asset('images/en/principle-professionalism.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
 						<span class="amfc-en-stat-card__badge">Efficiency</span>
 						<span class="amfc-en-stat-card__number">200,000+</span>
 						<span class="amfc-en-stat-card__label">Customers Served</span>
 					</div>
-					<div class="amfc-en-stat-card amfc-en-stat-card--2">
-						<img src="<?= e(asset('images/en/principle-integrity.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
-						<span class="amfc-en-stat-card__badge">Integrity</span>
-						<span class="amfc-en-stat-card__number">NT$20 Billion+</span>
-						<span class="amfc-en-stat-card__label">Assets Under Management</span>
-					</div>
-					<div class="amfc-en-stat-card amfc-en-stat-card--3">
+					<div class="amfc-en-stat-card amfc-en-stat-card--innovation">
 						<img src="<?= e(asset('images/en/principle-innovation.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
 						<span class="amfc-en-stat-card__badge">Innovation</span>
 						<span class="amfc-en-stat-card__number">AI-Powered</span>
 						<span class="amfc-en-stat-card__label">Intelligent Risk Management</span>
 					</div>
-					<div class="amfc-en-stat-card amfc-en-stat-card--4">
+					<div class="amfc-en-stat-card amfc-en-stat-card--integrity">
+						<img src="<?= e(asset('images/en/principle-integrity.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
+						<span class="amfc-en-stat-card__badge">Integrity</span>
+						<span class="amfc-en-stat-card__number">NT$20 Billion+</span>
+						<span class="amfc-en-stat-card__label">Assets Under Management</span>
+					</div>
+					<div class="amfc-en-stat-card amfc-en-stat-card--professionalism">
 						<img src="<?= e(asset('images/en/principle-financial-expertise.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
 						<span class="amfc-en-stat-card__badge">Professionalism</span>
 						<span class="amfc-en-stat-card__number">20+ years</span>

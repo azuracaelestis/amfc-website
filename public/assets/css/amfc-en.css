@@ -397,20 +397,28 @@ body.theme-en [tabindex]:focus-visible {
 
 /* Content-sized flex row — see principles.php's own comment for why this replaced a Bootstrap
    col-lg-4/col-lg-8 grid split. 84px gap, per feedback (also matches the source Figma node's own
-   layout: intro block ends at x=353, cards group starts at x=437). */
+   layout: intro block ends at x=353, cards group starts at x=437).
+   --amfc-en-stack-top lives here, not on .amfc-en-principles__stack below, so BOTH the intro
+   and the cards can reference the same offset — custom properties only inherit to descendants
+   of whatever sets them, and intro/stack-wrap are siblings, not one inside the other. */
 .amfc-en-principles__layout {
+	--amfc-en-stack-top: clamp(6rem, 16vh, 10rem);
 	display: flex;
 	align-items: flex-start;
 	gap: 84px;
 	flex-wrap: wrap;
 }
 
-/* Vertically centers the heading/body against ONE card's own height (404.89px), not the whole
-   stack (which includes a second card sitting directly beneath the first in normal flow, plus
-   the 30vh scroll-runway tail) — per feedback ("vertically centered align with the card").
-   Centering against the full stack height instead would put the text far below where card 1
-   actually sits at rest. */
+/* Sticky, matching the zh-Hant-TW site's own .amfc-philosophy__intro pattern (same idea: "the
+   heading stays pinned while the reader scrolls through the card pile") — per feedback, the
+   headline/body copy should stop and hold in place once the user scrolls to this section, while
+   the cards continue moving/stacking beside it, not stay in normal flow the whole time.
+   min-height still matches ONE card's own height (404.89px) so the text is vertically centered
+   against card 1 at rest, same reasoning as before — just now also pinned at that position via
+   sticky instead of only being positioned there once and left in flow. */
 .amfc-en-principles__intro {
+	position: sticky;
+	top: var(--amfc-en-stack-top);
 	flex: 0 1 353px;
 	max-width: 353px;
 	min-height: clamp(220px, calc(404.89 / 1440 * 100vw), 404.89px);
@@ -426,20 +434,20 @@ body.theme-en [tabindex]:focus-visible {
 
 /* Scroll-stacking pile — same CSS-only position:sticky mechanism as the zh-Hant-TW site's
    .amfc-philosophy__stack: no wrapper, no JS, no opacity scrub. Each card's own height supplies
-   its scroll dwell-time, and since both cards share the same `top`, card 2 releases from normal
-   flow and immediately pins at that same offset, landing directly on top of card 1 rather than
-   fanning out beside it. */
+   its scroll dwell-time, and since all four cards share the same `top` (inherited from
+   .amfc-en-principles__layout above), each releases from normal flow and immediately pins at
+   that same offset, landing directly on top of the one before it rather than fanning out
+   beside it. */
 .amfc-en-principles__stack {
-	--amfc-en-stack-top: clamp(6rem, 16vh, 10rem);
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 }
 
-/* Provides the scroll runway for card 2 to release before the next section begins — a real
-   element, not padding on the stack itself, since padding on a flex container isn't a flex item
-   and doesn't participate in the sticky release calculation the way a sibling's height does
+/* Provides the scroll runway for the last card to release before the next section begins — a
+   real element, not padding on the stack itself, since padding on a flex container isn't a flex
+   item and doesn't participate in the sticky release calculation the way a sibling's height does
    (same reasoning as the zh page's own .amfc-philosophy__stack-tail). */
 .amfc-en-principles__stack-tail {
 	height: 30vh;
@@ -464,35 +472,39 @@ body.theme-en [tabindex]:focus-visible {
 	justify-content: center;
 }
 
-/* Per-card tilt, z-index (later card stacks visually on top), and background, matching the
-   source Figma node's own rotate values exactly (-2.57deg / 2.42deg) rather than the earlier
-   flat +/-2deg guess. Background colors per feedback (explicit hex, not --amfc-en-panel-alt —
-   these two were previously swapped: card 1 inherited panel-alt's #f5f7ff and card 2 was hard-
-   coded to #ebefff, backwards from what was specified here). */
-.amfc-en-stat-card--1 {
+/* Stacking depth by DOM position (:nth-child), NOT baked into each card's own modifier class —
+   per feedback, the stack ORDER (which principle appears in which slot) needed to change
+   (Efficiency, Innovation, Integrity, Professionalism), and this way that's a markup reorder
+   alone in principles.php, with no CSS to touch: whichever card is later in the DOM always
+   stacks visually on top, regardless of which principle it is. */
+.amfc-en-principles__stack .amfc-en-stat-card:nth-child(1) { z-index: 1; }
+.amfc-en-principles__stack .amfc-en-stat-card:nth-child(2) { z-index: 2; }
+.amfc-en-principles__stack .amfc-en-stat-card:nth-child(3) { z-index: 3; }
+.amfc-en-principles__stack .amfc-en-stat-card:nth-child(4) { z-index: 4; }
+
+/* Per-card tilt and background — each card's own identity, not its position in the stack (see
+   the :nth-child rules above for that). Matches each card's own Figma node: Efficiency/Integrity
+   at -2.57deg/2.42deg (baked into their own rotated wrappers in the source file, background
+   colors per feedback), Innovation/Professionalism at #fff8d9 (their own nodes,
+   333:1315/333:1324, specified no tilt themselves, so they follow the zh-Hant-TW KSP set's own
+   tilt pattern instead). */
+.amfc-en-stat-card--efficiency {
 	transform: rotate(-2.57deg);
-	z-index: 1;
 	background: #ebefff;
 }
 
-.amfc-en-stat-card--2 {
+.amfc-en-stat-card--integrity {
 	transform: rotate(2.42deg);
-	z-index: 2;
 	background: #f5f7ff;
 }
 
-/* Cards 3-4 (Innovation, Professionalism) — background #fff8d9 per their own Figma nodes
-   (333:1315/333:1324), tilt per this file's own comment in principles.php (no tilt was
-   specified on these two nodes, so they follow the zh-Hant-TW KSP set's card-3/card-4 pattern). */
-.amfc-en-stat-card--3 {
+.amfc-en-stat-card--innovation {
 	transform: rotate(-3deg);
-	z-index: 3;
 	background: var(--amfc-en-yellow-soft);
 }
 
-.amfc-en-stat-card--4 {
+.amfc-en-stat-card--professionalism {
 	transform: rotate(4deg);
-	z-index: 4;
 	background: var(--amfc-en-yellow-soft);
 }
 
