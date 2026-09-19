@@ -16,8 +16,8 @@ require __DIR__ . '/../src/bootstrap.php';
 		<?php partial('en/funds') ?>
 		<?php partial('en/whatwedo') ?>
 		<?php partial('en/products') ?>
-		<?php partial('en/media-grid') ?>
 		<?php partial('en/cta') ?>
+		<?php partial('en/media-grid') ?>
 	</main>
 
 	<?php partial('en/footer') ?>
