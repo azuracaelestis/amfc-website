@@ -19,7 +19,7 @@
 				<p class="amfc-en-product-card__label">BuddyLoan</p>
 			</div>
 			<div class="amfc-en-product-card">
-				<img class="amfc-en-product-card__img--large" src="<?= e(asset('images/en/product-corporate-bond.png')) ?>" alt="Corporate bond illustration" width="986" height="1337" />
+				<img class="amfc-en-product-card__img--bond" src="<?= e(asset('images/en/product-corporate-bond.png')) ?>" alt="Corporate bond illustration" width="986" height="1337" />
 				<p class="amfc-en-product-card__label">Corporate Bond</p>
 			</div>
 		</div>

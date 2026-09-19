@@ -897,6 +897,16 @@ body.theme-en [tabindex]:focus-visible {
 	height: clamp(143px, calc(215 / 1440 * 100vw), 215px);
 }
 
+/* Corporate bond illustration: same letterboxing problem as the personal-loan card above --
+   its source art is ~0.74 aspect (tall document + coin stack), not the shared 237x242 box's
+   ~0.98, so it rendered as a ~178x242 photo centered in the box with visible blank margins.
+   Sized to the content's own aspect ratio, up to the same 284px height ceiling verified safe
+   for this card layout (400px card - padding/label/margin, see .amfc-en-product-card__img--portrait). */
+.amfc-en-product-card__img--bond {
+	width: clamp(155px, calc(210 / 1440 * 100vw), 210px);
+	height: clamp(184px, calc(284 / 1440 * 100vw), 284px);
+}
+
 .amfc-en-product-card__label {
 	font-weight: 700;
 	font-size: 1.5rem;
