@@ -52,7 +52,16 @@ body.theme-en * {
 body.theme-en {
 	font-size: 16px;
 	color: var(--amfc-en-navy);
-	overflow-x: hidden;
+	/* `clip`, not `hidden` — discovered while adding the principles section's sticky card
+	   stack, which wasn't sticking at all (getBoundingClientRect showed each card's `top`
+	   tracking scroll 1:1 instead of freezing). Per the CSS overflow spec, setting only one
+	   axis to `hidden` forces the OTHER axis to compute as `auto` (confirmed via
+	   getComputedStyle: body's overflow-y came back "auto" even though nothing set it
+	   explicitly), which turns body into an explicit scroll container instead of leaving the
+	   viewport as position:sticky's positioning context. `clip` gets the same no-horizontal-
+	   bleed result without establishing a scrollable overflow context on its own axis — same
+	   fix already used on the zh-Hant-TW page's own html/body rule in amfc-2026.css. */
+	overflow-x: clip;
 }
 
 /* Reinstate a visible focus ring inside this scope — AMFC's custom.css sets
@@ -386,21 +395,57 @@ body.theme-en [tabindex]:focus-visible {
 	margin-bottom: 12px;
 }
 
+/* Scroll-stacking pile — same CSS-only position:sticky mechanism as the zh-Hant-TW site's
+   .amfc-philosophy__stack: no wrapper, no JS, no opacity scrub. Each card's own height supplies
+   its scroll dwell-time, and since both cards share the same `top`, card 2 releases from normal
+   flow and immediately pins at that same offset, landing directly on top of card 1 rather than
+   fanning out beside it. */
+.amfc-en-principles__stack {
+	--amfc-en-stack-top: clamp(6rem, 16vh, 10rem);
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+/* Provides the scroll runway for card 2 to release before the next section begins — a real
+   element, not padding on the stack itself, since padding on a flex container isn't a flex item
+   and doesn't participate in the sticky release calculation the way a sibling's height does
+   (same reasoning as the zh page's own .amfc-philosophy__stack-tail). */
+.amfc-en-principles__stack-tail {
+	height: 30vh;
+}
+
 .amfc-en-stat-card {
+	position: sticky;
+	top: var(--amfc-en-stack-top);
+	/* 404.89x404.89px at the 1440px reference, per feedback (matches the source Figma node's
+	   own size exactly) — aspect-ratio:1 keeps it square as the fluid width scales down. */
+	width: clamp(220px, calc(404.89 / 1440 * 100vw), 404.89px);
+	aspect-ratio: 1 / 1;
+	margin-inline: auto;
 	background: var(--amfc-en-panel-alt);
 	border-radius: var(--amfc-en-radius-lg);
 	box-shadow: var(--amfc-en-shadow-card);
 	padding: 40px 32px;
 	text-align: center;
-	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
-.amfc-en-stat-card:nth-of-type(odd) {
-	transform: rotate(-2deg);
+/* Per-card tilt and z-index (later card stacks visually on top) and background, matching the
+   source Figma node's own rotate values exactly (-2.57deg / 2.42deg) rather than the earlier
+   flat +/-2deg guess. */
+.amfc-en-stat-card--1 {
+	transform: rotate(-2.57deg);
+	z-index: 1;
 }
 
-.amfc-en-stat-card:nth-of-type(even) {
-	transform: rotate(2deg);
+.amfc-en-stat-card--2 {
+	transform: rotate(2.42deg);
+	z-index: 2;
 	background: #ebefff;
 }
 
