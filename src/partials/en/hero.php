@@ -2,7 +2,7 @@
 <section class="amfc-en-hero">
 	<img class="amfc-en-hero__bg-shape" src="<?= e(asset('images/en/hero-bg-shape.svg')) ?>" alt="" aria-hidden="true" />
 	<img class="amfc-en-hero__bg-glow" src="<?= e(asset('images/en/hero-bg-ellipse.png')) ?>" alt="" aria-hidden="true" />
-	<div class="container amfc-en-hero__container">
+	<div class="container amfc-en-container amfc-en-hero__container">
 		<!-- g-4, not g-5 — g-5's 3rem gutter (52.8px on this site, see CLAUDE.md's rem-inflation
 		     bug) left the text column just 573.6px wide, 6px short of the 579.7px "AI-driven
 		     financial" needs at 64px bold to stay on one line as specified. g-4 frees enough of

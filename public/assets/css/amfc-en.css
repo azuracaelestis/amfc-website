@@ -200,20 +200,23 @@ body.theme-en [tabindex]:focus-visible {
 	opacity: 1;
 }
 
-.amfc-en-hero__container {
-	position: relative;
-	z-index: 1;
-	/* Overrides Bootstrap's own .container width/max-width/padding-inline (this element carries
-	   both classes) — per feedback, the headline/eyebrow's left edge must line up with the nav
-	   pill's own content start (its logo), not Bootstrap's default 12px container gutter, which
-	   left a 48px mismatch (nav logo at 120px from viewport left at 1440px width, headline at
-	   only 72px). Mirrors .amfc-en-nav's own sizing formula exactly (width: calc(100% - 64px),
-	   capped at the same 1264px, centered) so the two stay aligned at every viewport, not just
-	   1440px — a flat max-width override alone would only have fixed this one width. */
+/* Shared alignment class — overrides Bootstrap's own .container width/max-width/padding-inline
+   (elements using this carry both classes) so every section's content lines up with the nav
+   pill's own content start (its logo), not Bootstrap's default 12px container gutter, which
+   originally left a 48px mismatch on the hero (nav logo at 120px from viewport left at 1440px
+   width, headline at only 72px). Mirrors .amfc-en-nav's own sizing formula exactly (width:
+   calc(100% - 64px), capped at the same 1264px, centered) so every section stays aligned with
+   the nav at every viewport, not just 1440px — use this on any new section's own container. */
+.amfc-en-container {
 	width: calc(100% - 64px);
 	max-width: 1264px;
 	margin-inline: auto;
 	padding-inline: 32px;
+}
+
+.amfc-en-hero__container {
+	position: relative;
+	z-index: 1;
 }
 
 .amfc-en-hero__eyebrow {
@@ -262,7 +265,10 @@ body.theme-en [tabindex]:focus-visible {
 
 /* --- Trust / institutional strip --- */
 .amfc-en-trust {
-	padding-block: 64px;
+	/* 90px, matching this file's other sections' own padding-block (principles/whatwedo/etc.),
+	   not the original 64px guess — the reference screenshot shows noticeably more breathing
+	   room around the badges/heading than 64px gives. */
+	padding-block: 90px;
 	background: #fff;
 	/* -60px — dialed back from -190px per feedback (that covered far too much of the photo,
 	   per the before/after reference screenshots) to just a small sliver of overlap at the very
@@ -286,13 +292,20 @@ body.theme-en [tabindex]:focus-visible {
 
 .amfc-en-trust__heading {
 	font-weight: 700;
-	font-size: 1.25rem;
-	margin-bottom: 4px;
+	/* 32px, matching the source Figma node exactly (was 1.25rem/20px, a guess made before this
+	   section had a specific spec to check against). */
+	font-size: 32px;
+	line-height: 1.15;
+	color: var(--amfc-en-navy);
+	margin-bottom: 16px;
 }
 
 .amfc-en-trust__body {
 	font-size: 1rem;
 	line-height: 1.5;
+	/* Lighter accent blue, not navy — matches the reference: this line reads visibly lighter
+	   than the bold navy heading above it. */
+	color: var(--amfc-en-blue-accent);
 	margin-bottom: 0;
 }
 

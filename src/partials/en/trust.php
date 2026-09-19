@@ -1,6 +1,6 @@
 <?php // PORT THIS — content is a hardcoded stub per CLAUDE.md (no CMS in this repo). ?>
 <section class="amfc-en-trust">
-	<div class="container">
+	<div class="container amfc-en-container">
 		<div class="row align-items-center g-4">
 			<div class="col-lg-6">
 				<div class="d-flex align-items-center gap-4 amfc-en-trust__badges flex-wrap">
@@ -10,7 +10,9 @@
 				</div>
 			</div>
 			<div class="col-lg-6">
-				<p class="amfc-en-trust__heading">Institutional trust meets AI-driven financial solutions</p>
+				<!-- Explicit line break, matching the source Figma node exactly (two separate
+				     <p> lines inside one bold 32px block, not one naturally-wrapping string). -->
+				<p class="amfc-en-trust__heading">Institutional trust meets<br aria-hidden="true" />AI-driven financial solutions</p>
 				<p class="amfc-en-trust__body">Certified ISO 27001 &amp; ISO 27701 | TFTA Member | Strategic Swiss Wealth Securities Investment Consulting Co. LTD Partnership</p>
 			</div>
 		</div>
