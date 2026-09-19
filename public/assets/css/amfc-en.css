@@ -395,6 +395,35 @@ body.theme-en [tabindex]:focus-visible {
 	margin-bottom: 12px;
 }
 
+/* Content-sized flex row — see principles.php's own comment for why this replaced a Bootstrap
+   col-lg-4/col-lg-8 grid split. 84px gap, per feedback (also matches the source Figma node's own
+   layout: intro block ends at x=353, cards group starts at x=437). */
+.amfc-en-principles__layout {
+	display: flex;
+	align-items: flex-start;
+	gap: 84px;
+	flex-wrap: wrap;
+}
+
+/* Vertically centers the heading/body against ONE card's own height (404.89px), not the whole
+   stack (which includes a second card sitting directly beneath the first in normal flow, plus
+   the 30vh scroll-runway tail) — per feedback ("vertically centered align with the card").
+   Centering against the full stack height instead would put the text far below where card 1
+   actually sits at rest. */
+.amfc-en-principles__intro {
+	flex: 0 1 353px;
+	max-width: 353px;
+	min-height: clamp(220px, calc(404.89 / 1440 * 100vw), 404.89px);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.amfc-en-principles__stack-wrap {
+	flex: 1 1 auto;
+	min-width: 280px;
+}
+
 /* Scroll-stacking pile — same CSS-only position:sticky mechanism as the zh-Hant-TW site's
    .amfc-philosophy__stack: no wrapper, no JS, no opacity scrub. Each card's own height supplies
    its scroll dwell-time, and since both cards share the same `top`, card 2 releases from normal
@@ -449,9 +478,12 @@ body.theme-en [tabindex]:focus-visible {
 	background: #ebefff;
 }
 
+/* 230x144px at the 1440px reference, per feedback, fluid-scaled below it like this file's other
+   desktop-reference sizing. object-fit: contain — the source assets are square (200x200), so
+   this letterboxes them within the wider 230x144 box rather than stretching/distorting them. */
 .amfc-en-stat-card img {
-	height: 120px;
-	width: auto;
+	width: clamp(140px, calc(230 / 1440 * 100vw), 230px);
+	height: clamp(88px, calc(144 / 1440 * 100vw), 144px);
 	object-fit: contain;
 	margin-bottom: 16px;
 }
