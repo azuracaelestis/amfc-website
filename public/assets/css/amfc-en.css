@@ -1,0 +1,542 @@
+/* PORT THIS — new component styles for the English homepage, `.theme-en` scope, `amfc-en-`
+   prefixed classes. Separate from amfc-tokens.css/amfc-bootstrap-overrides.css/amfc-2026.css
+   (the zh-Hant-TW homepage's three-layer stack, see CLAUDE.md "CSS architecture") on purpose:
+   CLAUDE.md's own i18n guidance says English "becomes its own file/partial set... don't
+   pre-guess its shape" — this is a fully separate content/design track, not a locale variant of
+   the same layout, so it gets its own token set instead of adding a second value under the
+   existing --amfc-* names. All three conceptual layers (tokens, Bootstrap var overrides,
+   components) still live here, in that order, just in one file since it's a single page. */
+
+/* ---------- Layer 1: tokens (scoped to .theme-en, not :root, so nothing leaks into the
+   zh-Hant-TW homepage's global --amfc-* tokens when both pages share this same CSS bundle) ---------- */
+body.theme-en {
+	--amfc-en-navy: #1a2f86;
+	--amfc-en-blue-accent: #4161e1;
+	--amfc-en-blue-button: #2d50d7;
+	--amfc-en-blue-button-hover: #23409e;
+	--amfc-en-gold: #ebc84f;
+	--amfc-en-yellow-soft: #fff8d9;
+	--amfc-en-lavender: #d9e1ff;
+	--amfc-en-lavender-light: #ebefff;
+	--amfc-en-panel: #f5f7fd;
+	--amfc-en-panel-alt: #f5f7ff;
+	--amfc-en-border-accent: #b9c8ff;
+	--amfc-en-radius-lg: 32px;
+	--amfc-en-radius-md: 16px;
+	--amfc-en-shadow-card: 0 0 12.5px rgba(26, 47, 134, 0.2);
+}
+
+/* ---------- Layer 2: Bootstrap var overrides (reassign Bootstrap's own variables, scoped to
+   .theme-en — same approach CLAUDE.md prescribes for the zh-Hant-TW page, just a different
+   palette) ---------- */
+body.theme-en {
+	--bs-primary: var(--amfc-en-blue-button);
+	--bs-primary-rgb: 45, 80, 215;
+	--bs-body-color: var(--amfc-en-navy);
+	--bs-body-font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
+	--bs-link-color: var(--amfc-en-blue-accent);
+	--bs-link-hover-color: var(--amfc-en-blue-button);
+	--bs-btn-hover-bg: var(--amfc-en-blue-button-hover);
+	--bs-btn-hover-border-color: var(--amfc-en-blue-button-hover);
+	--bs-btn-active-bg: var(--amfc-en-blue-button-hover);
+	--bs-btn-active-border-color: var(--amfc-en-blue-button-hover);
+}
+
+/* AMFC's custom.css sets *, html, body { font-size: 1.1rem } (CLAUDE.md bug) — direct-match
+   every descendant so our font-size/font-family declarations aren't silently overridden by it. */
+body.theme-en,
+body.theme-en * {
+	font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
+}
+
+body.theme-en {
+	font-size: 16px;
+	color: var(--amfc-en-navy);
+	overflow-x: hidden;
+}
+
+/* Reinstate a visible focus ring inside this scope — AMFC's custom.css sets
+   *:focus/*:focus-visible { outline: none } site-wide (CLAUDE.md accessibility floor). */
+body.theme-en a:focus-visible,
+body.theme-en button:focus-visible,
+body.theme-en [tabindex]:focus-visible {
+	outline: 2px solid var(--amfc-en-blue-accent);
+	outline-offset: 2px;
+}
+
+/* ---------- Layer 3: components ---------- */
+
+.amfc-en-eyebrow {
+	font-family: 'Noto Sans TC', sans-serif;
+	font-weight: 700;
+	font-size: 1rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--amfc-en-blue-accent);
+	margin-bottom: 0;
+}
+
+.amfc-en-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: var(--amfc-en-blue-button);
+	color: #fff;
+	font-weight: 700;
+	font-size: 1.1rem;
+	padding: 14px 32px;
+	border-radius: 999px;
+	border: none;
+	text-decoration: none;
+	transition: background-color 0.2s ease-out, transform 0.2s ease-out;
+}
+
+.amfc-en-btn:hover,
+.amfc-en-btn:focus-visible {
+	background: var(--amfc-en-blue-button-hover);
+	color: #fff;
+	transform: translateY(-1px);
+}
+
+.amfc-en-btn img {
+	width: 20px;
+	height: 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-btn {
+		transition: none;
+	}
+	.amfc-en-btn:hover {
+		transform: none;
+	}
+}
+
+/* --- Nav --- */
+.amfc-en-nav {
+	position: sticky;
+	top: 24px;
+	z-index: 1000;
+	max-width: 1264px;
+	margin: 24px auto 0;
+	background: rgba(255, 255, 255, 0.8);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border-radius: 999px;
+	box-shadow: var(--amfc-en-shadow-card);
+	padding: 8px 32px;
+}
+
+.amfc-en-nav .navbar-brand img {
+	height: 40px;
+	width: auto;
+}
+
+.amfc-en-nav .nav-link {
+	color: var(--amfc-en-navy);
+	font-weight: 600;
+	font-size: 1rem;
+	padding: 0.5rem 1rem;
+}
+
+.amfc-en-nav .nav-link:hover,
+.amfc-en-nav .nav-link:focus-visible {
+	color: var(--amfc-en-blue-accent);
+}
+
+/* --- Hero --- */
+.amfc-en-hero {
+	position: relative;
+	overflow: hidden;
+	/* Deep navy-to-accent gradient, not the pale one this replaced — the hero's headline/eyebrow
+	   are white, and the source hero-bg-shape.svg export (526 bytes, a small abstract accent
+	   shape, not a full backdrop) left the section too light for that text to read against.
+	   This guarantees contrast regardless of how the decorative shape/ellipse render. */
+	background: linear-gradient(135deg, var(--amfc-en-navy) 0%, var(--amfc-en-blue-accent) 100%);
+	padding-block: 40px 96px;
+}
+
+.amfc-en-hero__bg-shape {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+	z-index: 0;
+	opacity: 0.5;
+	mix-blend-mode: soft-light;
+}
+
+.amfc-en-hero__bg-glow {
+	position: absolute;
+	top: -20%;
+	right: -15%;
+	width: 55%;
+	height: auto;
+	max-width: 700px;
+	z-index: 0;
+	opacity: 0.35;
+	mix-blend-mode: soft-light;
+}
+
+.amfc-en-hero__container {
+	position: relative;
+	z-index: 1;
+}
+
+.amfc-en-hero__eyebrow {
+	font-size: 1.25rem;
+	color: #fff;
+	font-weight: 500;
+	margin-bottom: 12px;
+}
+
+.amfc-en-hero__headline {
+	color: #fff;
+	font-weight: 700;
+	font-size: clamp(2rem, calc(64 / 1440 * 100vw), 4rem);
+	line-height: 1.15;
+	margin-bottom: 0;
+}
+
+.amfc-en-hero__photo-wrap {
+	position: relative;
+	border-radius: var(--amfc-en-radius-lg);
+	overflow: hidden;
+}
+
+.amfc-en-hero__photo {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* --- Trust / institutional strip --- */
+.amfc-en-trust {
+	padding-block: 64px;
+	background: #fff;
+}
+
+.amfc-en-trust__badges img {
+	height: 84px;
+	width: auto;
+	object-fit: contain;
+}
+
+.amfc-en-trust__heading {
+	font-weight: 700;
+	font-size: 1.25rem;
+	margin-bottom: 4px;
+}
+
+.amfc-en-trust__body {
+	font-size: 1rem;
+	line-height: 1.5;
+	margin-bottom: 0;
+}
+
+/* --- Principles / stats cards --- */
+.amfc-en-principles {
+	padding-block: 90px;
+	background: linear-gradient(180deg, var(--amfc-en-lavender-light) 0%, #ffffff 100%);
+	border-radius: var(--amfc-en-radius-lg);
+	margin-inline: 16px;
+}
+
+.amfc-en-principles__heading {
+	font-weight: 700;
+	font-size: clamp(1.5rem, calc(32 / 1440 * 100vw), 2rem);
+	margin-bottom: 12px;
+}
+
+.amfc-en-stat-card {
+	background: var(--amfc-en-panel-alt);
+	border-radius: var(--amfc-en-radius-lg);
+	box-shadow: var(--amfc-en-shadow-card);
+	padding: 40px 32px;
+	text-align: center;
+	height: 100%;
+}
+
+.amfc-en-stat-card:nth-of-type(odd) {
+	transform: rotate(-2deg);
+}
+
+.amfc-en-stat-card:nth-of-type(even) {
+	transform: rotate(2deg);
+	background: #ebefff;
+}
+
+.amfc-en-stat-card img {
+	height: 120px;
+	width: auto;
+	object-fit: contain;
+	margin-bottom: 16px;
+}
+
+.amfc-en-stat-card__badge {
+	display: inline-flex;
+	background: var(--amfc-en-gold);
+	color: var(--amfc-en-navy);
+	font-weight: 700;
+	font-size: 1.25rem;
+	padding: 8px 20px;
+	border-radius: 999px;
+	margin-bottom: 12px;
+}
+
+.amfc-en-stat-card__number {
+	font-weight: 900;
+	font-size: clamp(1.75rem, calc(48 / 1440 * 100vw), 2.5rem);
+	display: block;
+}
+
+.amfc-en-stat-card__label {
+	font-weight: 500;
+	font-size: 1.1rem;
+	display: block;
+}
+
+/* --- What we do --- */
+.amfc-en-whatwedo {
+	padding-block: 90px;
+	background: #fff;
+}
+
+.amfc-en-whatwedo__image {
+	width: 100%;
+	height: auto;
+	border-radius: var(--amfc-en-radius-lg);
+}
+
+.amfc-en-whatwedo__heading {
+	font-weight: 700;
+	font-size: clamp(1.5rem, calc(32 / 1440 * 100vw), 2rem);
+	line-height: 1.2;
+}
+
+.amfc-en-accordion-item {
+	background: var(--amfc-en-panel);
+	border-radius: var(--amfc-en-radius-md);
+	border: 3px solid transparent;
+	padding: 20px;
+}
+
+/* :has() instead of a static "active" class — the highlighted item must follow whichever
+   accordion panel Bootstrap's own collapse component currently has open (.show), not just
+   whichever one was marked active in the initial markup. */
+.amfc-en-accordion-item:has(.show) {
+	border-color: var(--amfc-en-border-accent);
+}
+
+.amfc-en-accordion-item__toggle {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	background: none;
+	border: none;
+	padding: 0;
+	text-align: left;
+	font-weight: 700;
+	font-size: 1.25rem;
+	color: var(--amfc-en-navy);
+}
+
+.amfc-en-accordion-item__toggle img {
+	width: 24px;
+	height: 24px;
+	transition: transform 0.2s ease-out;
+}
+
+.amfc-en-accordion-item__toggle[aria-expanded="true"] img {
+	transform: rotate(180deg);
+}
+
+.amfc-en-accordion-item ul {
+	margin: 16px 0 0;
+	padding-left: 24px;
+}
+
+.amfc-en-accordion-item li {
+	line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-accordion-item__toggle img {
+		transition: none;
+	}
+}
+
+/* --- Product cards --- */
+.amfc-en-products {
+	padding-block: 90px;
+	background: #fff;
+}
+
+.amfc-en-product-card {
+	background: var(--amfc-en-yellow-soft);
+	border-radius: var(--amfc-en-radius-lg);
+	height: 400px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 24px;
+	text-align: center;
+}
+
+.amfc-en-product-card img {
+	max-width: 80%;
+	max-height: 240px;
+	object-fit: contain;
+	margin-bottom: 16px;
+}
+
+.amfc-en-product-card__label {
+	font-weight: 700;
+	font-size: 1.5rem;
+	margin-bottom: 0;
+}
+
+/* --- Media / event / anti-fraud band --- */
+.amfc-en-media-band {
+	background: var(--amfc-en-lavender);
+	padding-block: 90px;
+}
+
+.amfc-en-media-card__image {
+	width: 100%;
+	height: 269px;
+	object-fit: cover;
+	border-radius: var(--amfc-en-radius-md);
+	background: linear-gradient(180deg, var(--amfc-en-lavender-light), var(--amfc-en-yellow-soft));
+	margin-bottom: 24px;
+}
+
+.amfc-en-media-card__title {
+	font-weight: 700;
+	font-size: 1.5rem;
+	margin-bottom: 0;
+}
+
+.amfc-en-media-card__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 1.25rem;
+	color: var(--amfc-en-navy);
+	text-decoration: none;
+}
+
+.amfc-en-media-card__link img {
+	width: 24px;
+	height: 24px;
+}
+
+.amfc-en-media-card__link:hover,
+.amfc-en-media-card__link:focus-visible {
+	color: var(--amfc-en-blue-accent);
+}
+
+/* --- CTA banner --- */
+.amfc-en-cta {
+	position: relative;
+	border-radius: var(--amfc-en-radius-lg);
+	overflow: hidden;
+	margin-inline: 16px;
+	margin-block: 40px;
+	min-height: 340px;
+	display: flex;
+	align-items: center;
+	color: #fff;
+}
+
+.amfc-en-cta__bg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	z-index: 0;
+}
+
+.amfc-en-cta::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(90deg, rgba(26, 47, 134, 0.75) 0%, rgba(26, 47, 134, 0.35) 100%);
+	z-index: 1;
+}
+
+.amfc-en-cta__content {
+	position: relative;
+	z-index: 2;
+	padding: 48px;
+}
+
+.amfc-en-cta__heading {
+	font-weight: 700;
+	font-size: clamp(1.75rem, calc(48 / 1440 * 100vw), 3rem);
+	margin-bottom: 4px;
+}
+
+.amfc-en-cta__subheading {
+	font-size: 1.25rem;
+	margin-bottom: 24px;
+}
+
+/* --- Footer --- */
+.amfc-en-footer {
+	background: #fff;
+	padding-block: 64px 32px;
+	border-top: 1px solid var(--amfc-en-lavender);
+}
+
+.amfc-en-footer h2 {
+	font-weight: 700;
+	font-size: 1rem;
+	margin-bottom: 16px;
+}
+
+.amfc-en-footer a {
+	color: var(--amfc-en-navy);
+	text-decoration: none;
+	display: block;
+	line-height: 2;
+}
+
+.amfc-en-footer a:hover,
+.amfc-en-footer a:focus-visible {
+	color: var(--amfc-en-blue-accent);
+}
+
+.amfc-en-footer__logo img {
+	height: 80px;
+	width: auto;
+}
+
+.amfc-en-footer__contact-label {
+	font-weight: 700;
+	margin-bottom: 4px;
+}
+
+.amfc-en-footer hr {
+	border-color: var(--amfc-en-lavender);
+	margin-block: 32px;
+}
+
+@media (max-width: 991.98px) {
+	.amfc-en-nav {
+		border-radius: 24px;
+		margin-inline: 16px;
+	}
+
+	.amfc-en-hero {
+		padding-block: 24px 64px;
+	}
+
+	.amfc-en-cta__content {
+		padding: 32px 24px;
+	}
+}
