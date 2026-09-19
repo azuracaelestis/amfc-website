@@ -156,6 +156,13 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-hero {
 	position: relative;
 	overflow: hidden;
+	/* Explicit z-index: 0 — without it, this section and .amfc-en-trust (the next sibling,
+	   which overlaps it via a negative margin-top) are both position:relative with z-index:auto,
+	   and .amfc-en-hero__photo's own `transform` (scale + translate) turned out to still let the
+	   photo paint above .amfc-en-trust's background in their overlap zone despite trust coming
+	   later in the DOM — confirmed via elementFromPoint at the overlap point. Giving each
+	   section its own explicit stacking value removes that ambiguity outright. */
+	z-index: 0;
 	/* Per feedback: the actual background is hero-bg-shape.svg itself (a light lavender-to-blue
 	   gradient rectangle, EEF1FE -> B9C8FF) with navy text on top, not a dark navy gradient —
 	   corrects the earlier guess (made before this spec) that assumed white text needed a dark
@@ -257,12 +264,18 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-trust {
 	padding-block: 64px;
 	background: #fff;
-	/* Moved up 80px per feedback, overlapping the hero section above it — plain sibling stacking
-	   (later element paints over earlier ones) is enough for it to render on top here, so no
-	   z-index needed; position: relative is only to keep this in its own stacking context in
-	   case a z-index is ever added to a sibling later. */
+	/* -190px — per feedback, this section must cover the BOTTOM PART of the hero photo, not
+	   just close the gap below it. Measured against the photo's real bottom edge
+	   (getBoundingClientRect): at -38px (the previous value) this section's top still landed
+	   21px *below* the photo's bottom edge — no overlap with the photo at all, just a smaller
+	   gap. -190px lands this section's top about 130px above the photo's bottom edge instead,
+	   a visible overlap onto the photo. */
 	position: relative;
-	margin-top: -80px;
+	/* Explicit stacking (see .amfc-en-hero's own z-index comment) — must be higher than hero's,
+	   or the hero photo's own transform paints on top of this section's background in their
+	   overlap zone regardless of DOM order. */
+	z-index: 1;
+	margin-top: -190px;
 }
 
 .amfc-en-trust__badges img {
