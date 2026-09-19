@@ -42,7 +42,7 @@
 			</div>
 			<div class="col-lg-6 text-lg-end">
 				<div class="amfc-en-footer__logo d-inline-block">
-					<img src="<?= e(asset('images/en/footer-logo.svg')) ?>" alt="AMFC" height="80" />
+					<img src="<?= e(asset('images/en/footer-logo.svg')) ?>" alt="AMFC" width="285" height="147" />
 				</div>
 			</div>
 		</div>
