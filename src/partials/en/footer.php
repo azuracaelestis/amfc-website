@@ -44,8 +44,6 @@
 			</div>
 		</div>
 
-		<hr />
-
 		<div class="row g-4 amfc-en-footer__contact">
 			<div class="col-md-4">
 				<p class="amfc-en-footer__contact-label">Customer Service</p>
