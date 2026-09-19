@@ -7,19 +7,19 @@
 
 		<div class="amfc-en-products__grid">
 			<div class="amfc-en-product-card">
-				<img class="amfc-en-product-card__img--large" src="<?= e(asset('images/en/product-vehicle-loan.png')) ?>" alt="Vehicle loan illustration" width="1024" height="1536" />
+				<img class="amfc-en-product-card__img--large" src="<?= e(asset('images/en/product-vehicle-loan.png')) ?>" alt="Vehicle loan illustration" width="950" height="850" />
 				<p class="amfc-en-product-card__label">Vehicle Loan</p>
 			</div>
 			<div class="amfc-en-product-card">
-				<img class="amfc-en-product-card__img--large" src="<?= e(asset('images/en/product-personal-loan.png')) ?>" alt="Personal loan illustration" width="1024" height="1536" />
+				<img class="amfc-en-product-card__img--large" src="<?= e(asset('images/en/product-personal-loan.png')) ?>" alt="Personal loan illustration" width="1024" height="1475" />
 				<p class="amfc-en-product-card__label">Personal Loan</p>
 			</div>
 			<div class="amfc-en-product-card">
-				<img class="amfc-en-product-card__img--small" src="<?= e(asset('images/en/product-buddyloan.png')) ?>" alt="BuddyLoan illustration" width="930" height="532" />
+				<img class="amfc-en-product-card__img--small" src="<?= e(asset('images/en/product-buddyloan.png')) ?>" alt="BuddyLoan illustration" width="871" height="532" />
 				<p class="amfc-en-product-card__label">BuddyLoan</p>
 			</div>
 			<div class="amfc-en-product-card">
-				<img class="amfc-en-product-card__img--large" src="<?= e(asset('images/en/product-corporate-bond.png')) ?>" alt="Corporate bond illustration" width="1024" height="1536" />
+				<img class="amfc-en-product-card__img--large" src="<?= e(asset('images/en/product-corporate-bond.png')) ?>" alt="Corporate bond illustration" width="986" height="1337" />
 				<p class="amfc-en-product-card__label">Corporate Bond</p>
 			</div>
 		</div>
