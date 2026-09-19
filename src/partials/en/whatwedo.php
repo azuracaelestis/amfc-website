@@ -4,13 +4,14 @@
       // 334:3898, 334:4102) — see .amfc-en-whatwedo__image's own comment in amfc-en.css. ?>
 <section class="amfc-en-whatwedo">
 	<div class="container">
-		<!-- align-items-start, not align-items-center — per feedback, the image must stay put
-		     while the accordion column's height changes as panels open/close. Bootstrap's
-		     align-items-center vertically centers each column against the ROW's total height,
-		     so the image visibly shifted up/down every time a panel's expand/collapse changed
-		     that height. align-items-start anchors both columns to the row's own top instead,
-		     which doesn't move. -->
-		<div class="row align-items-start g-5">
+		<!-- align-items-center, per feedback ("vertically center aligned with the text
+		     section") — safe now in a way it wasn't when align-items-start was introduced: all
+		     three accordion panels were standardized to exactly 4 list items each in an earlier
+		     round of copy fixes, so the text column's rendered height is now IDENTICAL across
+		     all three states (confirmed via getBoundingClientRect: 627px whichever panel is
+		     open) — the original jump bug was really "the column's height changes," and that's
+		     no longer true here, so centering no longer reintroduces it. -->
+		<div class="row align-items-center g-5">
 			<div class="col-lg-6">
 				<div class="amfc-en-whatwedo__image-wrap">
 					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--1" src="<?= e(asset('images/en/whatwedo-illustration.png')) ?>" alt="Illustration of financial technology dashboards and analytics" width="4096" height="2731" />
