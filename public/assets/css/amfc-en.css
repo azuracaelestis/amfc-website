@@ -265,10 +265,10 @@ body.theme-en [tabindex]:focus-visible {
 
 /* --- Trust / institutional strip --- */
 .amfc-en-trust {
-	/* 90px, matching this file's other sections' own padding-block (principles/whatwedo/etc.),
-	   not the original 64px guess — the reference screenshot shows noticeably more breathing
-	   room around the badges/heading than 64px gives. */
-	padding-block: 90px;
+	/* 180px top / 90px bottom, per feedback. The extra top padding also absorbs this section's
+	   own -60px margin-top (the overlap onto the hero photo below), so the content still clears
+	   the photo's bottom edge comfortably. */
+	padding-block: 180px 90px;
 	background: #fff;
 	/* -60px — dialed back from -190px per feedback (that covered far too much of the photo,
 	   per the before/after reference screenshots) to just a small sliver of overlap at the very
