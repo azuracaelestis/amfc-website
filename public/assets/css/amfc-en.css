@@ -728,10 +728,48 @@ body.theme-en [tabindex]:focus-visible {
 	background: #fff;
 }
 
-.amfc-en-whatwedo__image {
+/* Fixed aspect-ratio box (the default illustration's own 4096:2731) so the three
+   absolutely-stacked images below have a real box to fill — since all three are position:
+   absolute, none of them contributes to this wrapper's own height on its own. */
+.amfc-en-whatwedo__image-wrap {
+	position: relative;
 	width: 100%;
-	height: auto;
+	aspect-ratio: 4096 / 2731;
+}
+
+/* Three images stacked in the same box, cross-faded via opacity depending on which accordion
+   panel is open — CSS-only via :has(), matching this project's other CSS-only interactions
+   (the KSP/principles card stack) rather than reaching for JS. object-fit: contain rather than
+   cover: the three source illustrations (nodes 321:1108/334:3898/334:4102 in the source Figma)
+   have different aspect ratios from each other and from this wrapper's own box, and contain
+   guarantees none of them gets cropped regardless of that mismatch. */
+.amfc-en-whatwedo__image {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 	border-radius: var(--amfc-en-radius-lg);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+/* #amfcEnWwd1 already carries the "show" class by default in the markup (that panel starts
+   open), so this alone is enough to make image--1 the default visible one — no separate
+   unconditional opacity:1 rule needed. :has() is scoped to .row (the shared ancestor of both
+   the accordion panels and the image wrap), so it works regardless of which one is earlier in
+   the DOM. */
+.row:has(#amfcEnWwd1.show) .amfc-en-whatwedo__image--1,
+.row:has(#amfcEnWwd2.show) .amfc-en-whatwedo__image--2,
+.row:has(#amfcEnWwd3.show) .amfc-en-whatwedo__image--3 {
+	opacity: 1;
+	z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-whatwedo__image {
+		transition: none;
+	}
 }
 
 .amfc-en-whatwedo__heading {

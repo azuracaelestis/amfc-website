@@ -1,10 +1,22 @@
 <?php // PORT THIS — content is a hardcoded stub per CLAUDE.md (no CMS in this repo).
-      // Accordion uses Bootstrap's own collapse component (already loaded) rather than new JS. ?>
+      // Accordion uses Bootstrap's own collapse component (already loaded) rather than new JS.
+      // Image swap is CSS-only too (:has()), per the source Figma's 3 states (nodes 321:1108,
+      // 334:3898, 334:4102) — see .amfc-en-whatwedo__image's own comment in amfc-en.css. ?>
 <section class="amfc-en-whatwedo">
 	<div class="container">
-		<div class="row align-items-center g-5">
+		<!-- align-items-start, not align-items-center — per feedback, the image must stay put
+		     while the accordion column's height changes as panels open/close. Bootstrap's
+		     align-items-center vertically centers each column against the ROW's total height,
+		     so the image visibly shifted up/down every time a panel's expand/collapse changed
+		     that height. align-items-start anchors both columns to the row's own top instead,
+		     which doesn't move. -->
+		<div class="row align-items-start g-5">
 			<div class="col-lg-6">
-				<img class="amfc-en-whatwedo__image" src="<?= e(asset('images/en/whatwedo-illustration.png')) ?>" alt="Illustration of financial technology dashboards and analytics" width="4096" height="2731" />
+				<div class="amfc-en-whatwedo__image-wrap">
+					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--1" src="<?= e(asset('images/en/whatwedo-illustration.png')) ?>" alt="Illustration of financial technology dashboards and analytics" width="4096" height="2731" />
+					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--2" src="<?= e(asset('images/en/whatwedo-illustration-2.png')) ?>" alt="Illustration of cross-border financial collaboration and partnerships" width="1536" height="1024" />
+					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--3" src="<?= e(asset('images/en/whatwedo-illustration-3.png')) ?>" alt="Illustration of risk management and compliance governance" width="1448" height="1086" />
+				</div>
 			</div>
 			<div class="col-lg-6">
 				<p class="amfc-en-eyebrow">What We Do</p>
