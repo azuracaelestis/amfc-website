@@ -2,45 +2,45 @@
 <footer class="amfc-en-footer">
 	<div class="container">
 		<div class="row g-4">
-			<div class="col-lg-2 col-6">
+			<div class="col-6 col-lg">
 				<h2>About Us</h2>
 				<a href="#about">About AMFC</a>
 				<a href="#milestones">Milestones</a>
 				<a href="#sustainability">Corporate Sustainability</a>
 				<a href="#careers">Careers</a>
 			</div>
-			<div class="col-lg-2 col-6">
+			<div class="col-6 col-lg">
 				<h2>Services</h2>
 				<a href="#vehicle-loan">Vehicle Loan</a>
 				<a href="#personal-loan">Personal Loans</a>
 				<a href="#buddy-loan">Buddy Loan</a>
 			</div>
-			<div class="col-lg-2 col-6">
+			<div class="col-6 col-lg">
 				<h2>Investment</h2>
 			</div>
-			<div class="col-lg-2 col-6">
+			<div class="col-6 col-lg">
 				<h2>News</h2>
 				<a href="/active.html">Event</a>
 				<a href="/media.html">Media</a>
 			</div>
-			<div class="col-lg-2 col-6">
+			<div class="col-6 col-lg">
 				<h2>Anti-Fraud</h2>
 				<a href="/anti_fraud.html">Fraud Prevention</a>
 			</div>
-			<div class="col-lg-2 col-6">
+			<div class="col-6 col-lg">
 				<h2>AMFC App</h2>
 				<a href="#amfc-smart-loan">AI Money Fast Center</a>
 				<a href="#buddy-loan-app">Buddy Loan</a>
 				<a href="#billing">Payment</a>
 			</div>
-		</div>
-
-		<div class="row mt-4">
-			<div class="col-lg-6">
+			<div class="col-6 col-lg">
 				<h2>Contact Us</h2>
 				<a href="#contact" id="contact">Contact Us</a>
 			</div>
-			<div class="col-lg-6 text-lg-end">
+		</div>
+
+		<div class="row mt-4">
+			<div class="col-12 text-lg-end">
 				<div class="amfc-en-footer__logo d-inline-block">
 					<img src="<?= e(asset('images/en/footer-logo.svg')) ?>" alt="AMFC" width="285" height="147" />
 				</div>
