@@ -33,8 +33,10 @@
 						</button>
 						<div id="amfcEnWwd2" class="collapse" data-bs-parent="#amfcEnWhatWeDoAccordion">
 							<ul>
-								<li>Regional remittance &amp; settlement</li>
-								<li>Multi-currency treasury support</li>
+								<li>Regional financial collaboration</li>
+								<li>Cross-border financial operations</li>
+								<li>Strategic partnerships</li>
+								<li>Financial infrastructure development</li>
 							</ul>
 						</div>
 					</div>
@@ -45,8 +47,10 @@
 						</button>
 						<div id="amfcEnWwd3" class="collapse" data-bs-parent="#amfcEnWhatWeDoAccordion">
 							<ul>
-								<li>Regulatory compliance monitoring</li>
-								<li>Fraud detection &amp; prevention</li>
+								<li>Proprietary risk mode</li>
+								<li>Compliance workflow</li>
+								<li>Data security</li>
+								<li>ISO-certified governance</li>
 							</ul>
 						</div>
 					</div>
