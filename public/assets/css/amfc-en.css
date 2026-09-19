@@ -443,6 +443,16 @@ body.theme-en [tabindex]:focus-visible {
 	justify-content: center;
 }
 
+/* Zeroes the browser's default <p> margin-bottom (~17.6px here — this element was never given
+   its own explicit font-size, so it falls prey to AMFC's `*, html, body { font-size: 1.1rem }`
+   bug, and the default margin is 1em) — flex items don't collapse margins with each other the
+   way block siblings do, so that leftover margin was stacking on top of
+   .amfc-en-principles__watermark's own 70px margin-top, landing the real gap at 87.6px instead
+   of the 70px asked for. */
+.amfc-en-principles__intro p {
+	margin-bottom: 0;
+}
+
 .amfc-en-principles__stack-wrap {
 	flex: 1 1 auto;
 	min-width: 280px;
@@ -452,21 +462,35 @@ body.theme-en [tabindex]:focus-visible {
    absolutely positioned) so it simply joins the group that's already centered against card 1's
    height (see .amfc-en-principles__intro above); the group re-centers as a whole rather than
    pixel-locking the heading's own prior position. width fluid-scaled from a 220px reference,
-   capped so it stays clearly smaller than the 353px text column it sits under. Low opacity is
-   what makes this read as a "watermark" rather than a second logo — the source SVG's own fill
-   is already a light grey, same reasoning as the zh-Hant-TW site's identical asset. */
+   capped so it stays clearly smaller than the 353px text column it sits under.
+
+   mask-image + background-color, not an <img> + filter — per feedback, the watermark needs an
+   EXACT color (#D9E1FF, which happens to equal --amfc-en-lavender already defined in this file)
+   that a CSS filter on the source SVG's own baked-in #ebebeb fill can't reliably reproduce. The
+   mask uses the SVG purely as a shape (its luminance/alpha), so background-color paints through
+   it as the real color rather than an approximation — this also replaces the earlier
+   brightness(0)+opacity hack that was working around the same fill-color limitation. No
+   separate opacity needed this time: #D9E1FF read against this section's own lavender-tinted
+   background is already the subtle "watermark" look on its own, since the two colors are close
+   in tone. -webkit- prefixed properties are required — mask-image has no unprefixed support in
+   Safari as of this writing. */
 .amfc-en-principles__watermark {
+	display: block;
 	width: clamp(120px, calc(220 / 1440 * 100vw), 220px);
-	height: auto;
-	margin-top: 24px;
-	/* filter: brightness(0) first, not just opacity — the source SVG's own fill (#ebebeb) is
-	   nearly the same lightness as this section's own lavender background
-	   (--amfc-en-lavender-light, #ebefff), so it was rendering almost invisible here even
-	   though the identical asset reads fine as a subtle watermark on the zh-Hant-TW site's own
-	   white section background. brightness(0) turns the fill fully dark first, then a low
-	   opacity dials it back to a subtle watermark against THIS background instead. */
-	filter: brightness(0);
-	opacity: 0.08;
+	aspect-ratio: 766 / 403;
+	margin-top: 70px;
+	background-color: #d9e1ff;
+	/* Plain relative path, not the asset() PHP helper — this is a static .css file, never
+	   parsed by PHP, unlike the .php partials elsewhere in this project. Relative to this
+	   file's own location (public/assets/css/) up to public/assets/images/. */
+	-webkit-mask-image: url(../images/amfc-logo-grey.svg);
+	mask-image: url(../images/amfc-logo-grey.svg);
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: left center;
+	mask-position: left center;
 	pointer-events: none;
 }
 
