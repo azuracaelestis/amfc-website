@@ -179,10 +179,11 @@ body.theme-en [tabindex]:focus-visible {
 	position: absolute;
 	top: -20%;
 	right: -15%;
-	/* Moved down 300px per feedback, on top of the top:-20% base position — a separate
-	   transform (not folded into `top`/`right`) since both are percentages here and the
-	   requested shifts are flat px values. */
-	transform: translate(200px, 300px);
+	/* Net translate(80px, 342px): right 200px + left 120px (200-120=80), down 300px + 42px
+	   (300+42=342), each a follow-up on the previous feedback round — on top of the top:-20%
+	   base position, a separate transform since both `top`/`right` are percentages here and
+	   the requested shifts are flat px values. */
+	transform: translate(80px, 342px);
 	/* 1138x1138px at the 1440px reference, per feedback (matches the source Figma node's own
 	   size exactly), fluid-scaled below it like this file's other desktop-reference sizing. */
 	width: clamp(500px, calc(1138 / 1440 * 100vw), 1138px);
@@ -256,6 +257,12 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-trust {
 	padding-block: 64px;
 	background: #fff;
+	/* Moved up 80px per feedback, overlapping the hero section above it — plain sibling stacking
+	   (later element paints over earlier ones) is enough for it to render on top here, so no
+	   z-index needed; position: relative is only to keep this in its own stacking context in
+	   case a z-index is ever added to a sibling later. */
+	position: relative;
+	margin-top: -80px;
 }
 
 .amfc-en-trust__badges img {
