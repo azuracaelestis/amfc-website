@@ -29,9 +29,9 @@
 			</div>
 			<div class="col-lg-2 col-6">
 				<h2>AMFC App</h2>
-				<a href="#amfc-smart-loan">AMFC Smart Loan</a>
+				<a href="#amfc-smart-loan">AI Money Fast Center</a>
 				<a href="#buddy-loan-app">Buddy Loan</a>
-				<a href="#billing">Billing</a>
+				<a href="#billing">Payment</a>
 			</div>
 		</div>
 
