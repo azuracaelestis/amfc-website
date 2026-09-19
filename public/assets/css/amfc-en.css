@@ -1098,6 +1098,13 @@ body.theme-en [tabindex]:focus-visible {
 	height: 147px;
 }
 
+/* Raw px, not the default 1.1rem these <p> tags otherwise fall to (AMFC's html{font-size:1.1rem}
+   bug directly matches every element via `*`, per CLAUDE.md). */
+.amfc-en-footer__contact-label,
+.amfc-en-footer__contact p {
+	font-size: 16px;
+}
+
 .amfc-en-footer__contact-label {
 	font-weight: 700;
 	margin-bottom: 4px;
