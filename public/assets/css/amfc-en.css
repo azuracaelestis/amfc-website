@@ -180,9 +180,9 @@ body.theme-en [tabindex]:focus-visible {
 	top: -20%;
 	right: -15%;
 	/* Moved down 300px per feedback, on top of the top:-20% base position — a separate
-	   transform (not folded into `top`) since `top` is a percentage here and the requested
-	   shift is a flat px value. */
-	transform: translateY(300px);
+	   transform (not folded into `top`/`right`) since both are percentages here and the
+	   requested shifts are flat px values. */
+	transform: translate(200px, 300px);
 	/* 1138x1138px at the 1440px reference, per feedback (matches the source Figma node's own
 	   size exactly), fluid-scaled below it like this file's other desktop-reference sizing. */
 	width: clamp(500px, calc(1138 / 1440 * 100vw), 1138px);
@@ -195,7 +195,17 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-hero__container {
 	position: relative;
 	z-index: 1;
-	width: 100%;
+	/* Overrides Bootstrap's own .container width/max-width/padding-inline (this element carries
+	   both classes) — per feedback, the headline/eyebrow's left edge must line up with the nav
+	   pill's own content start (its logo), not Bootstrap's default 12px container gutter, which
+	   left a 48px mismatch (nav logo at 120px from viewport left at 1440px width, headline at
+	   only 72px). Mirrors .amfc-en-nav's own sizing formula exactly (width: calc(100% - 64px),
+	   capped at the same 1264px, centered) so the two stay aligned at every viewport, not just
+	   1440px — a flat max-width override alone would only have fixed this one width. */
+	width: calc(100% - 64px);
+	max-width: 1264px;
+	margin-inline: auto;
+	padding-inline: 32px;
 }
 
 .amfc-en-hero__eyebrow {
