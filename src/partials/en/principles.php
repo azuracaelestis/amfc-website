@@ -12,6 +12,15 @@
 			<div class="amfc-en-principles__intro">
 				<h2 class="amfc-en-principles__heading">Four Principles.<br />One Commitment.</h2>
 				<p>These four principles shape every solution we build and every partnership we create.</p>
+				<!-- Decorative AMFC wordmark watermark, per feedback — reuses the same grey
+				     logomark asset the zh-Hant-TW site's KSP section already uses for the same
+				     purpose (this page's own Figma frame doesn't have a dedicated watermark node
+				     for this section, unlike the hero's brand stamp — the request pointed at the
+				     page's general Figma URL, not a specific new node). Static placement under
+				     the intro text, not the zh page's fixed-position/scroll-fade behavior —
+				     that's tightly coupled to that page's own multi-card scroll timing and JS,
+				     well beyond a "place a watermark logo" placement request here. -->
+				<img class="amfc-en-principles__watermark" src="<?= e(asset('images/amfc-logo-grey.svg')) ?>" alt="" aria-hidden="true" />
 			</div>
 			<div class="amfc-en-principles__stack-wrap">
 				<!-- Scroll-stacking pile, same CSS-only position:sticky mechanism as the

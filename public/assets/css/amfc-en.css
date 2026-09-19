@@ -432,6 +432,28 @@ body.theme-en [tabindex]:focus-visible {
 	min-width: 280px;
 }
 
+/* Decorative AMFC wordmark, per feedback — a normal flex child after the body copy (not
+   absolutely positioned) so it simply joins the group that's already centered against card 1's
+   height (see .amfc-en-principles__intro above); the group re-centers as a whole rather than
+   pixel-locking the heading's own prior position. width fluid-scaled from a 220px reference,
+   capped so it stays clearly smaller than the 353px text column it sits under. Low opacity is
+   what makes this read as a "watermark" rather than a second logo — the source SVG's own fill
+   is already a light grey, same reasoning as the zh-Hant-TW site's identical asset. */
+.amfc-en-principles__watermark {
+	width: clamp(120px, calc(220 / 1440 * 100vw), 220px);
+	height: auto;
+	margin-top: 24px;
+	/* filter: brightness(0) first, not just opacity — the source SVG's own fill (#ebebeb) is
+	   nearly the same lightness as this section's own lavender background
+	   (--amfc-en-lavender-light, #ebefff), so it was rendering almost invisible here even
+	   though the identical asset reads fine as a subtle watermark on the zh-Hant-TW site's own
+	   white section background. brightness(0) turns the fill fully dark first, then a low
+	   opacity dials it back to a subtle watermark against THIS background instead. */
+	filter: brightness(0);
+	opacity: 0.08;
+	pointer-events: none;
+}
+
 /* Scroll-stacking pile — same CSS-only position:sticky mechanism as the zh-Hant-TW site's
    .amfc-philosophy__stack: no wrapper, no JS, no opacity scrub. Each card's own height supplies
    its scroll dwell-time, and since all four cards share the same `top` (inherited from
