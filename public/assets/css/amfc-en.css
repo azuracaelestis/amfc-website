@@ -410,6 +410,11 @@ body.theme-en [tabindex]:focus-visible {
 	   (align-items: start there, but paired with its own intro-slot's align-self: stretch —
 	   same effect, just spread across two rules there instead of one flex-row property here). */
 	align-items: stretch;
+	/* Centers the intro+cards group horizontally, per feedback — matters once stack-wrap's own
+	   flex-grow no longer fills 100% of the row's remaining width at every viewport (e.g. once
+	   flex-wrap: wrap kicks in below), so the pair doesn't just default to packing against the
+	   row's left edge. */
+	justify-content: center;
 	gap: 84px;
 	flex-wrap: wrap;
 }
@@ -476,8 +481,13 @@ body.theme-en [tabindex]:focus-visible {
    Safari as of this writing. */
 .amfc-en-principles__watermark {
 	display: block;
-	width: clamp(120px, calc(220 / 1440 * 100vw), 220px);
-	aspect-ratio: 766 / 403;
+	/* 606x312px at the 1440px reference, per feedback (was 220px wide, capped smaller than the
+	   text column on purpose at the time — that constraint is gone now), fluid-scaled below it
+	   like this file's other desktop-reference sizing. Its own aspect-ratio (606/312 ≈ 1.94) is
+	   close to but not identical to the source SVG's native 766:403 (≈1.90) — mask-size: contain
+	   fits the logo shape within this box without distorting it either way. */
+	width: clamp(300px, calc(606 / 1440 * 100vw), 606px);
+	aspect-ratio: 606 / 312;
 	margin-top: 70px;
 	background-color: #d9e1ff;
 	/* Plain relative path, not the asset() PHP helper — this is a static .css file, never
