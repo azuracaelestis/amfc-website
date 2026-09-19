@@ -290,6 +290,17 @@ body.theme-en [tabindex]:focus-visible {
 	object-fit: contain;
 }
 
+/* Per feedback: badge-swiss's rendered length must match the line above it (TFTA + IAS/IAF
+   combined, measured at 285.4px via getBoundingClientRect) — at the shared 84px height it was
+   399px wide instead (950x200 source aspect). 60px height gives 60 * (950/200) = 285px,
+   matching the row above almost exactly.
+   .amfc-en-trust__badges img.amfc-en-trust__badges-swiss, not just the class alone — a bare
+   class selector (0,1,0) loses to .amfc-en-trust__badges img's own (0,1,1) specificity, so the
+   shared 84px rule was still winning even with this class applied. */
+.amfc-en-trust__badges img.amfc-en-trust__badges-swiss {
+	height: 60px;
+}
+
 .amfc-en-trust__row {
 	/* 64px flat gap between the badges/text columns, per feedback (see this class's own
 	   comment in trust.php for why --bs-gutter-x directly, not double it). */
