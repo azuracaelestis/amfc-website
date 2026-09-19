@@ -25,7 +25,7 @@
 				<div class="amfc-en-principles__stack">
 					<div class="amfc-en-stat-card amfc-en-stat-card--1">
 						<img src="<?= e(asset('images/en/principle-professionalism.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
-						<span class="amfc-en-stat-card__badge">Professionalism</span>
+						<span class="amfc-en-stat-card__badge">Efficiency</span>
 						<span class="amfc-en-stat-card__number">200,000+</span>
 						<span class="amfc-en-stat-card__label">Customers Served</span>
 					</div>

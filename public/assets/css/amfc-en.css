@@ -464,18 +464,21 @@ body.theme-en [tabindex]:focus-visible {
 	justify-content: center;
 }
 
-/* Per-card tilt and z-index (later card stacks visually on top) and background, matching the
+/* Per-card tilt, z-index (later card stacks visually on top), and background, matching the
    source Figma node's own rotate values exactly (-2.57deg / 2.42deg) rather than the earlier
-   flat +/-2deg guess. */
+   flat +/-2deg guess. Background colors per feedback (explicit hex, not --amfc-en-panel-alt —
+   these two were previously swapped: card 1 inherited panel-alt's #f5f7ff and card 2 was hard-
+   coded to #ebefff, backwards from what was specified here). */
 .amfc-en-stat-card--1 {
 	transform: rotate(-2.57deg);
 	z-index: 1;
+	background: #ebefff;
 }
 
 .amfc-en-stat-card--2 {
 	transform: rotate(2.42deg);
 	z-index: 2;
-	background: #ebefff;
+	background: #f5f7ff;
 }
 
 /* 230x144px at the 1440px reference, per feedback, fluid-scaled below it like this file's other
