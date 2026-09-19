@@ -385,7 +385,11 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-principles {
 	padding-block: 90px;
 	background: linear-gradient(180deg, var(--amfc-en-lavender-light) 0%, #ffffff 100%);
-	border-radius: var(--amfc-en-radius-lg);
+	/* 64px top corners per feedback (was --amfc-en-radius-lg / 32px on all four), matching the
+	   trust section's own top-corner radius. Bottom corners left at 32px — they're effectively
+	   invisible anyway, since the gradient has already faded to white by then against the white
+	   section below. */
+	border-radius: 64px 64px var(--amfc-en-radius-lg) var(--amfc-en-radius-lg);
 	margin-inline: 16px;
 }
 
@@ -526,12 +530,13 @@ body.theme-en [tabindex]:focus-visible {
 	   below the intro's pinned top — plus that 70px gap = 360px. (An earlier 246px value here
 	   was derived from the paragraph's position BEFORE that re-centering, and overlapped the
 	   body copy by ~44px as a result.)
-	   left: 0 is what actually delivers the requested alignment: the slot inherits the
-	   overlay's left edge, which is .amfc-en-principles__layout's own — the page's nav
-	   alignment line (119px at 1440px, same as the nav logo and hero headline). */
+	   left: -32px — 32px further left than the overlay's own edge, per feedback. That edge is
+	   .amfc-en-principles__layout's own, i.e. the page's nav alignment line (119px at 1440px,
+	   same as the nav logo and hero headline), so this lands the mark at 87px — which is the
+	   container's own outer edge, level with the nav pill's outer edge rather than its logo. */
 	position: absolute;
 	top: 360px;
-	left: 0;
+	left: -32px;
 	/* 606x312px at the 1440px reference, per feedback, fluid-scaled below it like this file's
 	   other desktop-reference sizing. Its own aspect-ratio (606/312 ≈ 1.94) is close to but not
 	   identical to the source SVG's native 766:403 (≈1.90) — mask-size: contain fits the logo
@@ -615,12 +620,18 @@ body.theme-en [tabindex]:focus-visible {
 }
 
 .amfc-en-stat-card--integrity {
-	transform: rotate(2.42deg);
+	/* Negative (tilts left) — sign flipped from the Figma node's own +2.42deg, per feedback that
+	   the stack must alternate left/right/left/right by POSITION. Integrity is 3rd in the stack
+	   (Efficiency, Innovation, Integrity, Professionalism), so it takes the 3rd slot's leftward
+	   tilt; the magnitude is still the Figma value. */
+	transform: rotate(-2.42deg);
 	background: #f5f7ff;
 }
 
 .amfc-en-stat-card--innovation {
-	transform: rotate(-3deg);
+	/* Positive (tilts right) — Innovation is 2nd in the stack, so it takes the 2nd slot's
+	   rightward tilt in the alternating left/right/left/right pattern (see --integrity above). */
+	transform: rotate(3deg);
 	background: var(--amfc-en-yellow-soft);
 }
 
