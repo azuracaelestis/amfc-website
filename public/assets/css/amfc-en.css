@@ -292,6 +292,9 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-trust__layout {
 	display: flex;
 	align-items: center;
+	/* Centered per feedback — also matches the source Figma node, which centers this whole
+	   group (left-1/2 + -translate-x-1/2) rather than aligning it to the page's left gutter. */
+	justify-content: center;
 	gap: 64px;
 	flex-wrap: wrap;
 }
