@@ -1046,22 +1046,51 @@ body.theme-en [tabindex]:focus-visible {
 	border-top: 1px solid var(--amfc-en-lavender);
 }
 
+/* Matches the source Figma exactly (node 334:3996) -- the logo sits in the same row as the
+   category columns, pinned to the far right via justify-content:space-between, not on its own
+   row below them. */
+.amfc-en-footer__top {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 32px;
+	margin-bottom: 32px;
+}
+
+.amfc-en-footer__categories {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+}
+
+/* Content-hugging, not evenly stretched -- Figma's columns are only as wide as their own text
+   (e.g. "News" ~64px vs "AMFC App" ~133px), not a uniform grid. */
+.amfc-en-footer__category {
+	flex: 0 0 auto;
+}
+
 .amfc-en-footer h2 {
 	font-weight: 700;
-	font-size: 1rem;
-	margin-bottom: 16px;
+	font-size: 16px;
+	margin-bottom: 24px;
 }
 
 .amfc-en-footer a {
 	color: var(--amfc-en-navy);
 	text-decoration: none;
 	display: block;
+	font-size: 16px;
 	line-height: 2;
 }
 
 .amfc-en-footer a:hover,
 .amfc-en-footer a:focus-visible {
 	color: var(--amfc-en-blue-accent);
+}
+
+.amfc-en-footer__logo {
+	flex: 0 0 auto;
 }
 
 .amfc-en-footer__logo img {
