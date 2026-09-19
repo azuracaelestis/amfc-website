@@ -684,11 +684,12 @@ body.theme-en [tabindex]:focus-visible {
 /* --- Parent company (Funds Inc.) --- */
 .amfc-en-funds {
 	background: #fff;
-	/* 90px vertical / 140px horizontal, per the source Figma node (321:1100) exactly. Not
-	   wrapped in .amfc-en-container — this section centers its own row via justify-content on
-	   the row itself (see below), unlike every other section here which left-aligns its content
-	   to the nav's own alignment line. */
-	padding-block: 90px;
+	/* 180px vertical (top and bottom), per feedback — was 90px, matching the source Figma node
+	   (321:1100) exactly; that value is superseded here. 140px horizontal is unchanged, still
+	   from that same node. Not wrapped in .amfc-en-container — this section centers its own row
+	   via justify-content on the row itself (see below), unlike every other section here which
+	   left-aligns its content to the nav's own alignment line. */
+	padding-block: 180px;
 	padding-inline: 140px;
 	display: flex;
 	justify-content: center;
