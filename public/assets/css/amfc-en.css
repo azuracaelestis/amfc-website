@@ -284,6 +284,42 @@ body.theme-en [tabindex]:focus-visible {
 	border-radius: 64px 64px 0 0;
 }
 
+/* Content-sized flex row — see trust.php's own comment for why this replaced a Bootstrap
+   col-lg-6 50/50 row: with half-width columns the badges filled only ~285px of their ~569px
+   column, so the 64px gutter sat behind ~283px of dead column space and the real gap between
+   the logos and the text measured 346.6px. Sizing both blocks to their content makes this gap
+   the actual 64px asked for. */
+.amfc-en-trust__layout {
+	display: flex;
+	align-items: center;
+	gap: 64px;
+	flex-wrap: wrap;
+}
+
+.amfc-en-trust__badges {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	/* Matches the gap the badges had while they were relying on Bootstrap's gap-4 (1.5rem =
+	   26.4px on this site, per CLAUDE.md's rem-inflation bug), so this restructure doesn't
+	   change the spacing between the badges themselves — only the gap to the text block. */
+	gap: 26.4px;
+	flex: 0 0 auto;
+}
+
+.amfc-en-trust__badges-row {
+	display: flex;
+	align-items: center;
+	gap: 26.4px;
+}
+
+.amfc-en-trust__copy {
+	/* 523px, matching the source Figma node's own text block width. flex-shrink allowed so it
+	   still collapses gracefully on narrower viewports. */
+	flex: 0 1 523px;
+	max-width: 523px;
+}
+
 .amfc-en-trust__badges img {
 	height: 84px;
 	width: auto;
@@ -299,12 +335,6 @@ body.theme-en [tabindex]:focus-visible {
    shared 84px rule was still winning even with this class applied. */
 .amfc-en-trust__badges img.amfc-en-trust__badges-swiss {
 	height: 60px;
-}
-
-.amfc-en-trust__row {
-	/* 64px flat gap between the badges/text columns, per feedback (see this class's own
-	   comment in trust.php for why --bs-gutter-x directly, not double it). */
-	--bs-gutter-x: 64px;
 }
 
 .amfc-en-trust__heading {
