@@ -458,9 +458,17 @@ body.theme-en [tabindex]:focus-visible {
 	margin-bottom: 0;
 }
 
+/* flex: 0 0 auto (shrink-wrap to the card's own width), NOT flex: 1 1 auto — with grow enabled
+   this filled all 763px of the row's remaining width while the card inside is only ~405px and
+   centered in it via margin-inline: auto, leaving ~170px of dead space before the card started.
+   The row gap really was 84px, but measured from that empty space, so the gap a reader actually
+   sees ran to ~254px. Exactly the same dead-space trap as .amfc-en-trust__layout's own earlier
+   fix — and confirmed against the source Figma, whose principles group (node 321:1153) is
+   841.89px wide, i.e. 353 (text) + 84 (gap) + 404.89 (card) exactly.
+   No min-width here either: the card's own clamp() already floors its width on narrow
+   viewports, and a min-width larger than the card would reintroduce the same dead space. */
 .amfc-en-principles__stack-wrap {
-	flex: 1 1 auto;
-	min-width: 280px;
+	flex: 0 0 auto;
 }
 
 /* Decorative AMFC wordmark, per feedback — a normal flex child after the body copy (not
