@@ -837,10 +837,20 @@ body.theme-en [tabindex]:focus-visible {
 	background: #fff;
 }
 
+.amfc-en-products__grid {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	/* Raw px via clamp, not Bootstrap's g-4 (1.5rem) — AMFC's html{font-size:1.1rem} bug
+	   (CLAUDE.md) would inflate that to 26.4px instead of the requested 24px. */
+	gap: clamp(16px, calc(24 / 1440 * 100vw), 24px);
+}
+
 .amfc-en-product-card {
 	background: var(--amfc-en-yellow-soft);
 	border-radius: var(--amfc-en-radius-lg);
-	height: 400px;
+	width: clamp(180px, calc(280 / 1440 * 100vw), 280px);
+	height: clamp(257px, calc(400 / 1440 * 100vw), 400px);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
