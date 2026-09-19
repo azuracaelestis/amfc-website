@@ -959,11 +959,12 @@ body.theme-en [tabindex]:focus-visible {
 	border-radius: var(--amfc-en-radius-lg);
 	overflow: hidden;
 	margin-inline: 16px;
-	margin-block: 40px;
+	/* 180px vertical padding around the banner, per feedback. */
+	margin-block: 180px;
 	min-height: 340px;
 	display: flex;
 	align-items: center;
-	color: #fff;
+	color: var(--amfc-en-navy);
 }
 
 .amfc-en-cta__bg {
@@ -973,14 +974,6 @@ body.theme-en [tabindex]:focus-visible {
 	height: 100%;
 	object-fit: cover;
 	z-index: 0;
-}
-
-.amfc-en-cta::after {
-	content: '';
-	position: absolute;
-	inset: 0;
-	background: linear-gradient(90deg, rgba(26, 47, 134, 0.75) 0%, rgba(26, 47, 134, 0.35) 100%);
-	z-index: 1;
 }
 
 .amfc-en-cta__content {
