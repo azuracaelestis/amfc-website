@@ -880,6 +880,18 @@ body.theme-en [tabindex]:focus-visible {
 	height: clamp(161px, calc(242 / 1440 * 100vw), 242px);
 }
 
+/* Personal loan illustration only: its source art is a tall ~0.69 aspect ratio (person +
+   shopping bag), not the ~0.98 aspect the other three cards share, so fitting it into the same
+   237x242 box left it letterboxed down to ~168x242 -- visibly smaller than its neighbors even
+   though the box was identical. Sized on height instead, up to the card's actual free space
+   (measured via getBoundingClientRect: 400px card - 24px*2 padding - 40px label - 16px image
+   margin - 242px old image height = 54px slack), so the art renders visibly larger without
+   overflowing the card. */
+.amfc-en-product-card__img--portrait {
+	width: clamp(128px, calc(197 / 1440 * 100vw), 197px);
+	height: clamp(184px, calc(284 / 1440 * 100vw), 284px);
+}
+
 .amfc-en-product-card__img--small {
 	width: clamp(140px, calc(211 / 1440 * 100vw), 211px);
 	height: clamp(143px, calc(215 / 1440 * 100vw), 215px);

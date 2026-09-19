@@ -11,7 +11,7 @@
 				<p class="amfc-en-product-card__label">Vehicle Loan</p>
 			</div>
 			<div class="amfc-en-product-card">
-				<img class="amfc-en-product-card__img--large" src="<?= e(asset('images/en/product-personal-loan.png')) ?>" alt="Personal loan illustration" width="1024" height="1475" />
+				<img class="amfc-en-product-card__img--portrait" src="<?= e(asset('images/en/product-personal-loan.png')) ?>" alt="Personal loan illustration" width="1024" height="1475" />
 				<p class="amfc-en-product-card__label">Personal Loan</p>
 			</div>
 			<div class="amfc-en-product-card">
