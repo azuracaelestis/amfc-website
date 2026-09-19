@@ -1,6 +1,10 @@
 <?php // PORT THIS — content is a hardcoded stub per CLAUDE.md (no CMS in this repo). ?>
 <section class="amfc-en-principles">
-	<div class="container amfc-en-container py-5">
+	<!-- py-5 removed — .amfc-en-principles already sets its own padding-block: 90px; this
+	     Bootstrap utility was a leftover from the initial scaffold, silently stacking an extra
+	     ~52.8px of padding on top of that (3rem inflated to 52.8px by this site's own rem bug)
+	     and pushing the gap to the Funds section well past the 90px asked for. -->
+	<div class="container amfc-en-container">
 		<!-- Content-sized flex row (gap: 84px), not a Bootstrap col-lg-4/col-lg-8 grid split —
 		     same reasoning as .amfc-en-trust__layout: the card is only 404.89px wide but sits
 		     centered (margin-inline: auto) inside a much wider Bootstrap column, so the gutter
@@ -43,10 +47,17 @@
 			     almost immediately, long before the four-card stack even finished, per
 			     feedback ("the headline and body copy is left behind"). This outer slot has no
 			     sizing of its own — align-items: stretch on .amfc-en-principles__layout
-			     stretches it to match .amfc-en-principles__stack-wrap's own (much taller)
-			     height, giving the inner sticky intro that same tall box to travel within, so
-			     it keeps pace with the cards for the whole stacking sequence and only releases
-			     once the stack-wrap's real bottom (after the scroll-runway tail) scrolls past. -->
+			     stretches it to match .amfc-en-principles__stack-wrap's own height, giving the
+			     inner sticky intro that same tall box to travel within, so it keeps pace with
+			     the cards for the whole stacking sequence and releases at the same point the
+			     LAST CARD does — .amfc-en-principles__stack-tail (the scroll-runway spacer)
+			     now lives OUTSIDE this row entirely (see its own comment below) specifically so
+			     it doesn't inflate that shared stretch height beyond the cards' own: it used to
+			     live inside .amfc-en-principles__stack-wrap, so intro/watermark stayed pinned
+			     270px of scroll (the tail's own height) LONGER than the last card's own release
+			     — the cards would release and scroll away while the heading/watermark stayed
+			     frozen in place until the tail's extra height finally ran out, per feedback
+			     ("the watermark is left behind ... when the cards all stacked up"). -->
 			<div class="amfc-en-principles__intro-slot">
 				<div class="amfc-en-principles__intro">
 					<h2 class="amfc-en-principles__heading">Four Principles.<br />One Commitment.</h2>
@@ -58,9 +69,7 @@
 				     zh-Hant-TW site's .amfc-philosophy__stack (see amfc-2026.css's own
 				     extensive comment on that class) — no JS, no pinned track. All four cards
 				     share the same `top`, so each releases from flow and immediately pins at
-				     that same offset, landing directly on top of the one before it; then
-				     .amfc-en-principles__stack-tail supplies the scroll runway for the last
-				     card to release before the next section begins.
+				     that same offset, landing directly on top of the one before it.
 
 				     Stack order is Efficiency, Innovation, Integrity, Professionalism, per
 				     feedback — each card carries a CONTENT-based modifier class (its own
@@ -97,8 +106,12 @@
 						<span class="amfc-en-stat-card__label">Financial Expertise</span>
 					</div>
 				</div>
-				<div class="amfc-en-principles__stack-tail"></div>
 			</div>
 		</div>
+		<!-- Moved out of .amfc-en-principles__stack-wrap (see .amfc-en-principles__intro-slot's
+		     own comment above for why) — still provides the same scroll runway before the Funds
+		     section begins, just as a sibling of the whole layout row instead of a flex item
+		     inside it, so it no longer inflates the row's own align-items: stretch height. -->
+		<div class="amfc-en-principles__stack-tail"></div>
 	</div>
 </section>

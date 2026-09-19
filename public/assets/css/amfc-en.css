@@ -383,7 +383,15 @@ body.theme-en [tabindex]:focus-visible {
 
 /* --- Principles / stats cards --- */
 .amfc-en-principles {
-	padding-block: 90px;
+	/* Bottom trimmed to 87.125px (90px - 2.875px), per feedback ("90px vertical padding" between
+	   the watermark and the Funds section below). The 2.875px isn't arbitrary: it's the residual
+	   gap between the watermark's own rendered bottom edge and .amfc-en-principles__stack-tail's
+	   start once everything has released and settled (measured via getBoundingClientRect) — a
+	   side effect of the watermark's own 360px top offset (calibrated separately, for the 70px
+	   gap to the body copy while PINNED — see .amfc-en-principles__watermark's own comment) not
+	   landing it exactly flush with the stack's own bottom edge. Trimming it here, rather than
+	   adjusting that top offset, keeps the already-verified pinned-state 70px gap untouched. */
+	padding-block: 90px 87.125px;
 	background: linear-gradient(180deg, var(--amfc-en-lavender-light) 0%, #ffffff 100%);
 	/* 64px top corners per feedback (was --amfc-en-radius-lg / 32px on all four), matching the
 	   trust section's own top-corner radius. Bottom corners left at 32px — they're effectively
