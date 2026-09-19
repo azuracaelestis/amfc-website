@@ -9,18 +9,33 @@
 		     Figma node's own layout (intro block ends at x=353, the cards group starts at
 		     x=437 — 437-353=84). -->
 		<div class="amfc-en-principles__layout">
-			<div class="amfc-en-principles__intro">
-				<h2 class="amfc-en-principles__heading">Four Principles.<br />One Commitment.</h2>
-				<p>These four principles shape every solution we build and every partnership we create.</p>
-				<!-- Decorative AMFC wordmark watermark, per feedback — reuses the same grey
-				     logomark asset the zh-Hant-TW site's KSP section already uses for the same
-				     purpose (this page's own Figma frame doesn't have a dedicated watermark node
-				     for this section, unlike the hero's brand stamp — the request pointed at the
-				     page's general Figma URL, not a specific new node). Static placement under
-				     the intro text, not the zh page's fixed-position/scroll-fade behavior —
-				     that's tightly coupled to that page's own multi-card scroll timing and JS,
-				     well beyond a "place a watermark logo" placement request here. -->
-				<img class="amfc-en-principles__watermark" src="<?= e(asset('images/amfc-logo-grey.svg')) ?>" alt="" aria-hidden="true" />
+			<!-- Two nested wrappers, same pattern as the zh-Hant-TW site's own
+			     .amfc-philosophy__intro-slot: a sticky element's RELEASE point (when it stops
+			     being pinned) is governed by its own normal-flow box height, not by how long
+			     its sibling's content runs — .amfc-en-principles__intro on its own is only as
+			     tall as one card (via its min-height), so it was releasing and scrolling away
+			     almost immediately, long before the four-card stack even finished, per
+			     feedback ("the headline and body copy is left behind"). This outer slot has no
+			     sizing of its own — align-items: stretch on .amfc-en-principles__layout
+			     stretches it to match .amfc-en-principles__stack-wrap's own (much taller)
+			     height, giving the inner sticky intro that same tall box to travel within, so
+			     it keeps pace with the cards for the whole stacking sequence and only releases
+			     once the stack-wrap's real bottom (after the scroll-runway tail) scrolls past. -->
+			<div class="amfc-en-principles__intro-slot">
+				<div class="amfc-en-principles__intro">
+					<h2 class="amfc-en-principles__heading">Four Principles.<br />One Commitment.</h2>
+					<p>These four principles shape every solution we build and every partnership we create.</p>
+					<!-- Decorative AMFC wordmark watermark, per feedback — reuses the same grey
+					     logomark asset the zh-Hant-TW site's KSP section already uses for the
+					     same purpose (this page's own Figma frame doesn't have a dedicated
+					     watermark node for this section, unlike the hero's brand stamp — the
+					     request pointed at the page's general Figma URL, not a specific new
+					     node). Static placement under the intro text, not the zh page's fixed-
+					     position/scroll-fade behavior — that's tightly coupled to that page's
+					     own multi-card scroll timing and JS, well beyond a "place a watermark
+					     logo" placement request here. -->
+					<img class="amfc-en-principles__watermark" src="<?= e(asset('images/amfc-logo-grey.svg')) ?>" alt="" aria-hidden="true" />
+				</div>
 			</div>
 			<div class="amfc-en-principles__stack-wrap">
 				<!-- Scroll-stacking pile, same CSS-only position:sticky mechanism as the

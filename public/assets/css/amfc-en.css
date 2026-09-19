@@ -404,9 +404,24 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-principles__layout {
 	--amfc-en-stack-top: clamp(6rem, 16vh, 10rem);
 	display: flex;
-	align-items: flex-start;
+	/* stretch, not flex-start — see principles.php's own comment on .amfc-en-principles__intro-
+	   slot for why: this is what gives the sticky intro a tall enough box to travel within for
+	   the WHOLE stacking sequence, matching the zh-Hant-TW site's own .amfc-philosophy__grid
+	   (align-items: start there, but paired with its own intro-slot's align-self: stretch —
+	   same effect, just spread across two rules there instead of one flex-row property here). */
+	align-items: stretch;
 	gap: 84px;
 	flex-wrap: wrap;
+}
+
+/* Provides the tall containing block the sticky intro needs — see principles.php's own comment
+   on this element for the full reasoning (mirrors the zh-Hant-TW site's own
+   .amfc-philosophy__intro-slot). No sizing of its own: align-items: stretch on
+   .amfc-en-principles__layout above stretches this to match .amfc-en-principles__stack-wrap's
+   real height automatically. */
+.amfc-en-principles__intro-slot {
+	flex: 0 1 353px;
+	max-width: 353px;
 }
 
 /* Sticky, matching the zh-Hant-TW site's own .amfc-philosophy__intro pattern (same idea: "the
@@ -415,12 +430,13 @@ body.theme-en [tabindex]:focus-visible {
    the cards continue moving/stacking beside it, not stay in normal flow the whole time.
    min-height still matches ONE card's own height (404.89px) so the text is vertically centered
    against card 1 at rest, same reasoning as before — just now also pinned at that position via
-   sticky instead of only being positioned there once and left in flow. */
+   sticky instead of only being positioned there once and left in flow. This element itself
+   stays shrink-wrapped to its own content (min-height, not height/stretch) — it's the OUTER
+   slot above that stretches, giving this sticky element room to travel without changing where
+   its own content visually centers. */
 .amfc-en-principles__intro {
 	position: sticky;
 	top: var(--amfc-en-stack-top);
-	flex: 0 1 353px;
-	max-width: 353px;
 	min-height: clamp(220px, calc(404.89 / 1440 * 100vw), 404.89px);
 	display: flex;
 	flex-direction: column;
