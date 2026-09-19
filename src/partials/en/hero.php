@@ -2,6 +2,10 @@
 <section class="amfc-en-hero">
 	<img class="amfc-en-hero__bg-shape" src="<?= e(asset('images/en/hero-bg-shape.svg')) ?>" alt="" aria-hidden="true" />
 	<img class="amfc-en-hero__bg-glow" src="<?= e(asset('images/en/hero-bg-ellipse.png')) ?>" alt="" aria-hidden="true" />
+	<!-- "Brand stamp 1" (node 332:1255) — added to the Figma file after the initial pull, hence
+	     missing from the first build. Positioned x:1125/y:236, 260x195, in the 1440px-reference
+	     frame; own aspect ratio (1448x1086 source) already matches 260:195 exactly. -->
+	<img class="amfc-en-hero__brand-stamp" src="<?= e(asset('images/en/brand-stamp.png')) ?>" alt="AMFC: For a Brighter Asia" width="1448" height="1086" />
 	<div class="container amfc-en-container amfc-en-hero__container">
 		<!-- g-4, not g-5 — g-5's 3rem gutter (52.8px on this site, see CLAUDE.md's rem-inflation
 		     bug) left the text column just 573.6px wide, 6px short of the 579.7px "AI-driven

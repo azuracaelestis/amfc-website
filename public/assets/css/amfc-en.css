@@ -200,6 +200,20 @@ body.theme-en [tabindex]:focus-visible {
 	opacity: 1;
 }
 
+/* "Brand stamp 1" — the source Figma node (332:1255) positions this at x:1125/y:236, 260x195,
+   in its 1440px-reference frame; converted to right/top offsets (1440-1125-260=55px from the
+   right) and fluid-scaled like this file's other desktop-reference sizing. z-index above the
+   photo/glow (both 0) and the text container (1) — it's meant to sit on top of the photo in the
+   hero's top-right corner. */
+.amfc-en-hero__brand-stamp {
+	position: absolute;
+	top: clamp(80px, calc(236 / 1440 * 100vw), 236px);
+	right: clamp(20px, calc(55 / 1440 * 100vw), 55px);
+	width: clamp(140px, calc(260 / 1440 * 100vw), 260px);
+	height: auto;
+	z-index: 2;
+}
+
 /* Shared alignment class — overrides Bootstrap's own .container width/max-width/padding-inline
    (elements using this carry both classes) so every section's content lines up with the nav
    pill's own content start (its logo), not Bootstrap's default 12px container gutter, which
