@@ -217,7 +217,8 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-hero__brand-stamp {
 	position: absolute;
 	top: clamp(80px, calc(236 / 1440 * 100vw), 236px);
-	right: clamp(20px, calc(55 / 1440 * 100vw), 55px);
+	/* 55px + 42px per feedback ("move left by 42px"). */
+	right: clamp(62px, calc(97 / 1440 * 100vw), 97px);
 	width: clamp(140px, calc(260 / 1440 * 100vw), 260px);
 	height: auto;
 	z-index: 2;
