@@ -264,18 +264,18 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-trust {
 	padding-block: 64px;
 	background: #fff;
-	/* -190px — per feedback, this section must cover the BOTTOM PART of the hero photo, not
-	   just close the gap below it. Measured against the photo's real bottom edge
-	   (getBoundingClientRect): at -38px (the previous value) this section's top still landed
-	   21px *below* the photo's bottom edge — no overlap with the photo at all, just a smaller
-	   gap. -190px lands this section's top about 130px above the photo's bottom edge instead,
-	   a visible overlap onto the photo. */
+	/* -60px — dialed back from -190px per feedback (that covered far too much of the photo,
+	   per the before/after reference screenshots) to just a small sliver of overlap at the very
+	   bottom of the photo instead. */
 	position: relative;
 	/* Explicit stacking (see .amfc-en-hero's own z-index comment) — must be higher than hero's,
 	   or the hero photo's own transform paints on top of this section's background in their
 	   overlap zone regardless of DOM order. */
 	z-index: 1;
-	margin-top: -190px;
+	margin-top: -60px;
+	/* Rounded top corners, per feedback — 64px explicitly (not --amfc-en-radius-lg, which is
+	   32px, a different value used elsewhere in this file). */
+	border-radius: 64px 64px 0 0;
 }
 
 .amfc-en-trust__badges img {
