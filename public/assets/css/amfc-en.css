@@ -481,6 +481,21 @@ body.theme-en [tabindex]:focus-visible {
 	background: #f5f7ff;
 }
 
+/* Cards 3-4 (Innovation, Professionalism) — background #fff8d9 per their own Figma nodes
+   (333:1315/333:1324), tilt per this file's own comment in principles.php (no tilt was
+   specified on these two nodes, so they follow the zh-Hant-TW KSP set's card-3/card-4 pattern). */
+.amfc-en-stat-card--3 {
+	transform: rotate(-3deg);
+	z-index: 3;
+	background: var(--amfc-en-yellow-soft);
+}
+
+.amfc-en-stat-card--4 {
+	transform: rotate(4deg);
+	z-index: 4;
+	background: var(--amfc-en-yellow-soft);
+}
+
 /* 230x144px at the 1440px reference, per feedback, fluid-scaled below it like this file's other
    desktop-reference sizing. object-fit: contain — the source assets are square (200x200), so
    this letterboxes them within the wider 230x144 box rather than stretching/distorting them. */

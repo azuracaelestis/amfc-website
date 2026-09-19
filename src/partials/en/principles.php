@@ -16,12 +16,16 @@
 			<div class="amfc-en-principles__stack-wrap">
 				<!-- Scroll-stacking pile, same CSS-only position:sticky mechanism as the
 				     zh-Hant-TW site's .amfc-philosophy__stack (see amfc-2026.css's own
-				     extensive comment on that class) — no JS, no pinned track. Both cards
-				     share the same `top`, so card 2 lands directly on top of card 1 as it
-				     scrolls into its sticky range, then .amfc-en-principles__stack-tail
-				     supplies the scroll runway for card 2 to release before the next
-				     section begins. Only two cards here (vs. the zh page's four) — this
-				     section only has two principles per the source Figma. -->
+				     extensive comment on that class) — no JS, no pinned track. All four cards
+				     share the same `top`, so each releases from flow and immediately pins at
+				     that same offset, landing directly on top of the one before it; then
+				     .amfc-en-principles__stack-tail supplies the scroll runway for the last
+				     card to release before the next section begins. Cards 3-4 (Innovation,
+				     Professionalism) added from Figma nodes 333:1315/333:1324 — no tilt was
+				     specified on those nodes (unlike cards 1-2's -2.57deg/2.42deg, baked into
+				     their own rotated wrappers in the source file), so their tilt values
+				     follow the zh-Hant-TW KSP set's own card-3/card-4 pattern instead
+				     (-3deg/4deg) for consistency. -->
 				<div class="amfc-en-principles__stack">
 					<div class="amfc-en-stat-card amfc-en-stat-card--1">
 						<img src="<?= e(asset('images/en/principle-professionalism.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
@@ -34,6 +38,18 @@
 						<span class="amfc-en-stat-card__badge">Integrity</span>
 						<span class="amfc-en-stat-card__number">NT$20 Billion+</span>
 						<span class="amfc-en-stat-card__label">Assets Under Management</span>
+					</div>
+					<div class="amfc-en-stat-card amfc-en-stat-card--3">
+						<img src="<?= e(asset('images/en/principle-innovation.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
+						<span class="amfc-en-stat-card__badge">Innovation</span>
+						<span class="amfc-en-stat-card__number">AI-Powered</span>
+						<span class="amfc-en-stat-card__label">Intelligent Risk Management</span>
+					</div>
+					<div class="amfc-en-stat-card amfc-en-stat-card--4">
+						<img src="<?= e(asset('images/en/principle-financial-expertise.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
+						<span class="amfc-en-stat-card__badge">Professionalism</span>
+						<span class="amfc-en-stat-card__number">20+ years</span>
+						<span class="amfc-en-stat-card__label">Financial Expertise</span>
 					</div>
 				</div>
 				<div class="amfc-en-principles__stack-tail"></div>
