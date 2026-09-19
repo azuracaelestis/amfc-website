@@ -179,6 +179,10 @@ body.theme-en [tabindex]:focus-visible {
 	position: absolute;
 	top: -20%;
 	right: -15%;
+	/* Moved down 300px per feedback, on top of the top:-20% base position — a separate
+	   transform (not folded into `top`) since `top` is a percentage here and the requested
+	   shift is a flat px value. */
+	transform: translateY(300px);
 	/* 1138x1138px at the 1440px reference, per feedback (matches the source Figma node's own
 	   size exactly), fluid-scaled below it like this file's other desktop-reference sizing. */
 	width: clamp(500px, calc(1138 / 1440 * 100vw), 1138px);
@@ -225,7 +229,9 @@ body.theme-en [tabindex]:focus-visible {
 	   shift on screen. Writing it the other way (scale after translate) would apply the 68px
 	   shift in the pre-scale coordinate space instead, making the visible shift 68 * 1.75 =
 	   119px — not what "move down by 68px" asked for. */
-	transform: translateY(68px) scale(1.75);
+	/* 100px total (68px + a further 32px per follow-up feedback), same translate-before-scale
+	   ordering as before so it stays a flat px shift on screen regardless of the 1.75x scale. */
+	transform: translateY(100px) scale(1.75);
 	transform-origin: center;
 }
 
