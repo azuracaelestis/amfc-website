@@ -186,11 +186,11 @@ body.theme-en [tabindex]:focus-visible {
 	position: absolute;
 	top: -20%;
 	right: -15%;
-	/* Net translate(80px, 342px): right 200px + left 120px (200-120=80), down 300px + 42px
-	   (300+42=342), each a follow-up on the previous feedback round — on top of the top:-20%
-	   base position, a separate transform since both `top`/`right` are percentages here and
-	   the requested shifts are flat px values. */
-	transform: translate(80px, 342px);
+	/* Net translate(80px, 374px): right 200px + left 120px (200-120=80), down 300px + 42px +
+	   32px (300+42+32=374), each a follow-up on the previous feedback round — on top of the
+	   top:-20% base position, a separate transform since both `top`/`right` are percentages
+	   here and the requested shifts are flat px values. */
+	transform: translate(80px, 374px);
 	/* 1138x1138px at the 1440px reference, per feedback (matches the source Figma node's own
 	   size exactly), fluid-scaled below it like this file's other desktop-reference sizing. */
 	width: clamp(500px, calc(1138 / 1440 * 100vw), 1138px);
