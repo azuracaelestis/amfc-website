@@ -914,23 +914,67 @@ body.theme-en [tabindex]:focus-visible {
 }
 
 /* --- Media / event / anti-fraud band --- */
+/* Matches the source Figma exactly (node 334:3925) -- was a Bootstrap row/col-md-4 grid with a
+   1.5rem/1.25rem title/link (rem-inflated per CLAUDE.md) and no underline on "Learn More". */
 .amfc-en-media-band {
 	background: var(--amfc-en-lavender);
-	padding-block: 90px;
+	padding-block: clamp(56px, calc(90 / 1440 * 100vw), 90px);
+	padding-inline: clamp(24px, calc(120 / 1440 * 100vw), 120px);
+}
+
+.amfc-en-media-band__grid {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: clamp(20px, calc(42 / 1440 * 100vw), 42px);
+}
+
+.amfc-en-media-card {
+	width: clamp(260px, calc(360 / 1440 * 100vw), 360px);
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.amfc-en-media-card__image-wrap {
+	position: relative;
+	width: 100%;
+	height: clamp(200px, calc(269 / 1440 * 100vw), 269px);
+	border-radius: var(--amfc-en-radius-md);
+	overflow: hidden;
+}
+
+/* Figma's "Media" card gradient starts at #edf0ff -- a shade distinct from, but nearly
+   identical to, --amfc-en-lavender-light (#ebefff) used by the other two cards. Inlined rather
+   than tokenized since it's a one-off. */
+.amfc-en-media-card__image-wrap--media {
+	background: linear-gradient(180deg, #edf0ff, var(--amfc-en-yellow-soft));
+}
+
+.amfc-en-media-card__image-wrap--event,
+.amfc-en-media-card__image-wrap--antifraud {
+	background: linear-gradient(180deg, var(--amfc-en-lavender-light), var(--amfc-en-yellow-soft));
 }
 
 .amfc-en-media-card__image {
+	position: absolute;
+	inset: 0;
 	width: 100%;
-	height: 269px;
+	height: 100%;
 	object-fit: cover;
-	border-radius: var(--amfc-en-radius-md);
-	background: linear-gradient(180deg, var(--amfc-en-lavender-light), var(--amfc-en-yellow-soft));
-	margin-bottom: 24px;
+}
+
+.amfc-en-media-card__footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .amfc-en-media-card__title {
 	font-weight: 700;
-	font-size: 1.5rem;
+	font-size: 24px;
+	line-height: 22px;
+	color: var(--amfc-en-navy);
 	margin-bottom: 0;
 }
 
@@ -938,9 +982,10 @@ body.theme-en [tabindex]:focus-visible {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	font-size: 1.25rem;
+	font-size: 20px;
+	line-height: 22px;
 	color: var(--amfc-en-navy);
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 .amfc-en-media-card__link img {
