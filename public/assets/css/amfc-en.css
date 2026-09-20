@@ -919,7 +919,8 @@ body.theme-en [tabindex]:focus-visible {
    1.5rem/1.25rem title/link (rem-inflated per CLAUDE.md) and no underline on "Learn More". */
 .amfc-en-media-band {
 	background: var(--amfc-en-lavender);
-	padding-block: clamp(56px, calc(90 / 1440 * 100vw), 90px);
+	/* 180px per feedback (was 90px). */
+	padding-block: clamp(100px, calc(180 / 1440 * 100vw), 180px);
 	padding-inline: clamp(24px, calc(120 / 1440 * 100vw), 120px);
 }
 
