@@ -656,8 +656,9 @@ body.theme-en [tabindex]:focus-visible {
    non-square box would letterbox them via object-fit:contain, same bug seen on the Our
    Product cards' images earlier. */
 .amfc-en-stat-card img {
-	width: clamp(96px, calc(144 / 1440 * 100vw), 144px);
-	height: clamp(96px, calc(144 / 1440 * 100vw), 144px);
+	/* 144px + 5% per feedback. */
+	width: clamp(100.8px, calc(151.2 / 1440 * 100vw), 151.2px);
+	height: clamp(100.8px, calc(151.2 / 1440 * 100vw), 151.2px);
 	object-fit: contain;
 	margin-bottom: 16px;
 }
