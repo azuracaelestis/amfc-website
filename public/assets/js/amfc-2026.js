@@ -405,6 +405,28 @@ window.AMFC = (function () {
 		});
 	}
 
+	/* English homepage's KSP Integrity card only: coin-drop entrance, once, on scroll into
+	   view. querySelector returns null on the zh-Hant-TW homepage (no such class there), so
+	   this is safely cross-page-inert like every other init above. Purely CSS-driven (see the
+	   "KSP Integrity" block in amfc-en.css) -- unlike initPhilosophyStat1Reveal there's no
+	   JS-side final state to set (no count-up), so this doesn't need its own reduced-motion
+	   branch; that swap is handled entirely by amfc-en.css's own
+	   prefers-reduced-motion block, gated on this same .is-inview class. */
+	function initKspIntegrityCoinDrop() {
+		var card = document.querySelector('.amfc-en-stat-card--integrity');
+		if (!card || !('IntersectionObserver' in window)) return;
+
+		var observer = new IntersectionObserver(function (entries, obs) {
+			entries.forEach(function (entry) {
+				if (!entry.isIntersecting) return;
+				entry.target.classList.add('is-inview');
+				obs.unobserve(entry.target); // play once, not on every scroll pass
+			});
+		}, { threshold: 0.25 });
+
+		observer.observe(card);
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
@@ -414,6 +436,7 @@ window.AMFC = (function () {
 		initServiceCardTouchDelight();
 		initNewsCardTouchAffordance();
 		initLangToggle();
+		initKspIntegrityCoinDrop();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

@@ -693,6 +693,136 @@ body.theme-en [tabindex]:focus-visible {
 	display: block;
 }
 
+/* --- KSP Integrity card: coin-drop entrance animation, scroll-triggered, plays once ---
+   Only the Integrity card's icon is inline SVG (see principles.php) -- the other three cards
+   keep their plain <img>, untouched. Trigger: initKspIntegrityCoinDrop() in amfc-2026.js adds
+   .is-inview to .amfc-en-stat-card--integrity once, via IntersectionObserver. Everything here
+   animates only transform/opacity. */
+.amfc-en-stat-card__icon {
+	display: block;
+	width: clamp(100.8px, calc(151.2 / 1440 * 100vw), 151.2px);
+	height: clamp(100.8px, calc(151.2 / 1440 * 100vw), 151.2px);
+	aspect-ratio: 1 / 1;
+	margin-bottom: 16px;
+	overflow: hidden; /* the coin enters from the icon's own top edge, clipped here, not the page's */
+}
+
+.amfc-en-stat-card__icon svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+/* Coin center verified by hand-tracing principle-integrity.svg's two coin-face circle paths'
+   Bezier segments: (830.76, 721.53), radius 184.27, in the SVG's own 1254x1254 viewBox units --
+   transform-box:view-box resolves transform-origin against that coordinate system regardless of
+   how small the icon renders on screen. */
+.amfc-en-stat-card--integrity .coin,
+.amfc-en-stat-card--integrity .ray {
+	transform-box: view-box;
+	transform-origin: 830.76px 721.53px;
+}
+
+.amfc-en-stat-card--integrity .gleam {
+	opacity: 0;
+}
+
+.amfc-en-stat-card--integrity .tw {
+	transform-box: fill-box;
+	transform-origin: center;
+	opacity: 0;
+}
+
+/* Everything that isn't the coin (hand, coin-stack, plant, ribbon) just fades up behind it. */
+@keyframes amfc-ksp-base-rise {
+	from { opacity: 0; transform: translateY(22px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+.amfc-en-stat-card--integrity.is-inview .amfc-en-stat-card__icon {
+	animation: amfc-ksp-base-rise 520ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+/* The fall: gravity in, two cushioned bounces out. Shares its 1500ms duration and 120ms delay
+   with the ray/gleam/twinkle animations below so their keyframe percentages line up -- change
+   all five together, or the glint fires at the wrong moment. Beats: impact 945ms, glint 960ms,
+   rays 1110ms, twinkles 1170ms, settled 1620ms. */
+@keyframes amfc-ksp-coin-drop {
+	0%   { opacity: 0; transform: translateY(-980px) rotate(-16deg);
+	       animation-timing-function: cubic-bezier(.4, 0, .85, .4); }
+	10%  { opacity: 1; transform: translateY(-760px) rotate(-13deg);
+	       animation-timing-function: cubic-bezier(.4, 0, .9, .45); }
+	55%  { transform: translateY(0) rotate(0deg) scale(1);
+	       animation-timing-function: cubic-bezier(.3, 0, .7, 1); }
+	62%  { transform: translateY(8px) scaleX(1.11) scaleY(.87);
+	       animation-timing-function: cubic-bezier(.2, .75, .4, 1); }
+	74%  { transform: translateY(-54px) scaleX(.97) scaleY(1.05);
+	       animation-timing-function: cubic-bezier(.5, 0, .8, .5); }
+	85%  { transform: translateY(0) scaleX(1.05) scaleY(.96);
+	       animation-timing-function: cubic-bezier(.2, .75, .4, 1); }
+	93%  { transform: translateY(-14px) scale(1);
+	       animation-timing-function: cubic-bezier(.5, 0, .7, .6); }
+	100% { transform: translateY(0) scale(1); }
+}
+.amfc-en-stat-card--integrity.is-inview .coin {
+	animation: amfc-ksp-coin-drop 1500ms linear both;
+	animation-delay: 120ms;
+}
+
+@keyframes amfc-ksp-ray-pop {
+	0%, 54% { opacity: 0; transform: scale(.25); }
+	66%     { opacity: 1; transform: scale(1.2); }
+	78%     { transform: scale(.94); }
+	100%    { opacity: 1; transform: scale(1); }
+}
+.amfc-en-stat-card--integrity.is-inview .ray {
+	animation: amfc-ksp-ray-pop 1500ms cubic-bezier(.3, .8, .4, 1) both;
+	animation-delay: 120ms;
+}
+
+@keyframes amfc-ksp-gleam {
+	0%, 56%  { opacity: 0; transform: translateX(-70px); }
+	61%      { opacity: .8; }
+	84%, 100% { opacity: 0; transform: translateX(70px); }
+}
+.amfc-en-stat-card--integrity.is-inview .gleam {
+	animation: amfc-ksp-gleam 1500ms cubic-bezier(.35, .1, .3, 1) both;
+	animation-delay: 120ms;
+}
+.amfc-en-stat-card--integrity.is-inview .gleam-b {
+	animation-delay: 190ms;
+	opacity: .5;
+}
+
+@keyframes amfc-ksp-twinkle {
+	0%, 58% { opacity: 0;   transform: scale(0) rotate(-45deg); }
+	70%     { opacity: 1;   transform: scale(1.15) rotate(0deg); }
+	82%     { opacity: .85; transform: scale(.9) rotate(6deg); }
+	100%    { opacity: 0;   transform: scale(.5) rotate(10deg); }
+}
+.amfc-en-stat-card--integrity.is-inview .tw {
+	animation: amfc-ksp-twinkle 1500ms ease-out both;
+	animation-delay: calc(120ms + var(--t) * 70ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	@keyframes amfc-ksp-fade-only {
+		from { opacity: 0; }
+		to   { opacity: 1; }
+	}
+
+	.amfc-en-stat-card--integrity.is-inview .amfc-en-stat-card__icon,
+	.amfc-en-stat-card--integrity.is-inview .coin,
+	.amfc-en-stat-card--integrity.is-inview .ray {
+		animation: amfc-ksp-fade-only 200ms linear both !important;
+		animation-delay: 0ms !important;
+	}
+	.amfc-en-stat-card--integrity.is-inview .gleam,
+	.amfc-en-stat-card--integrity.is-inview .tw {
+		animation: none !important;
+		opacity: 0 !important;
+	}
+}
+
 /* --- Parent company (Funds Inc.) --- */
 .amfc-en-funds {
 	background: #fff;

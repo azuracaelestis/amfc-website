@@ -94,7 +94,11 @@
 						<span class="amfc-en-stat-card__label">Intelligent Risk Management</span>
 					</div>
 					<div class="amfc-en-stat-card amfc-en-stat-card--integrity">
-						<img src="<?= e(asset('images/en/principle-integrity.svg')) ?>" alt="" aria-hidden="true" width="144" height="144" />
+						<!-- Inline SVG (not <img>), unlike the other three cards -- this is the only icon
+						     whose internal paths get animated (coin-drop on scroll into view), and an
+						     <img src="...svg"> can't expose its internals to CSS/JS. See amfc-en.css's
+						     "KSP Integrity" block and amfc-2026.js's initKspIntegrityCoinDrop(). -->
+						<span class="amfc-en-stat-card__icon" aria-hidden="true"><?= svg_inline('images/en/principle-integrity.svg') ?></span>
 						<span class="amfc-en-stat-card__badge">Integrity</span>
 						<span class="amfc-en-stat-card__number">NT$20 Billion+</span>
 						<span class="amfc-en-stat-card__label">Assets Under Management</span>

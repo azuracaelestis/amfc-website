@@ -26,6 +26,16 @@ function asset(string $path): string
     return 'assets/' . $path . '?v=' . $version;
 }
 
+// Reads a local SVG asset's raw markup for inlining directly into the page (rather than
+// referencing it via <img src>) -- needed when a page must target/animate the SVG's own
+// internal elements, which an <img> can never expose. Trusted, locally-committed assets only;
+// callers must echo the result unescaped.
+function svg_inline(string $path): string
+{
+    $full = __DIR__ . '/../public/assets/' . $path;
+    return file_exists($full) ? file_get_contents($full) : '';
+}
+
 function partial(string $path, array $vars = []): void
 {
     extract($vars);
