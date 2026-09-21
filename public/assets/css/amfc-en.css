@@ -663,6 +663,13 @@ body.theme-en [tabindex]:focus-visible {
 	margin-bottom: 16px;
 }
 
+/* Efficiency's icon reads small next to the others -- another +10% on top of the 151.2px
+   base, per feedback ("now seems super small"). */
+.amfc-en-stat-card--efficiency img {
+	width: clamp(110.88px, calc(166.32 / 1440 * 100vw), 166.32px);
+	height: clamp(110.88px, calc(166.32 / 1440 * 100vw), 166.32px);
+}
+
 .amfc-en-stat-card__badge {
 	display: inline-flex;
 	background: var(--amfc-en-gold);
