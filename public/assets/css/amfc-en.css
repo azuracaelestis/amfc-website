@@ -652,9 +652,12 @@ body.theme-en [tabindex]:focus-visible {
 /* 230x144px at the 1440px reference, per feedback, fluid-scaled below it like this file's other
    desktop-reference sizing. object-fit: contain — the source assets are square (200x200), so
    this letterboxes them within the wider 230x144 box rather than stretching/distorting them. */
+/* Square box (was 230x144) to match the new SVG icons' own square viewBox -- the old
+   non-square box would letterbox them via object-fit:contain, same bug seen on the Our
+   Product cards' images earlier. */
 .amfc-en-stat-card img {
-	width: clamp(140px, calc(230 / 1440 * 100vw), 230px);
-	height: clamp(88px, calc(144 / 1440 * 100vw), 144px);
+	width: clamp(96px, calc(144 / 1440 * 100vw), 144px);
+	height: clamp(96px, calc(144 / 1440 * 100vw), 144px);
 	object-fit: contain;
 	margin-bottom: 16px;
 }

@@ -82,25 +82,25 @@
 				     use the zh-Hant-TW KSP set's own tilt pattern instead. -->
 				<div class="amfc-en-principles__stack">
 					<div class="amfc-en-stat-card amfc-en-stat-card--efficiency">
-						<img src="<?= e(asset('images/en/principle-professionalism.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
+						<img src="<?= e(asset('images/en/principle-efficiency.svg')) ?>" alt="" aria-hidden="true" width="144" height="144" />
 						<span class="amfc-en-stat-card__badge">Efficiency</span>
 						<span class="amfc-en-stat-card__number">200,000+</span>
 						<span class="amfc-en-stat-card__label">Customers Served</span>
 					</div>
 					<div class="amfc-en-stat-card amfc-en-stat-card--innovation">
-						<img src="<?= e(asset('images/en/principle-innovation.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
+						<img src="<?= e(asset('images/en/principle-innovation.svg')) ?>" alt="" aria-hidden="true" width="144" height="144" />
 						<span class="amfc-en-stat-card__badge">Innovation</span>
 						<span class="amfc-en-stat-card__number">AI-Powered</span>
 						<span class="amfc-en-stat-card__label">Intelligent Risk Management</span>
 					</div>
 					<div class="amfc-en-stat-card amfc-en-stat-card--integrity">
-						<img src="<?= e(asset('images/en/principle-integrity.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
+						<img src="<?= e(asset('images/en/principle-integrity.svg')) ?>" alt="" aria-hidden="true" width="144" height="144" />
 						<span class="amfc-en-stat-card__badge">Integrity</span>
 						<span class="amfc-en-stat-card__number">NT$20 Billion+</span>
 						<span class="amfc-en-stat-card__label">Assets Under Management</span>
 					</div>
 					<div class="amfc-en-stat-card amfc-en-stat-card--professionalism">
-						<img src="<?= e(asset('images/en/principle-financial-expertise.png')) ?>" alt="" aria-hidden="true" width="230" height="144" />
+						<img src="<?= e(asset('images/en/principle-professionalism.svg')) ?>" alt="" aria-hidden="true" width="144" height="144" />
 						<span class="amfc-en-stat-card__badge">Professionalism</span>
 						<span class="amfc-en-stat-card__number">20+ years</span>
 						<span class="amfc-en-stat-card__label">Financial Expertise</span>
