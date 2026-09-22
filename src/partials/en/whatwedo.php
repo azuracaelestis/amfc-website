@@ -13,13 +13,13 @@
 		     no longer true here, so centering no longer reintroduces it. -->
 		<div class="row align-items-center g-5">
 			<div class="col-lg-6">
-				<div class="amfc-en-whatwedo__image-wrap">
+				<div class="amfc-en-whatwedo__image-wrap" data-aos="zoom-in">
 					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--1" src="<?= e(asset('images/en/whatwedo-illustration.svg')) ?>" alt="Illustration of financial technology dashboards and analytics" width="1536" height="1024" />
 					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--2" src="<?= e(asset('images/en/whatwedo-illustration-2.png')) ?>" alt="Illustration of cross-border financial collaboration and partnerships" width="1536" height="1024" />
 					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--3" src="<?= e(asset('images/en/whatwedo-illustration-3.svg')) ?>" alt="Illustration of risk management and compliance governance" width="1536" height="1024" />
 				</div>
 			</div>
-			<div class="col-lg-6">
+			<div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
 				<p class="amfc-en-eyebrow">What We Do</p>
 				<h2 class="amfc-en-whatwedo__heading mt-3 mb-3">Financial Solutions Built for a Changing Asia</h2>
 				<p class="mb-4">Empowering Asian markets with AI-driven, compliant financial technology for individuals and enterprises.</p>

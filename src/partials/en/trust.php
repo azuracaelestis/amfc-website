@@ -9,7 +9,7 @@
 		     content makes the 64px gap real, and matches the source Figma node, which is itself
 		     a flex row with gap-[64px], not a half/half grid. -->
 		<div class="amfc-en-trust__layout">
-			<div class="amfc-en-trust__badges">
+			<div class="amfc-en-trust__badges" data-aos="fade-right">
 				<!-- The two rows are explicit now rather than relying on flex-wrap inside a
 				     fixed-width column — once this block shrinks to its content, all three
 				     badges would otherwise fit on one line and the wrap would disappear. -->
@@ -19,7 +19,7 @@
 				</div>
 				<img class="amfc-en-trust__badges-swiss" src="<?= e(asset('images/en/badge-swiss.png')) ?>" alt="Strategic Swiss Wealth Securities Investment Consulting Co. LTD partnership badge" width="950" height="200" />
 			</div>
-			<div class="amfc-en-trust__copy">
+			<div class="amfc-en-trust__copy" data-aos="fade-left" data-aos-delay="100">
 				<!-- Explicit line break, matching the source Figma node exactly (two separate
 				     <p> lines inside one bold 32px block, not one naturally-wrapping string). -->
 				<p class="amfc-en-trust__heading">Institutional trust meets<br aria-hidden="true" />AI-driven financial solutions</p>
