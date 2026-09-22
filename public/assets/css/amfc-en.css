@@ -919,6 +919,50 @@ body.theme-en [tabindex]:focus-visible {
 	}
 }
 
+/* --- KSP Professionalism card: sequential "calculating" button press, scroll-triggered ---
+   Same settled-in-stack trigger as the other three cards (initKspSettledAnimations() in
+   amfc-2026.js). Inlined the SVG (same reasoning as Integrity/Efficiency) -- it turned out to
+   already be a genuinely detailed calculator: 12 number keys in a 3x4 grid, 2 operator keys in
+   a side column, and a taller gold "=" key spanning the bottom two rows (all tagged .calc-key,
+   the gold one also .calc-key--equals, in principle-professionalism.svg). Each key presses in
+   a snake-order sequence (row 1 left-to-right, row 2 right-to-left, etc., via each key's own
+   --i custom property) like someone typing a calculation, finishing with the gold "=" key
+   pressing harder and glowing -- tells a small "precision, calculation, expertise" story
+   fitting this card's theme, same spirit as Efficiency's staggered people and Integrity's coin. */
+@keyframes amfc-ksp-key-press {
+	0%   { transform: scale(1); }
+	40%  { transform: scale(.82); }
+	70%  { transform: scale(1.04); }
+	100% { transform: scale(1); }
+}
+.amfc-en-stat-card--professionalism .calc-key {
+	transform-box: fill-box;
+	transform-origin: center;
+}
+.amfc-en-stat-card--professionalism.is-inview .calc-key {
+	animation: amfc-ksp-key-press 220ms ease-in-out both;
+	animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+@keyframes amfc-ksp-equals-press {
+	0%   { transform: scale(1);     filter: brightness(1); }
+	35%  { transform: scale(.85);   filter: brightness(1); }
+	55%  { transform: scale(1.08);  filter: brightness(1.35); }
+	80%  { transform: scale(.98);   filter: brightness(1.15); }
+	100% { transform: scale(1);     filter: brightness(1); }
+}
+.amfc-en-stat-card--professionalism.is-inview .calc-key--equals {
+	animation: amfc-ksp-equals-press 500ms ease-out both;
+	/* Starts right after the last number/operator key (14 keys * 55ms + that key's own 220ms). */
+	animation-delay: 970ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-stat-card--professionalism.is-inview .calc-key {
+		animation: none !important;
+	}
+}
+
 /* --- Parent company (Funds Inc.) --- */
 .amfc-en-funds {
 	background: #fff;

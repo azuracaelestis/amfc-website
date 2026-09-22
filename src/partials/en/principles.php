@@ -108,7 +108,11 @@
 						<span class="amfc-en-stat-card__label">Assets Under Management</span>
 					</div>
 					<div class="amfc-en-stat-card amfc-en-stat-card--professionalism">
-						<img src="<?= e(asset('images/en/principle-professionalism.svg')) ?>" alt="" aria-hidden="true" width="144" height="144" />
+						<!-- Inline SVG (not <img>), same reasoning as Integrity/Efficiency -- the
+						     sequential "calculating" button-press animates each key's own path
+						     independently, which an <img src="...svg"> can't expose. See amfc-en.css's
+						     "KSP Professionalism" block and amfc-2026.js's initKspSettledAnimations(). -->
+						<span class="amfc-en-stat-card__icon" aria-hidden="true"><?= svg_inline('images/en/principle-professionalism.svg') ?></span>
 						<span class="amfc-en-stat-card__badge">Professionalism</span>
 						<span class="amfc-en-stat-card__number">20+ years</span>
 						<span class="amfc-en-stat-card__label">Financial Expertise</span>
