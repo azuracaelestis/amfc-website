@@ -577,7 +577,8 @@ body.theme-en [tabindex]:focus-visible {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	/* 24px per feedback (was 20px). */
+	gap: 24px;
 }
 
 /* Provides the scroll runway for the last card to release before the next section begins — a
