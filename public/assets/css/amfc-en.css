@@ -877,6 +877,10 @@ body.theme-en [tabindex]:focus-visible {
 	position: relative;
 	width: 100%;
 	aspect-ratio: 4096 / 2731;
+	/* 10% enlarge per feedback -- scaling the whole wrap (not each image) keeps all three
+	   swapped images enlarged identically and centered, since scale()'s default transform-origin
+	   is 50% 50%. */
+	transform: scale(1.1);
 }
 
 /* Three images stacked in the same box, cross-faded via opacity depending on which accordion
