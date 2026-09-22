@@ -597,6 +597,13 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-stat-card {
 	position: sticky;
 	top: var(--amfc-en-stack-top);
+	/* Driven by initKspStackFade() (amfc-2026.js) -- dissolves each card in as it rises to
+	   settle in the stack, per feedback. Defaults to 1 (fully visible) so this degrades
+	   correctly without JS or under reduced motion -- neither ever sets the custom property,
+	   so there's no hidden base state to reconcile. The empty placeholder card never gets this
+	   property set either (it's excluded in JS, since it's the resting state, not something
+	   that rises into view), so it also just falls back to the same default 1. */
+	opacity: var(--amfc-en-card-fade, 1);
 	/* 404.89x404.89px at the 1440px reference, per feedback (matches the source Figma node's
 	   own size exactly) — aspect-ratio:1 keeps it square as the fluid width scales down. */
 	width: clamp(220px, calc(404.89 / 1440 * 100vw), 404.89px);
@@ -622,6 +629,13 @@ body.theme-en [tabindex]:focus-visible {
 .amfc-en-principles__stack .amfc-en-stat-card:nth-child(2) { z-index: 2; }
 .amfc-en-principles__stack .amfc-en-stat-card:nth-child(3) { z-index: 3; }
 .amfc-en-principles__stack .amfc-en-stat-card:nth-child(4) { z-index: 4; }
+.amfc-en-principles__stack .amfc-en-stat-card:nth-child(5) { z-index: 5; }
+
+/* Empty placeholder card (see principles.php) -- plain white, no tilt, deliberately neutral so
+   it reads as "not yet populated" next to the four tilted, colored principle cards. */
+.amfc-en-stat-card--empty {
+	background: #fff;
+}
 
 /* Per-card tilt and background — each card's own identity, not its position in the stack (see
    the :nth-child rules above for that). Matches each card's own Figma node: Efficiency/Integrity

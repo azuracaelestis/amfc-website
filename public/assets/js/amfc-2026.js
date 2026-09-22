@@ -405,6 +405,52 @@ window.AMFC = (function () {
 		});
 	}
 
+	/* Dissolves each KSP card in as it rises to settle in the stack, per feedback ("the section
+	   starts from empty card and the first will goes up when the user scroll... each card has
+	   the effect of dissolve and appear when goes up"). The empty placeholder card
+	   (.amfc-en-stat-card--empty, see principles.php) is deliberately excluded -- it's the
+	   resting state visible before any scrolling, not something that rises into view itself.
+
+	   Continuous and scroll-scrubbed, same rAF-throttled skeleton as
+	   initPhilosophyWatermarkFade() above, driving a per-card --amfc-en-card-fade custom
+	   property that amfc-en.css turns into opacity (default 1, so this degrades correctly
+	   without JS or under reduced motion -- neither ever sets the property, so there's no
+	   hidden base state to reconcile, unlike a class-toggle approach would need). Bidirectional
+	   by construction: scrolling back up naturally un-settles a card and fades it back out,
+	   since the value is recomputed from live scroll position every frame rather than fired
+	   once like the icon flourishes in initKspSettledAnimations() below -- intentional, since
+	   this is meant to track the physical rising motion itself, not mark a one-time arrival. */
+	function initKspStackFade() {
+		var cards = document.querySelectorAll(
+			'.amfc-en-principles__stack .amfc-en-stat-card:not(.amfc-en-stat-card--empty)'
+		);
+		if (!cards.length) return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		var FADE_DISTANCE = 200; // px of scroll the dissolve happens over, before the card settles
+		var ticking = false;
+
+		function onScroll() {
+			cards.forEach(function (card) {
+				var stickyTop = parseFloat(getComputedStyle(card).top) || 0;
+				var clearance = card.getBoundingClientRect().top - stickyTop;
+				var fade = 1 - clearance / FADE_DISTANCE;
+				fade = Math.max(0, Math.min(1, fade));
+				card.style.setProperty('--amfc-en-card-fade', fade);
+			});
+			ticking = false;
+		}
+
+		window.addEventListener('scroll', function () {
+			if (!ticking) {
+				window.requestAnimationFrame(onScroll);
+				ticking = true;
+			}
+		}, { passive: true });
+
+		onScroll(); // set initial values -- don't wait for the first scroll event
+	}
+
 	/* Triggers the KSP Efficiency (staggered person entrance), Integrity (coin-drop), and
 	   Innovation (icon pop-in) card animations once each card has actually SETTLED into its
 	   pinned spot in the scroll-stack -- not merely
@@ -471,6 +517,7 @@ window.AMFC = (function () {
 		initServiceCardTouchDelight();
 		initNewsCardTouchAffordance();
 		initLangToggle();
+		initKspStackFade();
 		initKspSettledAnimations();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
