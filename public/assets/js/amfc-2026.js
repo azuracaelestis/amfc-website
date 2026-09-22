@@ -405,27 +405,60 @@ window.AMFC = (function () {
 		});
 	}
 
-	/* Shared by the English homepage's KSP Integrity (coin-drop) and Innovation (icon wiggle)
-	   cards: observe `selector`, add "is-inview" once the element crosses `threshold`
-	   visibility, then stop watching. querySelector returns null on the zh-Hant-TW homepage (no
-	   such classes there), so this is safely cross-page-inert like every other init above. Both
-	   effects are purely CSS-driven (see amfc-en.css's "KSP Integrity"/"KSP Innovation" blocks)
-	   -- unlike initPhilosophyStat1Reveal there's no JS-side final state to set (no count-up),
-	   so neither needs its own reduced-motion branch; that swap is handled entirely by
-	   amfc-en.css's own prefers-reduced-motion rules, gated on this same .is-inview class. */
-	function initOnceInView(selector, threshold) {
-		var el = document.querySelector(selector);
-		if (!el || !('IntersectionObserver' in window)) return;
+	/* Triggers the KSP Integrity (coin-drop) and Innovation (icon pop-in) card animations once
+	   each card has actually SETTLED into its pinned spot in the scroll-stack -- not merely
+	   once it's 25% visible (an IntersectionObserver threshold, used here originally, fires
+	   while the card is still scrolling up INTO its pinned position, so the animation used to
+	   start mid-scroll instead of once the card had arrived, per feedback).
 
-		var observer = new IntersectionObserver(function (entries, obs) {
-			entries.forEach(function (entry) {
-				if (!entry.isIntersecting) return;
-				entry.target.classList.add('is-inview');
-				obs.unobserve(entry.target); // play once, not on every scroll pass
+	   All the stat cards share the same position:sticky `top` offset (see
+	   .amfc-en-stat-card's own `top: var(--amfc-en-stack-top)` in amfc-en.css), so "settled"
+	   has a precise, checkable meaning: a sticky element's `top` CSS property is a fixed pixel
+	   offset (resolved by getComputedStyle regardless of custom-property/clamp() indirection --
+	   verified: it returns e.g. "160px", not the unresolved var()/clamp() expression), and the
+	   element's live getBoundingClientRect().top can only approach that offset from above while
+	   still in normal flow, then holds exactly at it once stuck. So the first scroll frame
+	   where rect.top <= that offset IS the moment it becomes pinned.
+
+	   querySelector returns null on the zh-Hant-TW homepage (no such classes there), so this is
+	   safely cross-page-inert like every other init above. Both effects stay purely CSS-driven
+	   (see amfc-en.css's "KSP Integrity"/"KSP Innovation" blocks) -- this only decides WHEN to
+	   add .is-inview, same as the reduced-motion swap did before, that's still handled entirely
+	   by amfc-en.css's own prefers-reduced-motion rules. */
+	function initKspSettledAnimations() {
+		var pending = ['.amfc-en-stat-card--integrity', '.amfc-en-stat-card--innovation']
+			.map(function (selector) { return document.querySelector(selector); })
+			.filter(Boolean);
+		if (!pending.length) return;
+
+		function checkAll() {
+			pending = pending.filter(function (el) {
+				var stickyTop = parseFloat(getComputedStyle(el).top) || 0;
+				var isSettled = el.getBoundingClientRect().top <= stickyTop + 1; // +1: subpixel rounding
+				if (isSettled) el.classList.add('is-inview');
+				return !isSettled;
 			});
-		}, { threshold: threshold });
+			if (!pending.length) {
+				window.removeEventListener('scroll', onScroll);
+				window.removeEventListener('resize', onScroll);
+			}
+		}
 
-		observer.observe(el);
+		var ticking = false;
+		function onScroll() {
+			if (ticking) return;
+			ticking = true;
+			window.requestAnimationFrame(function () {
+				checkAll();
+				ticking = false;
+			});
+		}
+
+		checkAll(); // covers a page load that's already mid-scroll (deep link, reload, back/forward)
+		if (pending.length) {
+			window.addEventListener('scroll', onScroll, { passive: true });
+			window.addEventListener('resize', onScroll);
+		}
 	}
 
 	function init() {
@@ -437,8 +470,7 @@ window.AMFC = (function () {
 		initServiceCardTouchDelight();
 		initNewsCardTouchAffordance();
 		initLangToggle();
-		initOnceInView('.amfc-en-stat-card--integrity', 0.25);
-		initOnceInView('.amfc-en-stat-card--innovation', 0.25);
+		initKspSettledAnimations();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}
