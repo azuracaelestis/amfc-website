@@ -824,23 +824,24 @@ body.theme-en [tabindex]:focus-visible {
 	}
 }
 
-/* --- KSP Innovation card: icon wiggles left/right once, scroll-triggered ---
+/* --- KSP Innovation card: icon swings gently left/right once, scroll-triggered ---
    Same trigger pattern as the Integrity coin-drop (IntersectionObserver, once, via
-   initKspInnovationWiggle() in amfc-2026.js) but simpler: the whole <img> wiggles as one
-   unit, no inline SVG/sub-element targeting needed. Damped side-to-side rock, settling back
-   to rest. transform-only, per this project's animation convention. */
-@keyframes amfc-ksp-wiggle {
-	0%   { transform: translateX(0) rotate(0deg); }
-	15%  { transform: translateX(-8px) rotate(-6deg); }
-	30%  { transform: translateX(7px) rotate(5deg); }
-	45%  { transform: translateX(-6px) rotate(-4deg); }
-	60%  { transform: translateX(5px) rotate(3deg); }
-	75%  { transform: translateX(-3px) rotate(-2deg); }
-	90%  { transform: translateX(2px) rotate(1deg); }
-	100% { transform: translateX(0) rotate(0deg); }
+   initOnceInView() in amfc-2026.js) but simpler: the whole <img> swings as one unit, no
+   inline SVG/sub-element targeting needed. A slow, light pendulum swing (was a quick
+   side-to-side shake, per feedback: "not supposed to be wiggle... swing lightly and slower")
+   -- pure rotation, pivoting from the top edge like it's hanging, damped down to rest.
+   transform-only, per this project's animation convention. */
+@keyframes amfc-ksp-swing {
+	0%   { transform: rotate(0deg); }
+	20%  { transform: rotate(-7deg); }
+	40%  { transform: rotate(5deg); }
+	60%  { transform: rotate(-3deg); }
+	80%  { transform: rotate(1.5deg); }
+	100% { transform: rotate(0deg); }
 }
 .amfc-en-stat-card--innovation.is-inview img {
-	animation: amfc-ksp-wiggle 900ms ease-in-out both;
+	transform-origin: top center;
+	animation: amfc-ksp-swing 2200ms ease-in-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {
