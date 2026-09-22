@@ -1116,6 +1116,50 @@ body.theme-en [tabindex]:focus-visible {
 	transition: opacity 0.3s ease;
 }
 
+/* image--1 is inline SVG (not <img>), so object-fit above has nothing to act on -- the SVG's
+   own viewBox + default preserveAspectRatio (xMidYMid meet) does the same letterboxed "contain"
+   scaling once it's told to fill this 100%/100% box itself. */
+.amfc-en-whatwedo__image--1 svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+/* Slow, subtle, always-looping drift on the three floating UI cards inside the inlined
+   illustration (growth-graph card, shield/compliance card, pie-chart badge) -- reads as "alive"
+   rather than "animating" because the amplitude is small and each card's cycle length/offset is
+   different, so they never move in sync. transform-box: fill-box lets each <g> rotate/translate
+   around its own visual center without needing to hand-measure its coordinates in the 1536x1024
+   viewBox. Negative animation-delay starts each card mid-cycle immediately on load rather than
+   all three visibly launching from the same rest position together. */
+.wwd-float {
+	transform-box: fill-box;
+	transform-origin: center;
+}
+@keyframes amfc-wwd-float-graph {
+	0%, 100% { transform: translateY(0) rotate(0deg); }
+	50% { transform: translateY(-9px) rotate(-0.6deg); }
+}
+@keyframes amfc-wwd-float-shield {
+	0%, 100% { transform: translateY(0) rotate(0deg); }
+	50% { transform: translateY(7px) rotate(0.8deg); }
+}
+@keyframes amfc-wwd-float-pie {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(-6px); }
+}
+.wwd-float--graph { animation: amfc-wwd-float-graph 6.5s ease-in-out infinite; animation-delay: -1.2s; }
+.wwd-float--shield { animation: amfc-wwd-float-shield 5.5s ease-in-out infinite; animation-delay: -3.4s; }
+.wwd-float--pie { animation: amfc-wwd-float-pie 5s ease-in-out infinite; animation-delay: -2.1s; }
+
+@media (prefers-reduced-motion: reduce) {
+	.wwd-float--graph,
+	.wwd-float--shield,
+	.wwd-float--pie {
+		animation: none;
+	}
+}
+
 /* #amfcEnWwd1 already carries the "show" class by default in the markup (that panel starts
    open), so this alone is enough to make image--1 the default visible one — no separate
    unconditional opacity:1 rule needed. :has() is scoped to .row (the shared ancestor of both
