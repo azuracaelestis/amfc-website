@@ -405,16 +405,17 @@ window.AMFC = (function () {
 		});
 	}
 
-	/* English homepage's KSP Integrity card only: coin-drop entrance, once, on scroll into
-	   view. querySelector returns null on the zh-Hant-TW homepage (no such class there), so
-	   this is safely cross-page-inert like every other init above. Purely CSS-driven (see the
-	   "KSP Integrity" block in amfc-en.css) -- unlike initPhilosophyStat1Reveal there's no
-	   JS-side final state to set (no count-up), so this doesn't need its own reduced-motion
-	   branch; that swap is handled entirely by amfc-en.css's own
-	   prefers-reduced-motion block, gated on this same .is-inview class. */
-	function initKspIntegrityCoinDrop() {
-		var card = document.querySelector('.amfc-en-stat-card--integrity');
-		if (!card || !('IntersectionObserver' in window)) return;
+	/* Shared by the English homepage's KSP Integrity (coin-drop) and Innovation (icon wiggle)
+	   cards: observe `selector`, add "is-inview" once the element crosses `threshold`
+	   visibility, then stop watching. querySelector returns null on the zh-Hant-TW homepage (no
+	   such classes there), so this is safely cross-page-inert like every other init above. Both
+	   effects are purely CSS-driven (see amfc-en.css's "KSP Integrity"/"KSP Innovation" blocks)
+	   -- unlike initPhilosophyStat1Reveal there's no JS-side final state to set (no count-up),
+	   so neither needs its own reduced-motion branch; that swap is handled entirely by
+	   amfc-en.css's own prefers-reduced-motion rules, gated on this same .is-inview class. */
+	function initOnceInView(selector, threshold) {
+		var el = document.querySelector(selector);
+		if (!el || !('IntersectionObserver' in window)) return;
 
 		var observer = new IntersectionObserver(function (entries, obs) {
 			entries.forEach(function (entry) {
@@ -422,9 +423,9 @@ window.AMFC = (function () {
 				entry.target.classList.add('is-inview');
 				obs.unobserve(entry.target); // play once, not on every scroll pass
 			});
-		}, { threshold: 0.25 });
+		}, { threshold: threshold });
 
-		observer.observe(card);
+		observer.observe(el);
 	}
 
 	function init() {
@@ -436,7 +437,8 @@ window.AMFC = (function () {
 		initServiceCardTouchDelight();
 		initNewsCardTouchAffordance();
 		initLangToggle();
-		initKspIntegrityCoinDrop();
+		initOnceInView('.amfc-en-stat-card--integrity', 0.25);
+		initOnceInView('.amfc-en-stat-card--innovation', 0.25);
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

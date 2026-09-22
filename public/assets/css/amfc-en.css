@@ -823,6 +823,31 @@ body.theme-en [tabindex]:focus-visible {
 	}
 }
 
+/* --- KSP Innovation card: icon wiggles left/right once, scroll-triggered ---
+   Same trigger pattern as the Integrity coin-drop (IntersectionObserver, once, via
+   initKspInnovationWiggle() in amfc-2026.js) but simpler: the whole <img> wiggles as one
+   unit, no inline SVG/sub-element targeting needed. Damped side-to-side rock, settling back
+   to rest. transform-only, per this project's animation convention. */
+@keyframes amfc-ksp-wiggle {
+	0%   { transform: translateX(0) rotate(0deg); }
+	15%  { transform: translateX(-8px) rotate(-6deg); }
+	30%  { transform: translateX(7px) rotate(5deg); }
+	45%  { transform: translateX(-6px) rotate(-4deg); }
+	60%  { transform: translateX(5px) rotate(3deg); }
+	75%  { transform: translateX(-3px) rotate(-2deg); }
+	90%  { transform: translateX(2px) rotate(1deg); }
+	100% { transform: translateX(0) rotate(0deg); }
+}
+.amfc-en-stat-card--innovation.is-inview img {
+	animation: amfc-ksp-wiggle 900ms ease-in-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-stat-card--innovation.is-inview img {
+		animation: none !important;
+	}
+}
+
 /* --- Parent company (Funds Inc.) --- */
 .amfc-en-funds {
 	background: #fff;
