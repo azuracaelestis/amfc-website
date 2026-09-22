@@ -919,46 +919,28 @@ body.theme-en [tabindex]:focus-visible {
 	}
 }
 
-/* --- KSP Professionalism card: sequential "calculating" button press, scroll-triggered ---
+/* --- KSP Professionalism card: calculator icon tilts in like it's being picked up ---
    Same settled-in-stack trigger as the other three cards (initKspSettledAnimations() in
-   amfc-2026.js). Inlined the SVG (same reasoning as Integrity/Efficiency) -- it turned out to
-   already be a genuinely detailed calculator: 12 number keys in a 3x4 grid, 2 operator keys in
-   a side column, and a taller gold "=" key spanning the bottom two rows (all tagged .calc-key,
-   the gold one also .calc-key--equals, in principle-professionalism.svg). Each key presses in
-   a snake-order sequence (row 1 left-to-right, row 2 right-to-left, etc., via each key's own
-   --i custom property) like someone typing a calculation, finishing with the gold "=" key
-   pressing harder and glowing -- tells a small "precision, calculation, expertise" story
-   fitting this card's theme, same spirit as Efficiency's staggered people and Integrity's coin. */
-@keyframes amfc-ksp-key-press {
-	0%   { transform: scale(1); }
-	40%  { transform: scale(.82); }
-	70%  { transform: scale(1.04); }
-	100% { transform: scale(1); }
+   amfc-2026.js). Second iteration -- a per-key "calculating" button-press sequence (see git
+   history) turned out too small/subtle inside a ~150px icon to actually notice, per feedback.
+   Replaced with one bold, whole-icon motion instead: back to a plain <img> (no inline SVG
+   needed once nothing inside it animates independently), starting rotated and slightly small
+   as if being lifted off a surface, swinging past level with a little overshoot, then settling
+   flat -- a rotation this size would look physically wrong on a symmetric badge-like icon (see
+   Innovation's own shield, which is why that one is scale-only), but reads naturally here since
+   a rectangular handheld device visibly HAS an edge to tilt from. */
+@keyframes amfc-ksp-calc-tilt {
+	0%   { transform: rotate(-14deg) scale(.9) translateY(10px); }
+	55%  { transform: rotate(3deg) scale(1.04) translateY(-2px); }
+	78%  { transform: rotate(-1.5deg) scale(.99) translateY(0); }
+	100% { transform: rotate(0deg) scale(1) translateY(0); }
 }
-.amfc-en-stat-card--professionalism .calc-key {
-	transform-box: fill-box;
-	transform-origin: center;
-}
-.amfc-en-stat-card--professionalism.is-inview .calc-key {
-	animation: amfc-ksp-key-press 220ms ease-in-out both;
-	animation-delay: calc(var(--i, 0) * 55ms);
-}
-
-@keyframes amfc-ksp-equals-press {
-	0%   { transform: scale(1);     filter: brightness(1); }
-	35%  { transform: scale(.85);   filter: brightness(1); }
-	55%  { transform: scale(1.08);  filter: brightness(1.35); }
-	80%  { transform: scale(.98);   filter: brightness(1.15); }
-	100% { transform: scale(1);     filter: brightness(1); }
-}
-.amfc-en-stat-card--professionalism.is-inview .calc-key--equals {
-	animation: amfc-ksp-equals-press 500ms ease-out both;
-	/* Starts right after the last number/operator key (14 keys * 55ms + that key's own 220ms). */
-	animation-delay: 970ms;
+.amfc-en-stat-card--professionalism.is-inview img {
+	animation: amfc-ksp-calc-tilt 700ms ease-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.amfc-en-stat-card--professionalism.is-inview .calc-key {
+	.amfc-en-stat-card--professionalism.is-inview img {
 		animation: none !important;
 	}
 }
