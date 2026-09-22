@@ -1145,7 +1145,7 @@ body.theme-en [tabindex]:focus-visible {
 }
 
 @keyframes amfc-wwd-card-appear {
-	from { opacity: 0; transform: translateY(20px) scale(0.92); }
+	from { opacity: 0; transform: translateY(28px) scale(0.9); }
 	to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes amfc-wwd-float-graph {
@@ -1162,19 +1162,29 @@ body.theme-en [tabindex]:focus-visible {
 }
 
 /* Appear order: graph, then shield, then pie -- each card's float loop kicks in right as its
-   own entrance settles (delay = that card's entrance delay + entrance duration). */
-.is-inview .wwd-card--graph { animation: amfc-wwd-card-appear 550ms cubic-bezier(.22,1,.36,1) both; animation-delay: 0ms; }
-.is-inview .wwd-card--shield { animation: amfc-wwd-card-appear 550ms cubic-bezier(.22,1,.36,1) both; animation-delay: 280ms; }
-.is-inview .wwd-card--pie { animation: amfc-wwd-card-appear 550ms cubic-bezier(.22,1,.36,1) both; animation-delay: 560ms; }
+   own entrance settles (delay = that card's entrance delay + entrance duration). Durations/
+   stagger are deliberately generous (not just "slow enough to see once you're looking") because
+   the IntersectionObserver trigger (see initWwdCardReveal() in amfc-2026.js) fires the instant
+   half the graphic is visible, which during a normal scroll can still be *before* it's centered
+   in view -- a fast entrance was finishing before the user's eyes arrived, making the first two
+   cards look like they'd "always been floating" and only the last (most-delayed) one read as
+   an entrance. */
+.is-inview .wwd-card--graph { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 0ms; }
+.is-inview .wwd-card--shield { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 450ms; }
+.is-inview .wwd-card--pie { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 900ms; }
 
-.is-inview .wwd-float--graph { animation: amfc-wwd-float-graph 6.5s ease-in-out infinite; animation-delay: 550ms; }
-.is-inview .wwd-float--shield { animation: amfc-wwd-float-shield 5.5s ease-in-out infinite; animation-delay: 830ms; }
-.is-inview .wwd-float--pie { animation: amfc-wwd-float-pie 5s ease-in-out infinite; animation-delay: 1110ms; }
+.is-inview .wwd-float--graph { animation: amfc-wwd-float-graph 6.5s ease-in-out infinite; animation-delay: 750ms; }
+.is-inview .wwd-float--shield { animation: amfc-wwd-float-shield 5.5s ease-in-out infinite; animation-delay: 1200ms; }
+.is-inview .wwd-float--pie { animation: amfc-wwd-float-pie 5s ease-in-out infinite; animation-delay: 1650ms; }
 
 @media (prefers-reduced-motion: reduce) {
-	.wwd-card--graph,
-	.wwd-card--shield,
-	.wwd-card--pie {
+	/* Same specificity as ".is-inview .wwd-card--X" below (two classes each) -- reduced-motion
+	   JS adds .is-inview immediately, so without matching specificity here the entrance rule's
+	   still-running animation-delay/duration would win by specificity over this override despite
+	   appearing later in the file, leaving cards visibly mid-fade instead of instantly settled. */
+	.is-inview .wwd-card--graph,
+	.is-inview .wwd-card--shield,
+	.is-inview .wwd-card--pie {
 		animation: none;
 		opacity: 1;
 		transform: none;

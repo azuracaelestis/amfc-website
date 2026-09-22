@@ -556,7 +556,7 @@ window.AMFC = (function () {
 				entry.target.classList.add('is-inview');
 				obs.unobserve(entry.target);
 			});
-		}, { threshold: 0.3 });
+		}, { threshold: 0.5 });
 
 		observer.observe(wrap);
 	}
