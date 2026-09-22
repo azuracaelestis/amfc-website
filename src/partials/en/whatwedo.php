@@ -14,9 +14,9 @@
 		<div class="row align-items-center g-5">
 			<div class="col-lg-6">
 				<div class="amfc-en-whatwedo__image-wrap">
-					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--1" src="<?= e(asset('images/en/whatwedo-illustration.png')) ?>" alt="Illustration of financial technology dashboards and analytics" width="4096" height="2731" />
+					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--1" src="<?= e(asset('images/en/whatwedo-illustration.svg')) ?>" alt="Illustration of financial technology dashboards and analytics" width="1536" height="1024" />
 					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--2" src="<?= e(asset('images/en/whatwedo-illustration-2.png')) ?>" alt="Illustration of cross-border financial collaboration and partnerships" width="1536" height="1024" />
-					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--3" src="<?= e(asset('images/en/whatwedo-illustration-3.png')) ?>" alt="Illustration of risk management and compliance governance" width="1448" height="1086" />
+					<img class="amfc-en-whatwedo__image amfc-en-whatwedo__image--3" src="<?= e(asset('images/en/whatwedo-illustration-3.svg')) ?>" alt="Illustration of risk management and compliance governance" width="1536" height="1024" />
 				</div>
 			</div>
 			<div class="col-lg-6">
