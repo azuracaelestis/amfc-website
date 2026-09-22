@@ -405,11 +405,8 @@ window.AMFC = (function () {
 		});
 	}
 
-	/* Dissolves each KSP card in as it rises to settle in the stack, per feedback ("the section
-	   starts from empty card and the first will goes up when the user scroll... each card has
-	   the effect of dissolve and appear when goes up"). The empty placeholder card
-	   (.amfc-en-stat-card--empty, see principles.php) is deliberately excluded -- it's the
-	   resting state visible before any scrolling, not something that rises into view itself.
+	/* Dissolves each KSP card in as it rises to settle in the stack, per feedback ("each card
+	   has the effect of dissolve and appear when goes up").
 
 	   Continuous and scroll-scrubbed, same rAF-throttled skeleton as
 	   initPhilosophyWatermarkFade() above, driving a per-card --amfc-en-card-fade custom
@@ -421,9 +418,7 @@ window.AMFC = (function () {
 	   once like the icon flourishes in initKspSettledAnimations() below -- intentional, since
 	   this is meant to track the physical rising motion itself, not mark a one-time arrival. */
 	function initKspStackFade() {
-		var cards = document.querySelectorAll(
-			'.amfc-en-principles__stack .amfc-en-stat-card:not(.amfc-en-stat-card--empty)'
-		);
+		var cards = document.querySelectorAll('.amfc-en-principles__stack .amfc-en-stat-card');
 		if (!cards.length) return;
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 

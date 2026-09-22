@@ -81,14 +81,6 @@
 				     nodes 333:1315/333:1324) didn't specify a tilt angle themselves, so they
 				     use the zh-Hant-TW KSP set's own tilt pattern instead. -->
 				<div class="amfc-en-principles__stack">
-					<!-- Empty placeholder, per feedback ("the section starts from empty card and
-					     the first will goes up when the user scroll") -- this is what's visible at
-					     rest, before any scrolling into the stack; Efficiency (the actual first
-					     principle) rises and dissolves into view over it as the user scrolls, same
-					     as every other card rising over the one before it. No content/icon of its
-					     own, so it's aria-hidden and excluded from the stack fade-in JS below (it
-					     has nothing to fade FROM -- it's already the resting state). -->
-					<div class="amfc-en-stat-card amfc-en-stat-card--empty" aria-hidden="true"></div>
 					<div class="amfc-en-stat-card amfc-en-stat-card--efficiency">
 						<!-- Inline SVG (not <img>), same reasoning as the Integrity card -- the staggered
 						     three-person entrance animates each figure's own group independently, which
