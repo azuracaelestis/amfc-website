@@ -824,20 +824,26 @@ body.theme-en [tabindex]:focus-visible {
 	}
 }
 
-/* --- KSP Innovation card: icon pops in with a bounce once, scroll-triggered ---
-   Same trigger pattern as the Integrity coin-drop (IntersectionObserver, once, via
-   initOnceInView() in amfc-2026.js) but simpler: the whole <img> animates as one unit, no
-   inline SVG/sub-element targeting needed. Third iteration -- a shake, then a slow pendulum
-   swing, both read wrong for a symmetric shield icon (nothing about it visually suggests a
-   hinge to rotate from). Switched to a scale-only "pop" instead: no rotation at all, so
-   there's nothing to look physically implausible. The overshoot/settle bounce comes from the
-   easeOutBack cubic-bezier itself (scales past 1 then eases back), not manual keyframes. */
+/* --- KSP Innovation card: icon pulses with a bounce 3 times, scroll-triggered ---
+   Same trigger pattern as the Integrity coin-drop (settled-in-stack, via
+   initKspSettledAnimations() in amfc-2026.js) but simpler: the whole <img> animates as one
+   unit, no inline SVG/sub-element targeting needed. Third motion iteration -- a shake, then a
+   slow pendulum swing, both read wrong for a symmetric shield icon (nothing about it visually
+   suggests a hinge to rotate from). Scale-only "pop," no rotation, so nothing looks physically
+   implausible. Repeated 3x per feedback ("it only played once and the user missed it") -- the
+   keyframes now start AND end at rest (scale(1)), with the overshoot baked into the middle of
+   each cycle, so 3 repeats loop cleanly with no snap back to a smaller starting scale between
+   plays (the original single-play version went 0.85->1 via an easeOutBack curve, which would
+   have jumped back to 0.85 at the start of every repeat). */
 @keyframes amfc-ksp-pop-in {
-	from { transform: scale(0.85); }
-	to   { transform: scale(1); }
+	0%   { transform: scale(1); }
+	30%  { transform: scale(1.12); }
+	55%  { transform: scale(0.95); }
+	75%  { transform: scale(1.04); }
+	100% { transform: scale(1); }
 }
 .amfc-en-stat-card--innovation.is-inview img {
-	animation: amfc-ksp-pop-in 550ms cubic-bezier(.34, 1.56, .64, 1) both;
+	animation: amfc-ksp-pop-in 550ms ease-in-out 3;
 }
 
 @media (prefers-reduced-motion: reduce) {
