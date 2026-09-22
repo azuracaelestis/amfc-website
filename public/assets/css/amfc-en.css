@@ -287,6 +287,80 @@ body.theme-en [tabindex]:focus-visible {
 	border-radius: var(--amfc-en-radius-lg);
 }
 
+/* --- Hero entrance sequence, page-load (not scroll-triggered) --- Above the fold and always
+   visible at scrollY:0, so this plays automatically via CSS animation-delay -- no JS/observer
+   needed, unlike every scroll-stack effect elsewhere in this file. Six elements, staggered:
+   background glow blooms in first (the "stage" setting up), then bg-shape's flat color wash
+   fades in alongside it, then eyebrow rises in, then the headline (bigger rise, a beat later,
+   overlapping the eyebrow's own finish), then the photo settles into its already-calibrated
+   resting transform, and finally the brand stamp "stamps" down last as a capstone flourish
+   (rotated+oversized to start, drops into place with a small bounce). ~1.6s total.
+
+   animation-fill-mode: both on every rule -- "backwards" holds each element at its own 0%
+   keyframe state through its animation-delay (otherwise it would flash at its normal resting
+   style for that delay, then jump to the 0% state when the animation actually starts);
+   "forwards" (the other half of "both") is a no-op here since every 100% keyframe already
+   matches that element's own static resting CSS, listed in each comment below. */
+@keyframes amfc-en-hero-glow-bloom {
+	from { transform: translate(80px, 374px) scale(.85); opacity: 0; }
+	to   { transform: translate(80px, 374px) scale(1);   opacity: 1; } /* matches .amfc-en-hero__bg-glow's own static transform/opacity */
+}
+.amfc-en-hero__bg-glow {
+	animation: amfc-en-hero-glow-bloom 700ms ease-out both;
+}
+
+@keyframes amfc-en-hero-fade {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+.amfc-en-hero__bg-shape {
+	animation: amfc-en-hero-fade 350ms ease-out both;
+}
+
+@keyframes amfc-en-hero-rise {
+	from { opacity: 0; transform: translateY(16px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+.amfc-en-hero__eyebrow {
+	animation: amfc-en-hero-rise 450ms ease-out both;
+	animation-delay: 250ms;
+}
+.amfc-en-hero__headline {
+	animation: amfc-en-hero-rise 500ms ease-out both;
+	animation-delay: 450ms;
+}
+
+@keyframes amfc-en-hero-photo-settle {
+	from { opacity: 0; transform: translateY(160px) scale(1.55); }
+	to   { opacity: 1; transform: translateY(100px) scale(1.75); } /* matches .amfc-en-hero__photo-wrap's own static transform */
+}
+.amfc-en-hero__photo-wrap {
+	animation: amfc-en-hero-photo-settle 600ms ease-out both;
+	animation-delay: 600ms;
+}
+
+@keyframes amfc-en-hero-stamp-down {
+	0%   { opacity: 0; transform: rotate(-18deg) scale(1.3); }
+	60%  { opacity: 1; transform: rotate(4deg) scale(.95); }
+	80%  { transform: rotate(-2deg) scale(1.03); }
+	100% { transform: rotate(0deg) scale(1); } /* matches .amfc-en-hero__brand-stamp's own static (untransformed) rest state */
+}
+.amfc-en-hero__brand-stamp {
+	animation: amfc-en-hero-stamp-down 500ms ease-out both;
+	animation-delay: 1100ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-hero__bg-glow,
+	.amfc-en-hero__bg-shape,
+	.amfc-en-hero__eyebrow,
+	.amfc-en-hero__headline,
+	.amfc-en-hero__photo-wrap,
+	.amfc-en-hero__brand-stamp {
+		animation: none !important;
+	}
+}
+
 /* --- Trust / institutional strip --- */
 .amfc-en-trust {
 	/* 180px top / 90px bottom, per feedback. The extra top padding also absorbs this section's
