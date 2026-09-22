@@ -339,14 +339,25 @@ body.theme-en [tabindex]:focus-visible {
 	animation-delay: 600ms;
 }
 
-@keyframes amfc-en-hero-stamp-down {
-	0%   { opacity: 0; transform: rotate(-18deg) scale(1.3); }
-	60%  { opacity: 1; transform: rotate(4deg) scale(.95); }
-	80%  { transform: rotate(-2deg) scale(1.03); }
-	100% { transform: rotate(0deg) scale(1); } /* matches .amfc-en-hero__brand-stamp's own static (untransformed) rest state */
+/* Was a rotate+bounce "stamp drop" -- per feedback, replaced with a reveal that grows from the
+   top-left corner (where the script's own "For" sits) down toward the bottom-right (where
+   "Asia" and the underline sit), reading as the mark being written rather than dropped into
+   place. The stamp is a raster PNG with no vector path data, so a literal per-stroke SVG
+   draw-on (stroke-dasharray) isn't possible here.
+
+   clip-path: inset() rather than a mask-position sweep (tried first, see git history) --
+   inset()'s percentages are each edge's own distance from that edge, so `inset(0 0 0 0)` is
+   trivially "no clipping at all" and guarantees an exactly-correct, fully-visible end state.
+   The mask-position approach's start/end offsets had to be reasoned about through a confusing
+   background-position-style formula relative to an oversized mask-size, and got the end state
+   wrong (the mark stayed invisible instead of settling revealed) -- confirmed by testing five
+   different endpoint values directly, all still invisible, before abandoning it for this. */
+@keyframes amfc-en-hero-stamp-write {
+	from { clip-path: inset(0 100% 100% 0); }
+	to   { clip-path: inset(0 0 0 0); }
 }
 .amfc-en-hero__brand-stamp {
-	animation: amfc-en-hero-stamp-down 500ms ease-out both;
+	animation: amfc-en-hero-stamp-write 700ms ease-in-out both;
 	animation-delay: 1100ms;
 }
 
