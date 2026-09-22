@@ -665,8 +665,9 @@ body.theme-en [tabindex]:focus-visible {
 }
 
 /* Efficiency's icon reads small next to the others -- another +10% on top of the 151.2px
-   base, per feedback ("now seems super small"). */
-.amfc-en-stat-card--efficiency img {
+   base, per feedback ("now seems super small"). Targets .amfc-en-stat-card__icon (not img)
+   now that this card's icon is inline SVG for the staggered person animation below. */
+.amfc-en-stat-card--efficiency .amfc-en-stat-card__icon {
 	width: clamp(110.88px, calc(166.32 / 1440 * 100vw), 166.32px);
 	height: clamp(110.88px, calc(166.32 / 1440 * 100vw), 166.32px);
 }
@@ -848,6 +849,62 @@ body.theme-en [tabindex]:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
 	.amfc-en-stat-card--innovation.is-inview img {
+		animation: none !important;
+	}
+}
+
+/* --- KSP Efficiency card: staggered "team assembly" entrance, scroll-triggered ---
+   Same settled-in-stack trigger as the other two cards (initKspSettledAnimations() in
+   amfc-2026.js). The icon has three people, so per feedback this one gets more complexity:
+   inlined the SVG (same reasoning as the Integrity coin -- an <img> can't expose its internal
+   groups), which turned out to already be built as 3 independent top-level groups (one per
+   person, tagged .ksp-person--left/--center/--right below) plus a separate group of 3 sparkle
+   strokes above their heads (.ksp-sparkle, already present artwork -- NOT new decoration like
+   the coin's glint, so these must stay visible by default; only their entrance animation's own
+   0% keyframe hides them, no base opacity:0 rule, or the icon would render with missing
+   sparkles whenever JS is disabled). Each person pops up into place staggered left -> center
+   -> right, then the sparkles twinkle in afterward as a small celebration. transform-box:
+   fill-box on each group, since (unlike the coin) nothing here needs a single precise shared
+   pivot -- just each group's own natural bounding-box center. */
+@keyframes amfc-ksp-person-rise {
+	from { opacity: 0; transform: translateY(16px) scale(0.85); }
+	to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.amfc-en-stat-card--efficiency .ksp-person {
+	transform-box: fill-box;
+	transform-origin: center;
+}
+.amfc-en-stat-card--efficiency.is-inview .ksp-person {
+	animation: amfc-ksp-person-rise 450ms cubic-bezier(.34, 1.56, .64, 1) both;
+}
+.amfc-en-stat-card--efficiency.is-inview .ksp-person--left {
+	animation-delay: 0ms;
+}
+.amfc-en-stat-card--efficiency.is-inview .ksp-person--center {
+	animation-delay: 160ms;
+}
+.amfc-en-stat-card--efficiency.is-inview .ksp-person--right {
+	animation-delay: 320ms;
+}
+
+@keyframes amfc-ksp-sparkle-twinkle {
+	0%, 40% { opacity: 0;   transform: scale(0) rotate(-30deg); }
+	60%     { opacity: 1;   transform: scale(1.15) rotate(0deg); }
+	80%     { opacity: .85; transform: scale(.9) rotate(4deg); }
+	100%    { opacity: 1;   transform: scale(1) rotate(0deg); }
+}
+.amfc-en-stat-card--efficiency .ksp-sparkle {
+	transform-box: fill-box;
+	transform-origin: center;
+}
+.amfc-en-stat-card--efficiency.is-inview .ksp-sparkle {
+	animation: amfc-ksp-sparkle-twinkle 550ms ease-out both;
+	animation-delay: calc(750ms + var(--t) * 90ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-stat-card--efficiency.is-inview .ksp-person,
+	.amfc-en-stat-card--efficiency.is-inview .ksp-sparkle {
 		animation: none !important;
 	}
 }

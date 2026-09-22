@@ -82,7 +82,11 @@
 				     use the zh-Hant-TW KSP set's own tilt pattern instead. -->
 				<div class="amfc-en-principles__stack">
 					<div class="amfc-en-stat-card amfc-en-stat-card--efficiency">
-						<img src="<?= e(asset('images/en/principle-efficiency.svg')) ?>" alt="" aria-hidden="true" width="144" height="144" />
+						<!-- Inline SVG (not <img>), same reasoning as the Integrity card -- the staggered
+						     three-person entrance animates each figure's own group independently, which
+						     an <img src="...svg"> can't expose. See amfc-en.css's "KSP Efficiency" block
+						     and amfc-2026.js's initKspSettledAnimations(). -->
+						<span class="amfc-en-stat-card__icon" aria-hidden="true"><?= svg_inline('images/en/principle-efficiency.svg') ?></span>
 						<span class="amfc-en-stat-card__badge">Efficiency</span>
 						<span class="amfc-en-stat-card__number">200,000+</span>
 						<span class="amfc-en-stat-card__label">Customers Served</span>

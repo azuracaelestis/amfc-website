@@ -405,8 +405,9 @@ window.AMFC = (function () {
 		});
 	}
 
-	/* Triggers the KSP Integrity (coin-drop) and Innovation (icon pop-in) card animations once
-	   each card has actually SETTLED into its pinned spot in the scroll-stack -- not merely
+	/* Triggers the KSP Efficiency (staggered person entrance), Integrity (coin-drop), and
+	   Innovation (icon pop-in) card animations once each card has actually SETTLED into its
+	   pinned spot in the scroll-stack -- not merely
 	   once it's 25% visible (an IntersectionObserver threshold, used here originally, fires
 	   while the card is still scrolling up INTO its pinned position, so the animation used to
 	   start mid-scroll instead of once the card had arrived, per feedback).
@@ -426,7 +427,7 @@ window.AMFC = (function () {
 	   add .is-inview, same as the reduced-motion swap did before, that's still handled entirely
 	   by amfc-en.css's own prefers-reduced-motion rules. */
 	function initKspSettledAnimations() {
-		var pending = ['.amfc-en-stat-card--integrity', '.amfc-en-stat-card--innovation']
+		var pending = ['.amfc-en-stat-card--efficiency', '.amfc-en-stat-card--integrity', '.amfc-en-stat-card--innovation']
 			.map(function (selector) { return document.querySelector(selector); })
 			.filter(Boolean);
 		if (!pending.length) return;
