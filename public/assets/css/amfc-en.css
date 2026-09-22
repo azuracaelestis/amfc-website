@@ -351,13 +351,22 @@ body.theme-en [tabindex]:focus-visible {
    The mask-position approach's start/end offsets had to be reasoned about through a confusing
    background-position-style formula relative to an oversized mask-size, and got the end state
    wrong (the mark stayed invisible instead of settling revealed) -- confirmed by testing five
-   different endpoint values directly, all still invisible, before abandoning it for this. */
+   different endpoint values directly, all still invisible, before abandoning it for this.
+
+   steps(16, jump-start), not the smooth ease-in-out this had before -- per feedback ("one by
+   one per letter"). This is a flat raster PNG with no per-glyph path data, so a real per-letter
+   reveal isn't possible; steps() instead advances the same corner-growth reveal in 16 discrete
+   jumps (one per letter in "For a Brighter Asia", spaces excluded) rather than one continuous
+   motion, giving a typewriter-like staccato cadence that reads as letter-by-letter progress
+   even though each jump is really just a bigger slice of the whole image, not a single glyph's
+   shape. jump-start (not the timing function's own default, jump-end) so the very first
+   "letter" appears immediately when the reveal begins, instead of waiting a full step first. */
 @keyframes amfc-en-hero-stamp-write {
 	from { clip-path: inset(0 100% 100% 0); }
 	to   { clip-path: inset(0 0 0 0); }
 }
 .amfc-en-hero__brand-stamp {
-	animation: amfc-en-hero-stamp-write 700ms ease-in-out both;
+	animation: amfc-en-hero-stamp-write 900ms steps(16, jump-start) both;
 	animation-delay: 1100ms;
 }
 
