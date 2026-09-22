@@ -416,11 +416,38 @@ window.AMFC = (function () {
 	   by construction: scrolling back up naturally un-settles a card and fades it back out,
 	   since the value is recomputed from live scroll position every frame rather than fired
 	   once like the icon flourishes in initKspSettledAnimations() below -- intentional, since
-	   this is meant to track the physical rising motion itself, not mark a one-time arrival. */
+	   this is meant to track the physical rising motion itself, not mark a one-time arrival.
+
+	   Efficiency's own staggered person entrance is triggered from right here too (see the
+	   EFFICIENCY_FADE_TRIGGER block inside onScroll below), not from a separate
+	   IntersectionObserver -- a first attempt at "trigger as soon as it appears fully" used
+	   threshold:1.0 on IntersectionObserver, which fires purely on GEOMETRY (the card's box
+	   entering the viewport), with no idea this card's own opacity is being scrubbed by the
+	   fade above. That let the person entrance fire while the card was still almost fully
+	   transparent, wasting the whole flourish before anyone could see it play (caught via CDP:
+	   is-inview was true while the card's own computed opacity was still near 0). Reusing this
+   	   function's own fade calculation guarantees the two are always in sync. */
 	function initKspStackFade() {
 		var cards = document.querySelectorAll('.amfc-en-principles__stack .amfc-en-stat-card');
 		if (!cards.length) return;
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+		var efficiencyCard = document.querySelector('.amfc-en-stat-card--efficiency');
+		// EFFICIENCY_FADE_TRIGGER threshold -- per feedback ("triggered automatically when it
+		// appears fully, does not need the user to scroll down"): fires a little before the
+		// card is pixel-perfect settled (fade reaches exactly 1 only at that point, same timing
+		// as the other three cards' own settle-triggered flourishes), since by ~85% opacity a
+		// card already reads as "fully there" to the eye -- shaves off some of the extra scroll
+		// this card used to need without playing the flourish while still visibly fading in.
+		var EFFICIENCY_TRIGGER_FADE = 0.85;
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			// No fade tracking happens at all under reduced motion (cards stay at their default
+			// opacity:1 the whole time -- see the CSS default), so there's nothing to wait on;
+			// mark Efficiency in-view immediately. The actual flourish is still neutered by
+			// amfc-en.css's own prefers-reduced-motion block regardless of this class.
+			if (efficiencyCard) efficiencyCard.classList.add('is-inview');
+			return;
+		}
 
 		var FADE_DISTANCE = 200; // px of scroll the dissolve happens over, before the card settles
 		var ticking = false;
@@ -432,6 +459,10 @@ window.AMFC = (function () {
 				var fade = 1 - clearance / FADE_DISTANCE;
 				fade = Math.max(0, Math.min(1, fade));
 				card.style.setProperty('--amfc-en-card-fade', fade);
+
+				if (card === efficiencyCard && fade >= EFFICIENCY_TRIGGER_FADE) {
+					card.classList.add('is-inview'); // idempotent -- fine to call every frame past the threshold
+				}
 			});
 			ticking = false;
 		}
@@ -446,12 +477,13 @@ window.AMFC = (function () {
 		onScroll(); // set initial values -- don't wait for the first scroll event
 	}
 
-	/* Triggers the KSP Efficiency (staggered person entrance), Integrity (coin-drop),
-	   Innovation (icon pop-in), and Professionalism (sequential button press) card animations
-	   once each card has actually SETTLED into its pinned spot in the scroll-stack -- not merely
-	   once it's 25% visible (an IntersectionObserver threshold, used here originally, fires
-	   while the card is still scrolling up INTO its pinned position, so the animation used to
-	   start mid-scroll instead of once the card had arrived, per feedback).
+	/* Triggers the KSP Integrity (coin-drop), Innovation (icon pop-in), and Professionalism
+	   (sequential button press) card animations once each card has actually SETTLED into its
+	   pinned spot in the scroll-stack -- not merely once it's 25% visible (an
+	   IntersectionObserver threshold, used here originally, fires while the card is still
+	   scrolling up INTO its pinned position, so the animation used to start mid-scroll instead
+	   of once the card had arrived, per feedback). Efficiency used to be included here too, but
+	   now triggers from inside initKspStackFade() above instead (see its own comment for why).
 
 	   All the stat cards share the same position:sticky `top` offset (see
 	   .amfc-en-stat-card's own `top: var(--amfc-en-stack-top)` in amfc-en.css), so "settled"
@@ -468,7 +500,7 @@ window.AMFC = (function () {
 	   add .is-inview, same as the reduced-motion swap did before, that's still handled entirely
 	   by amfc-en.css's own prefers-reduced-motion rules. */
 	function initKspSettledAnimations() {
-		var pending = ['.amfc-en-stat-card--efficiency', '.amfc-en-stat-card--integrity', '.amfc-en-stat-card--innovation', '.amfc-en-stat-card--professionalism']
+		var pending = ['.amfc-en-stat-card--integrity', '.amfc-en-stat-card--innovation', '.amfc-en-stat-card--professionalism']
 			.map(function (selector) { return document.querySelector(selector); })
 			.filter(Boolean);
 		if (!pending.length) return;
