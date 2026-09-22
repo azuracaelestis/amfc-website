@@ -577,8 +577,13 @@ body.theme-en [tabindex]:focus-visible {
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	/* 24px per feedback (was 20px). */
-	gap: 24px;
+	/* This isn't just visual spacing -- since the cards are a position:sticky pile sharing the
+	   same `top`, this gap is the actual SCROLL DISTANCE between one card fully pinning and the
+	   next one covering it (the next card is normal-flow content sitting `gap` below the
+	   current one, and has to scroll that whole distance before it reaches the shared sticky
+	   offset). 24px gave almost no time to read a card before the next one stacked over it, per
+	   feedback -- bumped way up to give real reading time. */
+	gap: 220px;
 }
 
 /* Provides the scroll runway for the last card to release before the next section begins — a
