@@ -535,6 +535,32 @@ window.AMFC = (function () {
 		}
 	}
 
+	/* What We Do (EN page) card 1 illustration: the three floating UI cards (growth-graph,
+	   shield, pie-chart) stay hidden until the illustration scrolls into view, then reveal one
+	   at a time and settle into their continuous float loop -- purely CSS-driven (see
+	   amfc-en.css's ".wwd-card"/".wwd-float" rules), this only decides WHEN to add .is-inview.
+	   Fires once via unobserve, same pattern as initKspIntegrityCoinDrop. querySelector returns
+	   null on the zh-Hant-TW homepage, so this is safely cross-page-inert. */
+	function initWwdCardReveal() {
+		var wrap = document.querySelector('.amfc-en-whatwedo__image--1');
+		if (!wrap || !('IntersectionObserver' in window)) return;
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			wrap.classList.add('is-inview');
+			return;
+		}
+
+		var observer = new IntersectionObserver(function (entries, obs) {
+			entries.forEach(function (entry) {
+				if (!entry.isIntersecting) return;
+				entry.target.classList.add('is-inview');
+				obs.unobserve(entry.target);
+			});
+		}, { threshold: 0.3 });
+
+		observer.observe(wrap);
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
@@ -546,6 +572,7 @@ window.AMFC = (function () {
 		initLangToggle();
 		initKspStackFade();
 		initKspSettledAnimations();
+		initWwdCardReveal();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

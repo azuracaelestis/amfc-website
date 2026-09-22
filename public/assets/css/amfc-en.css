@@ -1125,16 +1125,28 @@ body.theme-en [tabindex]:focus-visible {
 	height: 100%;
 }
 
-/* Slow, subtle, always-looping drift on the three floating UI cards inside the inlined
-   illustration (growth-graph card, shield/compliance card, pie-chart badge) -- reads as "alive"
-   rather than "animating" because the amplitude is small and each card's cycle length/offset is
-   different, so they never move in sync. transform-box: fill-box lets each <g> rotate/translate
-   around its own visual center without needing to hand-measure its coordinates in the 1536x1024
-   viewBox. Negative animation-delay starts each card mid-cycle immediately on load rather than
-   all three visibly launching from the same rest position together. */
+/* The three floating UI cards (growth-graph, shield/compliance, pie-chart badge) appear one at
+   a time once the illustration scrolls into view (triggered by initWwdCardReveal() in
+   amfc-2026.js adding .is-inview to .amfc-en-whatwedo__image--1), then settle into a slow,
+   subtle, always-looping drift. Entrance lives on the outer .wwd-card wrapper (opacity +
+   translateY + scale) and floating lives on the inner .wwd-float group's own transform -- two
+   separate elements so the two animations don't fight over the same `transform` property on one
+   element. transform-box: fill-box lets each <g> move around its own visual center without
+   hand-measuring coordinates in the 1536x1024 viewBox. */
+.wwd-card {
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	transform: translateY(20px) scale(0.92);
+}
 .wwd-float {
 	transform-box: fill-box;
 	transform-origin: center;
+}
+
+@keyframes amfc-wwd-card-appear {
+	from { opacity: 0; transform: translateY(20px) scale(0.92); }
+	to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 @keyframes amfc-wwd-float-graph {
 	0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -1148,14 +1160,28 @@ body.theme-en [tabindex]:focus-visible {
 	0%, 100% { transform: translateY(0) scale(1); }
 	50% { transform: translateY(-14px) scale(1.03); }
 }
-.wwd-float--graph { animation: amfc-wwd-float-graph 6.5s ease-in-out infinite; animation-delay: -1.2s; }
-.wwd-float--shield { animation: amfc-wwd-float-shield 5.5s ease-in-out infinite; animation-delay: -3.4s; }
-.wwd-float--pie { animation: amfc-wwd-float-pie 5s ease-in-out infinite; animation-delay: -2.1s; }
+
+/* Appear order: graph, then shield, then pie -- each card's float loop kicks in right as its
+   own entrance settles (delay = that card's entrance delay + entrance duration). */
+.is-inview .wwd-card--graph { animation: amfc-wwd-card-appear 550ms cubic-bezier(.22,1,.36,1) both; animation-delay: 0ms; }
+.is-inview .wwd-card--shield { animation: amfc-wwd-card-appear 550ms cubic-bezier(.22,1,.36,1) both; animation-delay: 280ms; }
+.is-inview .wwd-card--pie { animation: amfc-wwd-card-appear 550ms cubic-bezier(.22,1,.36,1) both; animation-delay: 560ms; }
+
+.is-inview .wwd-float--graph { animation: amfc-wwd-float-graph 6.5s ease-in-out infinite; animation-delay: 550ms; }
+.is-inview .wwd-float--shield { animation: amfc-wwd-float-shield 5.5s ease-in-out infinite; animation-delay: 830ms; }
+.is-inview .wwd-float--pie { animation: amfc-wwd-float-pie 5s ease-in-out infinite; animation-delay: 1110ms; }
 
 @media (prefers-reduced-motion: reduce) {
-	.wwd-float--graph,
-	.wwd-float--shield,
-	.wwd-float--pie {
+	.wwd-card--graph,
+	.wwd-card--shield,
+	.wwd-card--pie {
+		animation: none;
+		opacity: 1;
+		transform: none;
+	}
+	.is-inview .wwd-float--graph,
+	.is-inview .wwd-float--shield,
+	.is-inview .wwd-float--pie {
 		animation: none;
 	}
 }
