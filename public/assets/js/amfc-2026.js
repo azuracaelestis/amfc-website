@@ -535,25 +535,33 @@ window.AMFC = (function () {
 		}
 	}
 
-	/* What We Do (EN page) card 1 illustration: the three floating UI cards (growth-graph,
-	   shield, pie-chart) stay hidden until the illustration scrolls into view, then reveal one
-	   at a time and settle into their continuous float loop -- purely CSS-driven (see
-	   amfc-en.css's ".wwd-card"/".wwd-float" rules), this only decides WHEN to add .is-inview.
-	   Fires once via unobserve, same pattern as initKspIntegrityCoinDrop. querySelector returns
-	   null on the zh-Hant-TW homepage, so this is safely cross-page-inert. */
+	/* What We Do (EN page) illustrations: the floating UI badges in card 1 (growth-graph,
+	   shield, pie-chart) and card 3 (legal-scale, shield/lock) stay hidden until the
+	   illustration scrolls into view, then reveal one at a time and settle into their
+	   continuous float loop -- purely CSS-driven (see amfc-en.css's ".wwd-card"/".wwd-float"
+	   rules), this only decides WHEN to add .is-inview. Observes the shared image-wrap (not
+	   either inline SVG directly) since both cards' badges should reveal at the same scroll
+	   position regardless of which accordion panel happens to be open; .is-inview is added to
+	   both SVG hosts unconditionally since each one's own entrance CSS is scoped to its own
+	   .wwd-card--* descendants, so it's inert on whichever card isn't currently visible. Fires
+	   once via unobserve, same pattern as initKspIntegrityCoinDrop. querySelector returns null
+	   on the zh-Hant-TW homepage, so this is safely cross-page-inert. */
 	function initWwdCardReveal() {
-		var wrap = document.querySelector('.amfc-en-whatwedo__image--1');
-		if (!wrap || !('IntersectionObserver' in window)) return;
+		var wrap = document.querySelector('.amfc-en-whatwedo__image-wrap');
+		var hosts = ['.amfc-en-whatwedo__image--1', '.amfc-en-whatwedo__image--3']
+			.map(function (selector) { return document.querySelector(selector); })
+			.filter(Boolean);
+		if (!wrap || !hosts.length || !('IntersectionObserver' in window)) return;
 
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-			wrap.classList.add('is-inview');
+			hosts.forEach(function (host) { host.classList.add('is-inview'); });
 			return;
 		}
 
 		var observer = new IntersectionObserver(function (entries, obs) {
 			entries.forEach(function (entry) {
 				if (!entry.isIntersecting) return;
-				entry.target.classList.add('is-inview');
+				hosts.forEach(function (host) { host.classList.add('is-inview'); });
 				obs.unobserve(entry.target);
 			});
 		}, { threshold: 0.5 });
