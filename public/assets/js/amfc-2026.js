@@ -535,38 +535,63 @@ window.AMFC = (function () {
 		}
 	}
 
-	/* What We Do (EN page) illustrations: the floating UI badges in card 1 (growth-graph,
-	   shield, pie-chart) and card 3 (legal-scale, shield/lock) stay hidden until the
-	   illustration scrolls into view, then reveal one at a time and settle into their
-	   continuous float loop -- purely CSS-driven (see amfc-en.css's ".wwd-card"/".wwd-float"
-	   rules), this only decides WHEN to add .is-inview. Observes the shared image-wrap (not
-	   either inline SVG directly) since both cards' badges should reveal at the same scroll
-	   position regardless of which accordion panel happens to be open; .is-inview is added to
-	   both SVG hosts unconditionally since each one's own entrance CSS is scoped to its own
-	   .wwd-card--* descendants, so it's inert on whichever card isn't currently visible. Fires
-	   once via unobserve, same pattern as initKspIntegrityCoinDrop. querySelector returns null
-	   on the zh-Hant-TW homepage, so this is safely cross-page-inert. */
+	/* What We Do (EN page) card 1 illustration: the three floating UI badges (growth-graph,
+	   shield, pie-chart) stay hidden until the illustration scrolls into view, then reveal one
+	   at a time and settle into their continuous float loop -- purely CSS-driven (see
+	   amfc-en.css's ".wwd-card"/".wwd-float" rules), this only decides WHEN to add .is-inview.
+	   Card 1 is the default-open accordion panel, so "scrolled into view" is the right trigger
+	   for it; card 3's own badges are triggered separately by initWwdCard3Reveal() below, keyed
+	   to the accordion panel opening instead, since scroll position alone doesn't mean the user
+	   is actually looking at card 3. Fires once via unobserve, same pattern as
+	   initKspIntegrityCoinDrop. querySelector returns null on the zh-Hant-TW homepage, so this is
+	   safely cross-page-inert. */
 	function initWwdCardReveal() {
-		var wrap = document.querySelector('.amfc-en-whatwedo__image-wrap');
-		var hosts = ['.amfc-en-whatwedo__image--1', '.amfc-en-whatwedo__image--3']
-			.map(function (selector) { return document.querySelector(selector); })
-			.filter(Boolean);
-		if (!wrap || !hosts.length || !('IntersectionObserver' in window)) return;
+		var host = document.querySelector('.amfc-en-whatwedo__image--1');
+		if (!host || !('IntersectionObserver' in window)) return;
 
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-			hosts.forEach(function (host) { host.classList.add('is-inview'); });
+			host.classList.add('is-inview');
 			return;
 		}
 
 		var observer = new IntersectionObserver(function (entries, obs) {
 			entries.forEach(function (entry) {
 				if (!entry.isIntersecting) return;
-				hosts.forEach(function (host) { host.classList.add('is-inview'); });
+				entry.target.classList.add('is-inview');
 				obs.unobserve(entry.target);
 			});
 		}, { threshold: 0.5 });
 
-		observer.observe(wrap);
+		observer.observe(host);
+	}
+
+	/* What We Do (EN page) card 3 illustration (legal-scale, shield/lock badges): reveals when
+	   the "Risk Management & Compliance" accordion panel actually opens, via Bootstrap's own
+	   collapse event, rather than on scroll -- card 3's image sits in the same box as card 1's
+	   and only becomes visible once its accordion panel is expanded (see
+	   amfc-en.css's ".row:has(#amfcEnWwd3.show) ..." swap rule), so scroll position alone
+	   doesn't tell us the user is actually looking at it. Listener removes itself after firing
+	   once; if the panel is somehow already open before JS runs (e.g. a future deep-link), the
+	   initial check below covers it without waiting for a collapse event that already happened. */
+	function initWwdCard3Reveal() {
+		var host = document.querySelector('.amfc-en-whatwedo__image--3');
+		var panel = document.getElementById('amfcEnWwd3');
+		if (!host || !panel) return;
+
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			host.classList.add('is-inview');
+			return;
+		}
+
+		if (panel.classList.contains('show')) {
+			host.classList.add('is-inview');
+			return;
+		}
+
+		panel.addEventListener('shown.bs.collapse', function onShown() {
+			host.classList.add('is-inview');
+			panel.removeEventListener('shown.bs.collapse', onShown);
+		});
 	}
 
 	function init() {
@@ -581,6 +606,7 @@ window.AMFC = (function () {
 		initKspStackFade();
 		initKspSettledAnimations();
 		initWwdCardReveal();
+		initWwdCard3Reveal();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}
