@@ -1819,6 +1819,7 @@ body.theme-en > header {
 	.amfc-en-trust__body {
 		font-size: 16px;
 		line-height: 1.5;
+		text-align: center;
 	}
 
 	/* --- Principles: rounded panel, centered intro, 290px tilted cards that still stack ---
