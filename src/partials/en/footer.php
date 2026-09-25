@@ -45,19 +45,22 @@
 		</div>
 
 		<div class="row g-4 amfc-en-footer__contact">
-			<div class="col-md-4">
+			<div class="col-md-4 amfc-en-footer__service">
 				<p class="amfc-en-footer__contact-label">Customer Service</p>
 				<p class="mb-0">(886) 2 6604 0880</p>
 				<p class="mb-0">Business Hour 9:00-18:00</p>
 			</div>
 			<div class="col-md-4">
-				<p class="amfc-en-footer__contact-label">Taiwan Office</p>
+				<p class="amfc-en-footer__contact-label"><span class="amfc-en-footer__zh">台灣據點</span>Taiwan Office</p>
 				<p class="mb-0">B2., No. 9-1, Dehui St., Zhongshan Dist., Taipei City, 104439, Taiwan (R.O.C)</p>
 			</div>
 			<div class="col-md-4">
-				<p class="amfc-en-footer__contact-label">Japan Office</p>
+				<p class="amfc-en-footer__contact-label"><span class="amfc-en-footer__zh">日本據點</span>Japan Office</p>
+				<p class="mb-0 amfc-en-footer__jp-name">AMFC JAPAN</p>
 				<p class="mb-0">Hankyu Grand Building, 26F 8&minus;47 Kakuda-cho, Kita Ward Osaka 530-0017 Japan</p>
 			</div>
 		</div>
+		<!-- Phone design only (hidden >=768px in CSS). -->
+		<p class="amfc-en-footer__copyright">&copy; 2026 FUNDS AMFC Asia-Pacific Inclusive Financial Technology. All Rights Reserved. Privacy Policy</p>
 	</div>
 </footer>

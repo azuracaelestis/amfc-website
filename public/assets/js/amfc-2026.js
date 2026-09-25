@@ -595,6 +595,67 @@ window.AMFC = (function () {
 		});
 	}
 
+	/* What We Do (EN page), phone layout only: the design puts the illustration INSIDE the open
+	   accordion panel (under its bullet list) instead of in its own column, and it follows whichever
+	   panel is open. The three images already cross-fade via the ".row:has(#amfcEnWwdN.show)" rules
+	   in amfc-en.css, and the wrap stays inside that .row, so moving the one wrap node between
+	   panels is enough -- no duplicated inline SVGs (which would also duplicate their clip-path
+	   IDs). Moves back to its original column above 768px. Listens on the accordion container
+	   because Bootstrap's collapse events bubble. */
+	function initWwdMobileImagePlacement() {
+		var wrap = document.querySelector('.amfc-en-whatwedo__image-wrap');
+		var accordion = document.getElementById('amfcEnWhatWeDoAccordion');
+		if (!wrap || !accordion) return;
+
+		var home = wrap.parentNode;
+		var mq = window.matchMedia('(max-width: 767.98px)');
+
+		function place() {
+			if (!mq.matches) {
+				if (wrap.parentNode !== home) home.appendChild(wrap);
+				return;
+			}
+			var open = accordion.querySelector('.collapse.show') || accordion.querySelector('.collapse');
+			if (open && wrap.parentNode !== open) open.appendChild(wrap);
+		}
+
+		accordion.addEventListener('show.bs.collapse', function (e) {
+			if (mq.matches) e.target.appendChild(wrap);
+		});
+		if (mq.addEventListener) mq.addEventListener('change', place); else mq.addListener(place);
+		place();
+	}
+
+	/* Products (EN page), phone layout only: highlights the dot for whichever card is nearest the
+	   left edge of the horizontal scroller. rAF-throttled scroll listener, same pattern as the
+	   other scroll handlers in this file; a no-op where the dots are display:none (>=768px). */
+	function initProductsCarouselDots() {
+		var grid = document.querySelector('.amfc-en-products__grid');
+		var dots = document.querySelectorAll('.amfc-en-products__dots span');
+		if (!grid || !dots.length) return;
+
+		var cards = grid.querySelectorAll('.amfc-en-product-card');
+		var ticking = false;
+
+		function update() {
+			ticking = false;
+			var best = 0;
+			var bestDist = Infinity;
+			for (var i = 0; i < cards.length; i++) {
+				var d = Math.abs(cards[i].offsetLeft - grid.scrollLeft - grid.clientLeft - 20);
+				if (d < bestDist) { bestDist = d; best = i; }
+			}
+			// Scrolled to the very end: the last card can't reach the left edge, so pin it active.
+			if (grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 2) best = cards.length - 1;
+			for (var j = 0; j < dots.length; j++) dots[j].classList.toggle('is-active', j === best);
+		}
+
+		grid.addEventListener('scroll', function () {
+			if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+		}, { passive: true });
+		update();
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
@@ -609,6 +670,8 @@ window.AMFC = (function () {
 		initWwdCardReveal();
 		initWwdAccordionReveal('.amfc-en-whatwedo__image--2', 'amfcEnWwd2');
 		initWwdAccordionReveal('.amfc-en-whatwedo__image--3', 'amfcEnWwd3');
+		initWwdMobileImagePlacement();
+		initProductsCarouselDots();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

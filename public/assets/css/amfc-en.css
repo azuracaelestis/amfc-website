@@ -144,6 +144,14 @@ body.theme-en [tabindex]:focus-visible {
 	padding: 8px 32px;
 }
 
+/* AMFC's custom.css makes <header> position:sticky on small screens; with z-index:auto that forms
+   a stacking context that paints BELOW the hero (a later positioned sibling), hiding the fixed nav
+   pill inside it. Raising the header itself lifts the pill above every section. */
+body.theme-en > header {
+	position: relative;
+	z-index: 1000;
+}
+
 .amfc-en-nav .navbar-brand img {
 	height: 40px;
 	width: auto;
@@ -1660,5 +1668,614 @@ body.theme-en [tabindex]:focus-visible {
 
 	.amfc-en-cta__content {
 		padding: 32px 24px;
+	}
+}
+
+/* =====================================================================================
+   PHONE LAYOUT (<= 767.98px) -- built to the 375px "AMFC - Homepage (Mobile) Final" Figma
+   frame. Everything below is scoped to this one media query so the desktop/tablet layout
+   above is untouched. Values are the design's own px (375px reference), not fluid clamp()s,
+   since the frame is a single fixed width; raw px throughout also sidesteps the site's
+   html{font-size:1.1rem} inflation (CLAUDE.md).
+   ===================================================================================== */
+
+/* Phone-only elements: hidden at every other width. */
+.amfc-en-products__dots,
+.amfc-en-footer__zh,
+.amfc-en-footer__jp-name,
+.amfc-en-footer__copyright {
+	display: none;
+}
+
+@media (max-width: 767.98px) {
+	/* --- Nav: white pill, logo + plus/close toggle (design: x18, y38, 339px wide) --- */
+	.amfc-en-nav {
+		top: 38px;
+		width: calc(100% - 36px);
+		margin: 0;
+		padding: 10px 20px;
+		background: #fff;
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+		box-shadow: none;
+		border-radius: 100px;
+	}
+	.amfc-en-nav:has(.navbar-collapse.show, .navbar-collapse.collapsing) {
+		border-radius: 28px;
+	}
+	.amfc-en-nav .navbar-brand {
+		margin: 0;
+		padding: 0;
+	}
+	.amfc-en-nav .navbar-brand img {
+		height: 33px;
+		width: auto;
+	}
+	.amfc-en-nav .navbar-toggler {
+		width: 29px;
+		height: 29px;
+		padding: 0;
+		box-shadow: none;
+	}
+	.amfc-en-nav .navbar-toggler-icon {
+		position: relative;
+		width: 29px;
+		height: 29px;
+		background-image: none;
+	}
+	.amfc-en-nav .navbar-toggler-icon::before,
+	.amfc-en-nav .navbar-toggler-icon::after {
+		content: "";
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 20.5px;
+		height: 2.83px;
+		margin: -1.4px 0 0 -10.25px;
+		border-radius: 100px;
+		background: var(--amfc-en-blue-button);
+		transition: transform 0.2s ease-out;
+	}
+	.amfc-en-nav .navbar-toggler-icon::after {
+		transform: rotate(90deg);
+	}
+	.amfc-en-nav .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
+		transform: rotate(45deg);
+	}
+	.amfc-en-nav .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
+		transform: rotate(-45deg);
+	}
+	.amfc-en-nav .navbar-collapse {
+		padding-top: 8px;
+	}
+	.amfc-en-nav .nav-link {
+		padding: 8px 0;
+	}
+
+	/* --- Hero: 722px tall, text top-left, arch photo + cut-out couple below it --- */
+	.amfc-en-hero {
+		display: block;
+		height: 722px;
+		padding: 0;
+	}
+	.amfc-en-hero .row {
+		margin: 0;
+	}
+	.amfc-en-hero [class*="col-"] {
+		padding: 0;
+		/* Bootstrap's g-4 gives each column a top margin (cancelled by the row's negative margin,
+		   which is zeroed above) -- it would push the text 26px below the design. */
+		margin-top: 0;
+	}
+	/* static (not relative) so the photo/stamp below can position against the hero itself;
+	   text is lifted above the glow individually instead. */
+	.amfc-en-hero__container {
+		position: static;
+		width: auto;
+		max-width: none;
+		margin: 0;
+		padding: 134px 26px 0;
+	}
+	.amfc-en-hero__eyebrow,
+	.amfc-en-hero__headline {
+		position: relative;
+		z-index: 1;
+	}
+	.amfc-en-hero__eyebrow {
+		font-size: 16px;
+		line-height: 1.5;
+		margin-bottom: 12px;
+	}
+	.amfc-en-hero__headline {
+		font-size: 32px;
+		line-height: 36px;
+	}
+	.amfc-en-hero__bg-glow {
+		top: 319px;
+		/* Figma: 571px circle centred at 50% + 5px, so its left edge is 93px off-screen. */
+		left: -93px;
+		right: auto;
+		width: 571px;
+		height: 571px;
+		transform: none;
+		animation-name: amfc-en-hero-glow-bloom-m;
+	}
+	.amfc-en-hero__photo-wrap {
+		position: absolute;
+		z-index: 1;
+		top: 331px;
+		left: 9px;
+		width: 416px;
+		height: 357px;
+		overflow: hidden;
+		transform: none;
+		animation-name: amfc-en-hero-photo-settle-m;
+	}
+	.amfc-en-hero__photo {
+		position: absolute;
+		top: 10.52%;
+		left: -2.48%;
+		width: 92.44%;
+		height: auto;
+		border-radius: 0;
+	}
+	.amfc-en-hero__brand-stamp {
+		top: 343px;
+		left: calc(50% + 25.5px);
+		right: auto;
+		width: 132px;
+	}
+
+	/* --- Trust: white sheet overlapping the hero by 50px --- */
+	.amfc-en-trust {
+		margin-top: -50px;
+		padding: 89px 0 48px;
+		border-radius: 32px 32px 0 0;
+	}
+	.amfc-en-trust .amfc-en-container {
+		width: 100%;
+		max-width: none;
+		padding-inline: 23px;
+	}
+	.amfc-en-trust__layout {
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-items: center;
+		gap: 32px;
+	}
+	.amfc-en-trust__badges {
+		align-items: center;
+		gap: 0;
+		width: 100%;
+	}
+	.amfc-en-trust__badges-row {
+		justify-content: center;
+		gap: 8px;
+	}
+	.amfc-en-trust__badges img {
+		height: 84px;
+	}
+	.amfc-en-trust__badges-row img:first-child {
+		width: 146px;
+		object-fit: cover;
+	}
+	.amfc-en-trust__badges-row img:last-child {
+		width: 157px;
+	}
+	.amfc-en-trust__badges img.amfc-en-trust__badges-swiss {
+		width: 321px;
+		max-width: 100%;
+		height: 84px;
+	}
+	.amfc-en-trust__copy {
+		flex: none;
+		max-width: none;
+		width: 100%;
+	}
+	.amfc-en-trust__heading {
+		font-size: 24px;
+		line-height: 24px;
+		text-align: center;
+		margin-bottom: 16px;
+	}
+	.amfc-en-trust__body {
+		font-size: 16px;
+		line-height: 1.5;
+	}
+
+	/* --- Principles: rounded panel, centered intro, 290px tilted cards that still stack ---
+	   The desktop intro/watermark stick beside the cards; on a phone the intro just sits above
+	   the stack (it scrolls away as the first card pins), and the watermark closes the panel. */
+	.amfc-en-principles {
+		margin-inline: 9px;
+		padding: 48px 20px;
+		border-radius: 32px;
+		background: linear-gradient(180deg, var(--amfc-en-panel), #fff 100%);
+	}
+	.amfc-en-principles .amfc-en-container {
+		width: 100%;
+		max-width: none;
+		padding-inline: 0;
+	}
+	.amfc-en-principles__layout {
+		--amfc-en-stack-top: 108px;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-items: center;
+		gap: 32px;
+	}
+	.amfc-en-principles__intro-slot {
+		flex: none;
+		width: 100%;
+		max-width: none;
+	}
+	.amfc-en-principles__intro {
+		position: static;
+		min-height: 0;
+		text-align: center;
+	}
+	.amfc-en-principles__heading {
+		font-size: 24px;
+		line-height: 24px;
+		margin-bottom: 12px;
+	}
+	.amfc-en-principles__intro p {
+		font-size: 16px;
+		line-height: 1.5;
+	}
+	.amfc-en-principles__stack-wrap {
+		width: 100%;
+	}
+	.amfc-en-principles__watermark-overlay {
+		position: static;
+		order: 3;
+		width: 100%;
+	}
+	.amfc-en-principles__watermark-slot {
+		position: static;
+		height: auto;
+	}
+	.amfc-en-principles__watermark {
+		position: static;
+		width: 293px;
+		margin-left: -11px;
+	}
+	.amfc-en-stat-card {
+		width: 290px;
+		max-width: 100%;
+		padding: 27px;
+	}
+	.amfc-en-stat-card img,
+	.amfc-en-stat-card__icon,
+	.amfc-en-stat-card--efficiency .amfc-en-stat-card__icon {
+		width: 119px;
+		height: 119px;
+		margin-bottom: 12px;
+	}
+	.amfc-en-stat-card__badge {
+		font-size: 20px;
+		padding: 8px 16px;
+		margin-bottom: 12px;
+	}
+	.amfc-en-stat-card__number {
+		font-size: 24px;
+		line-height: 1.2;
+		margin-bottom: 4px;
+	}
+	.amfc-en-stat-card__label {
+		font-size: 16px;
+		line-height: 1.2;
+	}
+
+	/* --- Funds --- */
+	.amfc-en-funds {
+		display: block;
+		padding: 48px 20px;
+	}
+	.amfc-en-funds__row {
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-items: center;
+		gap: 34px;
+		text-align: center;
+	}
+	.amfc-en-funds__logo {
+		width: 173px;
+	}
+	.amfc-en-funds__copy {
+		max-width: none;
+	}
+
+	/* --- What we do: header, then accordion; the illustration lives INSIDE the open panel
+	   (initWwdMobileImagePlacement() in amfc-2026.js moves it there), not in its own column. --- */
+	.amfc-en-whatwedo {
+		padding-block: 48px;
+	}
+	.amfc-en-whatwedo .container {
+		padding-inline: 18px;
+	}
+	.amfc-en-whatwedo .row > .col-lg-6:first-child {
+		display: none;
+	}
+	.amfc-en-eyebrow {
+		font-size: 16px;
+		line-height: 24px;
+		letter-spacing: 0;
+	}
+	.amfc-en-whatwedo .amfc-en-eyebrow {
+		text-align: center;
+		margin-bottom: 24px;
+	}
+	.amfc-en-whatwedo__heading {
+		font-size: 24px;
+		line-height: 24px;
+		margin: 0 0 16px !important;
+	}
+	.amfc-en-whatwedo .col-lg-6 > p:not(.amfc-en-eyebrow) {
+		font-size: 16px;
+		line-height: 1.5;
+		margin-bottom: 36px !important;
+	}
+	.amfc-en-whatwedo #amfcEnWhatWeDoAccordion {
+		gap: 16px !important;
+	}
+	.amfc-en-accordion-item__toggle {
+		font-size: 20px;
+		line-height: 1.2;
+	}
+	.amfc-en-accordion-item ul {
+		margin-top: 10px;
+		font-size: 16px;
+	}
+	.amfc-en-accordion-item li {
+		font-size: 16px;
+	}
+	.amfc-en-accordion-item .amfc-en-whatwedo__image-wrap {
+		width: 100%;
+		height: 242px;
+		aspect-ratio: auto;
+		margin-top: 10px;
+		/* Same 1.1x enlargement the desktop wrap has: the SVG art sits inside generous viewBox
+		   margins, and the design's raster fills more of its 292x242 box. */
+		transform: scale(1.1) !important;
+		/* AOS's zoom-in start state would leave a relocated image invisible until a scroll
+		   position it no longer has; it's decorative here, so just show it. */
+		opacity: 1 !important;
+		transition: none !important;
+	}
+
+	/* --- Products: 280x400 cards in a horizontal snap scroller with position dots --- */
+	.amfc-en-products {
+		padding-block: 48px;
+	}
+	.amfc-en-products .container {
+		padding-inline: 0;
+	}
+	.amfc-en-products .amfc-en-eyebrow,
+	.amfc-en-products h2,
+	.amfc-en-products__intro {
+		padding-inline: 20px;
+	}
+	.amfc-en-products h2 {
+		font-size: 24px !important;
+		line-height: 24px;
+		text-align: left;
+		margin: 24px 0 16px !important;
+	}
+	.amfc-en-products__intro {
+		max-width: none;
+		text-align: left;
+		margin-bottom: 36px !important;
+	}
+	.amfc-en-products__grid {
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+		gap: 24px;
+		padding-inline: 20px;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scroll-padding-inline: 20px;
+		scrollbar-width: none;
+	}
+	.amfc-en-products__grid::-webkit-scrollbar {
+		display: none;
+	}
+	.amfc-en-products .amfc-en-product-card {
+		flex: 0 0 280px;
+		width: 280px;
+		height: 400px;
+		padding: 24px 24px 33px;
+		scroll-snap-align: start;
+	}
+	.amfc-en-product-card:nth-child(-n+2) {
+		border-radius: 16px;
+	}
+	.amfc-en-product-card img {
+		margin-bottom: 27px;
+	}
+	.amfc-en-product-card__img--large {
+		width: 237px;
+		height: 242px;
+		/* the design's vehicle art fills ~90% of its box */
+		transform: scale(.93);
+	}
+	.amfc-en-product-card__img--portrait {
+		width: 197px;
+		height: 284px;
+	}
+	.amfc-en-product-card__img--small {
+		width: 211px;
+		height: 215px;
+	}
+	.amfc-en-product-card__img--bond {
+		width: 210px;
+		height: 284px;
+	}
+	.amfc-en-product-card__label {
+		font-size: 24px;
+		line-height: 29px;
+	}
+	.amfc-en-products__dots {
+		display: flex;
+		justify-content: center;
+		gap: 12px;
+		margin-top: 24px;
+	}
+	.amfc-en-products__dots span {
+		width: 10px;
+		height: 10px;
+		border-radius: 5px;
+		background: var(--amfc-en-lavender);
+		transition: width 0.25s ease-out;
+	}
+	.amfc-en-products__dots span.is-active {
+		width: 42px;
+	}
+
+	/* --- CTA: 333x538 portrait card --- */
+	.amfc-en-cta {
+		margin: 48px 8px;
+		min-height: 538px;
+		align-items: flex-start;
+		border-radius: 16px;
+	}
+	.amfc-en-cta__content {
+		width: 100%;
+		padding: 34px 18px 0;
+	}
+	.amfc-en-cta__heading {
+		font-size: 36px;
+		line-height: 42px;
+		margin-bottom: 12px;
+	}
+	.amfc-en-cta__subheading {
+		max-width: 239px;
+		font-size: 20px;
+		line-height: 32px;
+		margin-bottom: 20px;
+	}
+	.amfc-en-cta .amfc-en-btn {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+		height: 62px;
+		padding: 0 48px;
+		font-size: 20px;
+	}
+	.amfc-en-cta .amfc-en-btn img {
+		width: 24px;
+		height: 24px;
+	}
+
+	/* --- Media band: full-width stacked cards --- */
+	.amfc-en-media-band {
+		padding: 90px 20px;
+	}
+	.amfc-en-media-band__grid {
+		flex-direction: column;
+		flex-wrap: nowrap;
+		align-items: stretch;
+		gap: 42px;
+	}
+	.amfc-en-media-card {
+		width: 100%;
+	}
+	.amfc-en-media-card__image-wrap {
+		height: 269px;
+	}
+	/* Design: image at the card's full width, natural aspect (335x251), bottom-aligned so the
+	   gradient shows above it -- not the desktop cover crop. */
+	.amfc-en-media-card__image {
+		top: auto;
+		bottom: 0;
+		height: auto;
+	}
+	.amfc-en-media-card__title {
+		font-size: 24px;
+	}
+
+	/* --- Footer: offices + big logo + copyright only (the design drops the link columns and
+	   customer-service block at this width) --- */
+	.amfc-en-footer {
+		padding: 48px 0 53px;
+		border-top: 0;
+	}
+	.amfc-en-footer > .container {
+		display: flex;
+		flex-direction: column;
+		padding-inline: 0;
+	}
+	.amfc-en-footer__categories,
+	.amfc-en-footer__service {
+		display: none;
+	}
+	.amfc-en-footer__contact {
+		order: 1;
+		--bs-gutter-x: 0;
+		--bs-gutter-y: 0;
+		margin: 0;
+		padding-inline: 30px;
+		row-gap: 52px;
+	}
+	.amfc-en-footer__contact > * {
+		padding: 0;
+		margin-top: 0;
+	}
+	.amfc-en-footer__contact-label,
+	.amfc-en-footer__contact p {
+		font-size: 12px;
+		line-height: 18px;
+	}
+	.amfc-en-footer__contact-label {
+		font-weight: 400;
+		margin-bottom: 12px;
+	}
+	.amfc-en-footer__contact > :nth-child(2) {
+		max-width: 307px;
+	}
+	.amfc-en-footer__contact > :nth-child(3) {
+		max-width: 266px;
+	}
+	.amfc-en-footer__zh {
+		display: block;
+		font-size: 12px;
+		font-weight: 400;
+		line-height: 18px;
+	}
+	.amfc-en-footer__jp-name {
+		display: block;
+	}
+	.amfc-en-footer__top {
+		order: 2;
+		margin: 12px 0 0;
+	}
+	.amfc-en-footer__logo {
+		width: 100%;
+	}
+	.amfc-en-footer__logo img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+	.amfc-en-footer .amfc-en-footer__copyright {
+		display: block;
+		order: 3;
+		margin: 20px auto 0;
+		max-width: 343px;
+		font-family: 'Noto Sans TC', sans-serif;
+		font-size: 12px;
+		line-height: 1.5;
+		text-align: center;
+	}
+
+	/* Phone-specific replacements for the desktop hero entrance keyframes -- those bake the
+	   desktop translate/scale into their end state, which would fight the phone geometry above. */
+	@keyframes amfc-en-hero-glow-bloom-m {
+		from { transform: scale(.85); opacity: 0; }
+		to   { transform: scale(1);   opacity: 1; }
+	}
+	@keyframes amfc-en-hero-photo-settle-m {
+		from { opacity: 0; transform: translateY(24px); }
+		to   { opacity: 1; transform: none; }
 	}
 }

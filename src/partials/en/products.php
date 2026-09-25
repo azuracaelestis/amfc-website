@@ -23,5 +23,8 @@
 				<p class="amfc-en-product-card__label">Corporate Bond</p>
 			</div>
 		</div>
+		<!-- Phone only (hidden >=768px in CSS): the four cards become a horizontal scroller and
+		     these dots track which card is in view (updated by initProductsCarouselDots()). -->
+		<div class="amfc-en-products__dots" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 	</div>
 </section>

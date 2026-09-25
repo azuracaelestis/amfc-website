@@ -21,7 +21,7 @@
 			</div>
 			<div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
 				<p class="amfc-en-eyebrow">What We Do</p>
-				<h2 class="amfc-en-whatwedo__heading mt-3 mb-3">Financial Solutions Built for a Changing Asia</h2>
+				<h2 class="amfc-en-whatwedo__heading mt-3 mb-3">Financial Solutions Built for<br class="d-md-none" aria-hidden="true" /> a Changing Asia</h2>
 				<p class="mb-4">Empowering Asian markets with AI-driven, compliant financial technology for individuals and enterprises.</p>
 
 				<div class="d-flex flex-column gap-3" id="amfcEnWhatWeDoAccordion">
@@ -41,7 +41,7 @@
 					</div>
 					<div class="amfc-en-accordion-item">
 						<button class="amfc-en-accordion-item__toggle" type="button" data-bs-toggle="collapse" data-bs-target="#amfcEnWwd2" aria-expanded="false" aria-controls="amfcEnWwd2">
-							Cross-Border Financial Services
+							Cross-Border<br class="d-md-none" aria-hidden="true" /> Financial Services
 							<img src="<?= e(asset('images/en/icon-chevron-down.svg')) ?>" alt="" aria-hidden="true" />
 						</button>
 						<div id="amfcEnWwd2" class="collapse" data-bs-parent="#amfcEnWhatWeDoAccordion">

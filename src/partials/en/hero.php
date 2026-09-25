@@ -1,6 +1,9 @@
 <?php // PORT THIS — content is a hardcoded stub per CLAUDE.md (no CMS in this repo). ?>
 <section class="amfc-en-hero">
-	<img class="amfc-en-hero__bg-shape" src="<?= e(asset('images/en/hero-bg-shape.svg')) ?>" alt="" aria-hidden="true" />
+	<picture>
+		<source media="(max-width: 767.98px)" srcset="<?= e(asset('images/en/hero-bg-shape-mobile.svg')) ?>" />
+		<img class="amfc-en-hero__bg-shape" src="<?= e(asset('images/en/hero-bg-shape.svg')) ?>" alt="" aria-hidden="true" />
+	</picture>
 	<img class="amfc-en-hero__bg-glow" src="<?= e(asset('images/en/hero-bg-ellipse.png')) ?>" alt="" aria-hidden="true" />
 	<!-- "Brand stamp 1" (node 332:1255) — added to the Figma file after the initial pull, hence
 	     missing from the first build. Positioned x:1125/y:236, 260x195, in the 1440px-reference
@@ -26,7 +29,12 @@
 			</div>
 			<div class="col-lg-6">
 				<div class="amfc-en-hero__photo-wrap">
-					<img class="amfc-en-hero__photo" src="<?= e(asset('images/en/hero-photo.png')) ?>" alt="A couple smiling while looking at a smartphone together" width="1672" height="941" />
+					<picture>
+						<!-- Phone design uses a separate portrait cut-out of the couple (transparent
+						     background, sits on the arch photo behind it), not the desktop landscape shot. -->
+						<source media="(max-width: 767.98px)" srcset="<?= e(asset('images/en/hero-photo-mobile.png')) ?>" width="800" height="999" />
+						<img class="amfc-en-hero__photo" src="<?= e(asset('images/en/hero-photo.png')) ?>" alt="A couple smiling while looking at a smartphone together" width="1672" height="941" />
+					</picture>
 				</div>
 			</div>
 		</div>
