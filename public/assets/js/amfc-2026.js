@@ -398,6 +398,13 @@ window.AMFC = (function () {
 				});
 				option.setAttribute('aria-pressed', 'true');
 
+				// Options that map to a real page (the two homepages) navigate there; the rest
+				// stay UI-only until AMFC wires the language cookie.
+				if (option.getAttribute('data-href')) {
+					window.location.href = option.getAttribute('data-href');
+					return;
+				}
+
 				// TODO (AMFC integration): wire selection to the existing
 				// AMFC_2025_WEBSITE_lang cookie / set_lang() in their custom.js, per CLAUDE.md —
 				// same integration boundary as the desktop dropdown's own identical TODO.

@@ -6,7 +6,7 @@
 <header>
 	<nav class="navbar navbar-expand-lg amfc-en-nav">
 		<div class="container-fluid px-0">
-			<a class="navbar-brand" href="/en"><img src="<?= e(asset('images/en/nav-logo.svg')) ?>" alt="AMFC" height="53" /></a>
+			<a class="navbar-brand" href="<?= e(page_url('en')) ?>"><img src="<?= e(asset('images/en/nav-logo.svg')) ?>" alt="AMFC" height="53" /></a>
 			<button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#amfcEnNavCollapse" aria-controls="amfcEnNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -23,7 +23,7 @@
 							Language
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item" href="/" data-lang="zh-TW">繁體中文</a></li>
+							<li><a class="dropdown-item" href="<?= e(page_url('zh')) ?>" hreflang="zh-Hant-TW" lang="zh-Hant-TW" data-lang="zh-TW">繁體中文</a></li>
 							<li><a class="dropdown-item" href="#" data-lang="en-US">English</a></li>
 						</ul>
 					</li>
@@ -36,7 +36,7 @@
 							<img class="amfc-nav__lang-chevron" src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" aria-hidden="true" />
 						</button>
 						<ul id="amfcEnLangList" class="amfc-lang-list" hidden>
-							<li><button type="button" class="amfc-lang-list__option" data-lang="zh-TW" aria-pressed="false">繁體中文<span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
+							<li><button type="button" class="amfc-lang-list__option" data-lang="zh-TW" data-href="<?= e(page_url('zh')) ?>" aria-pressed="false">繁體中文<span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
 							<li><button type="button" class="amfc-lang-list__option" data-lang="en-US" aria-pressed="true">English<span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
 						</ul>
 					</li>

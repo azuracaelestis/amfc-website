@@ -5,7 +5,7 @@
 ?>
 <header class="amfc-nav-pill">
 	<nav class="navbar navbar-expand-lg py-2">
-		<a class="navbar-brand amfc-nav__brand" href="/"><img src="<?= e(asset('images/header-logo.svg')) ?>" alt="<?= e(t('site.logo_alt')) ?>" height="47" /></a>
+		<a class="navbar-brand amfc-nav__brand" href="<?= e(page_url('zh')) ?>"><img src="<?= e(asset('images/header-logo.svg')) ?>" alt="<?= e(t('site.logo_alt')) ?>" height="47" /></a>
 		<!-- Mobile menu toggle, per the Figma mobile frame (AMFC - Homepage (Mobile) Final1).
 		     navbar-expand-lg was already collapsing the nav below 992px by Bootstrap's own rules,
 		     but with no toggler present the collapsed items had no way to be revealed — they were
@@ -33,7 +33,7 @@
 						<img src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" width="12" height="12" aria-hidden="true" />
 					</button>
 					<ul class="dropdown-menu dropdown-menu-end">
-						<li><a class="dropdown-item" href="#" data-lang="en-US"><?= e(t('nav.lang.en')) ?></a></li>
+						<li><a class="dropdown-item" href="<?= e(page_url('en')) ?>" hreflang="en" lang="en" data-lang="en-US"><?= e(t('nav.lang.en')) ?></a></li>
 						<li><a class="dropdown-item" href="#" data-lang="ja-JP"><?= e(t('nav.lang.ja')) ?></a></li>
 						<li><a class="dropdown-item" href="#" data-lang="id-ID"><?= e(t('nav.lang.id')) ?></a></li>
 					</ul>
@@ -58,7 +58,7 @@
 						     current/only built content language (zh-Hant-TW, see CLAUDE.md "Content
 						     & i18n"), so it's the real starting selection, not a placeholder. -->
 						<li><button type="button" class="amfc-lang-list__option" data-lang="zh-TW" aria-pressed="true"><?= e(t('nav.lang.zh')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
-						<li><button type="button" class="amfc-lang-list__option" data-lang="en-US" aria-pressed="false"><?= e(t('nav.lang.en')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
+						<li><button type="button" class="amfc-lang-list__option" data-lang="en-US" data-href="<?= e(page_url('en')) ?>" aria-pressed="false"><?= e(t('nav.lang.en')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
 						<li><button type="button" class="amfc-lang-list__option" data-lang="ja-JP" aria-pressed="false"><?= e(t('nav.lang.ja')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
 						<li><button type="button" class="amfc-lang-list__option" data-lang="id-ID" aria-pressed="false"><?= e(t('nav.lang.id')) ?><span class="amfc-lang-list__check" aria-hidden="true"></span></button></li>
 					</ul>

@@ -8,6 +8,9 @@
 <!-- Audit fix: og:image and internal links on the live site inconsistently mix amfc.com.tw
      and www.amfc.com.tw — canonicalize on the www host everywhere in our markup -->
 <link rel="canonical" href="https://www.amfc.com.tw/" />
+<link rel="alternate" hreflang="zh-Hant-TW" href="https://www.amfc.com.tw/" />
+<link rel="alternate" hreflang="en" href="https://www.amfc.com.tw/en" />
+<link rel="alternate" hreflang="x-default" href="https://www.amfc.com.tw/" />
 
 <!-- Same Bootstrap version/URL already CSP-allowlisted on the live site — do not bump, do not self-host.
      Audit fix: SRI hash added (absent on the live site) — computed from the exact file this URL serves. -->

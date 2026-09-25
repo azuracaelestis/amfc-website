@@ -36,6 +36,16 @@ function svg_inline(string $path): string
     return file_exists($full) ? file_get_contents($full) : '';
 }
 
+// URL of the homepage in a given language, used by both pages' language switchers and logo
+// links so the two homepages point at each other. Locally the English page is public/en.php; on
+// AMFC's server it's their own /en route -- this is the ONE place to change that on integration
+// (or replace with their own route helper), alongside t()/asset() above.
+function page_url(string $lang): string
+{
+    $urls = ['zh' => '/', 'en' => '/en.php'];
+    return $urls[$lang] ?? '/';
+}
+
 function partial(string $path, array $vars = []): void
 {
     extract($vars);
