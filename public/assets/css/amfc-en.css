@@ -1393,6 +1393,14 @@ body.theme-en > header {
 .amfc-en-product-card img {
 	object-fit: contain;
 	margin-bottom: 16px;
+	/* The per-card width/height below are the *preferred* sizes. The image and the card scale by
+	   two different formulas (and the label can wrap to two lines), so at some widths the two
+	   don't fit; min-height: 0 lets the image shrink (flex-shrink, in this column) to whatever
+	   room the card actually has instead of overflowing past its top edge. object-fit: contain
+	   keeps the art undistorted as the box shrinks. */
+	flex-shrink: 1;
+	min-height: 0;
+	max-width: 100%;
 }
 
 /* Hover elevation. Uses the independent `translate` property (not `transform`) and a
@@ -1454,8 +1462,11 @@ body.theme-en > header {
 
 .amfc-en-product-card__label {
 	font-weight: 700;
-	font-size: 1.5rem;
+	/* 20px on desktop per feedback (was 1.5rem, inflated to ~26px on this site). Raw px. */
+	font-size: 20px;
+	line-height: 24px;
 	margin-bottom: 0;
+	flex-shrink: 0;
 }
 
 /* --- Media / event / anti-fraud band --- */
