@@ -1657,11 +1657,6 @@ body.theme-en > header {
 }
 
 @media (max-width: 991.98px) {
-	.amfc-en-nav {
-		border-radius: 24px;
-		margin-inline: 16px;
-	}
-
 	.amfc-en-hero {
 		padding-block: 24px 64px;
 	}
@@ -1691,70 +1686,6 @@ body.theme-en > header {
 }
 
 @media (max-width: 767.98px) {
-	/* --- Nav: white pill, logo + plus/close toggle (design: x18, y38, 339px wide) --- */
-	.amfc-en-nav {
-		top: 38px;
-		width: calc(100% - 36px);
-		margin: 0;
-		padding: 10px 20px;
-		background: #fff;
-		backdrop-filter: none;
-		-webkit-backdrop-filter: none;
-		box-shadow: none;
-		border-radius: 100px;
-	}
-	.amfc-en-nav:has(.navbar-collapse.show, .navbar-collapse.collapsing) {
-		border-radius: 28px;
-	}
-	.amfc-en-nav .navbar-brand {
-		margin: 0;
-		padding: 0;
-	}
-	.amfc-en-nav .navbar-brand img {
-		height: 33px;
-		width: auto;
-	}
-	.amfc-en-nav .navbar-toggler {
-		width: 29px;
-		height: 29px;
-		padding: 0;
-		box-shadow: none;
-	}
-	.amfc-en-nav .navbar-toggler-icon {
-		position: relative;
-		width: 29px;
-		height: 29px;
-		background-image: none;
-	}
-	.amfc-en-nav .navbar-toggler-icon::before,
-	.amfc-en-nav .navbar-toggler-icon::after {
-		content: "";
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: 20.5px;
-		height: 2.83px;
-		margin: -1.4px 0 0 -10.25px;
-		border-radius: 100px;
-		background: var(--amfc-en-blue-button);
-		transition: transform 0.2s ease-out;
-	}
-	.amfc-en-nav .navbar-toggler-icon::after {
-		transform: rotate(90deg);
-	}
-	.amfc-en-nav .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
-		transform: rotate(45deg);
-	}
-	.amfc-en-nav .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
-		transform: rotate(-45deg);
-	}
-	.amfc-en-nav .navbar-collapse {
-		padding-top: 8px;
-	}
-	.amfc-en-nav .nav-link {
-		padding: 8px 0;
-	}
-
 	/* --- Hero: 722px tall, text top-left, arch photo + cut-out couple below it --- */
 	.amfc-en-hero {
 		display: block;
@@ -2413,5 +2344,191 @@ body.theme-en > header {
 	@keyframes amfc-en-hero-photo-settle-m {
 		from { opacity: 0; transform: translateY(24px); }
 		to   { opacity: 1; transform: none; }
+	}
+}
+
+/* =====================================================================================
+   NAV BELOW 992px (Bootstrap's navbar-expand-lg collapse point) -- a port of the Chinese
+   page's mobile nav (amfc-2026.css: .amfc-nav-pill, .amfc-nav__*, .amfc-lang-list*) so the two
+   pages match exactly: translucent pill with the logo and a "+" that turns into a cross; the
+   menu opens as its own frosted rounded panel BELOW the pill (not by stretching the pill); the
+   language row expands inline with checkmarked options. Values are the same ones, including the
+   rem-based ones (the site's inflated root font-size is identical on both pages, so the same
+   rem expressions land on the same pixels). Desktop (>=992px) is untouched.
+   Not ported: the Chinese page also hides the pill on scroll-down (initNavAutoHide) -- that's
+   behaviour, not style; say the word to add it here.
+   ===================================================================================== */
+.amfc-en-nav__lang-dropdown ~ .amfc-nav__lang-toggle-mobile,
+.amfc-en-nav .amfc-nav__lang-toggle-mobile {
+	display: none;
+}
+
+@media (max-width: 991.98px) {
+	.amfc-en-nav {
+		top: 1.5rem;
+		width: clamp(15.5rem, calc(339 / 375 * 100vw), 921.6px);
+		height: clamp(2.5rem, calc(53 / 375 * 100vw), 64px);
+		margin: 0;
+		padding: 0 clamp(0.9rem, calc(28.8 / 1440 * 100vw), 1.8rem);
+		flex-wrap: nowrap;
+		background: rgba(255, 255, 255, 0.8);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
+		border-radius: 999px;
+		box-shadow: 0 12px 32px rgba(22, 35, 79, 0.08);
+	}
+	.amfc-en-nav > .container-fluid {
+		height: 100%;
+		flex-wrap: nowrap;
+	}
+
+	.amfc-en-nav .navbar-brand {
+		display: inline-flex;
+		align-items: center;
+		margin: 0;
+		padding: 0;
+		transform: translateX(20px);
+	}
+	.amfc-en-nav .navbar-brand img {
+		width: clamp(3rem, calc(66 / 375 * 100vw), 80px);
+		height: clamp(1.5rem, calc(33 / 375 * 100vw), 40px);
+	}
+
+	/* "+" glyph (two crossed rounded bars, #2d50d7), turning into a cross when open. !important
+	   because AMFC's custom.css sets `.navbar-toggler { background-color: #fff !important }`. */
+	.amfc-en-nav .navbar-toggler {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: none;
+		padding: 0.25rem;
+		background-color: transparent !important;
+		box-shadow: none !important;
+	}
+	.amfc-en-nav .navbar-toggler:focus-visible {
+		outline: 2px solid var(--amfc-en-blue-accent);
+		outline-offset: 2px;
+	}
+	.amfc-en-nav .navbar-toggler-icon {
+		width: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 24.75px);
+		height: clamp(0.9375rem, calc(20.51 / 375 * 100vw), 24.75px);
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath stroke='%232d50d7' stroke-linecap='round' stroke-width='2.5' d='M12 4v16M4 12h16'/%3e%3c/svg%3e");
+		transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
+	}
+	.amfc-en-nav .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+		transform: rotate(45deg);
+	}
+
+	/* The menu is its own frosted panel floating 0.75rem below the pill. */
+	.amfc-en-nav .navbar-collapse {
+		position: absolute;
+		top: calc(100% + 0.75rem);
+		left: 0;
+		right: 0;
+		background: rgba(255, 255, 255, 0.92);
+		backdrop-filter: blur(20px) saturate(180%);
+		-webkit-backdrop-filter: blur(20px) saturate(180%);
+		border: 1px solid rgba(255, 255, 255, 0.6);
+		border-radius: 24px;
+		box-shadow: 0 12px 32px rgba(22, 35, 79, 0.08);
+		padding: 1.25rem 1.5rem;
+	}
+	.amfc-en-nav .navbar-nav {
+		width: 100%;
+		align-items: flex-start;
+	}
+	.amfc-en-nav .nav-link {
+		/* Bootstrap's own vertical-list padding (0.5rem 0) -- the desktop rule's 1rem side padding
+		   would indent the links 16px further than on the Chinese page. */
+		padding: 0.5rem 0;
+		color: var(--amfc-en-navy);
+		font-size: 1rem;
+		font-weight: 600;
+		transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+	}
+	.amfc-en-nav .nav-link:hover,
+	.amfc-en-nav .nav-link:focus-visible {
+		transform: translateY(-2px);
+	}
+
+	/* Desktop dropdown hidden; the inline-expand disclosure takes its place. */
+	.amfc-en-nav__lang-dropdown {
+		display: none;
+	}
+	.amfc-en-nav .amfc-nav__lang-toggle-mobile {
+		display: list-item;
+		width: 100%;
+	}
+	.amfc-en-nav .amfc-nav__lang-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		width: 100%;
+		justify-content: space-between;
+		min-height: 44px;
+		padding-left: 0;
+		background: none;
+		border: none;
+		color: var(--amfc-en-navy);
+		font-size: 1rem;
+		font-weight: 600;
+	}
+	.amfc-en-nav .amfc-nav__lang-toggle img {
+		transform: rotate(-90deg);
+	}
+	.amfc-en-nav .amfc-nav__lang-toggle .amfc-nav__lang-chevron {
+		transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
+	}
+	.amfc-en-nav .amfc-nav__lang-toggle[aria-expanded="true"] .amfc-nav__lang-chevron {
+		transform: rotate(90deg);
+	}
+
+	.amfc-en-nav .amfc-lang-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+	}
+	.amfc-en-nav .amfc-lang-list__option {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		min-height: 44px;
+		/* the whole row (label + checkmark) sits 10px right, as on the Chinese page */
+		transform: translateX(10px);
+		background: none;
+		border: none;
+		padding: 0.5rem 0;
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--amfc-en-navy);
+	}
+	.amfc-en-nav .amfc-lang-list__option:focus-visible {
+		outline: 2px solid var(--amfc-en-blue-accent);
+		outline-offset: 2px;
+	}
+	.amfc-en-nav .amfc-lang-list__check {
+		display: block;
+		width: 12px;
+		height: 7px;
+		border-left: 2px solid var(--amfc-en-blue-accent);
+		border-bottom: 2px solid var(--amfc-en-blue-accent);
+		transform: rotate(-45deg);
+		opacity: 0;
+	}
+	.amfc-en-nav .amfc-lang-list__option[aria-pressed="true"] .amfc-lang-list__check {
+		opacity: 1;
+	}
+	.amfc-en-nav .amfc-lang-list__option[aria-pressed="true"] {
+		color: var(--amfc-en-blue-accent);
+	}
+}
+
+@media (max-width: 991.98px) and (prefers-reduced-motion: reduce) {
+	.amfc-en-nav .navbar-toggler-icon,
+	.amfc-en-nav .nav-link,
+	.amfc-en-nav .amfc-nav__lang-toggle .amfc-nav__lang-chevron {
+		transition: none;
 	}
 }
