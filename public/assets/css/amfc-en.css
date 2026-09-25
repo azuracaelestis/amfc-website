@@ -1120,6 +1120,7 @@ body.theme-en [tabindex]:focus-visible {
    the SVG's own viewBox + default preserveAspectRatio (xMidYMid meet) does the same letterboxed
    "contain" scaling once it's told to fill this 100%/100% box itself. */
 .amfc-en-whatwedo__image--1 svg,
+.amfc-en-whatwedo__image--2 svg,
 .amfc-en-whatwedo__image--3 svg {
 	display: block;
 	width: 100%;
@@ -1130,8 +1131,8 @@ body.theme-en [tabindex]:focus-visible {
    (legal-scale, shield/lock) appear one at a time, then settle into a slow, subtle,
    always-looping drift. Card 1's badges trigger off scroll (initWwdCardReveal() in
    amfc-2026.js, adding .is-inview to .amfc-en-whatwedo__image--1); card 3's trigger off its
-   accordion panel actually opening (initWwdCard3Reveal(), adding .is-inview to
-   .amfc-en-whatwedo__image--3) rather than scroll, since scroll position alone doesn't mean the
+   accordion panel actually opening (initWwdAccordionReveal(), adding .is-inview to
+   .amfc-en-whatwedo__image--2 / --3) rather than scroll, since scroll position alone doesn't mean the
    user has switched to that panel. Entrance lives on the outer .wwd-card wrapper (opacity +
    translateY + scale) and floating lives on the inner .wwd-float group's own transform -- two
    separate elements so the two animations don't fight over the same `transform` property on one
@@ -1194,6 +1195,19 @@ body.theme-en [tabindex]:focus-visible {
 .is-inview .wwd-float--scale { animation: amfc-wwd-float-scale 6s ease-in-out infinite; animation-delay: 750ms; }
 .is-inview .wwd-float--lock { animation: amfc-wwd-float-lock 5.2s ease-in-out infinite; animation-delay: 1200ms; }
 
+/* Card 2 (cross-border): entrance only, no float. Story order -- globe, then currencies
+   clockwise ($ € £ ¥), then the two arrows that connect them, then the lock last as a seal of
+   trust. Its lock badge is .wwd-card--lock-x (not --lock) so it can't collide with card 3's
+   .wwd-card--lock, which has a float wrapper and a different delay. */
+.is-inview .wwd-card--globe { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 0ms; }
+.is-inview .wwd-card--usd { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 600ms; }
+.is-inview .wwd-card--eur { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 750ms; }
+.is-inview .wwd-card--gbp { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 900ms; }
+.is-inview .wwd-card--jpy { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 1050ms; }
+.is-inview .wwd-card--arrow-a { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 1500ms; }
+.is-inview .wwd-card--arrow-b { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 1650ms; }
+.is-inview .wwd-card--lock-x { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 2250ms; }
+
 @media (prefers-reduced-motion: reduce) {
 	/* Same specificity as ".is-inview .wwd-card--X" below (two classes each) -- reduced-motion
 	   JS adds .is-inview immediately, so without matching specificity here the entrance rule's
@@ -1203,7 +1217,15 @@ body.theme-en [tabindex]:focus-visible {
 	.is-inview .wwd-card--shield,
 	.is-inview .wwd-card--pie,
 	.is-inview .wwd-card--scale,
-	.is-inview .wwd-card--lock {
+	.is-inview .wwd-card--lock,
+	.is-inview .wwd-card--globe,
+	.is-inview .wwd-card--usd,
+	.is-inview .wwd-card--eur,
+	.is-inview .wwd-card--gbp,
+	.is-inview .wwd-card--jpy,
+	.is-inview .wwd-card--arrow-a,
+	.is-inview .wwd-card--arrow-b,
+	.is-inview .wwd-card--lock-x {
 		animation: none;
 		opacity: 1;
 		transform: none;

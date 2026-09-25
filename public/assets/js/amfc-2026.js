@@ -540,7 +540,7 @@ window.AMFC = (function () {
 	   at a time and settle into their continuous float loop -- purely CSS-driven (see
 	   amfc-en.css's ".wwd-card"/".wwd-float" rules), this only decides WHEN to add .is-inview.
 	   Card 1 is the default-open accordion panel, so "scrolled into view" is the right trigger
-	   for it; card 3's own badges are triggered separately by initWwdCard3Reveal() below, keyed
+	   for it; cards 2 and 3 are triggered separately by initWwdAccordionReveal() below, keyed
 	   to the accordion panel opening instead, since scroll position alone doesn't mean the user
 	   is actually looking at card 3. Fires once via unobserve, same pattern as
 	   initKspIntegrityCoinDrop. querySelector returns null on the zh-Hant-TW homepage, so this is
@@ -565,17 +565,18 @@ window.AMFC = (function () {
 		observer.observe(host);
 	}
 
-	/* What We Do (EN page) card 3 illustration (legal-scale, shield/lock badges): reveals when
-	   the "Risk Management & Compliance" accordion panel actually opens, via Bootstrap's own
-	   collapse event, rather than on scroll -- card 3's image sits in the same box as card 1's
-	   and only becomes visible once its accordion panel is expanded (see
-	   amfc-en.css's ".row:has(#amfcEnWwd3.show) ..." swap rule), so scroll position alone
-	   doesn't tell us the user is actually looking at it. Listener removes itself after firing
-	   once; if the panel is somehow already open before JS runs (e.g. a future deep-link), the
-	   initial check below covers it without waiting for a collapse event that already happened. */
-	function initWwdCard3Reveal() {
-		var host = document.querySelector('.amfc-en-whatwedo__image--3');
-		var panel = document.getElementById('amfcEnWwd3');
+	/* What We Do (EN page) cards 2 and 3 illustrations (cross-border globe/currencies/arrows/lock;
+	   legal-scale and shield/lock badges): reveal when their accordion panel actually opens, via
+	   Bootstrap's own collapse event, rather than on scroll -- each image sits in the same box as
+	   card 1's and only becomes visible once its panel is expanded (see amfc-en.css's
+	   ".row:has(#amfcEnWwdN.show) ..." swap rule), so scroll position alone doesn't tell us the user
+	   is actually looking at it. Listener removes itself after firing once; if the panel is somehow
+	   already open before JS runs (e.g. a future deep-link), the initial check covers it without
+	   waiting for a collapse event that already happened. Returns silently on pages without these
+	   elements (zh-Hant-TW). */
+	function initWwdAccordionReveal(hostSelector, panelId) {
+		var host = document.querySelector(hostSelector);
+		var panel = document.getElementById(panelId);
 		if (!host || !panel) return;
 
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -606,7 +607,8 @@ window.AMFC = (function () {
 		initKspStackFade();
 		initKspSettledAnimations();
 		initWwdCardReveal();
-		initWwdCard3Reveal();
+		initWwdAccordionReveal('.amfc-en-whatwedo__image--2', 'amfcEnWwd2');
+		initWwdAccordionReveal('.amfc-en-whatwedo__image--3', 'amfcEnWwd3');
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}
