@@ -1954,16 +1954,18 @@ body.theme-en > header {
 		display: none;
 	}
 	.amfc-en-principles__stack-tail {
-		height: 0;
+		height: 174px;
 	}
-	/* Pinned with the heading and copy, sitting where the cards land (card zone = 264-554px, the
-	   mark is 151px tall at 300px), so the first card rises over it and the rest stack on top.
-	   Cards (z-index 1-4) paint above the intro, and so above this. Not clipped or moved by
-	   the release: it travels with the intro. */
+	/* Pinned with the heading and copy, 389px (to the visible logo) below the body copy (the design puts it under the
+	   card zone, which is 264-554px when pinned). Positioned from the intro's bottom edge, so
+	   the 389px holds whether the copy wraps to 2 or 3 lines. Cards (z-index 1-4) paint above
+	   the intro, and so above this if they ever overlap. It travels with the intro, so the
+	   section reserves room for it below the stack (.amfc-en-principles__stack-tail). */
 	.amfc-en-principles__watermark--intro {
 		display: block;
 		position: absolute;
-		top: 192px;
+		/* 363px + the ~26px of empty space inside the mark's own box = 389px to the visible logo. */
+		top: calc(100% + 363px);
 		left: -11px;
 		width: 293px;
 		pointer-events: none;
