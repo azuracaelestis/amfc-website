@@ -2234,8 +2234,10 @@ body.theme-en > header {
 		bottom: 0;
 		height: auto;
 	}
-	.amfc-en-media-card__title {
-		font-size: 24px;
+	.amfc-en-media-card__title,
+	.amfc-en-media-card__link {
+		font-size: 16px;
+		line-height: 24px;
 	}
 
 	/* --- Footer: follows the Chinese page's phone footer (see amfc-2026.css .amfc-footer__*): no
