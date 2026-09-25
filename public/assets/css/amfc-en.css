@@ -1970,6 +1970,17 @@ body.theme-en > header {
 		position: static;
 		width: 293px;
 	}
+	/* Hold at the end: once the last card has landed on the pile, the whole stack (and the pinned
+	   intro) stays put for another 300px of scrolling before the section scrolls away, so the
+	   finished stack gets a beat instead of being carried off the moment it lands. A real flex
+	   item at the end of the stack (padding wouldn't count toward the sticky release); its
+	   negative margin cancels the stack's 220px flex gap, so the hold is exactly its own height. */
+	.amfc-en-principles__stack::after {
+		content: "";
+		flex: none;
+		height: 300px;
+		margin-top: -220px;
+	}
 	.amfc-en-stat-card {
 		top: 264px;
 		width: 290px;
