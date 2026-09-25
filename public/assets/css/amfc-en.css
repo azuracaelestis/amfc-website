@@ -2139,6 +2139,12 @@ body.theme-en > header {
 	.amfc-en-product-card:nth-child(-n+2) {
 		border-radius: 16px;
 	}
+	/* No hover elevation on the phone layout (it's a swipe carousel; this also covers a narrow
+	   desktop window, where the desktop rule's (hover: hover) gate would otherwise still apply). */
+	.amfc-en-products .amfc-en-product-card:hover {
+		translate: none;
+		box-shadow: none;
+	}
 	.amfc-en-product-card img {
 		margin-bottom: 27px;
 	}
