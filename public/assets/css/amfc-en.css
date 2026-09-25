@@ -1468,6 +1468,17 @@ body.theme-en > header {
 	padding-inline: clamp(24px, calc(120 / 1440 * 100vw), 120px);
 }
 
+.amfc-en-media-band__heading {
+	/* Same heading treatment as the Products / What We Do headings (32px at 1440, bold, navy,
+	   centred). Raw px, not rem (CLAUDE.md's rem-inflation note). */
+	font-size: clamp(24px, calc(32 / 1440 * 100vw), 32px);
+	font-weight: 700;
+	line-height: 1.2;
+	text-align: center;
+	color: var(--amfc-en-navy);
+	margin: 0 0 48px;
+}
+
 .amfc-en-media-band__grid {
 	display: flex;
 	flex-wrap: wrap;
@@ -2229,6 +2240,11 @@ body.theme-en > header {
 	   each side of every boundary), and this band's neighbours already supply the other 48px. */
 	.amfc-en-media-band {
 		padding: 48px 20px;
+	}
+	.amfc-en-media-band__heading {
+		font-size: 24px;
+		line-height: 24px;
+		margin-bottom: 36px;
 	}
 	.amfc-en-media-band__grid {
 		flex-direction: column;

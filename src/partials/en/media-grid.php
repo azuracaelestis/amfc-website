@@ -1,5 +1,6 @@
 <?php // PORT THIS — content is a hardcoded stub per CLAUDE.md (no CMS in this repo). ?>
 <section class="amfc-en-media-band" id="news">
+	<h2 class="amfc-en-media-band__heading" data-aos="fade-up">Latest News</h2>
 	<div class="amfc-en-media-band__grid">
 		<div class="amfc-en-media-card" data-aos="fade-up" data-aos-delay="0">
 			<div class="amfc-en-media-card__image-wrap amfc-en-media-card__image-wrap--media">
