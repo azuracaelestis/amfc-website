@@ -1510,6 +1510,19 @@ body.theme-en > header {
 	object-fit: cover;
 }
 
+/* The art should sit flush with the card's bottom edge (0px margin, as in the design). Each PNG
+   carries a little empty transparent space under its artwork -- measured from the alpha channel:
+   Media 0.64% of the image height, Event 5.80%, Anti-Fraud 0% -- so each is shifted down by its
+   own margin (a % translate is of the image's own height, so this holds at every card size, on
+   desktop's cover-fit box and on the phone's natural-aspect one alike); the overflow, all
+   transparent, is clipped by the wrap. */
+.amfc-en-media-card__image-wrap--media .amfc-en-media-card__image {
+	transform: translateY(0.64%);
+}
+.amfc-en-media-card__image-wrap--event .amfc-en-media-card__image {
+	transform: translateY(5.8%);
+}
+
 .amfc-en-media-card__footer {
 	display: flex;
 	align-items: center;
