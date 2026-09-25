@@ -62,6 +62,10 @@
 				<div class="amfc-en-principles__intro">
 					<h2 class="amfc-en-principles__heading">Four Principles.<br />One Commitment.</h2>
 					<p>These four principles shape every solution we build and every partnership we create.</p>
+					<!-- Phone only (hidden >=768px in CSS): on a phone the watermark is part of the pinned
+					     intro, so it shows with the heading and the cards stack on top of it (cards paint
+					     above the intro via z-index; the desktop overlay watermark is hidden on phones). -->
+					<span class="amfc-en-principles__watermark amfc-en-principles__watermark--intro" role="presentation" aria-hidden="true"></span>
 				</div>
 			</div>
 			<div class="amfc-en-principles__stack-wrap">
@@ -125,10 +129,6 @@
 		     own comment above for why) — still provides the same scroll runway before the Funds
 		     section begins, just as a sibling of the whole layout row instead of a flex item
 		     inside it, so it no longer inflates the row's own align-items: stretch height. -->
-		<div class="amfc-en-principles__stack-tail">
-			<!-- Phone only (hidden >=768px in CSS): on a phone the watermark sits directly under the
-			     last card, 36px below it, instead of in the desktop overlay above. -->
-			<span class="amfc-en-principles__watermark amfc-en-principles__watermark--tail" role="presentation" aria-hidden="true"></span>
-		</div>
+		<div class="amfc-en-principles__stack-tail"></div>
 	</div>
 </section>

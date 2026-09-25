@@ -1680,7 +1680,7 @@ body.theme-en > header {
    ===================================================================================== */
 
 /* Phone-only elements: hidden at every other width. */
-.amfc-en-principles__watermark--tail,
+.amfc-en-principles__watermark--intro,
 .amfc-en-products__dots,
 .amfc-en-footer__zh,
 .amfc-en-footer__jp-name,
@@ -1923,7 +1923,6 @@ body.theme-en > header {
 	.amfc-en-principles__intro {
 		position: sticky;
 		top: var(--amfc-en-stack-top);
-		z-index: 5;
 		width: 100%;
 		min-height: 0;
 		text-align: center;
@@ -1945,30 +1944,33 @@ body.theme-en > header {
 	}
 	.amfc-en-principles__stack-wrap {
 		width: 100%;
-		margin-top: -340px;
+		/* -340px cancels the intro's release margin above; +260px is a lead-in of empty space
+		   before the first card, so the pinned intro and watermark are visible on their own and
+		   the cards then rise over the watermark. */
+		margin-top: -80px;
 	}
-	/* The desktop overlay watermark is replaced by the twin in .amfc-en-principles__stack-tail,
-	   which sits in flow right under the last card. */
+	/* The desktop overlay watermark is replaced by the twin inside the pinned intro (below). */
 	.amfc-en-principles__watermark-overlay {
 		display: none;
 	}
 	.amfc-en-principles__stack-tail {
-		height: auto;
-		padding-top: 36px;
+		height: 0;
 	}
-	.amfc-en-principles__watermark--tail {
+	/* Pinned with the heading and copy, sitting where the cards land (card zone = 264-554px, the
+	   mark is 151px tall at 300px), so the first card rises over it and the rest stack on top.
+	   Cards (z-index 1-4) paint above the intro, and so above this. Not clipped or moved by
+	   the release: it travels with the intro. */
+	.amfc-en-principles__watermark--intro {
 		display: block;
-		position: static;
+		position: absolute;
+		top: 192px;
+		left: -11px;
 		width: 293px;
-		margin-left: -11px;
+		pointer-events: none;
 	}
 	.amfc-en-principles__watermark-slot {
 		position: static;
 		height: auto;
-	}
-	.amfc-en-principles__watermark {
-		position: static;
-		width: 293px;
 	}
 	/* Hold at the end: once the last card has landed on the pile, the whole stack (and the pinned
 	   intro) stays put for another 300px of scrolling before the section scrolls away, so the
