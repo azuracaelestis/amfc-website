@@ -1791,7 +1791,7 @@ body.theme-en > header {
 		line-height: 36px;
 	}
 	.amfc-en-hero__bg-glow {
-		top: 319px;
+		top: 307px; /* design 319px, moved up 12px per feedback */
 		/* Figma: 571px circle centred at 50% + 5px, so its left edge is 93px off-screen. */
 		left: -93px;
 		right: auto;
@@ -1820,7 +1820,7 @@ body.theme-en > header {
 		border-radius: 0;
 	}
 	.amfc-en-hero__brand-stamp {
-		top: 343px;
+		top: 319px; /* design 343px, moved up 24px per feedback */
 		left: calc(50% + 25.5px);
 		right: auto;
 		width: 132px;
