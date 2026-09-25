@@ -1469,28 +1469,14 @@ body.theme-en > header {
 }
 
 .amfc-en-media-band__heading {
-	/* Same type as the Products / What We Do headings (32px at 1440, bold, navy). Raw px, not
-	   rem (CLAUDE.md's rem-inflation note). Left-aligned on desktop, to the first card's left
-	   edge: the cards are a centred row, so the heading is given that row's exact width (3
-	   cards + 2 gaps, the same two clamp() formulas as .amfc-en-media-card and the grid's gap)
-	   and centred as a block. Phones re-centre it (see the phone block). */
+	/* Same treatment as the other section headings (Products, What We Do): 32px at 1440 scaling
+	   down to 24px, bold, navy, centred. Raw px, not rem (CLAUDE.md's rem-inflation note). */
 	font-size: clamp(24px, calc(32 / 1440 * 100vw), 32px);
 	font-weight: 700;
 	line-height: 1.2;
-	text-align: left;
+	text-align: center;
 	color: var(--amfc-en-navy);
-	width: calc(3 * clamp(260px, calc(360 / 1440 * 100vw), 360px) + 2 * clamp(20px, calc(42 / 1440 * 100vw), 42px));
-	max-width: 100%;
-	margin: 0 auto 48px;
-}
-
-/* Below ~1004px the three cards no longer fit on one line and wrap to two per row (still a
-   centred row), so the heading takes that row's width (2 cards + 1 gap) to keep lining up with
-   the first card. Phones override this (single column, centred heading). */
-@media (max-width: 1004px) {
-	.amfc-en-media-band__heading {
-		width: calc(2 * clamp(260px, calc(360 / 1440 * 100vw), 360px) + clamp(20px, calc(42 / 1440 * 100vw), 42px));
-	}
+	margin: 0 0 48px;
 }
 
 .amfc-en-media-band__grid {
@@ -2258,8 +2244,6 @@ body.theme-en > header {
 	.amfc-en-media-band__heading {
 		font-size: 24px;
 		line-height: 24px;
-		text-align: center;
-		width: auto;
 		margin-bottom: 36px;
 	}
 	.amfc-en-media-band__grid {
