@@ -1674,6 +1674,15 @@ body.theme-en > header {
    html{font-size:1.1rem} inflation (CLAUDE.md).
    ===================================================================================== */
 
+/* What We Do's eyebrow/heading/copy carry data-aos for the phone layout only; at 768px and up
+   the whole column animates instead (see whatwedo.php), so these stay put rather than doubling up. */
+@media (min-width: 768px) {
+	.amfc-en-whatwedo .col-lg-6:last-child > [data-aos] {
+		opacity: 1 !important;
+		transform: none !important;
+	}
+}
+
 /* Phone-only elements: hidden at every other width. */
 .amfc-en-principles__watermark--intro,
 .amfc-en-products__arrow,
@@ -2334,6 +2343,22 @@ body.theme-en > header {
 	}
 	.amfc-en-footer .amfc-en-footer__copyright a:hover {
 		text-decoration: underline;
+	}
+
+	/* --- Phone motion: one vertical rise everywhere ---
+	   Headlines and body copy all use the same fade-up as the Products header. The horizontal
+	   fade-left/fade-right slide-ins (Trust badges and copy, Funds logo and copy) read as the
+	   page swaying side to side on a narrow screen, so on phones their start position is a
+	   100px rise instead (AOS's own fade-up offset); the settled state is AOS's own. */
+	body.theme-en [data-aos="fade-right"]:not(.aos-animate),
+	body.theme-en [data-aos="fade-left"]:not(.aos-animate) {
+		transform: translate3d(0, 100px, 0);
+	}
+	/* What We Do: the desktop column-level motion is off on phones because its eyebrow, heading
+	   and copy animate individually (data-aos in whatwedo.php). */
+	.amfc-en-whatwedo .col-lg-6[data-aos] {
+		opacity: 1 !important;
+		transform: none !important;
 	}
 
 	/* Phone-specific replacements for the desktop hero entrance keyframes -- those bake the

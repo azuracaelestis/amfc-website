@@ -19,10 +19,13 @@
 					<span class="amfc-en-whatwedo__image amfc-en-whatwedo__image--3" role="img" aria-label="Illustration of risk management and compliance governance"><?= svg_inline('images/en/whatwedo-illustration-3.svg') ?></span>
 				</div>
 			</div>
+			<!-- The column fades up as one block on desktop; on phones the eyebrow/heading/copy each rise
+			     on their own like the Products header does (data-aos on the three below), and the column's
+			     own motion is switched off -- see the phone motion block in amfc-en.css. -->
 			<div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
-				<p class="amfc-en-eyebrow">What We Do</p>
-				<h2 class="amfc-en-whatwedo__heading mt-3 mb-3">Financial Solutions Built for<br class="d-md-none" aria-hidden="true" /> a Changing Asia</h2>
-				<p class="mb-4">Empowering Asian markets with AI-driven, compliant financial technology for individuals and enterprises.</p>
+				<p class="amfc-en-eyebrow" data-aos="fade-up">What We Do</p>
+				<h2 class="amfc-en-whatwedo__heading mt-3 mb-3" data-aos="fade-up">Financial Solutions Built for<br class="d-md-none" aria-hidden="true" /> a Changing Asia</h2>
+				<p class="mb-4" data-aos="fade-up">Empowering Asian markets with AI-driven, compliant financial technology for individuals and enterprises.</p>
 
 				<div class="d-flex flex-column gap-3" id="amfcEnWhatWeDoAccordion">
 					<div class="amfc-en-accordion-item">
