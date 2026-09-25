@@ -1680,6 +1680,7 @@ body.theme-en > header {
    ===================================================================================== */
 
 /* Phone-only elements: hidden at every other width. */
+.amfc-en-principles__watermark--tail,
 .amfc-en-products__dots,
 .amfc-en-footer__zh,
 .amfc-en-footer__jp-name,
@@ -1895,8 +1896,7 @@ body.theme-en > header {
 	.amfc-en-principles {
 		position: relative;
 		margin-inline: 9px;
-		/* bottom: 48px panel padding + 151px watermark + 24px gap */
-		padding: 48px 20px 223px;
+		padding: 48px 20px;
 		border-radius: 32px;
 		background: linear-gradient(180deg, var(--amfc-en-panel), #fff 100%);
 	}
@@ -1947,10 +1947,20 @@ body.theme-en > header {
 		width: 100%;
 		margin-top: -340px;
 	}
+	/* The desktop overlay watermark is replaced by the twin in .amfc-en-principles__stack-tail,
+	   which sits in flow right under the last card. */
 	.amfc-en-principles__watermark-overlay {
-		position: absolute;
-		inset: auto auto 48px 9px;
+		display: none;
+	}
+	.amfc-en-principles__stack-tail {
+		height: auto;
+		padding-top: 36px;
+	}
+	.amfc-en-principles__watermark--tail {
+		display: block;
+		position: static;
 		width: 293px;
+		margin-left: -11px;
 	}
 	.amfc-en-principles__watermark-slot {
 		position: static;

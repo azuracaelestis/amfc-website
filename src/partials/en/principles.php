@@ -125,6 +125,10 @@
 		     own comment above for why) — still provides the same scroll runway before the Funds
 		     section begins, just as a sibling of the whole layout row instead of a flex item
 		     inside it, so it no longer inflates the row's own align-items: stretch height. -->
-		<div class="amfc-en-principles__stack-tail"></div>
+		<div class="amfc-en-principles__stack-tail">
+			<!-- Phone only (hidden >=768px in CSS): on a phone the watermark sits directly under the
+			     last card, 36px below it, instead of in the desktop overlay above. -->
+			<span class="amfc-en-principles__watermark amfc-en-principles__watermark--tail" role="presentation" aria-hidden="true"></span>
+		</div>
 	</div>
 </section>
