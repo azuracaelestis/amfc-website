@@ -1685,6 +1685,7 @@ body.theme-en > header {
 .amfc-en-products__dots,
 .amfc-en-footer__zh,
 .amfc-en-footer__jp-name,
+.amfc-en-footer__phone,
 .amfc-en-footer__copyright {
 	display: none;
 }
@@ -2296,16 +2297,18 @@ body.theme-en > header {
 		font-size: 24px;
 	}
 
-	/* --- Footer: offices + big logo + copyright only (the design drops the link columns and
-	   customer-service block at this width) --- */
+	/* --- Footer: follows the Chinese page's phone footer (see amfc-2026.css .amfc-footer__*): no
+	   link columns or Customer Service block, each office as a 74px label column beside its
+	   details (16px, 5px between lines, 24px between offices), a faint grey watermark lockup,
+	   then the copyright and privacy lines. --- */
 	.amfc-en-footer {
-		padding: 48px 0 53px;
+		padding: 48px 0;
 		border-top: 0;
 	}
 	.amfc-en-footer > .container {
 		display: flex;
 		flex-direction: column;
-		padding-inline: 0;
+		padding-inline: 30px;
 	}
 	.amfc-en-footer__categories,
 	.amfc-en-footer__service {
@@ -2316,43 +2319,60 @@ body.theme-en > header {
 		--bs-gutter-x: 0;
 		--bs-gutter-y: 0;
 		margin: 0;
-		padding-inline: 30px;
-		row-gap: 52px;
+		padding: 0;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		row-gap: 24px;
 	}
 	.amfc-en-footer__contact > * {
+		display: flex;
+		gap: 12px;
+		width: 100%;
+		max-width: none;
 		padding: 0;
 		margin-top: 0;
 	}
+	/* after the row rule above, whose specificity would otherwise re-show it */
+	.amfc-en-footer__contact > .amfc-en-footer__service {
+		display: none;
+	}
 	.amfc-en-footer__contact-label,
 	.amfc-en-footer__contact p {
-		font-size: 12px;
-		line-height: 18px;
+		font-size: 16px;
+		line-height: 1.5;
 	}
 	.amfc-en-footer__contact-label {
+		flex-shrink: 0;
+		width: 74px;
+		line-height: 1.2;
 		font-weight: 400;
-		margin-bottom: 12px;
-	}
-	.amfc-en-footer__contact > :nth-child(2) {
-		max-width: 307px;
-	}
-	.amfc-en-footer__contact > :nth-child(3) {
-		max-width: 266px;
+		margin-bottom: 0;
 	}
 	.amfc-en-footer__zh {
 		display: block;
-		font-size: 12px;
+		font-size: 16px;
 		font-weight: 400;
-		line-height: 18px;
+		line-height: 1.2;
 	}
-	.amfc-en-footer__jp-name {
+	.amfc-en-footer__contact-content {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		max-width: clamp(229px, calc(229 / 375 * 100vw), 328px);
+	}
+	.amfc-en-footer__jp-name,
+	.amfc-en-footer__phone {
 		display: block;
 	}
 	.amfc-en-footer__top {
 		order: 2;
-		margin: 12px 0 0;
+		margin: 32px 0 0;
 	}
 	.amfc-en-footer__logo {
 		width: 100%;
+	}
+	.amfc-en-footer__logo picture {
+		display: block;
 	}
 	.amfc-en-footer__logo img {
 		display: block;
@@ -2360,14 +2380,28 @@ body.theme-en > header {
 		height: auto;
 	}
 	.amfc-en-footer .amfc-en-footer__copyright {
-		display: block;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
 		order: 3;
-		margin: 20px auto 0;
-		max-width: 343px;
-		font-family: 'Noto Sans TC', sans-serif;
+		margin-top: 32px;
 		font-size: 12px;
 		line-height: 1.5;
 		text-align: center;
+	}
+	.amfc-en-footer .amfc-en-footer__copyright p {
+		margin: 0;
+		font-size: 12px;
+	}
+	.amfc-en-footer .amfc-en-footer__copyright a {
+		display: inline;
+		font-size: 12px;
+		line-height: 1.5;
+		text-decoration: none;
+	}
+	.amfc-en-footer .amfc-en-footer__copyright a:hover {
+		text-decoration: underline;
 	}
 
 	/* Phone-specific replacements for the desktop hero entrance keyframes -- those bake the
