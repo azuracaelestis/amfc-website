@@ -2126,7 +2126,6 @@ body.theme-en > header {
 		height: 10px;
 		border-radius: 5px;
 		background: var(--amfc-en-lavender);
-		transition: width 0.25s ease-out;
 	}
 	.amfc-en-products__dots span.is-active {
 		width: 42px;
