@@ -1841,7 +1841,7 @@ body.theme-en > header {
 		flex-direction: column;
 		flex-wrap: nowrap;
 		align-items: center;
-		gap: 32px;
+		gap: 36px;
 	}
 	.amfc-en-trust__badges {
 		align-items: center;
@@ -1873,10 +1873,14 @@ body.theme-en > header {
 		width: 100%;
 	}
 	.amfc-en-trust__heading {
-		font-size: 24px;
+		/* Exactly two lines (the <br> in trust.php): the widest, "AI-driven financial solutions",
+		   is 331px at 24px vs a 329px column, so it gets 8px of bleed each side, and the font
+		   scales with the screen (6.4vw = 24px at 375) so narrower phones don't overflow. */
+		font-size: min(24px, 6.4vw);
 		line-height: 24px;
+		white-space: nowrap;
 		text-align: center;
-		margin-bottom: 16px;
+		margin: 0 -8px 16px;
 	}
 	.amfc-en-trust__body {
 		font-size: 16px;
