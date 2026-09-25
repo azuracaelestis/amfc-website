@@ -1387,6 +1387,29 @@ body.theme-en [tabindex]:focus-visible {
 	margin-bottom: 16px;
 }
 
+/* Hover elevation. Uses the independent `translate` property (not `transform`) and a
+   two-class selector because each card carries AOS's data-aos="fade-up", and AOS owns
+   `transform` and `transition-property` on [data-aos] elements (its own settled-state rule
+   outranks a plain single-class hover rule). Hover-capable pointers only, so touch devices
+   don't get a stuck "lifted" card after a tap. */
+.amfc-en-products .amfc-en-product-card {
+	transition: translate 0.3s cubic-bezier(.22, 1, .36, 1), box-shadow 0.3s ease, transform 0.4s, opacity 0.4s;
+}
+@media (hover: hover) {
+	.amfc-en-products .amfc-en-product-card:hover {
+		translate: 0 -12px;
+		box-shadow: 0 18px 32px rgba(17, 47, 124, 0.16);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-products .amfc-en-product-card {
+		transition: box-shadow 0.2s ease;
+	}
+	.amfc-en-products .amfc-en-product-card:hover {
+		translate: none;
+	}
+}
+
 /* Per-card image sizes, matching the source Figma exactly (was a shared 80%/240px max, a guess
    made before this section had specific per-card specs to check against). */
 .amfc-en-product-card__img--large {
