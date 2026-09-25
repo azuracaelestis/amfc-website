@@ -1888,11 +1888,15 @@ body.theme-en > header {
 	}
 
 	/* --- Principles: rounded panel, centered intro, 290px tilted cards that still stack ---
-	   The desktop intro/watermark stick beside the cards; on a phone the intro just sits above
-	   the stack (it scrolls away as the first card pins), and the watermark closes the panel. */
+	   As on desktop, the intro stays pinned while the cards rise beneath it and stack: the intro
+	   pins at --amfc-en-stack-top (below the nav pill) and every card pins at 264px, i.e. just
+	   below the pinned intro (108px top + ~132px of heading/copy + 24px). The watermark leaves
+	   the flow and sits in the section's bottom padding, so it never runs under the pinned intro. */
 	.amfc-en-principles {
+		position: relative;
 		margin-inline: 9px;
-		padding: 48px 20px;
+		/* bottom: 48px panel padding + 151px watermark + 24px gap */
+		padding: 48px 20px 223px;
 		border-radius: 32px;
 		background: linear-gradient(180deg, var(--amfc-en-panel), #fff 100%);
 	}
@@ -1902,21 +1906,33 @@ body.theme-en > header {
 		padding-inline: 0;
 	}
 	.amfc-en-principles__layout {
+		/* static: the desktop rule makes the layout the watermark's containing block; on a phone
+		   the watermark anchors to the section's bottom padding instead. */
+		position: static;
 		--amfc-en-stack-top: 108px;
 		flex-direction: column;
 		flex-wrap: nowrap;
 		align-items: center;
 		gap: 32px;
 	}
+	/* display: contents lifts the intro out of its slot so it becomes a direct child of the
+	   (tall) layout, which is then the containing block its sticky positioning travels within. */
 	.amfc-en-principles__intro-slot {
-		flex: none;
-		width: 100%;
-		max-width: none;
+		display: contents;
 	}
 	.amfc-en-principles__intro {
-		position: static;
+		position: sticky;
+		top: var(--amfc-en-stack-top);
+		z-index: 5;
+		width: 100%;
 		min-height: 0;
 		text-align: center;
+		/* Sticky release accounts for the margin box: with this the intro lets go at the moment
+		   the last (pinned) card starts to leave (its bottom, 264 + 290, minus the intro's own
+		   pinned bottom, 108 + ~132 = ~314px; 300 leaves a little margin so the intro always
+		   leaves first), instead of staying pinned while that card slides up underneath it.
+		   The stack's negative margin-top below cancels the space this adds in the flow. */
+		margin-bottom: 340px;
 	}
 	.amfc-en-principles__heading {
 		font-size: 24px;
@@ -1929,11 +1945,12 @@ body.theme-en > header {
 	}
 	.amfc-en-principles__stack-wrap {
 		width: 100%;
+		margin-top: -340px;
 	}
 	.amfc-en-principles__watermark-overlay {
-		position: static;
-		order: 3;
-		width: 100%;
+		position: absolute;
+		inset: auto auto 48px 9px;
+		width: 293px;
 	}
 	.amfc-en-principles__watermark-slot {
 		position: static;
@@ -1942,9 +1959,9 @@ body.theme-en > header {
 	.amfc-en-principles__watermark {
 		position: static;
 		width: 293px;
-		margin-left: -11px;
 	}
 	.amfc-en-stat-card {
+		top: 264px;
 		width: 290px;
 		max-width: 100%;
 		padding: 27px;
