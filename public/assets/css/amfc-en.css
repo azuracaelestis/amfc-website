@@ -2188,8 +2188,10 @@ body.theme-en > header {
 	}
 
 	/* --- Media band: full-width stacked cards --- */
+	/* 48px, not the design's 90px: sections are spaced 96px apart everywhere (48px of padding on
+	   each side of every boundary), and this band's neighbours already supply the other 48px. */
 	.amfc-en-media-band {
-		padding: 90px 20px;
+		padding: 48px 20px;
 	}
 	.amfc-en-media-band__grid {
 		flex-direction: column;
