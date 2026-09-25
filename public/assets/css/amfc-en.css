@@ -1510,17 +1510,19 @@ body.theme-en > header {
 	object-fit: cover;
 }
 
-/* The art should sit flush with the card's bottom edge (0px margin, as in the design). Each PNG
-   carries a little empty transparent space under its artwork -- measured from the alpha channel:
-   Media 0.64% of the image height, Event 5.80%, Anti-Fraud 0% -- so each is shifted down by its
-   own margin (a % translate is of the image's own height, so this holds at every card size, on
-   desktop's cover-fit box and on the phone's natural-aspect one alike); the overflow, all
-   transparent, is clipped by the wrap. */
+/* The art bleeds off the card's bottom edge (0px margin, as in the design): the Figma frames
+   position each image 6.88% (Media) / 5.76% (Event, Anti-Fraud) of the card's height down from its
+   top, cropping the transparent margin and a sliver of the artwork's own base. A % translate is
+   of the image's own height, so this matches at every card size, on desktop's cover-fit box and
+   the phone's natural-aspect one alike; the overflow is clipped by the wrap. (An earlier pass
+   shifted by each PNG's measured empty margin instead, which left Media and Anti-Fraud short of
+   the design's crop.) */
 .amfc-en-media-card__image-wrap--media .amfc-en-media-card__image {
-	transform: translateY(0.64%);
+	transform: translateY(6.88%);
 }
-.amfc-en-media-card__image-wrap--event .amfc-en-media-card__image {
-	transform: translateY(5.8%);
+.amfc-en-media-card__image-wrap--event .amfc-en-media-card__image,
+.amfc-en-media-card__image-wrap--antifraud .amfc-en-media-card__image {
+	transform: translateY(5.76%);
 }
 
 .amfc-en-media-card__footer {
