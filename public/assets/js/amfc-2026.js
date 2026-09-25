@@ -650,9 +650,39 @@ window.AMFC = (function () {
 			for (var j = 0; j < dots.length; j++) dots[j].classList.toggle('is-active', j === best);
 		}
 
+		/* Swipe hint: arrows on the wrapper appear as soon as the user touches or scrolls the row and
+		   fade out ~1.6s after they stop, each only for a direction that can still scroll. Also
+		   tappable: a tap scrolls one card. */
+		var carousel = grid.parentNode;
+		var prev = carousel.querySelector('.amfc-en-products__arrow--prev');
+		var next = carousel.querySelector('.amfc-en-products__arrow--next');
+		var hideTimer = null;
+
+		function updateArrows() {
+			carousel.classList.toggle('can-prev', grid.scrollLeft > 4);
+			carousel.classList.toggle('can-next', grid.scrollLeft + grid.clientWidth < grid.scrollWidth - 4);
+		}
+		function hint() {
+			updateArrows();
+			carousel.classList.add('is-hinting');
+			window.clearTimeout(hideTimer);
+			hideTimer = window.setTimeout(function () { carousel.classList.remove('is-hinting'); }, 1600);
+		}
+		function step(dir) {
+			var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			var cardW = cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : grid.clientWidth;
+			grid.scrollBy({ left: dir * cardW, behavior: reduce ? 'auto' : 'smooth' });
+			hint();
+		}
+
 		grid.addEventListener('scroll', function () {
 			if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+			hint();
 		}, { passive: true });
+		grid.addEventListener('touchstart', hint, { passive: true });
+		grid.addEventListener('pointerdown', hint, { passive: true });
+		if (prev) prev.addEventListener('click', function () { step(-1); });
+		if (next) next.addEventListener('click', function () { step(1); });
 		update();
 	}
 

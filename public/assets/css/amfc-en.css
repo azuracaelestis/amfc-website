@@ -1681,6 +1681,7 @@ body.theme-en > header {
 
 /* Phone-only elements: hidden at every other width. */
 .amfc-en-principles__watermark--intro,
+.amfc-en-products__arrow,
 .amfc-en-products__dots,
 .amfc-en-footer__zh,
 .amfc-en-footer__jp-name,
@@ -2131,7 +2132,7 @@ body.theme-en > header {
 	.amfc-en-products .amfc-en-product-card {
 		flex: 0 0 280px;
 		width: 280px;
-		height: 400px;
+		height: 350px;
 		padding: 24px 24px 33px;
 		scroll-snap-align: start;
 	}
@@ -2141,27 +2142,74 @@ body.theme-en > header {
 	.amfc-en-product-card img {
 		margin-bottom: 27px;
 	}
+	/* Image boxes are sized to the 350px card: 350 - 24 top - 33 bottom - 29 label - 27 gap = 237px
+	   of height for the art (was 284px in the 400px card). */
 	.amfc-en-product-card__img--large {
-		width: 237px;
-		height: 242px;
+		width: 232px;
+		height: 237px;
 		/* the design's vehicle art fills ~90% of its box */
 		transform: scale(.93);
 	}
 	.amfc-en-product-card__img--portrait {
-		width: 197px;
-		height: 284px;
+		width: 164px;
+		height: 237px;
 	}
 	.amfc-en-product-card__img--small {
-		width: 211px;
-		height: 215px;
+		width: 208px;
+		height: 212px;
 	}
 	.amfc-en-product-card__img--bond {
-		width: 210px;
-		height: 284px;
+		width: 175px;
+		height: 237px;
 	}
 	.amfc-en-product-card__label {
 		font-size: 24px;
 		line-height: 29px;
+	}
+	/* Swipe-hint arrows: hidden until the user touches or scrolls the carousel, then shown (only
+	   for directions that can still scroll) and faded out again shortly after they stop. Their
+	   classes on the wrapper (is-hinting / can-prev / can-next) come from
+	   initProductsCarouselDots(). Vertically centred on the 350px cards. */
+	.amfc-en-products__carousel {
+		position: relative;
+	}
+	.amfc-en-products__arrow {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		top: 155px;
+		width: 40px;
+		height: 40px;
+		padding: 0;
+		border: 0;
+		border-radius: 50%;
+		background: #fff;
+		box-shadow: 0 2px 12px rgba(26, 47, 134, 0.25);
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.25s ease-out, visibility 0s linear 0.25s;
+		z-index: 2;
+	}
+	.amfc-en-products__arrow--prev {
+		left: 8px;
+	}
+	.amfc-en-products__arrow--prev img {
+		transform: rotate(180deg);
+	}
+	.amfc-en-products__arrow--next {
+		right: 8px;
+	}
+	.amfc-en-products__arrow img {
+		width: 24px;
+		height: 24px;
+	}
+	.amfc-en-products__carousel.is-hinting.can-prev .amfc-en-products__arrow--prev,
+	.amfc-en-products__carousel.is-hinting.can-next .amfc-en-products__arrow--next,
+	.amfc-en-products__arrow:focus-visible {
+		opacity: 1;
+		visibility: visible;
+		transition-delay: 0s;
 	}
 	.amfc-en-products__dots {
 		display: flex;
