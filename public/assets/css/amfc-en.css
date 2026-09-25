@@ -1195,9 +1195,27 @@ body.theme-en [tabindex]:focus-visible {
 .is-inview .wwd-float--scale { animation: amfc-wwd-float-scale 6s ease-in-out infinite; animation-delay: 750ms; }
 .is-inview .wwd-float--lock { animation: amfc-wwd-float-lock 5.2s ease-in-out infinite; animation-delay: 1200ms; }
 
-/* Card 2 (cross-border): entrance only, no float. Story order -- globe, then currencies
-   clockwise ($ € £ ¥), then the two arrows that connect them, then the lock last as a seal of
-   trust. Its lock badge is .wwd-card--lock-x (not --lock) so it can't collide with card 3's
+@keyframes amfc-wwd-float-usd {
+	0%, 100% { transform: translateY(0) rotate(0deg); }
+	50% { transform: translateY(-18px) rotate(-3deg); }
+}
+@keyframes amfc-wwd-float-eur {
+	0%, 100% { transform: translateY(0) rotate(0deg); }
+	50% { transform: translateY(-14px) rotate(3deg); }
+}
+@keyframes amfc-wwd-float-gbp {
+	0%, 100% { transform: translateY(0) rotate(0deg); }
+	50% { transform: translateY(16px) rotate(-2.5deg); }
+}
+@keyframes amfc-wwd-float-jpy {
+	0%, 100% { transform: translateY(0) rotate(0deg); }
+	50% { transform: translateY(20px) rotate(2.5deg); }
+}
+
+/* Card 2 (cross-border): entrance for every piece, plus a float loop on the four
+   currency badges (inner .wwd-float wrapper, so it never fights the entrance transform). Story
+   order -- globe, then currencies clockwise ($ € £ ¥), then the two arrows that connect them,
+   then the lock last as a seal of trust. Its lock badge is .wwd-card--lock-x (not --lock) so it can't collide with card 3's
    .wwd-card--lock, which has a float wrapper and a different delay. */
 .is-inview .wwd-card--globe { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 0ms; }
 .is-inview .wwd-card--usd { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 600ms; }
@@ -1207,6 +1225,13 @@ body.theme-en [tabindex]:focus-visible {
 .is-inview .wwd-card--arrow-a { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 1500ms; }
 .is-inview .wwd-card--arrow-b { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 1650ms; }
 .is-inview .wwd-card--lock-x { animation: amfc-wwd-card-appear 750ms cubic-bezier(.22,1,.36,1) both; animation-delay: 2250ms; }
+
+/* Currencies start floating once the whole sequence has landed (lock finishes at 2250 + 750 =
+   3000ms), each on its own cycle length and a slight stagger so they never move in unison. */
+.is-inview .wwd-float--usd { animation: amfc-wwd-float-usd 5.6s ease-in-out infinite; animation-delay: 3000ms; }
+.is-inview .wwd-float--eur { animation: amfc-wwd-float-eur 6.2s ease-in-out infinite; animation-delay: 3300ms; }
+.is-inview .wwd-float--gbp { animation: amfc-wwd-float-gbp 5.2s ease-in-out infinite; animation-delay: 3600ms; }
+.is-inview .wwd-float--jpy { animation: amfc-wwd-float-jpy 6.6s ease-in-out infinite; animation-delay: 3900ms; }
 
 @media (prefers-reduced-motion: reduce) {
 	/* Same specificity as ".is-inview .wwd-card--X" below (two classes each) -- reduced-motion
@@ -1234,7 +1259,11 @@ body.theme-en [tabindex]:focus-visible {
 	.is-inview .wwd-float--shield,
 	.is-inview .wwd-float--pie,
 	.is-inview .wwd-float--scale,
-	.is-inview .wwd-float--lock {
+	.is-inview .wwd-float--lock,
+	.is-inview .wwd-float--usd,
+	.is-inview .wwd-float--eur,
+	.is-inview .wwd-float--gbp,
+	.is-inview .wwd-float--jpy {
 		animation: none;
 	}
 }
