@@ -2055,9 +2055,11 @@ body.theme-en > header {
 	.amfc-en-whatwedo__heading {
 		font-size: 24px;
 		line-height: 24px;
+		text-align: center;
 		margin: 0 0 16px !important;
 	}
 	.amfc-en-whatwedo .col-lg-6 > p:not(.amfc-en-eyebrow) {
+		text-align: center;
 		font-size: 16px;
 		line-height: 1.5;
 		margin-bottom: 36px !important;
@@ -2105,12 +2107,12 @@ body.theme-en > header {
 	.amfc-en-products h2 {
 		font-size: 24px !important;
 		line-height: 24px;
-		text-align: left;
+		text-align: center;
 		margin: 24px 0 16px !important;
 	}
 	.amfc-en-products__intro {
 		max-width: none;
-		text-align: left;
+		text-align: center;
 		margin-bottom: 36px !important;
 	}
 	.amfc-en-products__grid {
