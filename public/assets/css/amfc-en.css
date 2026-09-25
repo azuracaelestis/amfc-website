@@ -1533,9 +1533,9 @@ body.theme-en > header {
 
 .amfc-en-media-card__title {
 	font-weight: 700;
-	/* 20px per feedback (was 24px, matching the Figma node exactly before this follow-up). */
-	font-size: 20px;
-	line-height: 22px;
+	/* 16px per feedback (was 20px, and 24px before that -- the Figma node's own size). */
+	font-size: 16px;
+	line-height: 24px;
 	color: var(--amfc-en-navy);
 	margin-bottom: 0;
 }
@@ -1544,8 +1544,8 @@ body.theme-en > header {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	font-size: 20px;
-	line-height: 22px;
+	font-size: 16px;
+	line-height: 24px;
 	color: var(--amfc-en-navy);
 	text-decoration: underline;
 }
