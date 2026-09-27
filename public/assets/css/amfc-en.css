@@ -162,11 +162,33 @@ body.theme-en > header {
 	font-weight: 600;
 	font-size: 1rem;
 	padding: 0.5rem 1rem;
+	/* Rounded so the pressed/chosen fill below (its own background, not the traveling hover
+	   pill) reads as a pill too, not a hard-cornered rectangle. */
+	border-radius: 999px;
 }
 
+/* Hover: text stays navy -- only the traveling lavender pill underneath (below) signals hover,
+   per feedback. No rule needed here since .nav-link's own resting color already is navy; this
+   is a no-op stated explicitly so a future edit can't accidentally reintroduce a color swap. */
 .amfc-en-nav .nav-link:hover,
 .amfc-en-nav .nav-link:focus-visible {
-	color: var(--amfc-en-blue-accent);
+	color: var(--amfc-en-navy);
+}
+
+/* Pressed/chosen: a solid rounded fill directly on the link/toggle itself (its own background,
+   separate from the lavender hover pill below) -- :active covers the momentary click itself on
+   every item; [aria-expanded="true"] keeps the Language toggle in this same look for as long as
+   its dropdown stays open, the one item here with a real persisted "chosen" state. Both already
+   sit at z-index:1 (above the pill, see the shared rule below), so this solid fill simply paints
+   over the pill rather than needing any JS coordination with it. */
+.amfc-en-nav .nav-link:active,
+.amfc-en-nav .amfc-en-nav__lang-toggle:active,
+.amfc-en-nav .amfc-en-nav__lang-toggle[aria-expanded="true"] {
+	/* !important on the toggle only: it carries Bootstrap's .bg-transparent utility class,
+	   which sets background-color with !important -- beats this rule's specificity regardless,
+	   so matching importance is the only way this fill actually shows on that element. */
+	background: var(--amfc-en-blue-button) !important;
+	color: #fff;
 }
 
 /* Desktop nav hover pill -- a light "spotlight" that slides and resizes to sit behind whichever
