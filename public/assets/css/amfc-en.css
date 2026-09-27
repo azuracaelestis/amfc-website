@@ -169,6 +169,24 @@ body.theme-en > header {
 	color: var(--amfc-en-blue-accent);
 }
 
+/* Desktop "Language" dropdown toggle: an explicit chevron-down icon in place of Bootstrap's
+   default triangle caret, matching the Chinese page's own nav (same icon-chevron-down.svg,
+   rotated -90deg since the source art points sideways -- see amfc-2026.css's identical rule on
+   .amfc-nav__lang-toggle). */
+.amfc-en-nav__lang-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.amfc-en-nav__lang-toggle img {
+	transform: rotate(-90deg);
+}
+
+.amfc-en-nav__lang-toggle.dropdown-toggle::after {
+	display: none;
+}
+
 /* --- Hero --- */
 .amfc-en-hero {
 	position: relative;

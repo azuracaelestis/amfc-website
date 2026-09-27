@@ -19,8 +19,9 @@
 					<li class="nav-item dropdown amfc-en-nav__lang-dropdown">
 						<!-- TODO (AMFC integration): wire selection to the existing
 						     AMFC_2025_WEBSITE_lang cookie / set_lang() already in their custom.js -->
-						<button class="nav-link dropdown-toggle border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+						<button class="nav-link dropdown-toggle border-0 bg-transparent amfc-en-nav__lang-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 							Language
+							<img src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" width="12" height="12" aria-hidden="true" />
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end">
 							<li><a class="dropdown-item" href="<?= e(page_url('zh')) ?>" hreflang="zh-Hant-TW" lang="zh-Hant-TW" data-lang="zh-TW">繁體中文</a></li>
