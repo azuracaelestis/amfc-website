@@ -172,7 +172,8 @@ body.theme-en > header {
 /* Desktop "Language" dropdown toggle: an explicit chevron-down icon in place of Bootstrap's
    default triangle caret, matching the Chinese page's own nav (same icon-chevron-down.svg,
    rotated -90deg since the source art points sideways -- see amfc-2026.css's identical rule on
-   .amfc-nav__lang-toggle). */
+   .amfc-nav__lang-toggle). Rotates a further 180deg when the menu is open (Bootstrap flips
+   aria-expanded on the button itself, so that's the hook -- no JS needed for this part). */
 .amfc-en-nav__lang-toggle {
 	display: inline-flex;
 	align-items: center;
@@ -181,10 +182,90 @@ body.theme-en > header {
 
 .amfc-en-nav__lang-toggle img {
 	transform: rotate(-90deg);
+	transition: transform 0.25s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.amfc-en-nav__lang-toggle[aria-expanded="true"] img {
+	transform: rotate(-90deg) rotate(180deg);
 }
 
 .amfc-en-nav__lang-toggle.dropdown-toggle::after {
 	display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-nav__lang-toggle img {
+		transition: none;
+	}
+}
+
+/* Language dropdown panel -- overrides AMFC's own sitewide .dropdown-menu/.dropdown-item rules
+   (custom.css: steel-blue #78a4cd fill, white text, a baked-in "→" ::after on every item,
+   #fff3cd hover) with a plain white panel: rows are transparent by default (the panel's own
+   white shows through), tint light lavender on hover, and the *selected* language (aria-current,
+   set in header.php) is marked with just a small checkmark on its right -- no separate fill or
+   color for "selected", so hovering the other option doesn't read as "also selected".
+
+   IMPORTANT: display must stay display:none by default and only switch to flex under Bootstrap's
+   own .show class (added by its JS on toggle) -- an earlier version set `display: flex`
+   unconditionally on .amfc-en-nav__lang-menu, which has the same (0,1,0) specificity as
+   Bootstrap's own ".dropdown-menu { display: none }" and loads after it, so it silently won
+   the cascade and kept the panel permanently rendered/clickable regardless of .show. Bootstrap's
+   JS was still toggling .show correctly the whole time (confirmed via classList) -- the bug was
+   purely this CSS keeping it visible regardless, which read as "the dropdown won't close". */
+.amfc-en-nav__lang-menu {
+	display: none;
+	background: rgba(255, 255, 255, 0.96);
+	backdrop-filter: blur(20px) saturate(180%);
+	-webkit-backdrop-filter: blur(20px) saturate(180%);
+	border: 1px solid rgba(255, 255, 255, 0.6);
+	border-radius: var(--amfc-en-radius-md);
+	box-shadow: var(--amfc-en-shadow-card);
+	padding: 8px;
+	min-width: 170px;
+}
+
+.amfc-en-nav__lang-menu.show {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.amfc-en-nav__lang-menu .dropdown-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	background: none;
+	color: var(--amfc-en-navy);
+	font-weight: 500;
+	font-size: 1rem;
+	padding: 10px 14px;
+	border-radius: 8px;
+	transition: background-color 0.15s ease-out;
+}
+
+.amfc-en-nav__lang-menu .dropdown-item::after {
+	content: "";
+	width: 12px;
+	height: 7px;
+	flex: none;
+	/* Small checkmark, drawn the same way the mobile language list's own checkmark is
+	   (amfc-2026.css .amfc-lang-list__check): a wide/flat rotated border-L reads as a check
+	   tick, not a chevron. Suppresses AMFC's own sitewide "→" ::after in the same declaration. */
+	border-left: 2px solid var(--amfc-en-blue-accent);
+	border-bottom: 2px solid var(--amfc-en-blue-accent);
+	transform: rotate(-45deg);
+	opacity: 0;
+}
+
+.amfc-en-nav__lang-menu .dropdown-item[aria-current="true"]::after {
+	opacity: 1;
+}
+
+.amfc-en-nav__lang-menu .dropdown-item:hover,
+.amfc-en-nav__lang-menu .dropdown-item:focus-visible {
+	background: var(--amfc-en-lavender);
 }
 
 /* --- Hero --- */

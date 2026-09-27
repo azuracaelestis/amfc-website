@@ -23,9 +23,9 @@
 							Language
 							<img src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" width="12" height="12" aria-hidden="true" />
 						</button>
-						<ul class="dropdown-menu dropdown-menu-end">
+						<ul class="dropdown-menu dropdown-menu-end amfc-en-nav__lang-menu">
 							<li><a class="dropdown-item" href="<?= e(page_url('zh')) ?>" hreflang="zh-Hant-TW" lang="zh-Hant-TW" data-lang="zh-TW">繁體中文</a></li>
-							<li><a class="dropdown-item" href="#" data-lang="en-US">English</a></li>
+							<li><a class="dropdown-item" href="#" data-lang="en-US" aria-current="true">English</a></li>
 						</ul>
 					</li>
 					<!-- Phones only. Class names match what initLangToggle() (amfc-2026.js) looks for --
