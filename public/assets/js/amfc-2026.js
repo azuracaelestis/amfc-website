@@ -714,13 +714,14 @@ window.AMFC = (function () {
 		if (!targets.length) return;
 
 		function moveTo(el) {
-			// transform-only (no width/height): the pill is a fixed 1px box with
-			// transform-origin: left center (amfc-en.css), so scaleX(el's own width in px)
-			// grows it rightward from that pinned left edge -- the same translateX that
-			// places the edge also positions the whole scaled shape, no extra math needed.
+			// width is a real, animated (not transform-faked) property here -- see amfc-en.css's
+			// own comment on .amfc-en-nav__hover-pill for why: a true pill shape needs
+			// border-radius computed against the element's actual width at each size, which a
+			// scaleX() trick can't reproduce correctly (it visibly rendered as a rectangle).
 			var navRect = nav.getBoundingClientRect();
 			var elRect = el.getBoundingClientRect();
-			pill.style.transform = 'translateX(' + (elRect.left - navRect.left) + 'px) scaleX(' + elRect.width + ')';
+			pill.style.width = elRect.width + 'px';
+			pill.style.transform = 'translateX(' + (elRect.left - navRect.left) + 'px)';
 			pill.style.opacity = '1';
 		}
 		function hide() {

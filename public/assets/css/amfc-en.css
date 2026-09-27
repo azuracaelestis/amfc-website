@@ -203,15 +203,23 @@ body.theme-en > header {
    for that dropdown's chevron rotation -- reusing both rather than inventing new ones for this
    interaction keeps every piece of hover feedback in this nav feeling like the same material.
 
-   transform-only, not width/height: those are layout properties (trigger reflow on every hover),
-   where transform/opacity are compositor-only. height:100% covers every target without ever
-   needing to change -- every item in this row shares one line-height (align-items-lg-center on
-   the <ul>), confirmed via getBoundingClientRect() (About Us and the Language toggle both came
-   back 43.984375px tall). For width, the pill is a fixed 1px box with transform-origin: left
-   center (not the default 50%/center), so scaleX grows it rightward FROM that fixed left edge
-   rather than from its own middle -- meaning the same translateX that places the edge also
-   positions the whole scaled shape correctly, with no separate offset math for the scale's own
-   growth needed. */
+   height:100% (static, never animated) covers every target without needing to change -- every
+   item in this row shares one line-height (align-items-lg-center on the <ul>), confirmed via
+   getBoundingClientRect() (About Us and the Language toggle both came back 43.984375px tall).
+
+   width IS animated here, deliberately, despite that generally being layout-thrashing advice
+   worth following: a true pill/stadium shape (semicircular ends + straight sides) needs
+   border-radius computed against the element's REAL width at each size, and there's no way to
+   fake that with transform alone. A first attempt tried a fixed 1px box scaled via
+   transform:scaleX() -- but CSS clamps overlapping corner radii against the box's OWN
+   (untransformed) dimensions before any transform is applied, so a 1px-wide box gets its
+   border-radius crushed to ~0 by that clamping, and scaleX can't "un-crush" an already-flattened
+   corner -- it rendered as a sharp rectangle that only LOOKED like it had radius:999px in
+   getComputedStyle (which reports the specified value, not what the clamping+transform actually
+   produced). The real perf concern width animation usually raises doesn't really apply to this
+   element specifically: it's position:absolute (out of normal flow already, so resizing it
+   can't cascade into reflowing any surrounding content) and only changes on ~4 discrete hover
+   events, not continuously/every frame. */
 .amfc-en-nav .navbar-nav {
 	position: relative;
 }
@@ -220,16 +228,15 @@ body.theme-en > header {
 	position: absolute;
 	left: 0;
 	top: 0;
-	width: 1px;
+	width: 0;
 	height: 100%;
-	transform-origin: left center;
 	border-radius: 999px;
 	background: var(--amfc-en-lavender);
 	opacity: 0;
 	pointer-events: none;
 	z-index: 0;
-	transform: scaleX(0);
-	transition: transform 300ms cubic-bezier(0, 0, 0.2, 1), opacity 150ms ease-out;
+	transition: transform 300ms cubic-bezier(0, 0, 0.2, 1), width 300ms cubic-bezier(0, 0, 0.2, 1),
+		opacity 150ms ease-out;
 }
 
 /* Link/toggle text needs to sit above the pill (z-index 0) to stay legible once it slides
