@@ -714,11 +714,13 @@ window.AMFC = (function () {
 		if (!targets.length) return;
 
 		function moveTo(el) {
+			// transform-only (no width/height): the pill is a fixed 1px box with
+			// transform-origin: left center (amfc-en.css), so scaleX(el's own width in px)
+			// grows it rightward from that pinned left edge -- the same translateX that
+			// places the edge also positions the whole scaled shape, no extra math needed.
 			var navRect = nav.getBoundingClientRect();
 			var elRect = el.getBoundingClientRect();
-			pill.style.width = elRect.width + 'px';
-			pill.style.height = elRect.height + 'px';
-			pill.style.transform = 'translate(' + (elRect.left - navRect.left) + 'px, ' + (elRect.top - navRect.top) + 'px)';
+			pill.style.transform = 'translateX(' + (elRect.left - navRect.left) + 'px) scaleX(' + elRect.width + ')';
 			pill.style.opacity = '1';
 		}
 		function hide() {
