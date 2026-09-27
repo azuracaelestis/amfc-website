@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "public/assets/css/amfc-en.css"
+        ],
+        "createdAt": "2026-09-27T14:23:33.610Z",
+        "reason": "Claude decided: tried transform-only (scaleX on a 1px box) first; CSS clamps overlapping corner-radii against the element's own untransformed width before any transform applies, so the 1px box's border-radius collapsed to ~0 and rendered as a rectangle (confirmed via zoomed pixel screenshot, not just computed style). Reverted to animating real width. Element is position:absolute (isolated from document flow, can't cascade into reflowing surrounding content) and only changes on ~4 discrete hover events, not continuously."
+      }
+    ]
+  }
+}

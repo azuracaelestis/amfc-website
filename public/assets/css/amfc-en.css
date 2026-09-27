@@ -167,6 +167,27 @@ body.theme-en > header {
 	border-radius: 999px;
 }
 
+/* The horizontal half of the rule above has actually never applied: Bootstrap ships its own
+   ".navbar-expand-lg .navbar-nav .nav-link { padding-left/right: var(--bs-navbar-nav-link-
+   padding-x) }" (3 class selectors, specificity (0,3,0)), which beats ".amfc-en-nav .nav-link"
+   above (0,2,0) regardless of source order -- confirmed via CSS.getMatchedStylesForNode, not
+   just computed style, since the two rules' values (8.8px vs the intended 17.6px) were close
+   enough that a quick visual check wouldn't have caught it. The real rendered horizontal padding
+   has been 8.8px (Bootstrap's own default var, same as this rule's OWN vertical 0.5rem, which is
+   why both looked identical) this whole time, not the 1rem it was coded as.
+
+   Matching Bootstrap's own 3-selector shape ties specificity, and since this file loads after
+   bootstrap.min.css, source order then decides in our favor. 12.8px = that real 8.8px, +4px each
+   side per feedback ("the pill feels too tight") -- raw px, not rem (CLAUDE.md's rem-inflation
+   note), and deliberately targets the padding actually being rendered rather than the 17.6px the
+   old shorthand only claimed to set. Both the traveling hover pill and the pressed/chosen fill
+   read their size from this same element's own rendered box (getBoundingClientRect /
+   background-color respectively), so fixing it here widens both together. */
+.amfc-en-nav .navbar-nav .nav-link {
+	padding-left: 12.8px;
+	padding-right: 12.8px;
+}
+
 /* Hover: text stays navy -- only the traveling lavender pill underneath (below) signals hover,
    per feedback. No rule needed here since .nav-link's own resting color already is navy; this
    is a no-op stated explicitly so a future edit can't accidentally reintroduce a color swap. */
