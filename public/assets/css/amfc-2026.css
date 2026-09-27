@@ -667,24 +667,18 @@
 	color: var(--amfc-text-heading); /* #1A2F86 */
 	font-size: 1rem; /* 16px — held fixed, NOT scaled down with the rest of the bar */
 	font-weight: 600;
-	/* Micro-lift on hover/focus, per spec. Position shift only — no color, background or
-	   shadow change. Reuses --amfc-ease-out (not a separate snappier curve) to keep one
-	   easing language across every hover/quick-interaction site-wide — at this 2px amplitude
-	   the difference between curves is sub-pixel for the whole transition anyway. */
-	transition: transform var(--amfc-duration-medium) var(--amfc-ease-out);
+	/* Rounded so the pressed/chosen fill below (its own background, not the traveling hover
+	   pill) reads as a pill too, not a hard-cornered rectangle. Matches the English nav. */
+	border-radius: 999px;
 }
 
 /* Applied to .nav-link (the <a>/<button>), NOT .nav-item as the reference CSS had it:
    .nav-item is the wrapping <li>, which is never focusable, so :focus-visible would never
-   fire on it and keyboard users would get no lift at all. .nav-link covers all five items —
+   fire on it and keyboard users would get no feedback at all. .nav-link covers all five items —
    the four section anchors and the language <button> (which carries .nav-link too). Scoped
    under .amfc-nav-pill so it can't leak into any other Bootstrap nav on the page. */
 
 /* Current-section cue: a persistent 1px lift, so the state is visible without hovering.
-   Declared BEFORE the :hover/:focus-visible rule below — both selectors land on the same
-   (0,3,0) specificity, so source order is what lets a hover on the current item still lift
-   the full 2px instead of being pinned at 1px.
-
    NOTE: nothing sets these attributes yet. The nav's links are in-page anchors (#about,
    #service, ...) and no scrollspy currently marks one active, so today this rule matches
    nothing — it's the hook, ready for whichever mechanism sets it. Both the ARIA-standard
@@ -697,24 +691,81 @@
 	transform: translateY(-1px);
 }
 
+/* Hover: text stays navy -- only the traveling lavender pill underneath (below) signals hover,
+   matching the English nav (feedback there: "hover effect ... pill", no color/lift change on
+   the link itself). Replaces this nav's own earlier translateY(-2px) hover-lift, which the
+   English nav never had -- kept as a no-op here (rather than deleted outright) so a future
+   edit can't accidentally reintroduce a lift that no longer matches the other language page. */
 .amfc-nav-pill .nav-link:hover,
 .amfc-nav-pill .nav-link:focus-visible {
-	transform: translateY(-2px);
+	color: var(--amfc-text-heading);
 }
 
 /* The sitewide `.theme-2026 :focus-visible` ring at the top of this file already supplies
    exactly the required indicator (2px solid, --amfc-accent, 2px offset), and it exists
-   because AMFC's live custom.css kills focus outlines globally. Restated here anyway: the
-   lift alone is not a sufficient focus indicator, and this keeps the nav's own indicator from
-   silently disappearing if that global rule is ever scoped down or dropped during the port. */
+   because AMFC's live custom.css kills focus outlines globally. Restated here anyway so the
+   nav's own indicator can't silently disappear if that global rule is ever scoped down or
+   dropped during the port. */
 .amfc-nav-pill .nav-link:focus-visible {
 	outline: 2px solid var(--amfc-accent);
 	outline-offset: 2px;
 }
 
+/* Pressed/chosen: a solid rounded fill directly on the link/toggle itself (its own background,
+   separate from the lavender hover pill below) -- :active covers the momentary click itself on
+   every item; [aria-expanded="true"] keeps the Language toggle in this same look for as long as
+   its dropdown stays open. Both already sit at z-index:1 (above the pill, see the shared rule
+   below), so this solid fill simply paints over the pill rather than needing any JS
+   coordination with it. No !important needed here (unlike amfc-en.css's equivalent rule): this
+   nav's toggle doesn't carry Bootstrap's .bg-transparent utility class, so there's no
+   higher-importance background declaration to beat. */
+.amfc-nav-pill .nav-link:active,
+.amfc-nav-pill .amfc-nav__lang-toggle:active,
+.amfc-nav-pill .amfc-nav__lang-toggle[aria-expanded="true"] {
+	background: var(--amfc-accent);
+	color: #fff;
+}
+
+/* Desktop nav hover pill -- a light "spotlight" that slides and resizes to sit behind whichever
+   link/toggle is hovered. initNavHoverPill() (amfc-2026.js) drives it via inline transform/width
+   on every mouseenter/focus; this file only sets its resting look and transition curve.
+   Desktop-only (that JS gates on hover-capable pointers at >=992px). Same mechanism and reasoning
+   as amfc-en.css's .amfc-en-nav__hover-pill -- including animating width itself rather than
+   faking it with scaleX(), which crushes border-radius on a deliberately tiny base box (see that
+   file's own comment for the full explanation); safe here for the same reasons: position:absolute
+   (can't cascade into reflowing surrounding content) and only changes on a handful of discrete
+   hover events. */
+.amfc-nav-pill .navbar-nav {
+	position: relative;
+}
+
+.amfc-nav__hover-pill {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 100%;
+	border-radius: 999px;
+	background: var(--amfc-periwinkle-100); /* #D9E1FF -- same fill as the English nav's pill */
+	opacity: 0;
+	pointer-events: none;
+	z-index: 0;
+	transition: transform 300ms var(--amfc-ease-out), width 300ms var(--amfc-ease-out),
+		opacity 150ms ease-out;
+}
+
+/* Link/toggle text needs to sit above the pill (z-index 0) to stay legible once it slides
+   underneath -- both also already have position:static/inline-flex, neither conflicts with
+   adding position:relative here purely to establish that stacking order. */
+.amfc-nav-pill .nav-link,
+.amfc-nav-pill .amfc-nav__lang-toggle {
+	position: relative;
+	z-index: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
-	.amfc-nav-pill .nav-link {
-		transition: none;
+	.amfc-nav__hover-pill {
+		transition: opacity 150ms linear;
 	}
 }
 
@@ -728,7 +779,10 @@
 }
 
 /* Source icon's native orientation points sideways — Figma itself rotates this same asset
-   -90deg to point down (see node 87:74), so replicate that rotation here. */
+   -90deg to point down (see node 87:74), so replicate that rotation here. Still targets `img`
+   specifically: this matches the MOBILE disclosure's chevron (still a plain <img>, see
+   header.php) — the desktop dropdown's chevron below is a separate inlined <svg>, which this
+   selector no longer reaches. */
 .amfc-nav__lang-toggle img {
 	transform: rotate(-90deg);
 }
@@ -736,6 +790,97 @@
 /* Real Figma icon replaces it, so suppress Bootstrap's default ::after triangle caret */
 .amfc-nav__lang-toggle.dropdown-toggle::after {
 	display: none;
+}
+
+/* Desktop dropdown toggle's chevron: inlined (not <img>) so its stroke can pick up currentColor
+   and turn white on press/open along with the button's own text color -- an <img>'s SVG can
+   never respond to page CSS. Same approach as amfc-en.css's .amfc-en-nav__lang-chevron; named
+   with a "-desktop" suffix here (rather than reusing .amfc-nav__lang-chevron) because this nav's
+   mobile disclosure toggle already uses that class on its own <img>, and the two need different
+   base markup/selectors (svg child vs img itself). Sized to match the old <img width="12"
+   height="12">. Rotates a further 180deg when the dropdown opens (Bootstrap flips aria-expanded
+   on the button itself, so that's the hook -- no JS needed for this part). */
+.amfc-nav__lang-chevron-desktop {
+	display: inline-flex;
+	width: 12px;
+	height: 12px;
+	color: inherit;
+}
+
+.amfc-nav__lang-chevron-desktop svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	transform: rotate(-90deg);
+	transition: transform 0.25s var(--amfc-ease-out);
+}
+
+.amfc-nav__lang-toggle[aria-expanded="true"] .amfc-nav__lang-chevron-desktop svg {
+	transform: rotate(-90deg) rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-nav__lang-chevron-desktop svg {
+		transition: none;
+	}
+}
+
+/* Desktop "Language" dropdown panel -- overrides AMFC's own sitewide .dropdown-menu/
+   .dropdown-item rules (custom.css: steel-blue #78a4cd fill, white text, a baked-in "→" ::after
+   on every item, #fff3cd hover) with a plain white panel: rows are transparent by default (the
+   panel's own white shows through) and tint light lavender on hover. Same treatment as the
+   English page's .amfc-en-nav__lang-menu (amfc-en.css) -- see that file's comments for the two
+   specificity fights this resolves (display:none vs Bootstrap's .show, and centered positioning
+   vs Bootstrap's [data-bs-popper] rule).
+
+   No checkmark rule here unlike the English page's version: none of this menu's three items
+   (English/日本語/Bahasa Indonesia) represent the CURRENT language the way English's own menu
+   marks "English" as selected -- this page's own language (Chinese) isn't itself an option in
+   this list. The dropdown-item::after arrow-suppression is still needed regardless. */
+.amfc-nav__lang-menu {
+	display: none;
+	background: rgba(255, 255, 255, 0.96);
+	backdrop-filter: blur(20px) saturate(180%);
+	-webkit-backdrop-filter: blur(20px) saturate(180%);
+	border: 1px solid rgba(255, 255, 255, 0.6);
+	border-radius: var(--amfc-radius-md);
+	box-shadow: var(--amfc-shadow-card);
+	padding: 8px;
+	min-width: 170px;
+}
+
+.amfc-nav__lang-menu.show {
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 50%;
+	margin: 0;
+	transform: translateX(-50%);
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.amfc-nav__lang-menu .dropdown-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	background: none;
+	color: var(--amfc-text-heading);
+	font-weight: 500;
+	font-size: 1rem;
+	padding: 10px 14px;
+	border-radius: 8px;
+	transition: background-color 0.15s ease-out;
+}
+
+.amfc-nav__lang-menu .dropdown-item::after {
+	content: none; /* suppresses AMFC's sitewide "→" ::after; no checkmark needed, see comment above */
+}
+
+.amfc-nav__lang-menu .dropdown-item:hover,
+.amfc-nav__lang-menu .dropdown-item:focus-visible {
+	background: var(--amfc-periwinkle-100);
 }
 
 /* --- Hero ---

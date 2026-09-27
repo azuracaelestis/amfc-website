@@ -693,24 +693,28 @@ window.AMFC = (function () {
 		update();
 	}
 
-	/* English desktop nav: a light "spotlight" pill that slides/resizes to sit behind whichever
-	   link or the Language toggle is currently hovered/focused, rather than each item only
-	   changing its own text color in place. CSS alone can't animate between two arbitrary
-	   sibling elements' widths/positions, so this drives it via inline transform/width/height,
-	   matching amfc-en.css's own ".amfc-en-nav__hover-pill" resting style and transition.
+	/* Desktop nav: a light "spotlight" pill that slides/resizes to sit behind whichever link or
+	   the Language toggle is currently hovered/focused, rather than each item only changing its
+	   own text color in place. CSS alone can't animate between two arbitrary sibling elements'
+	   widths/positions, so this drives it via inline transform/width/height, matching each nav's
+	   own "__hover-pill" resting style and transition in its stylesheet.
+
+	   Shared by both the English page (amfc-en.css/.amfc-en-nav) and the Chinese page
+	   (amfc-2026.css/.amfc-nav-pill) -- same interaction, different nav markup/classes, so the
+	   selectors are passed in per call rather than hardcoded once.
 
 	   Desktop-only, and re-evaluated on breakpoint/pointer-type change (same matchMedia +
 	   attach/detach pattern as initWwdMobileImagePlacement) rather than a one-time check at
 	   load: a mouse-driven pill sliding along a vertical column doesn't read as the same
 	   interaction if the window is later resized down into the mobile collapsed menu, or if a
-	   touch-only device somehow matches the width query. querySelectorAll returns null on the
-	   zh-Hant-TW homepage (no .amfc-en-nav there), so this is safely cross-page-inert. */
-	function initNavHoverPill() {
-		var nav = document.querySelector('.amfc-en-nav .navbar-nav');
-		var pill = document.querySelector('.amfc-en-nav__hover-pill');
+	   touch-only device somehow matches the width query. querySelectorAll returns null when a
+	   page has no matching nav, so each call is safely cross-page-inert. */
+	function initNavHoverPill(navSelector, pillSelector, linkSelector) {
+		var nav = document.querySelector(navSelector);
+		var pill = document.querySelector(pillSelector);
 		if (!nav || !pill) return;
 
-		var targets = Array.prototype.slice.call(nav.querySelectorAll(':scope > li > .nav-link, :scope > li > .amfc-en-nav__lang-toggle'));
+		var targets = Array.prototype.slice.call(nav.querySelectorAll(linkSelector));
 		if (!targets.length) return;
 
 		function moveTo(el) {
@@ -775,7 +779,13 @@ window.AMFC = (function () {
 		initWwdAccordionReveal('.amfc-en-whatwedo__image--3', 'amfcEnWwd3');
 		initWwdMobileImagePlacement();
 		initProductsCarouselDots();
-		initNavHoverPill();
+		initNavHoverPill('.amfc-en-nav .navbar-nav', '.amfc-en-nav__hover-pill', ':scope > li > .nav-link, :scope > li > .amfc-en-nav__lang-toggle');
+		/* Chinese nav's mobile disclosure toggle shares the SAME .amfc-nav__lang-toggle class as
+		   its desktop dropdown toggle (only the parent <li> differs) -- excluding
+		   .amfc-nav__lang-toggle-mobile keeps the pill from also targeting that hidden-at-desktop
+		   duplicate, which the English nav doesn't need since its two toggles use different
+		   classes (.amfc-en-nav__lang-toggle vs plain .amfc-nav__lang-toggle) already. */
+		initNavHoverPill('.amfc-nav-pill .navbar-nav', '.amfc-nav__hover-pill', ':scope > li:not(.amfc-nav__lang-toggle-mobile) > .nav-link, :scope > li:not(.amfc-nav__lang-toggle-mobile) > .amfc-nav__lang-toggle');
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

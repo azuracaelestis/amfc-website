@@ -11,6 +11,15 @@
         ],
         "createdAt": "2026-09-27T14:23:33.610Z",
         "reason": "Claude decided: tried transform-only (scaleX on a 1px box) first; CSS clamps overlapping corner-radii against the element's own untransformed width before any transform applies, so the 1px box's border-radius collapsed to ~0 and rendered as a rectangle (confirmed via zoomed pixel screenshot, not just computed style). Reverted to animating real width. Element is position:absolute (isolated from document flow, can't cascade into reflowing surrounding content) and only changes on ~4 discrete hover events, not continuously."
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "public/assets/css/amfc-2026.css"
+        ],
+        "createdAt": "2026-09-27T14:46:08.917Z",
+        "reason": "Same justified exception as amfc-en.css's .amfc-en-nav__hover-pill: .amfc-nav__hover-pill animates width (not scaleX) because a true pill shape needs border-radius computed against the element's real width -- scaleX on a tiny base box crushes the radius (see amfc-en.css's comment for the full writeup). Safe: position:absolute, only changes on a handful of discrete hover events."
       }
     ]
   }

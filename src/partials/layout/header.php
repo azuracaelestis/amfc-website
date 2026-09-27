@@ -18,6 +18,14 @@
 		</button>
 		<div class="collapse navbar-collapse amfc-nav__collapse" id="amfcNavCollapse">
 			<ul class="navbar-nav ms-auto flex-column flex-lg-row align-items-start align-items-lg-center amfc-nav__items">
+				<!-- Desktop only: a light "spotlight" pill that slides/resizes to whichever link is
+				     hovered (initNavHoverPill in amfc-2026.js drives its position via inline
+				     transform/width -- CSS alone can't animate between two arbitrary sibling
+				     elements' widths). Sits behind the link text (z-index, see amfc-2026.css), so it
+				     never blocks clicks. Absolutely positioned, so its place in the DOM doesn't
+				     affect the real layout of the items around it. Same pattern as the English
+				     page's .amfc-en-nav__hover-pill. -->
+				<span class="amfc-nav__hover-pill" aria-hidden="true"></span>
 				<li class="nav-item"><a class="nav-link" href="#about"><?= e(t('nav.about')) ?></a></li>
 				<li class="nav-item"><a class="nav-link" href="#service"><?= e(t('nav.services')) ?></a></li>
 				<li class="nav-item"><a class="nav-link" href="#news"><?= e(t('nav.news')) ?></a></li>
@@ -28,11 +36,20 @@
 				<li class="nav-item dropdown amfc-nav__lang-dropdown">
 					<!-- TODO (AMFC integration): wire selection to the existing AMFC_2025_WEBSITE_lang
 					     cookie / set_lang() already in their custom.js, per CLAUDE.md -->
-					<button class="nav-link dropdown-toggle amfc-nav__lang-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<!-- data-bs-display="static": stops Bootstrap from handing positioning to Popper
+					     (which right-aligned the menu via dropdown-menu-end) -- plain CSS in
+					     amfc-2026.css centers it under the button instead, same fix as the English
+					     page's dropdown (see amfc-en.css). -->
+					<button class="nav-link dropdown-toggle amfc-nav__lang-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
 						<?= e(t('nav.language')) ?>
-						<img src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" width="12" height="12" aria-hidden="true" />
+						<!-- Inlined (not <img>) so its stroke can pick up currentColor and turn white on
+						     press/open along with the button's own text color -- an <img>'s SVG can never
+						     respond to page CSS. Named "-desktop" to stay distinct from the plain <img>
+						     chevron the mobile disclosure below still uses (same class name,
+						     amfc-nav__lang-chevron, shared with the English mobile toggle). -->
+						<span class="amfc-nav__lang-chevron-desktop" aria-hidden="true"><?= svg_inline('images/icon-chevron-down-inline.svg') ?></span>
 					</button>
-					<ul class="dropdown-menu dropdown-menu-end">
+					<ul class="dropdown-menu amfc-nav__lang-menu">
 						<li><a class="dropdown-item" href="<?= e(page_url('en')) ?>" hreflang="en" lang="en" data-lang="en-US"><?= e(t('nav.lang.en')) ?></a></li>
 						<li><a class="dropdown-item" href="#" data-lang="ja-JP"><?= e(t('nav.lang.ja')) ?></a></li>
 						<li><a class="dropdown-item" href="#" data-lang="id-ID"><?= e(t('nav.lang.id')) ?></a></li>
