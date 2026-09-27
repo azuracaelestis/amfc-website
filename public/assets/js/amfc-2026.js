@@ -693,6 +693,69 @@ window.AMFC = (function () {
 		update();
 	}
 
+	/* English desktop nav: a light "spotlight" pill that slides/resizes to sit behind whichever
+	   link or the Language toggle is currently hovered/focused, rather than each item only
+	   changing its own text color in place. CSS alone can't animate between two arbitrary
+	   sibling elements' widths/positions, so this drives it via inline transform/width/height,
+	   matching amfc-en.css's own ".amfc-en-nav__hover-pill" resting style and transition.
+
+	   Desktop-only, and re-evaluated on breakpoint/pointer-type change (same matchMedia +
+	   attach/detach pattern as initWwdMobileImagePlacement) rather than a one-time check at
+	   load: a mouse-driven pill sliding along a vertical column doesn't read as the same
+	   interaction if the window is later resized down into the mobile collapsed menu, or if a
+	   touch-only device somehow matches the width query. querySelectorAll returns null on the
+	   zh-Hant-TW homepage (no .amfc-en-nav there), so this is safely cross-page-inert. */
+	function initNavHoverPill() {
+		var nav = document.querySelector('.amfc-en-nav .navbar-nav');
+		var pill = document.querySelector('.amfc-en-nav__hover-pill');
+		if (!nav || !pill) return;
+
+		var targets = Array.prototype.slice.call(nav.querySelectorAll(':scope > li > .nav-link, :scope > li > .amfc-en-nav__lang-toggle'));
+		if (!targets.length) return;
+
+		function moveTo(el) {
+			var navRect = nav.getBoundingClientRect();
+			var elRect = el.getBoundingClientRect();
+			pill.style.width = elRect.width + 'px';
+			pill.style.height = elRect.height + 'px';
+			pill.style.transform = 'translate(' + (elRect.left - navRect.left) + 'px, ' + (elRect.top - navRect.top) + 'px)';
+			pill.style.opacity = '1';
+		}
+		function hide() {
+			pill.style.opacity = '0';
+		}
+		function onEnter(e) { moveTo(e.currentTarget); }
+		function onFocus(e) { moveTo(e.currentTarget); }
+
+		var attached = false;
+		function attach() {
+			if (attached) return;
+			attached = true;
+			targets.forEach(function (el) {
+				el.addEventListener('mouseenter', onEnter);
+				el.addEventListener('focus', onFocus);
+				el.addEventListener('blur', hide);
+			});
+			nav.addEventListener('mouseleave', hide);
+		}
+		function detach() {
+			if (!attached) return;
+			attached = false;
+			targets.forEach(function (el) {
+				el.removeEventListener('mouseenter', onEnter);
+				el.removeEventListener('focus', onFocus);
+				el.removeEventListener('blur', hide);
+			});
+			nav.removeEventListener('mouseleave', hide);
+			hide();
+		}
+
+		var mq = window.matchMedia('(min-width: 992px) and (hover: hover)');
+		function sync() { if (mq.matches) attach(); else detach(); }
+		sync();
+		if (mq.addEventListener) mq.addEventListener('change', sync); else mq.addListener(sync);
+	}
+
 	function init() {
 		initNavAutoHide();
 		initPhilosophyWatermarkFade();
@@ -709,6 +772,7 @@ window.AMFC = (function () {
 		initWwdAccordionReveal('.amfc-en-whatwedo__image--3', 'amfcEnWwd3');
 		initWwdMobileImagePlacement();
 		initProductsCarouselDots();
+		initNavHoverPill();
 		/* AOS (loaded in layout/scripts) handles section reveals; the philosophy stack is
 		   CSS-only. Add future modules here. */
 	}

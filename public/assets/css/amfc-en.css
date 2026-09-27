@@ -169,6 +169,51 @@ body.theme-en > header {
 	color: var(--amfc-en-blue-accent);
 }
 
+/* Desktop nav hover pill -- a light "spotlight" that slides and resizes to sit behind whichever
+   link/toggle is hovered, tracking the pointer across the bar rather than each item just
+   changing its own color in place. initNavHoverPill() (amfc-2026.js) drives position/size via
+   inline transform/width/height on every mouseenter/focus; this file only sets its resting
+   look and the transition curve. Desktop-only (that JS gates on hover-capable pointers at
+   >=992px) -- the mobile collapsed menu doesn't get a trailing pill.
+
+   Colors/timing are this nav's own: --amfc-en-lavender is the same fill already used for the
+   Language dropdown's row hover, and 300ms cubic-bezier(0,0,.2,1) is the same curve already used
+   for that dropdown's chevron rotation -- reusing both rather than inventing new ones for this
+   interaction keeps every piece of hover feedback in this nav feeling like the same material. */
+.amfc-en-nav .navbar-nav {
+	position: relative;
+}
+
+.amfc-en-nav__hover-pill {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	border-radius: 999px;
+	background: var(--amfc-en-lavender);
+	opacity: 0;
+	pointer-events: none;
+	z-index: 0;
+	transition: transform 300ms cubic-bezier(0, 0, 0.2, 1), width 300ms cubic-bezier(0, 0, 0.2, 1),
+		height 300ms cubic-bezier(0, 0, 0.2, 1), opacity 150ms ease-out;
+}
+
+/* Link/toggle text needs to sit above the pill (z-index 0) to stay legible once it slides
+   underneath -- both also already have position:static/inline-flex, neither conflicts with
+   adding position:relative here purely to establish that stacking order. */
+.amfc-en-nav .nav-link,
+.amfc-en-nav .amfc-en-nav__lang-toggle {
+	position: relative;
+	z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.amfc-en-nav__hover-pill {
+		transition: opacity 150ms linear;
+	}
+}
+
 /* Desktop "Language" dropdown toggle: an explicit chevron-down icon in place of Bootstrap's
    default triangle caret, matching the Chinese page's own nav (same icon-chevron-down.svg,
    rotated -90deg since the source art points sideways -- see amfc-2026.css's identical rule on

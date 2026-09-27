@@ -12,6 +12,13 @@
 			</button>
 			<div class="collapse navbar-collapse justify-content-end" id="amfcEnNavCollapse">
 				<ul class="navbar-nav align-items-lg-center gap-lg-4">
+					<!-- Desktop only: a light "spotlight" pill that slides/resizes to whichever link is
+					     hovered (initNavHoverPill in amfc-2026.js drives its position via inline
+					     transform/width/height -- CSS alone can't animate between two arbitrary
+					     sibling elements' widths). Sits behind the link text (z-index, see amfc-en.css),
+					     so it never blocks clicks. Absolutely positioned, so its place in the DOM
+					     doesn't affect the real layout of the items around it. -->
+					<span class="amfc-en-nav__hover-pill" aria-hidden="true"></span>
 					<li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
 					<li class="nav-item"><a class="nav-link" href="#news">Latest News</a></li>
 					<!-- Desktop only (hidden below 992px in amfc-en.css): a Bootstrap dropdown. Phones get the
