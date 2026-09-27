@@ -32,7 +32,12 @@
 					     button). Plain CSS below centers it under the button instead. -->
 					<button class="nav-link dropdown-toggle border-0 bg-transparent amfc-en-nav__lang-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
 							Language
-							<img src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" width="12" height="12" aria-hidden="true" />
+							<!-- Inlined (not <img>) so its stroke can pick up currentColor and turn white on
+							     press/selection along with the button's own text color -- an <img>'s SVG can
+							     never respond to page CSS. A dedicated -inline.svg source file is used instead
+							     of editing the shared icon-chevron-down.svg in place, since that file is still
+							     referenced via <img> by the mobile toggle below and the Chinese page's nav. -->
+							<span class="amfc-en-nav__lang-chevron" aria-hidden="true"><?= svg_inline('images/icon-chevron-down-inline.svg') ?></span>
 						</button>
 						<ul class="dropdown-menu amfc-en-nav__lang-menu">
 							<li><a class="dropdown-item" href="<?= e(page_url('zh')) ?>" hreflang="zh-Hant-TW" lang="zh-Hant-TW" data-lang="zh-TW">繁體中文</a></li>
