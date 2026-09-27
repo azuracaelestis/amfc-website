@@ -19,11 +19,15 @@
 					<li class="nav-item dropdown amfc-en-nav__lang-dropdown">
 						<!-- TODO (AMFC integration): wire selection to the existing
 						     AMFC_2025_WEBSITE_lang cookie / set_lang() already in their custom.js -->
-						<button class="nav-link dropdown-toggle border-0 bg-transparent amfc-en-nav__lang-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+						<!-- data-bs-display="static": stops Bootstrap from handing positioning to Popper
+					     (which right-aligned the menu to the button via dropdown-menu-end, landing
+					     it well left of the "Language" label since the menu is wider than the
+					     button). Plain CSS below centers it under the button instead. -->
+					<button class="nav-link dropdown-toggle border-0 bg-transparent amfc-en-nav__lang-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
 							Language
 							<img src="<?= e(asset('images/icon-chevron-down.svg')) ?>" alt="" width="12" height="12" aria-hidden="true" />
 						</button>
-						<ul class="dropdown-menu dropdown-menu-end amfc-en-nav__lang-menu">
+						<ul class="dropdown-menu amfc-en-nav__lang-menu">
 							<li><a class="dropdown-item" href="<?= e(page_url('zh')) ?>" hreflang="zh-Hant-TW" lang="zh-Hant-TW" data-lang="zh-TW">繁體中文</a></li>
 							<li><a class="dropdown-item" href="#" data-lang="en-US" aria-current="true">English</a></li>
 						</ul>

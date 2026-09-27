@@ -226,6 +226,21 @@ body.theme-en > header {
 }
 
 .amfc-en-nav__lang-menu.show {
+	/* Centered under the "Language" button, not right-aligned to it. The button carries
+	   data-bs-display="static" (header.php), so Bootstrap skips Popper for this menu -- but it
+	   still tags the menu data-bs-popper="static" and ships its own
+	   ".dropdown-menu[data-bs-popper] { position; top; left; margin-top }" rule for it, at
+	   (0,2,0) specificity (one class + one attribute). A bare ".amfc-en-nav__lang-menu" rule is
+	   only (0,1,0) and lost to that despite loading later in the cascade -- matching Bootstrap's
+	   own two-selector specificity here (via the already-present .show class) is what lets our
+	   positioning actually win. Anchored to .amfc-en-nav__lang-dropdown (the <li>, already
+	   position:relative via Bootstrap's own .dropdown rule), which is roughly the button's own
+	   width once the menu itself is taken out of flow by position:absolute. */
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 50%;
+	margin: 0;
+	transform: translateX(-50%);
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
@@ -1086,7 +1101,9 @@ body.theme-en > header {
 	transform-origin: center;
 }
 .amfc-en-stat-card--efficiency.is-inview .ksp-person {
-	animation: amfc-ksp-person-rise 450ms cubic-bezier(.34, 1.56, .64, 1) both;
+	/* ease-out-quint, not the bounce/overshoot curve this had before -- smooth deceleration
+	   reads as "settling into place" without the elastic snap-past-then-back motion. */
+	animation: amfc-ksp-person-rise 450ms cubic-bezier(.22, 1, .36, 1) both;
 }
 .amfc-en-stat-card--efficiency.is-inview .ksp-person--left {
 	animation-delay: 0ms;
