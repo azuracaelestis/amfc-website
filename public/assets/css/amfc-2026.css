@@ -672,6 +672,28 @@
 	border-radius: 999px;
 }
 
+/* Bootstrap ships its own ".navbar-expand-lg .navbar-nav .nav-link { padding-left/right:
+   var(--bs-navbar-nav-link-padding-x) }" at (0,3,0) specificity, which beats a plain
+   ".amfc-nav-pill .nav-link" padding override (0,2,0) regardless of source order -- confirmed
+   via CSS.getMatchedStylesForNode, same fight already documented on the English page's
+   equivalent rule (amfc-en.css, .amfc-en-nav .navbar-nav .nav-link). Matching Bootstrap's own
+   3-selector shape here ties specificity, and since this file loads after bootstrap.min.css,
+   source order then decides in our favor. The real rendered padding here was 8.8px
+   (Bootstrap's own default var) before this rule; 12.8px = that 8.8px + the requested 4px each
+   side, raw px rather than rem (CLAUDE.md's rem-inflation note). Both the traveling hover pill
+   and the pressed/chosen fill read their size from this same element's own rendered box, so
+   fixing it here widens both together.
+
+   Desktop-only (per the request) -- unguarded, this would also outrank (same 0,3,0 shape beats
+   0,1,0) the mobile Language toggle's own "padding-left: 0" override just below, which exists
+   specifically to align that button's text under the stacked section links once collapsed. */
+@media (min-width: 992px) {
+	.amfc-nav-pill .navbar-nav .nav-link {
+		padding-left: 12.8px;
+		padding-right: 12.8px;
+	}
+}
+
 /* Applied to .nav-link (the <a>/<button>), NOT .nav-item as the reference CSS had it:
    .nav-item is the wrapping <li>, which is never focusable, so :focus-visible would never
    fire on it and keyboard users would get no feedback at all. .nav-link covers all five items —
