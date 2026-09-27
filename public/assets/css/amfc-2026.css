@@ -889,6 +889,9 @@
 	gap: 12px;
 	background: none;
 	color: var(--amfc-text-heading);
+	font-family: var(--amfc-font-en); /* DM Sans, matching the desktop toggle's own "Language" label
+	   and the English page's dropdown copy (amfc-en.css) -- 日本語 falls through this stack's own
+	   sans-serif fallback regardless, since DM Sans has no CJK glyphs to begin with. */
 	font-weight: 500;
 	font-size: 1rem;
 	padding: 10px 14px;
