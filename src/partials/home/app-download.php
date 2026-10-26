@@ -8,7 +8,12 @@
    Photo sits OUTSIDE .amfc-container (unlike every other element in this section) so it can
    bleed full-width edge-to-edge, per Figma (node 87:270: `w-full` inside its own 1443px-wide
    section frame, not the narrower 1264px content container) — see the .amfc-app__photo
-   comment in amfc-2026.css. */
+   comment in amfc-2026.css.
+
+   TODO: the CTA below (.amfc-app__cta) is a placeholder href="#" -- point it at the real
+   KingDo landing page URL once https://github.com/azuracaelestis/kingdo-landing is deployed.
+   That's a deliberately separate repo/deploy (own color system, own domain), not a page in
+   this one -- see that repo's CLAUDE.md for the full reasoning. */
 ?>
 <section id="app" class="amfc-app" data-aos="fade-up">
 	<!-- <picture>, not a duplicated <img> pair shown/hidden via CSS, per feedback ("replace the
