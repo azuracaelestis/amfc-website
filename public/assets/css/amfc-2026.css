@@ -4162,3 +4162,175 @@ body {
 	margin-top: 48px;
 	text-align: center;
 }
+
+/* About Us — mobile (Figma node 474:257, 375px frame). Scaffold pass at the repo's standard
+   mobile breakpoint: single column, 335px content, full-width 42px CTAs, value cards as a
+   sticky scroll pile (same CSS-only mechanic as the homepage KSP), timeline dates collapsed to
+   a single "2026/05" line above each entry. Fluid values deliberately left for the polish pass. */
+@media (max-width: 991.98px) {
+	.amfc-about-hero,
+	.amfc-about-values,
+	.amfc-about-group,
+	.amfc-about-timeline {
+		--amfc-about-gutter: clamp(20px, calc(20 / 375 * 100vw), 40px);
+	}
+
+	.amfc-about-hero .amfc-container,
+	.amfc-about-intro .amfc-container,
+	.amfc-about-values .amfc-container,
+	.amfc-about-group .amfc-container,
+	.amfc-about-timeline .amfc-container {
+		width: 100%;
+		padding-inline: var(--amfc-about-gutter);
+	}
+
+	.amfc-about__cta {
+		display: flex;
+		width: 100%;
+		min-width: 0;
+		height: 42px;
+		padding-block: 10px;
+	}
+
+	/* Hero: Figma text block starts 134px down (102 frame offset + 32 padding). */
+	.amfc-about-hero {
+		height: 722px;
+		padding-top: 134px;
+	}
+
+	.amfc-about-hero__photo {
+		object-position: 72% bottom;
+	}
+
+	.amfc-about-hero__headline {
+		max-width: none;
+		font-size: 32px;
+		line-height: 36px;
+	}
+
+	.amfc-about-hero__eyebrow {
+		margin-bottom: 12px;
+	}
+
+	.amfc-about-intro {
+		margin-top: -50px; /* panel top at 672 over a 722px hero */
+		padding-block: 84px 40px;
+		border-radius: 40px 40px 0 0;
+	}
+
+	.amfc-about-intro__body {
+		max-width: 325px;
+	}
+
+	.amfc-about-values {
+		padding-bottom: 80px;
+	}
+
+	.amfc-about-values__list {
+		display: block;
+		margin-top: 42px;
+	}
+
+	.amfc-about-values__card {
+		position: sticky;
+		top: 120px;
+		margin: 0 auto 24px;
+		box-shadow: var(--amfc-shadow-card);
+	}
+
+	.amfc-about-values__card--trust { --amfc-about-tilt: -4deg; z-index: 1; }
+	.amfc-about-values__card--innovation { --amfc-about-tilt: 3.5deg; z-index: 2; }
+	.amfc-about-values__card--efficiency { --amfc-about-tilt: -3deg; z-index: 3; }
+	.amfc-about-values__card--expertise { --amfc-about-tilt: 4deg; z-index: 4; }
+
+	.amfc-about-values__card {
+		rotate: var(--amfc-about-tilt);
+	}
+
+	.amfc-about-group {
+		padding-block: 48px 70px;
+	}
+
+	.amfc-about-group__rows {
+		gap: 90px;
+		margin-top: 66px;
+	}
+
+	.amfc-about-group__row,
+	.amfc-about-group__row--reverse {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 32px;
+	}
+
+	.amfc-about-group__photo {
+		flex: none;
+		width: 100%;
+		height: 208px;
+	}
+
+	.amfc-about-group__photo--funds,
+	.amfc-about-group__photo--japan {
+		object-position: 100% center;
+	}
+
+	.amfc-about-group__text {
+		flex: none;
+		align-items: center;
+		gap: 24px;
+		padding-inline: 4px;
+		text-align: left;
+	}
+
+	.amfc-about-group__logo {
+		width: 180px;
+		height: 39px;
+	}
+
+	.amfc-about-group__name,
+	.amfc-about-group__body {
+		align-self: stretch;
+	}
+
+	.amfc-about-group__text .amfc-about__cta {
+		align-self: stretch;
+		margin-top: 8px;
+	}
+
+	.amfc-about-timeline {
+		padding-block: 48px;
+	}
+
+	.amfc-about-timeline__list {
+		max-width: 291px;
+		margin-top: 42px;
+	}
+
+	.amfc-about-timeline__item {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 12px;
+		padding: 0 0 42px;
+	}
+
+	.amfc-about-timeline__item + .amfc-about-timeline__item {
+		padding-top: 42px;
+	}
+
+	.amfc-about-timeline__date {
+		flex-direction: row;
+		width: auto;
+	}
+
+	.amfc-about-timeline__year::after {
+		content: "/";
+	}
+
+	.amfc-about-timeline__month {
+		font-size: 16px;
+	}
+
+	.amfc-about-timeline__cta-wrap {
+		margin-top: 42px;
+	}
+}
