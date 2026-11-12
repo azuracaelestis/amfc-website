@@ -24,3 +24,6 @@ dist/
 # the three-zone repo structure (see CLAUDE.md). Files get copied into public/assets/ once
 # wired into a partial; this folder stays local and untracked.
 /asset/
+
+# Netlify CLI link state (machine-specific)
+.netlify/

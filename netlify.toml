@@ -1,0 +1,11 @@
+# PROTOTYPE SCAFFOLDING — DELETE ON INTEGRATION (see CLAUDE.md "The three-zone rule").
+# This repo has no build step; the static export in dist/ is regenerated locally before each
+# deploy (see the deploy guide) rather than built on Netlify itself, since Netlify has no PHP
+# runtime and this is plain PHP.
+[build]
+  publish = "dist"
+
+[[redirects]]
+  from = "/en"
+  to = "/en.html"
+  status = 200
