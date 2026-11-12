@@ -3856,3 +3856,309 @@ body {
 		order: 3; /* last — see .amfc-footer__contact/.amfc-footer__row's own order values */
 	}
 }
+
+/* --- About Us page (Figma node 474:30, desktop). Scaffold pass: structure, copy and geometry
+   from the frame; per-section polish and the mobile frame (474:256) come next. Every text
+   element sets its own font-size/family in px (see CLAUDE.md: AMFC's `*` font-size rule wins
+   over inheritance, and rem is ~17.6px on this site). --- */
+
+.amfc-about__section-title {
+	margin: 0;
+	color: var(--amfc-blue-550);
+	font-family: var(--amfc-font-zh);
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.5;
+	text-align: center;
+}
+
+/* Figma buttons here are 203x64 pills with 20px text; .amfc-btn supplies everything else. */
+.amfc-about__cta {
+	min-width: 203px;
+	padding-block: 21px;
+	padding-inline: 32px;
+}
+
+.amfc-about__cta .amfc-btn__label {
+	font-family: var(--amfc-font-zh);
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 22px;
+}
+
+/* Hero: photo fills the box; 763px = Figma's 699px to the white panel + the 64px the panel's
+   rounded top lifts over it (see .amfc-about-intro). */
+.amfc-about-hero {
+	position: relative;
+	height: 763px;
+	padding-top: 215px;
+	overflow: hidden;
+}
+
+.amfc-about-hero__photo {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center 69%;
+}
+
+.amfc-about-hero__content {
+	position: relative;
+}
+
+.amfc-about-hero__eyebrow {
+	margin: 0 0 20px;
+	color: var(--amfc-blue-900);
+	font-family: var(--amfc-font-zh);
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.5;
+}
+
+.amfc-about-hero__headline {
+	max-width: 538px;
+	margin: 0;
+	color: var(--amfc-blue-900);
+	font-family: var(--amfc-font-en);
+	font-size: 64px;
+	font-weight: 700;
+	line-height: 75px;
+}
+
+/* Intro: white panel with a 64px rounded top lifting over the hero photo (Figma 474:35). */
+.amfc-about-intro {
+	position: relative;
+	margin-top: -64px;
+	padding-block: 106px 90px;
+	background: var(--amfc-surface);
+	border-radius: 64px 64px 0 0;
+}
+
+.amfc-about-intro__body {
+	max-width: 789px;
+	margin-inline: auto;
+	text-align: center;
+}
+
+.amfc-about-intro__body p {
+	margin: 0;
+	color: var(--amfc-blue-900);
+	font-family: var(--amfc-font-zh);
+	font-size: 16px;
+	line-height: 1.7;
+}
+
+.amfc-about-intro__body p + p {
+	margin-top: 27px; /* Figma's blank line between the two paragraphs */
+}
+
+/* 公司經營理念: four 260px cards, 48px apart (= Figma's 1184px row). */
+.amfc-about-values {
+	padding-bottom: 176px;
+	background: var(--amfc-surface);
+}
+
+.amfc-about-values__list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 48px;
+	margin: 45px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.amfc-about-values__card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 260px;
+	height: 260px;
+	padding: 95px 22px 0;
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.amfc-about-values__card--trust { background: var(--amfc-mint-100); }
+.amfc-about-values__card--innovation { background: var(--amfc-cream-100); }
+.amfc-about-values__card--efficiency { background: var(--amfc-periwinkle-100); }
+.amfc-about-values__card--expertise { background: var(--amfc-lavender-100); }
+
+.amfc-about-values__art img {
+	position: absolute;
+	max-width: none;
+}
+
+.amfc-about-values__icon-coin { left: 140px; top: 59px; width: 59px; height: 59px; transform: rotate(-6.1deg); }
+.amfc-about-values__icon-bulb { left: 161px; top: 45px; width: 47px; height: 71px; }
+.amfc-about-values__icon-spark-lg { left: 134px; top: 53px; width: 17px; height: 16px; }
+.amfc-about-values__icon-spark-sm { left: 211px; top: 94px; width: 10px; height: 11px; }
+.amfc-about-values__icon-thumbsup { left: 158px; top: 30px; width: 102px; height: 87px; transform: rotate(-5.74deg); }
+.amfc-about-values__icon-bubble { left: 112px; top: 40px; width: 109px; height: 48px; }
+.amfc-about-values__icon-stars { left: 121px; top: 53px; width: 88px; height: 14px; }
+
+.amfc-about-values__tag {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 80px;
+	padding: 8px 16px;
+	border-radius: 32px;
+	background: var(--amfc-gold-400);
+	color: #000;
+	font-family: var(--amfc-font-zh);
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.amfc-about-values__number {
+	margin-top: 24px;
+	color: var(--amfc-blue-900);
+	font-family: var(--amfc-font-en);
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 35px;
+	white-space: nowrap;
+}
+
+.amfc-about-values__label {
+	margin-top: 14px;
+	color: var(--amfc-blue-900);
+	font-family: var(--amfc-font-zh);
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.2;
+}
+
+/* 我們集團: two alternating 493px photo + 439px text rows, 90px apart. */
+.amfc-about-group {
+	padding-block: 118px 189px;
+	background: var(--amfc-grad-about-group);
+}
+
+.amfc-about-group__rows {
+	display: flex;
+	flex-direction: column;
+	gap: 90px;
+	max-width: 1022px;
+	margin: 90px auto 0;
+}
+
+.amfc-about-group__row {
+	display: flex;
+	align-items: center;
+	gap: 90px;
+}
+
+.amfc-about-group__row--reverse {
+	flex-direction: row-reverse;
+}
+
+.amfc-about-group__photo {
+	flex: 0 1 493px;
+	min-width: 0;
+	height: 309px;
+	border-radius: 16px;
+	object-fit: cover;
+}
+
+.amfc-about-group__photo--funds { object-position: 71% center; }
+.amfc-about-group__photo--japan { object-position: 80% center; }
+
+.amfc-about-group__text {
+	display: flex;
+	flex: 0 1 439px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 24px;
+	min-width: 0;
+}
+
+.amfc-about-group__logo {
+	width: 244px;
+	height: 53px;
+}
+
+.amfc-about-group__name {
+	margin: 0;
+	color: var(--amfc-blue-900);
+	font-family: var(--amfc-font-en);
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+.amfc-about-group__body {
+	margin: 0;
+	color: var(--amfc-blue-900);
+	font-family: var(--amfc-font-zh);
+	font-size: 16px;
+	line-height: 30px;
+}
+
+/* 大事紀: 761px list, 60px date column + 48px gap + text; hairline dividers between items. */
+.amfc-about-timeline {
+	padding-block: 65px 210px;
+	background: var(--amfc-grad-about-timeline);
+}
+
+.amfc-about-timeline__list {
+	max-width: 761px;
+	margin: 90px auto 0;
+	padding: 0;
+	list-style: none;
+}
+
+.amfc-about-timeline__item {
+	display: flex;
+	align-items: center;
+	gap: 48px;
+	padding: 20px 0 20px 23px;
+}
+
+.amfc-about-timeline__item:first-child {
+	padding-top: 0;
+}
+
+.amfc-about-timeline__item + .amfc-about-timeline__item {
+	border-top: 1px solid rgba(26, 47, 134, 0.25); /* Figma: 0.25px #1A2F86 stroke */
+}
+
+.amfc-about-timeline__date {
+	display: flex;
+	flex: none;
+	flex-direction: column;
+	width: 60px;
+	margin: 0;
+	color: #000;
+	text-align: center;
+}
+
+.amfc-about-timeline__year,
+.amfc-about-timeline__month {
+	font-family: var(--amfc-font-en);
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.amfc-about-timeline__year { font-size: 16px; }
+.amfc-about-timeline__month { font-size: 36px; }
+
+.amfc-about-timeline__body {
+	flex: 1;
+	margin: 0;
+	color: var(--amfc-blue-900);
+	font-family: var(--amfc-font-zh);
+	font-size: 16px;
+	line-height: 30px;
+}
+
+.amfc-about-timeline__cta-wrap {
+	margin-top: 48px;
+	text-align: center;
+}

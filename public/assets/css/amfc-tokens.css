@@ -18,6 +18,7 @@
 	--amfc-mint-100: #ebefff; /* stat card (誠信) + service-card hover wash. Name is a misnomer
 	                             from the palette import — the value is a pale blue, not a mint. */
 	--amfc-cream-100: #fff8d9; /* stat card (創新/AI) */
+	--amfc-lavender-200: #e8edff; /* About page timeline band, bottom stop (Figma 474:204) */
 	--amfc-card-border: #8ea4f5; /* service card border (the KSP stat cards are borderless) */
 	--amfc-gold-500: #eab43f; /* eyebrow accent — used across multiple sections, missed on first pass */
 	--amfc-gold-400: #ebc84f; /* stat-card tag pill background */
@@ -46,6 +47,9 @@
 	   gradient shapes for this same background, so this is a genuinely separate token, not a
 	   duplicate — see .amfc-hero in amfc-2026.css for where each applies. */
 	--amfc-grad-hero-mobile: linear-gradient(180deg, #b9c8ff 0%, #8ea4f5 100%);
+	/* About page bands (Figma 474:36 / 474:204, stops re-mapped onto each section's own box). */
+	--amfc-grad-about-group: linear-gradient(180deg, var(--amfc-lavender-100) 41%, var(--amfc-white) 71%);
+	--amfc-grad-about-timeline: linear-gradient(180deg, var(--amfc-white) 54%, var(--amfc-lavender-200) 77%);
 
 	/* Typography — Noto Sans TC for Chinese headings/body, DM Sans for English subheadline
 	   copy (the hero eyebrow), matching the Figma source's font assignments. Neither is

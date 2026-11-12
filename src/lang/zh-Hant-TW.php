@@ -181,4 +181,40 @@ return [
     // equivalent exists in the desktop footer's own Figma node, so not ported there yet.
     'footer.legal.copyright' => '©2026 FUNDS AMFC 亞太普惠金融科技 版權所有',
     'footer.legal.privacy' => '隱私權聲明',
+
+    // --- About Us page (Figma node 474:30, desktop) ---
+    'about.page_title' => '關於我們 | AMFC 亞太普惠金融科技',
+    'about.hero.eyebrow' => '關於我們',
+    'about.hero.headline_line1' => 'Financial Inclusiveness for',
+    'about.hero.headline_line2' => 'a Better Asia',
+    'about.intro.p1' => '亞太普惠金融科技（AMFC，品牌識別為 FUNDS AMFC）成立於 2013 年，以「Financial Inclusiveness for a Better Asia」為願景，長期深耕普惠金融與消費分期服務，致力以科技讓金融更貼近生活。',
+    'about.intro.p2' => '做為日本科技金融集團 Funds Inc. 旗下的重要營運成員，AMFC 依託母公司在固定收益與資本市場的國際資源，並結合自身在自主系統開發、AI 風控與在地化營運的深厚經驗，持續打造靈活且值得信賴的金融科技服務。',
+    // The four value cards reuse home.philosophy.stat*.* (same company facts as the homepage KSP
+    // cards). Figma's About frame labels card 1 "金融實務經驗" and card 3 "用戶誠勢推薦"; the
+    // homepage keys hold the confirmed copy ("資產管理總量" / "用戶誠摯推薦").
+    'about.values.title' => '公司經營理念',
+    'about.group.title' => '我們集團',
+    'about.group.funds.logo_alt' => 'Funds Inc. 標誌',
+    'about.group.funds.photo_alt' => '東京鐵塔與東京市區天際線',
+    'about.group.funds.body' => 'Funds Inc.（Funds.jp）為日本領先的固定收益型金融科技平台，以「為不安的未來提供創新解答」為使命，專注於連結個人投資者與優質企業融資需求。',
+    'about.group.japan.title' => 'AMFC Japan',
+    'about.group.japan.photo_alt' => '大阪城與護城河',
+    'about.group.japan.body' => 'AMFC Japan 為 FUNDS AMFC 旗下日本子公司，作為連結日本與亞洲的橋樑，推動金融、科技及跨境合作。',
+    'about.cta' => '了解更多',
+    'about.timeline.title' => '大事紀',
+    'about.timeline.1.year' => '2026',
+    'about.timeline.1.month' => '05',
+    'about.timeline.1.body' => '亞太普惠(AMFC)品牌升級，隨著加入日本母公司Funds Inc.，未來將以「FUNDS AMFC」作為新的品牌識別。在母公司集團支持下，邁向更穩健、專業且具前瞻性的發展新階段',
+    'about.timeline.2.year' => '2025',
+    'about.timeline.2.month' => '12',
+    'about.timeline.2.body' => '四百坪全新辦公室正式啟用，整合集團資源，開啟 AMFC 成長與創新的全新篇章',
+    'about.timeline.3.year' => '2025',
+    'about.timeline.3.month' => '11',
+    'about.timeline.3.body' => '攜手計志文基金會協助弱勢兒少募資課輔、服務學習、自立生活與培力訓練，以金融科技擴大世代向上流動，讓普惠成為推動社會永續的核心力量',
+    'about.timeline.4.year' => '2025',
+    'about.timeline.4.month' => '04',
+    'about.timeline.4.body' => '在日本完成 AMFC Inclusion Fund #1 #2 #3 企業基金募集，累積總額達15億日幣',
+    'about.timeline.5.year' => '2024',
+    'about.timeline.5.month' => '11',
+    'about.timeline.5.body' => '完成募資B輪投資法人－Funds Japan 正式進軍日本市場並啟動第一輪 AMFC Inclusion Fund在日企業基金募集',
 ];

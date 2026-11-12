@@ -23,8 +23,8 @@
 				<div class="amfc-footer__col">
 					<div class="amfc-footer__col-title"><?= e(t('footer.col.about.title')) ?></div>
 					<ul>
-						<li><a href="#about"><?= e(t('footer.col.about.item1')) ?></a></li>
-						<li><a href="#about"><?= e(t('footer.col.about.item2')) ?></a></li>
+						<li><a href="<?= e(route_url('about')) ?>"><?= e(t('footer.col.about.item1')) ?></a></li>
+						<li><a href="<?= e(route_url('about')) ?>#timeline"><?= e(t('footer.col.about.item2')) ?></a></li>
 						<li><a href="#about"><?= e(t('footer.col.about.item3')) ?></a></li>
 						<li><a href="/hr"><?= e(t('footer.col.about.item4')) ?></a></li>
 					</ul>

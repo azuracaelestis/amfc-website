@@ -46,6 +46,14 @@ function page_url(string $lang): string
     return $urls[$lang] ?? '/';
 }
 
+// URL of an inner (zh) page. Locally each page is its own public/<page>.php; swap for AMFC's own
+// route helper on integration, same as page_url() above.
+function route_url(string $page): string
+{
+    $urls = ['about' => '/about.php'];
+    return $urls[$page] ?? '/';
+}
+
 function partial(string $path, array $vars = []): void
 {
     extract($vars);

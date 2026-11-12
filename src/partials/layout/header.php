@@ -26,7 +26,7 @@
 				     affect the real layout of the items around it. Same pattern as the English
 				     page's .amfc-en-nav__hover-pill. -->
 				<span class="amfc-nav__hover-pill" aria-hidden="true"></span>
-				<li class="nav-item"><a class="nav-link" href="#about"><?= e(t('nav.about')) ?></a></li>
+				<li class="nav-item"><a class="nav-link" href="<?= e(route_url('about')) ?>"><?= e(t('nav.about')) ?></a></li>
 				<li class="nav-item"><a class="nav-link" href="#service"><?= e(t('nav.services')) ?></a></li>
 				<li class="nav-item"><a class="nav-link" href="#news"><?= e(t('nav.news')) ?></a></li>
 				<li class="nav-item"><a class="nav-link" href="#investor"><?= e(t('nav.investor')) ?></a></li>

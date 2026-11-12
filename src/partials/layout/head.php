@@ -1,16 +1,23 @@
 <?php // PORT THIS — adapt into AMFC's existing <head>; keep the CSS load order noted in CLAUDE.md ?>
 <meta charset="UTF-8" />
-<title><?= e(t('site.name')) ?></title>
+<?php
+// Inner pages pass their own title / path (e.g. partial('layout/head', ['page_title' => ..., 'canonical_path' => 'about'])).
+$page_title = $page_title ?? t('site.name');
+$canonical_path = $canonical_path ?? '';
+?>
+<title><?= e($page_title) ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <!-- Audit fix: the live site's meta description is literally the placeholder string
      "亞太普惠金融科技股份有限公司網站描述" — real copy here, sourced via t() like everything else -->
 <meta name="description" content="<?= e(t('site.description')) ?>" />
 <!-- Audit fix: og:image and internal links on the live site inconsistently mix amfc.com.tw
      and www.amfc.com.tw — canonicalize on the www host everywhere in our markup -->
-<link rel="canonical" href="https://www.amfc.com.tw/" />
+<link rel="canonical" href="https://www.amfc.com.tw/<?= e($canonical_path) ?>" />
+<?php if ($canonical_path === ''): // homepage-only pairs; inner pages have no English twin yet ?>
 <link rel="alternate" hreflang="zh-Hant-TW" href="https://www.amfc.com.tw/" />
 <link rel="alternate" hreflang="en" href="https://www.amfc.com.tw/en" />
 <link rel="alternate" hreflang="x-default" href="https://www.amfc.com.tw/" />
+<?php endif; ?>
 
 <!-- Same Bootstrap version/URL already CSP-allowlisted on the live site — do not bump, do not self-host.
      Audit fix: SRI hash added (absent on the live site) — computed from the exact file this URL serves. -->
