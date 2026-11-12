@@ -4,10 +4,10 @@
 ?>
 <section id="timeline" class="amfc-about-timeline">
 	<div class="amfc-container">
-		<h2 class="amfc-about__section-title"><?= e(t('about.timeline.title')) ?></h2>
+		<h2 class="amfc-about__section-title" data-aos="fade" data-aos-duration="1400" data-aos-easing="ease-in-out-sine"><?= e(t('about.timeline.title')) ?></h2>
 		<ol class="amfc-about-timeline__list">
 			<?php for ($i = 1; $i <= 5; $i++): ?>
-				<li class="amfc-about-timeline__item">
+				<li class="amfc-about-timeline__item" data-aos="fade" data-aos-duration="1400" data-aos-easing="ease-in-out-sine">
 					<p class="amfc-about-timeline__date">
 						<span class="amfc-about-timeline__year"><?= e(t("about.timeline.$i.year")) ?></span>
 						<span class="amfc-about-timeline__month"><?= e(t("about.timeline.$i.month")) ?></span>
@@ -16,7 +16,7 @@
 				</li>
 			<?php endfor; ?>
 		</ol>
-		<div class="amfc-about-timeline__cta-wrap">
+		<div class="amfc-about-timeline__cta-wrap" data-aos="fade" data-aos-duration="1400" data-aos-easing="ease-in-out-sine">
 			<a href="" class="btn btn-primary rounded-pill amfc-btn amfc-about__cta" data-track="about-timeline-cta"><span class="amfc-btn__label"><?= e(t('about.cta')) ?></span></a>
 		</div>
 	</div>

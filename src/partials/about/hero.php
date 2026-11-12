@@ -3,7 +3,7 @@
 	<img class="amfc-about-hero__photo" src="<?= e(asset('images/about/about-hero.jpg')) ?>" alt="" aria-hidden="true" width="3124" height="2064" fetchpriority="high" />
 	<div class="amfc-container amfc-about-hero__content">
 		<p class="amfc-about-hero__eyebrow"><?= e(t('about.hero.eyebrow')) ?></p>
-		<h1 class="amfc-about-hero__headline">
+		<h1 data-aos="fade" data-aos-duration="1800" data-aos-easing="ease-in-out-sine" class="amfc-about-hero__headline">
 			<?= e(t('about.hero.headline_line1')) ?><br />
 			<?= e(t('about.hero.headline_line2')) ?>
 		</h1>

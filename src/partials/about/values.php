@@ -12,8 +12,8 @@ $cards = [
 ?>
 <section class="amfc-about-values">
 	<div class="amfc-container">
-		<h2 class="amfc-about__section-title"><?= e(t('about.values.title')) ?></h2>
-		<ul class="amfc-about-values__list">
+		<h2 class="amfc-about__section-title" data-aos="fade" data-aos-duration="1400" data-aos-easing="ease-in-out-sine"><?= e(t('about.values.title')) ?></h2>
+		<ul class="amfc-about-values__list" data-aos="fade" data-aos-duration="1400" data-aos-easing="ease-in-out-sine" data-aos-delay="150">
 			<?php foreach ($cards as $c): ?>
 				<li class="amfc-about-values__card amfc-about-values__card--<?= e($c['mod']) ?>">
 					<span class="amfc-about-values__art" aria-hidden="true">

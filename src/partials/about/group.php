@@ -4,9 +4,9 @@
 ?>
 <section class="amfc-about-group">
 	<div class="amfc-container">
-		<h2 class="amfc-about__section-title"><?= e(t('about.group.title')) ?></h2>
+		<h2 class="amfc-about__section-title" data-aos="fade" data-aos-duration="1400" data-aos-easing="ease-in-out-sine"><?= e(t('about.group.title')) ?></h2>
 		<div class="amfc-about-group__rows">
-			<div class="amfc-about-group__row">
+			<div class="amfc-about-group__row" data-aos="fade" data-aos-duration="1400" data-aos-easing="ease-in-out-sine">
 				<img class="amfc-about-group__photo amfc-about-group__photo--funds" src="<?= e(asset('images/about/about-group-funds.jpg')) ?>" alt="<?= e(t('about.group.funds.photo_alt')) ?>" width="2172" height="724" loading="lazy" />
 				<div class="amfc-about-group__text">
 					<img class="amfc-about-group__logo" src="<?= e(asset('images/funds-logo.svg')) ?>" alt="<?= e(t('about.group.funds.logo_alt')) ?>" width="244" height="53" />
@@ -14,7 +14,7 @@
 					<a href="" class="btn btn-primary rounded-pill amfc-btn amfc-about__cta" data-track="about-group-funds-cta"><span class="amfc-btn__label"><?= e(t('about.cta')) ?></span></a>
 				</div>
 			</div>
-			<div class="amfc-about-group__row amfc-about-group__row--reverse">
+			<div class="amfc-about-group__row amfc-about-group__row--reverse" data-aos="fade" data-aos-duration="1400" data-aos-easing="ease-in-out-sine">
 				<img class="amfc-about-group__photo amfc-about-group__photo--japan" src="<?= e(asset('images/about/about-group-japan.jpg')) ?>" alt="<?= e(t('about.group.japan.photo_alt')) ?>" width="1916" height="821" loading="lazy" />
 				<div class="amfc-about-group__text">
 					<h3 class="amfc-about-group__name"><?= e(t('about.group.japan.title')) ?></h3>

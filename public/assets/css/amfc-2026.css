@@ -4035,6 +4035,79 @@ body {
 	line-height: 1.2;
 }
 
+/* Desktop hover: the card lifts and its icon art plays once (the sparkles loop while hovered).
+   Resting state is the static Figma art, so touch / reduced-motion / mobile see no change. */
+@media (min-width: 992px) and (hover: hover) and (prefers-reduced-motion: no-preference) {
+	.amfc-about-values__card {
+		transition: transform var(--amfc-duration-medium) var(--amfc-ease-out), box-shadow var(--amfc-duration-medium) var(--amfc-ease-out);
+	}
+
+	.amfc-about-values__card:hover {
+		transform: translateY(-12px);
+		box-shadow: 0 20px 40px rgba(22, 35, 79, 0.16);
+	}
+
+	.amfc-about-values__card--trust:hover .amfc-about-values__icon-coin {
+		animation: amfc-about-coin-flip 800ms ease-out 1;
+	}
+
+	.amfc-about-values__card--innovation:hover .amfc-about-values__icon-bulb {
+		animation: amfc-about-bulb-bob 900ms ease-in-out 1;
+	}
+
+	.amfc-about-values__card--innovation:hover .amfc-about-values__icon-spark-lg {
+		animation: amfc-about-twinkle 1.2s ease-in-out infinite;
+	}
+
+	.amfc-about-values__card--innovation:hover .amfc-about-values__icon-spark-sm {
+		animation: amfc-about-twinkle 1.2s ease-in-out infinite 0.4s;
+	}
+
+	.amfc-about-values__card--efficiency:hover .amfc-about-values__icon-thumbsup {
+		transform-origin: 90% 80%;
+		animation: amfc-about-thumb-nod 900ms ease-in-out 1;
+	}
+
+	.amfc-about-values__card--expertise:hover .amfc-about-values__icon-bubble {
+		animation: amfc-about-bubble-drop 400ms cubic-bezier(0.16, 1, 0.3, 1) 1;
+	}
+
+	.amfc-about-values__card--expertise:hover .amfc-about-values__icon-stars {
+		animation: amfc-about-star-pop 350ms cubic-bezier(0.34, 1.56, 0.64, 1) 400ms 1 backwards;
+	}
+}
+
+@keyframes amfc-about-coin-flip {
+	from { transform: perspective(500px) rotate(-6.1deg) rotateY(0deg); }
+	to { transform: perspective(500px) rotate(-6.1deg) rotateY(360deg); }
+}
+
+@keyframes amfc-about-bulb-bob {
+	0%, 100% { transform: translateY(0); }
+	40% { transform: translateY(-8px); }
+	70% { transform: translateY(2px); }
+}
+
+@keyframes amfc-about-twinkle {
+	0%, 100% { opacity: 0.3; transform: scale(0.6); }
+	50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes amfc-about-thumb-nod {
+	0%, 50%, 100% { transform: rotate(-5.74deg); }
+	25%, 75% { transform: rotate(-16deg); }
+}
+
+@keyframes amfc-about-bubble-drop {
+	from { opacity: 0; transform: translateY(-20px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes amfc-about-star-pop {
+	from { opacity: 0; transform: scale(0); }
+	to { opacity: 1; transform: scale(1); }
+}
+
 /* 我們集團: two alternating 493px photo + 439px text rows, 90px apart. */
 .amfc-about-group {
 	padding-block: 118px 189px;
